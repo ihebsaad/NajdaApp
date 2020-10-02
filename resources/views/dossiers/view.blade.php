@@ -3167,6 +3167,23 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             }
                             alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
 
+							
+							/****** Enregistrement Appel ********/
+							
+					       var _token = $('input[name="_token"]').val();
+ 						   var dossier = $('#iddossier').val();
+
+                    $.ajax({
+                        url:"{{ route('addappel') }}",
+                        method:"POST",
+                        data:{numero:num,dossier:dossier, _token:_token},
+                        success:function(data){
+                            //   alert('Added successfully');
+                            window.location =data;
+
+                        }
+                    });
+					
                         });
 
 

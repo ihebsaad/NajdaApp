@@ -246,6 +246,7 @@ Route::get('/dossiers/details/{id}', 'DossiersController@details')->name('dossie
 Route::get('/dossiers/details2', 'DossiersController@details2')->name('dossiers.details2');
 Route::get('/dossiers/fermeture/{id}', 'DossiersController@fermeture')->name('dossiers.fermeture');
 Route::get('/listeUsersDoss/{iddoss}', 'DossiersController@users_work_on_folder');
+Route::post('/addappel', 'DossiersController@addappel')->name('addappel');
 
 
 

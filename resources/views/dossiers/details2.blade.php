@@ -27,7 +27,7 @@ use \App\Http\Controllers\UsersController;
 @section('content')
 
 <div class="row">
-<h1 style="color:#4fc1e9"><?php echo $dossier->reference_medic .' - '.$dossier->subscriber_name .' '.$dossier->subscriber_lastname  ;?> </h1><br>
+<h1 style="color:#4fc1e9"><a href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo $dossier->reference_medic .' - '.$dossier->subscriber_name .' '.$dossier->subscriber_lastname  ;?> </a></h1><br>
 
 	<h2> Les statistiques par période entre <b style="color:#4fc1e9"><?php echo $debut ;?></b> et <b style="color:#4fc1e9"><?php echo $fin ;?></b>  </h2><br>
 

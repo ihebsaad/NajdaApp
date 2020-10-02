@@ -36,6 +36,7 @@ use App\OMRemorquage;
 use App\OMMedicInternational;
 use App\Attachement;
 use App\Tag;
+use App\Appel;
 
 use WordTemplate;
 use Mail;
@@ -4969,11 +4970,36 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
       } 
 
 
+/************/
 
 
 
 
 
+
+
+
+    function addappel(Request $request)
+    {
+
+         $dossier = $request->get('dossier');
+         $numero =  $request->get("numero");
+		 $date=date('d-m-Y H:i:s');
+		 $heure=date('H:i:s');
+		 
+		   $appel = new Appel([
+            'dossier' => $dossier,
+            'numero' => $numero,
+            'date' => $date,
+            'heure' => $heure,
+      
+        ]);
+
+       $appel->save();
+			
+	}
+	
+	
 
 }
 

@@ -78,7 +78,7 @@ $listeusers=DossiersController::users_work_on_folder($id);
  
 ?>							 
 @section('content')
-<h1 style="color:#4fc1e9"><?php echo $dossier->reference_medic .' - '.$dossier->subscriber_name .' '.$dossier->subscriber_lastname  ;?> </h1>
+<h1 style="color:#4fc1e9"><a href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo $dossier->reference_medic .' - '.$dossier->subscriber_name .' '.$dossier->subscriber_lastname  ;?></a> </h1>
 <br>
 <div class="row">
 
