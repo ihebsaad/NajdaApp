@@ -3153,9 +3153,26 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                         $('#launchPhone').on('click', function(event) {
                             event.preventDefault();
                             var num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
-                             var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?num='+num,
-                                features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
-                            var session=null;
+							
+				 /****** Enregistrement Appel ********/
+				    var _token = $('input[name="_token"]').val();
+ 						   var dossier = $('#iddossier').val();
+			//	alert(num);
+			//	alert(dossier);
+                    $.ajax({
+                        url:"{{ route('addappel') }}",
+                        method:"POST",
+                        data:{numero:num,dossier:dossier, _token:_token},
+                        success:function(data){
+                            //     alert(data);
+                          //  window.location =data;
+
+                        }
+                    });
+				/**************/	
+                  var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?num='+num,
+                  features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
+                  var session=null;
                             // This is set when the phone is open and removed on close
                             if (!localStorage.getItem('ctxPhone')) {
                                 window.open(url, 'ctxPhone', features);
@@ -3166,27 +3183,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                             }
                             alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
-
-							
-							/****** Enregistrement Appel ********/
-							
-					       var _token = $('input[name="_token"]').val();
- 						   var dossier = $('#iddossier').val();
-
-                    $.ajax({
-                        url:"{{ route('addappel') }}",
-                        method:"POST",
-                        data:{numero:num,dossier:dossier, _token:_token},
-                        success:function(data){
-                            //   alert('Added successfully');
-                            window.location =data;
-
-                        }
-                    });
+ 
 					
                         });
 
-
+ 
                         /* window.onload = function(){
                              window.document.getElementById('numDisplay').value= document.getElementById('numtel').value ;
                          }*/

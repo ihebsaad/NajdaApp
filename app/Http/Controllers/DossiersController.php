@@ -4984,19 +4984,32 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
          $dossier = $request->get('dossier');
          $numero =  $request->get("numero");
-		 $date=date('d-m-Y H:i:s');
+		 $date=date('Y-m-d H:i:s');
 		 $heure=date('H:i:s');
 		 
-		   $appel = new Appel([
+	/*	   $appel = new Appel([
             'dossier' => $dossier,
             'numero' => $numero,
             'date' => $date,
-            'heure' => $heure,
+            'heure' => $heure
       
         ]);
+		*/
+		    DB::table('appels')->insert(
+            ['dossier' => $dossier,
+                'numero' => $numero,
+                'date' => $date,
+                'heure' => $heure,
+		 
+				]
+        );
 
-       $appel->save();
-			
+    /*  if ($appel->save()){
+		  return $appel->id;
+	  }  else{
+		  return 0;
+	  }
+			*/
 	}
 	
 	
