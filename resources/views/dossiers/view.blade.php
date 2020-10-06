@@ -4430,6 +4430,7 @@ $("#templateom").val("Select").change();
         var tempdoc = $("#templateordrem").val();
         var affectea = $("#affectea").val();
         var srctemp = document.getElementById('omfilled').src;
+
 if (srctemp.indexOf("/odm_medic") === -1 )
       { var heuredateRDV =document.omfilled.CL_heuredateRDV.value;
        if (heuredateRDV==="")
@@ -4442,7 +4443,47 @@ if (srctemp.indexOf("/odm_medic") === -1 )
             return false;
               
 
-        }}
+        }
+var heureRDV =document.omfilled.CL_heure_RDV.value;
+       if (heureRDV==="")
+        {document.getElementById('genomhtml').disabled = false;
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez saisir l'heure de RDV"
+            });
+            return false;
+              
+
+        }
+
+var lieuprestpc =document.omfilled.lieuprest.value;
+       if (lieuprestpc==="")
+        {document.getElementById('genomhtml').disabled = false;
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez saisir le Lieu prise en charge"
+            });
+            return false;
+              
+
+        }
+var lieudechargedec =document.omfilled.lieudecharge.value;
+       if (lieudechargedec==="")
+        {document.getElementById('genomhtml').disabled = false;
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez saisir le Lieu décharge"
+            });
+            return false;
+              
+
+        }
+
+
+}
         if (srctemp.indexOf("/odm_medic") === -1 )
             {
 if((affectea==="mmentite" && tempdoc==="remplace")|| (affectea==="interne" && tempdoc==="complete") )
@@ -4471,6 +4512,21 @@ if((affectea==="mmentite" && tempdoc==="remplace")|| (affectea==="interne" && te
                 type: 'error',
                 title: 'oups...',
                 text: "Veuillez saisir la date de dispo prévisible"
+            });
+            return false;
+              
+
+        }
+var dhretbaseprev =document.omfilled.dhretbaseprev.value;
+
+       if (dhretbaseprev==="")
+
+        
+        {document.getElementById('genomhtml').disabled = false;
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez saisir la date de retour base prévisible"
             });
             return false;
               
