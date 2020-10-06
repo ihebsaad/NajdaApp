@@ -326,15 +326,20 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 <p class=rvps1><span class=rvts2><br></span></p>
 
 <p class=rvps1><span class=rvts2>
-<input type="text" list="inter__garage" name="inter__garage"  value="<?php  if(isset ($inter__garage)) echo $inter__garage; ?>"  />
-        <datalist id="inter__garage">
-            <?php
+<select id="inter__garage" name="inter__garage" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-  //  echo "<option value='".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."' >".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."</option>";
-      echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';
+      echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
 }
 ?>
+</select>
+
 </span><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
@@ -360,16 +365,21 @@ foreach ($array_tel as $tel) {
 <p class=rvps1><span class=rvts7><br></span></p>
 <ul class=list2>
     <li style="margin-left: 0px" class=rvps6><span class=rvts7>Notre expert Mr </span><span class=rvts9>
-<input type="text" list="inter__expert" name="inter__expert"  value="<?php  if(isset ($inter__expert)) echo $inter__expert; ?>" />
-        <datalist id="inter__expert">
-            <?php
-foreach ($array_presta as $presta) {
-    
- // echo "<option value='".$presta['prenom']." ".$presta['name']."' >".$presta['prenom']." ".$presta['name']."</option>";
- echo '<option value="'.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["prenom"].''.$presta["name"].'</option>';
- }
-?>
+<select id="inter__expert" name="inter__expert" autocomplete="off" onchange="intexpertchange();" >
+<?php
 
+foreach ($array_presta as $presta) {
+if(($presta['id'] === $id__prestataire1)) {
+    
+    echo '<option value="'.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" selected >'.$presta["prenom"].''.$presta["name"].'</option>';}
+else {
+    
+      echo '<option value="'.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["prenom"].''.$presta["name"].'</option>';}
+}
+    
+   
+?>
+</select>
 </span><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input><span class=rvts7>passera à votre garage pour expertiser le véhicule le <input name="CL_date_heure_exp" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_exp)) echo $CL_date_heure_exp; ?>"></input></span></li>
 </ul>
 <p class=rvps7><span class=rvts7><br></span></p>
@@ -392,38 +402,30 @@ foreach ($array_presta as $presta) {
 <p><span class=rvts17><br></span></p>
 </form>
 <script type="text/javascript">
-document.querySelector('input[list="inter__garage"]').addEventListener('input', onInput);
+    var e = document.getElementById("inter__garage");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("inter__garage");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
+  var e = document.getElementById("inter__expert");
+    var idpres = e.options[e.selectedIndex].id;
+    document.getElementById("id__prestataire1").value = idpres;
 
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
+    //changement de id remorquage intervenant lors changement select
+    function intexpertchange() {
+        var e = document.getElementById("inter__expert");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire1").value = idpres;
+     }
 
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
-document.querySelector('input[list="inter__expert"]').addEventListener('input', onInput1);
 
-	function onInput1(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
 
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire1").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
 </script>
 
 </body></html>

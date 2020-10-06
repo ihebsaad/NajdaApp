@@ -61,7 +61,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
@@ -328,14 +328,20 @@ mysqli_query($conn,"set names 'utf8'");
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2><!--<input name="prest__reeduc" style="width:300px" placeholder="Prestataire rééducation" value="<?php if(isset ($prest__reeduc)) echo $prest__reeduc; ?>"></input>-->
 
-<input type="text" list="prest__reeduc" name="prest__reeduc" value="<?php  if(isset ($prest__reeduc)) echo $prest__reeduc;?>" />
-        <datalist id="prest__reeduc">
-            <?php
+<select id="prest__reeduc" name="prest__reeduc" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
 }
 ?>
+</select>
+
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -407,22 +413,18 @@ if (obj.value > 0)
 /*    $("#CL_montant_total").on("change paste keyup", function() {
    alert($(this).val()); 
 });*/
-document.querySelector('input[list="prest__reeduc"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+var e = document.getElementById("prest__reeduc");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__reeduc");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
+</script>
 </script>
 </body></html>
 <?php

@@ -533,15 +533,19 @@ $sqlsig = "SELECT id,nom FROM docs WHERE id IN (SELECT doc FROM dossiers_docs WH
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2>
-<input type="text" list="prest__structure" name="prest__structure"  value="<?php  if(isset ($prest__structure)) echo $prest__structure; ?>" />
-        <datalist id="prest__structure">
-            <?php
-foreach ($array_struc as $struc) {
+<select id="prest__structure" name="prest__structure" autocomplete="off" onchange="prestchange();" >
+<?php
+
+foreach ($array_struc as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-   // echo "<option value='".$struc['name']."' >".$struc['name']."</option>";
-echo '<option value="'.$struc["name"].'" id="'.$struc["id"].'" >'.$struc["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
 }
 ?>
+</select>
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -673,22 +677,19 @@ if (obj.value > 0)
             $("#pattention").hide();
         }
     });	
-document.querySelector('input[list="prest__structure"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+// initialisation id prestataires
+    
+        var e = document.getElementById("prest__structure");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__structure");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 </body></html>
 <?php

@@ -274,14 +274,19 @@ foreach ($array_client as $client) {
 
 
 <span class=rvts9> </span><span class=rvts2>attestons par la présente que notre prestataire technique la société </span><span class=rvts9>
-<input type="text" list="prest__dossier" name="prest__dossier" value="<?php  if(isset ($prest__dossier)) echo $prest__dossier;?>" />
-        <datalist id="prest__dossier">
-            <?php
+<select id="prest__dossier" name="prest__dossier" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-  echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
 }
 ?>
+</select>
 </span><span class=rvts10> </span><span class=rvts9></span><span class=rvts2> <input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input> est chargé par nos soins de procéder au rapatriement du véhicule <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2>Cette procuration est délivrée pour servir et valoir ce que de droit auprès des services de la douane tunisienne.</span></p>
@@ -303,21 +308,16 @@ foreach ($array_prest as $prest) {
 <p><span class=rvts11><br></span></p>
 </form>
 <script type="text/javascript">
-document.querySelector('input[list="prest__dossier"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+var e = document.getElementById("prest__dossier");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__dossier");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 </body></html>

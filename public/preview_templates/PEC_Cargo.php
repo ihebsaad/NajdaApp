@@ -91,7 +91,7 @@ $sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestat
         $array_presta = array();
         while($rowvha = $resultvha->fetch_assoc()) {
             //$array_presta[] = array('prenom' => $rowvha["prenom"],'nom' => $rowvha["nom"]  );
-            $array_presta[] = array('id' => $rowvha["id"],"name" => $rowvha["name"],"prenom" => $rowvh["id"],"civilite" => $rowvh["civilite"]);
+            $array_presta[] = array('id' => $rowvha["id"],"name" => $rowvha["name"],"prenom" => $rowvh["prenom"],"civilite" => $rowvh["civilite"]);
         }   }
 $sqlclient = "SELECT id,groupe,name FROM clients";
 	$resultclient = $conn->query($sqlclient);
@@ -367,14 +367,20 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2>
-<input type="text" list="prest__transitaire" name="prest__transitaire"  value="<?php if(isset ($prest__transitaire)) echo $prest__transitaire; ?>" />
-        <datalist id="prest__transitaire">
-            <?php
+            
+<select id="prest__transitaire" name="prest__transitaire" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'">'.$prest["name"].'</option>';}
 }
 ?>
+</select>
 </span></p>
 <p class=rvps1><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -424,13 +430,28 @@ foreach ($array_tel as $tel) {
 <p class=rvps5><span class=rvts9>Suite à notre entretien téléphonique, nous vous confirmons la prise en charge du rapatriement en <input name="CL_type_contenneur" placeholder="Type Contenneur" value="<?php if(isset ($CL_type_contenneur)) echo $CL_type_contenneur; ?>"></input> sur le navire <input name="CL_navire" placeholder="Navire" value="<?php if(isset ($CL_navire)) echo $CL_navire; ?>"></input>qui quittera le port de Rades tel que spécifié ci-dessus.</span></p>
 <p class=rvps7><span class=rvts9><br></span></p>
 <p class=rvps1><span class=rvts7>Comme convenu, le véhicule sera remorqué par notre prestataire </span><span class=rvts14>
-<input type="text" list="inter__remor" name="inter__remor"  value="<?php if(isset ($inter__remor)) echo $inter__remor; ?>" />
-        <datalist id="inter__remor">
+<!--<input type="text" list="inter__remor" name="inter__remor"  value="<?php //if(isset ($inter__remor)) echo $inter__remor; ?>" />
+        <datalist id="inter__remor">-->
             <?php
-foreach ($array_presta as $presta) {
+/*foreach ($array_presta as $presta) {
    echo '<option value="'.$presta["civilte"].''.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["civilite"].''.$presta["prenom"].''.$presta["name"].'</option>';
-}
+}*/
 ?>
+<select id="inter__remor" name="inter__remor" autocomplete="off" onchange="intremorqchange();" >
+<?php
+
+foreach ($array_presta as $presta) {
+if(($presta['id'] === $id__prestataire1)) {
+    
+   echo '<option value="'.$presta["civilte"].''.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" selected >'.$presta["name"].'</option>';}
+else {
+    
+     echo '<option value="'.$presta["civilte"].''.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["name"].'</option>';}
+}
+    
+   
+?>
+</select>
 </span><span class=rvts7><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input> vers le port de Rades le « </span><span class=rvts14></span><span class=rvts7> <input name="CL_date_om_remorquage" placeholder="text" value="<?php if(isset ($CL_date_om_remorquage)) echo $CL_date_om_remorquage; ?>"></input>». </span></p>
 <p class=rvps7><span class=rvts8><br></span></p>
 <p class=rvps5><span class=rvts9>Merci de nous adresser votre facture originale dès que possible (dans un délai max de 30 jours) à l</span><span class=rvts15>’</span><span class=rvts9>adresse ci-dessus, en mentionnant notre référence de dossier.</span></p>
@@ -452,38 +473,33 @@ foreach ($array_presta as $presta) {
 <p class=rvps1><span class=rvts7>« courrier électronique, sans signature »</span></p>
 </form>
 <script type="text/javascript">
-document.querySelector('input[list="prest__transitaire"]').addEventListener('input', onInput);
+// initialisation id prestataires
+    
+        var e = document.getElementById("prest__transitaire");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__transitaire");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
 
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
-document.querySelector('input[list="inter__remor"]').addEventListener('input', onInput1);
+    // initialisation id remorquage intervenant
+ 
+    var e = document.getElementById("inter__remor");
+    var idpres = e.options[e.selectedIndex].id;
+    document.getElementById("id__prestataire1").value = idpres;
 
-	function onInput1(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire1").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+    //changement de id remorquage intervenant lors changement select
+    function intremorqchange() {
+        var e = document.getElementById("inter__remor");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire1").value = idpres;
+     }
 
 </script>
 </body></html>
