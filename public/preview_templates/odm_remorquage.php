@@ -304,6 +304,17 @@ if (!empty($resultspec) && $resultspec->num_rows > 0) {
     }
     //print_r($array_prest);
 }
+$sqladr = "SELECT id,champ FROM adresses where nature='teldoss' and parent=".$dossier;
+	$resultadr = $conn->query($sqladr);
+	if ($resultadr->num_rows > 0) {
+	    // output data of each row
+	    $array_adr = array();
+	    while($rowadr = $resultadr->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_adr[] = array('id' => $rowadr["id"],'champ' => $rowadr["champ"]);
+	    }
+	 //  print_r($array_adr);
+		}
 
 header("Content-Type: text/html;charset=UTF-8");
 ?>
@@ -571,7 +582,7 @@ foreach ($array_spec as $spec) {
     <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV pour </span><span style="font-family:'Times New Roman'; font-weight:bold"> le remorquage </span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
         <input type="time" id="CL_heure_RDV" name="CL_heure_RDV" min="00:00" max="23:59"  <?php if (isset($detailom)) { if (isset($detailom['CL_heure_RDV'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_RDV']))."'";}} ?> >
         <span style="font-family:'Times New Roman'; color:#0070c0">            </span><span style="font-family:'Times New Roman'; font-weight:bold">Contact téléphonique</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:   </span><span style="font-family:'Times New Roman'; color:#31849b">
-<input name="CL_contacttel" placeholder="Contact téléphonique" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_contacttel'])) {echo "value='".$detailom['CL_contacttel']."'";}} ?> ></input>
+<input name="CL_contacttel" placeholder="Contact téléphonique" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_contacttel'])) {echo "value='".$detailom['CL_contacttel']."'";}} else  {  if(isset($array_adr[0]['champ'])) {echo "value='".$array_adr[0]['champ']."'";} else { echo "value=''";}} ?>  ></input>
 				 </span><span style="font-family:'Times New Roman'">Qualité</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">: </span>
         <input name="CL_qualite" placeholder="Qualité" <?php if (isset($detailom)) { if (isset($detailom['CL_qualite'])) {echo "value='".$detailom['CL_qualite']."'";}} ?> ></input>
     </p>
