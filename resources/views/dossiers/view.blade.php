@@ -3146,53 +3146,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 </div>
 
                 <div class="modal-footer">
-                    <a  type="button" class="btn btn-primary" href="phone" id="launchPhone"  >Appeler</a>
+                    <button type="button"  class="btn btn-primary"  onclick="launchPhone();">Appeler</button>
 
-                    <script>
-
-                        $('#launchPhone').on('click', function(event) {
-                            event.preventDefault();
-                            var num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
-							
-				 /****** Enregistrement Appel ********/
-				    var _token = $('input[name="_token"]').val();
- 						   var dossier = $('#iddossier').val();
-			//	alert(num);
-			//	alert(dossier);
-                    $.ajax({
-                        url:"{{ route('addappel') }}",
-                        method:"POST",
-                        data:{numero:num,dossier:dossier, _token:_token},
-                        success:function(data){
-                            //     alert(data);
-                          //  window.location =data;
-
-                        }
-                    });
-				/**************/	
-                  var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?num='+num,
-                  features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
-                  var session=null;
-                            // This is set when the phone is open and removed on close
-                            if (!localStorage.getItem('ctxPhone')) {
-                                window.open(url, 'ctxPhone', features);
-
-                                return false;
-                            } else {
-                                window.alert('Phone already open.');
-
-                            }
-                            alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
- 
-					
-                        });
-
- 
-                        /* window.onload = function(){
-                             window.document.getElementById('numDisplay').value= document.getElementById('numtel').value ;
-                         }*/
-                    </script>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                  
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 
                 </div>
             </div>
@@ -6109,6 +6066,14 @@ $("#showNext-m").click(function() {
                 });
 }
  });
+ function launchPhone() {
+                           
+                         num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+                                window.open('http://192.168.1.249/najdatest/public/webphone/samples/mobile.php?wp_callto='+num,'phone',
+                               'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=295,height=575,');
+                                $("#faireappel").modal('hide');
+
+                               }
 
 </script>
 <!-- <script src="http://malsup.github.com/jquery.form.js"></script>

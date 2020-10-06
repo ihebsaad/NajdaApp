@@ -185,8 +185,8 @@
           </form>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a href="#" id="phonebtn" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
-              <span class="fas fa-fw fas fa-phone fa-2x"></span>
+          <a  id="phonebtn" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button"  data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
+              <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
         </div>
 
@@ -608,22 +608,8 @@ $iduser=$user->id; ?>
 </script>
 
 <script>
-
-    $('#phonebtn').on('click', function(event) {
-        event.preventDefault();
-         var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?user=<?php echo Auth::id(); ?>',
-            features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
-        var session=null;
-        // This is set when the phone is open and removed on close
-        if (!localStorage.getItem('ctxPhone')) {
-            window.open(url, 'ctxPhone', features);
-
-            return false;
-        } else {
-            window.alert('Phone already open.');
-
-        }
-        alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
+$('#phonebtn').on('click', function(event) {
+          window.open('http://192.168.1.249/najdatest/public/webphone/samples/mobile.php','phone','menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=295,height=575,');
 
     });
 
