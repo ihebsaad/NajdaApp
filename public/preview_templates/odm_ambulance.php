@@ -58,6 +58,7 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 			    // output data of each row
 			    $agtsign = $resultsign->fetch_assoc();
 			    $signaturetype = strtolower($agtsign['type_dossier']);
+if($signaturetype=='medical') {$signaturetype="médicale";}
 			}
 }
 else
@@ -72,6 +73,7 @@ else
 
 	    // recuperer type dossier pour la signature (medicale ou technique)
 		$signaturetype = strtolower($detaildoss['type_dossier']);
+if($signaturetype=='medical') {$signaturetype="médicale";}
 		
 
 	    // infos client
