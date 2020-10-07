@@ -230,8 +230,19 @@ $valchamp = str_replace("<br />", "", $valchamp);
                 $mc=round(microtime(true) * 1000);
                 $datees = strftime("%d-%m-%Y"."_".$mc); 
                 $datesc = strftime("%d-%m-%Y"); 				
-                $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.rtf');
-                $titref =utf8_encode($arrfile['nom'].'_'.$datesc);
+                
+if (strpos($arrfile['nom'], 'Fax_Ima') !== false) {
+$infodossierfaxima=Dossier::select('reference_medic','reference_customer')->where('id',$dossier)->first();
+$refdossfaxima=$infodossierfaxima['reference_medic'];
+$refclientfaxima=$infodossierfaxima['reference_customer'];
+$name_file = utf8_encode($arrfile['nom'].'_'.$datees.'_'.$refdossfaxima.'_'.$refclientfaxima.'.rtf');
+ $titref =utf8_encode($arrfile['nom'].'_'.$datesc.'_'.$refdossfaxima.'_'.$refclientfaxima);
+}
+else
+{
+$name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.rtf');
+$titref =utf8_encode($arrfile['nom'].'_'.$datesc);}
+                
            /* }
         else 
             {
@@ -1542,8 +1553,20 @@ public function historique(Request $request)
         $mc=round(microtime(true) * 1000);
         $datees = strftime("%d-%m-%Y"."_".$mc); 
         $datesc = strftime("%d-%m-%Y"); 
-        $name_file = $arrfile['nom'].'_'.$datees.'_annulation.rtf';
-        $titref =$arrfile['nom'].'_'.$datesc;
+        
+if (strpos($arrfile['nom'], 'Fax_Ima') !== false) {
+$infodossierfaxima=Dossier::select('reference_medic','reference_customer')->where('id',$dossier)->first();
+$refdossfaxima=$infodossierfaxima['reference_medic'];
+$refclientfaxima=$infodossierfaxima['reference_customer'];
+
+$name_file = $arrfile['nom'].'_'.$datees.'_'.$refdossfaxima.'_'.$refclientfaxima.'_annulation.rtf';
+$titref =$arrfile['nom'].'_'.$datesc.'_'.$refdossfaxima.'_'.$refclientfaxima;
+ 
+}
+else
+{
+$name_file = $arrfile['nom'].'_'.$datees.'_annulation.rtf';
+        $titref =$arrfile['nom'].'_'.$datesc;}
         // verifier si la template a un champ date/heure
         $datees="";
         if(stristr($arrfile['champs'], '[DATE_HEURE]') !== FALSE) 
