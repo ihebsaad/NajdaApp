@@ -1278,6 +1278,7 @@ array_push($listepr,$pr['prestataire_id']);
                              </div>
 
                              <div class="row">
+<input type="hidden" value="1"  id="start-m" />
                                  <span class="btn btn-success" id="rechercherm" >Rechercher <i class="fa fa-loop"></i></span>
                              </div>
 
@@ -1324,8 +1325,9 @@ array_push($listepr,$pr['prestataire_id']);
                                  <div class="  form-group"  id="prestation-m"  style="display:none">
                                    <div class="col-md-4">
                                        <button style="display:none;margin-botom:10px" type="button" id="valide-m" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+<input type="hidden" value="0" id="firstsaved-m" />
                                    </div>
-                                     <div class="col-md-4">
+                                     <div class="col-md-4"  style="display:none;padding-left:15px;"  id="validation-m">
                                          <label>ou bien Prestation non effectuée ? Raison:</label>
 
                                          <select class="form-control" id="statutprest-m" >
@@ -4554,7 +4556,7 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
         else {
             var type_affectation = "";
             var nomprestextern = $("#prestselected").val();
-            var idprestextern = $("#idprestation-m").val();
+            var idprestextern = $("#idprestselected").val();
 
         }
 
@@ -4903,37 +4905,68 @@ function toggle(className, displayState){
 			
 			*/
         });
+ 
+$('#valide-m').click(function(){
+            var prestation=  document.getElementById('idprestation-m').value;
+            var _token = $('input[name="_token"]').val();
+// creation prestation  si ce n'est pas la premiere
+			
+			
+				  var prestataire = $('#selectedprest-m').val();
+			  var nomprestataire = $('#selectedprest-m option:selected').text();
+                 var dossier_id = $('#dossier').val();
+//alert(nomprestataire);
+//alert(prestataire);
+            var typeprestom = document.getElementById('templateom').value;
+            var gouvernorat = $('#gouvcouvm').val();
+            var specialite = $('#specialitem').val();
+ if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
+            // AMBULANCE
+            if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4;}
+            // REMORQUAGE
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1;}
+            // cas remplace
+            var srcomtemp = document.getElementById("omfilled").src;
+            var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
+            var posomambulancetemp = srcomtemp.indexOf("odm_ambulance");
+            var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
+                var date = $('#pres_datem').val();
 
-        $('#valide-m').click(function(){
-          var prestation=  document.getElementById('idprestation-m').value;
-          var _token = $('input[name="_token"]').val();
-
-            $.ajax({
+                //   gouvcouv
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('prestations.saving') }}",
+                        method:"POST",
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        success:function(data){
+                            var prestation=parseInt(data);
+                            // window.location =data;
+						//	document.getElementById('idprestation').value=prestation;
+							
+							
+							
+			   $.ajax({
                 url:"{{ route('prestations.valide') }}",
                 method:"POST",
                 data:{prestation:prestation, _token:_token},
                 success:function(data){
-                    /*var prest = $('#selectedprest').val();
-                 $.ajax({
-                    url:"{{--route('prestataires.NomPrestatireById') --}}",
-                    method:"POST",
-                    data:{id:prest, _token:_token},
-                    success:function(data){
-                        //document.getElementById('prestselected').value = data;
-                        alert(data);
-                    }
-                 });*/
-
-                    
-                document.getElementById('typeaffect').style.display='none';
+                 //   var prestation=parseInt(data);
+                    /// window.location =data;
+                 document.getElementById('typeaffect').style.display='none';
                  //document.getElementById('prestselected').value = document.getElementById('selectedprest-m').value;
                  var prestvalid=document.getElementById('selectedprest-m').value;
                  console.log(prestvalid);
                  var prestvaltext = $("#selectedprest-m option[value='"+prestvalid+"']").text();
-                 console.log("text: "+prestvaltext);
+
+          console.log("text: "+prestvaltext);
                  //document.getElementById('prestselected').val = prestvaltext;
                  $("#prestselected").val(prestvaltext);
-                 
+                 $("#idprestselected").val(prestation);
                  document.getElementById('externaffect').style.display='block';
                  
                  $("#affectationprest").prop('disabled', true);
@@ -4946,7 +4979,42 @@ function toggle(className, displayState){
                 }
 
             });
+ 
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+
+
+                        }
+
+                    });
+                }else{
+
+                }
+				
+			/*
+			// validation
+			prestation= document.getElementById('idprestation').value;
+			alert('prestation '+prestation);
+            $.ajax({
+                url:"{{ route('prestations.valide') }}",
+                method:"POST",
+                data:{prestation:prestation, _token:_token},
+                success:function(data){
+                 //   var prestation=parseInt(data);
+                    /// window.location =data;
+                    window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+
+            });
+			
+			*/
         });
+
+       
 
 
         $('#add2').click(function(){
@@ -5094,28 +5162,18 @@ function toggle(className, displayState){
 
 
         });
+$('#add2-m').click(function(){
 
-
-
-        $('#add2-m').click(function(){
-
-            selected=   document.getElementById('selected-m').value;
+           selected=   document.getElementById('selected-m').value;
             document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_'+selected+'-m').value ;
 
-
-            var prestataire = $('#selectedprest-m').val();
+             var prestataire = $('#selectedprest-m').val();
             var dossier_id = $('#dossier-m').val();
 
             var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
             var specialite = $('#specialitem').val();
-            /*
-                Taxi: - type:2 - specialite:2
-                Remorquage: - type:1 - specialite:3
-                Ambulance: -type:4 - specialite:4
-            */
-            // TAXI
-            if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
+ if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4;}
             // REMORQUAGE
@@ -5131,7 +5189,7 @@ function toggle(className, displayState){
 
 
             var date = $('#pres_datem').val();
-
+           
             //   gouvcouv
             if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                {
@@ -5145,7 +5203,8 @@ function toggle(className, displayState){
                /// window.location =data;
 
                     document.getElementById('prestation-m').style.display='block';
-                    document.getElementById('valide-m').style.display='block';
+                   document.getElementById('valide-m').style.display='block';
+                   document.getElementById('validation-m').style.display='block';
                     document.getElementById('idprestation-m').value =prestation;
 
                 },
@@ -5159,6 +5218,11 @@ function toggle(className, displayState){
 
              }
         });
+
+
+
+
+      
 
         $('.radio1').click(function() {
 
@@ -5335,12 +5399,11 @@ function toggle(className, displayState){
 
         });
 */
-        $("#rechercherm").click(function(){
-
-
-            // document.getElementById('termine').style.display = 'none';
-            document.getElementById('showNext-m').style.display='none';
+       
+  $("#rechercherm").click(function(){
+           document.getElementById('showNext-m').style.display='none';
             document.getElementById('add2-m').style.display='none';
+             document.getElementById('showNext-m').firstChild.data ='Commencer';
             document.getElementById('add2prest-m').style.display='none';
             document.getElementById('selectedprest-m').value=0;
 
@@ -5378,9 +5441,6 @@ function toggle(className, displayState){
             //var  specialite =document.getElementById('specialite').value;
             var  ville =document.getElementById('villeprm').value;
             var  postal =document.getElementById('villecodem').value; 
-            //alert (gouv+" | "+ville+" | "+postal);
-            //alert (type+" | "+gouv);
-            //console.log("before ajax");
             if((type !="")&&(gouv !=""))
             {
                 var _token = $('input[name="_token"]').val();
@@ -5388,18 +5448,18 @@ function toggle(className, displayState){
                 document.getElementById('termine-m').style.display = 'none';
                 document.getElementById('add2-m').style.display = 'none';
                 document.getElementById('add2prest-m').style.display='none';
-                console.log("in ajax");
+
+               console.log('in ajax') ;
+
                 $.ajax({
                     url:"{{ route('dossiers.listepresm') }}",
                     method:"post",
 
                     data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
                     success:function(data){
-
-
                         $('#data-m').html(data);
-                        //window.location =data;
                         console.log("success list prest");
+                        //window.location =data;
                         console.log(data);
                         ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
                         var  total =parseInt(document.getElementById('total-m').value);
@@ -5408,7 +5468,10 @@ function toggle(className, displayState){
                         {
                             document.getElementById('showNext-m').style.display='block';
                         }
+						if(  document.getElementById('showNext-m').firstChild.data =='Suivant'){
+							document.getElementById('item1-m').style.display = 'block';
 
+						}
                     }
                 }); // ajax
 
@@ -5419,7 +5482,7 @@ function toggle(className, displayState){
                     text: "SVP, Sélectionner le gouvernorat et la spécialité"
                 });
             }
-        }); // change
+        });
 
 
 
@@ -5435,7 +5498,7 @@ function toggle(className, displayState){
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
             document.getElementById('selectedprest').value = 0;
-   document.getElementById('selectedprest').value = document.getElementById('prestataire_id_1').value ;
+   document.getElementById('selectedprest').value = document.getElementById('prestataire_id_1_').value ;
    $('#showNext').prop('disabled', true);
 	  $('#add2').prop('disabled', false);
 */
@@ -5469,17 +5532,54 @@ document.getElementById('add2').style.display = 'block';
  document.getElementById('showNext').firstChild.data ='Suivant';
  //  $('#showNext').prop('disabled', false);
      });
+$("#essai2-m").click(function() {
+   /*         document.getElementById('start').value = 1;
+            document.getElementById('termine').style.display = 'none';
+            document.getElementById('add2').style.display = 'block';
+            document.getElementById('valide').style.display = 'block';
+            document.getElementById('validation').style.display = 'block';
+            document.getElementById('add2prest').style.display='block';
+            document.getElementById('showNext').style.display = 'block';
+            //document.getElementById('showNext').firstChild.data   = 'Commencer';
+            document.getElementById('item1').style.display = 'block';
+            document.getElementById('selected').value = 1;
+            document.getElementById('selectedprest').value = 0;
+   document.getElementById('selectedprest').value = document.getElementById('prestataire_id_1').value ;
+   $('#showNext').prop('disabled', true);
+	  $('#add2').prop('disabled', false);
+*/
 
-        $("#essai2-m").click(function() {
-            document.getElementById('termine-m').style.display = 'none';
-            document.getElementById('add2-m').style.display = 'block';
-            document.getElementById('add2prest-m').style.display='block';
-            document.getElementById('showNext-m').style.display = 'block';
-            document.getElementById('item1-m').style.display = 'block';
-            document.getElementById('selected-m').value = 1;
-            document.getElementById('selectedprest-m').value = 0;
+     document.getElementById('selected-m').value = 1;
+     document.getElementById('selectedprest-m').value = 0;
 
-        });
+  $( "#rechercherm" ).trigger( "click" );
+ 
+ //$( "#showNext" ).trigger( "click" );
+
+ document.getElementById('selected-m').value=1; var selected=1; next=selected+1;
+   document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_1-m').value ;
+
+   
+document.getElementById('item1-m').style.display = 'block';
+document.getElementById('add2-m').style.display = 'block';
+  document.getElementById('selected-m').value = 1;
+  
+  
+  $('#showNext-m').prop('disabled', true);
+	  $('#add2-m').prop('disabled', false);
+
+  document.getElementById('add2-m').style.display = 'block';
+                        document.getElementById('valide-m').style.display = 'block';
+                        document.getElementById('validation-m').style.display = 'block';
+                        document.getElementById('add2prest-m').style.display='block';
+                        document.getElementById('termine-m').style.display = 'none';
+                        document.getElementById('item1-m').style.display = 'block';
+ 
+ document.getElementById('showNext-m').firstChild.data ='Suivant';
+ //  $('#showNext').prop('disabled', false);
+     });
+
+      
 
 
         $("#statutprest").change(function() {
@@ -5493,8 +5593,350 @@ document.getElementById('add2').style.display = 'block';
  $('#showNext').prop('disabled', false);
 
  });
+   $("#statutprest-m").change(function() {
+ if(document.getElementById('statutprest-m').value=='autre'){
+    document.getElementById('detailsprest-m').style.display='block';
 
-   $("#showNext").click(function() {
+}else{
+    document.getElementById('detailsprest-m').style.display='none';
+
+}
+ $('#showNext-m').prop('disabled', false);
+
+ });
+
+
+   $("#showNext-m").click(function() {
+	var start=  document.getElementById('start-m').value ;
+	  var  prest =document.getElementById('selectedprest-m').value;
+    ///// Enregistrement prestation
+ if(    start==1  &&       document.getElementById('showNext-m').firstChild.data =='Commencer' )
+{
+	 document.getElementById('selected-m').value=1; var selected=1; next=selected+1;
+   document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_1-m').value ;
+$('#showNext-m').prop('disabled', true);
+ $('#add2-m').prop('disabled', false);
+
+
+ document.getElementById('add2-m').style.display = 'block';
+                        document.getElementById('valide-m').style.display = 'block';
+                        document.getElementById('validation-m').style.display = 'block';
+                        document.getElementById('add2prest-m').style.display='block';
+                        document.getElementById('termine-m').style.display = 'none';
+                        document.getElementById('item1-m').style.display = 'block';
+                     //   document.getElementById('item'+String(selected)).style.display = 'none';
+                     //   document.getElementById('item'+String(next)).style.display = 'block';
+
+
+                 //      $("#selected").val(next);
+
+ document.getElementById('showNext-m').firstChild.data ='Suivant';
+  }
+  else{
+	  document.getElementById('start-m').value =0;
+	  
+	   var  prestation =document.getElementById('idprestation-m').value;
+            //    var  prestataire =document.getElementById('selectedprest').value;
+                var  statut =document.getElementById('statutprest-m').value;
+                var  details =document.getElementById('detailsprest-m').value;
+				
+	            ///////    $("#selected").val(selected+1);
+
+/*
+                selected=  parseInt(document.getElementById('selected').value);
+				alert(selected) ;
+                if(selected >1 ) {
+                document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
+
+
+                var prestataire = $('#selectedprest').val();
+                var dossier_id = $('#dossier').val();
+
+                var typeprest = $('#typeprest').val();
+                var gouvernorat = $('#gouvcouv').val();
+                var specialite = $('#specialite').val();
+                var date = $('#pres_date').val();
+
+                //   gouvcouv
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('prestations.saving') }}",
+                        method:"POST",
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        success:function(data){
+                            var prestation=parseInt(data);
+                            /// window.location =data;
+
+                        //    document.getElementById('prestation').style.display='block';
+                        //    document.getElementById('valide').style.display='block';
+                        //    document.getElementById('idprestation').value =prestation;
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+
+
+                        }
+
+                    });
+                }else{
+
+                }
+
+    }
+ */
+
+
+                document.getElementById('showNext-m').firstChild.data  ='Suivant';
+
+                var shownext=false;var infos=false;
+
+				if( document.getElementById('firstsaved-m').value==0)
+				{
+				  var prestataire = $('#selectedprest-m').val();
+			  var nomprestataire = $('#selectedprest-m option:selected').text();
+ 			//  alert(nomprestataire);
+                var dossier_id = $('#dossier').val();
+
+              var typeprestom = document.getElementById('templateom').value;
+            var gouvernorat = $('#gouvcouvm').val();
+            var specialite = $('#specialitem').val();
+ if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
+            // AMBULANCE
+            if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4;}
+            // REMORQUAGE
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1;}
+            // cas remplace
+            var srcomtemp = document.getElementById("omfilled").src;
+            var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
+            var posomambulancetemp = srcomtemp.indexOf("odm_ambulance");
+            var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
+              var date = $('#pres_datem').val();
+
+                //   gouvcouv
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('prestations.saving') }}",
+                        method:"POST",
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        success:function(data){
+                            var prestation=parseInt(data);
+                            // window.location =data;
+							document.getElementById('idprestation-m').value=prestation;
+
+                        //    document.getElementById('prestation').style.display='block';
+                        //    document.getElementById('valide').style.display='block';
+                        //    document.getElementById('idprestation').value =prestation;
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+
+
+                        }
+
+                    });
+                }else{
+
+                }
+				
+				 }
+				 document.getElementById('firstsaved-m').value=0;
+				
+// 				
+ var _token = $('input[name="_token"]').val(); 
+                var  prestation =document.getElementById('idprestation-m').value; 
+                var  prestataire =document.getElementById('selectedprest-m').value;
+            //    var  statut =document.getElementById('statutprest').value;
+            //    var  details =document.getElementById('detailsprest').value;
+  var nomprestataire = $('#selectedprest-m option:selected').text();
+ 		//	  alert(nomprestataire);
+ 		//	  alert(prestation);
+			  
+                $.ajax({
+                    url:"{{ route('prestations.updatestatut') }}",
+                    method:"POST",
+                    data:{prestation:prestation,prestataire:prest,statut:statut,details:details, _token:_token},
+                    success:function(data){
+
+                // reinitialiser le champs de statut
+                    ///    if(document.getElementById('selectedprest').value ==0) {
+                    ///        document.getElementById('statutprest').value ='';
+                    ///        document.getElementById('detailsprest').value ='';}
+
+                    }
+                });				
+				
+				
+				
+				
+
+            // reinitialiser le champs de statut
+            /*if(document.getElementById('selectedprest').value ==0) {
+                document.getElementById('statutprest').value ='';
+            document.getElementById('detailsprest').value ='';}*/
+
+			
+			
+			
+ 	/*****
+            // si une prestation a èté ajoutée
+            if(document.getElementById('idprestation').value >0) {
+                if ((document.getElementById('statutprest').value == 'autre') && (document.getElementById('detailsprest').value != '')) {
+                    shownext=true;infos=true;
+					$('#showNext').prop('disabled', false);
+
+                }
+                if ((document.getElementById('statutprest').value == 'nonjoignable') || (document.getElementById('statutprest').value == 'nondisponible')) {
+                    shownext=true;infos=true;
+					$('#showNext').prop('disabled', false);
+
+                }
+            }
+            else{shownext=true;}
+             if(shownext==true)
+              {
+            if(infos==true){
+                // enregistrement des infos de prestation  + envoi des emails
+                var _token = $('input[name="_token"]').val();
+                var  prestation =document.getElementById('idprestation').value;
+                var  prestataire =document.getElementById('selectedprest').value;
+                var  statut =document.getElementById('statutprest').value;
+                var  details =document.getElementById('detailsprest').value;
+
+                $.ajax({
+                    url:"{{ route('prestations.updatestatut') }}",
+                    method:"POST",
+                    data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
+                    success:function(data){
+
+                // reinitialiser le champs de statut
+                        if(document.getElementById('selectedprest').value ==0) {
+                            document.getElementById('statutprest').value ='';
+                            document.getElementById('detailsprest').value ='';}
+
+                    }
+                });
+                document.getElementById('statutprest').selectedIndex =0;
+
+                      if(document.getElementById('idprestation').value >0) {
+                       ////   document.getElementById('prestation').style.display='none';
+                      }
+
+            }
+			
+			****/
+                document.getElementById('selectedprest-m').value = 0;
+                document.getElementById('detailsprest-m').value='';
+
+                var selected =parseInt(document.getElementById('selected-m').value);
+                var total = parseInt(document.getElementById('total-m').value);
+                document.getElementById('statutprest-m').value='';
+
+
+                var next = parseInt(selected) + 1;
+				
+				 if ((selected != 0) && (next <=  total  )) {
+
+                document.getElementById('selected-m').value = next;
+            document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_'+next+'-m').value ;
+				 }
+			
+			
+			// button reset => set prstaitaire 1
+			
+			
+                if ((selected == 0)) {
+                    document.getElementById('termine-m').style.display = 'none';
+                    document.getElementById('item1-m').style.display = 'block';
+                    document.getElementById('add2-m').style.display = 'block';
+                    document.getElementById('valide-m').style.display = 'block';
+                    document.getElementById('validation-m').style.display = 'block';
+                    document.getElementById('add2prest-m').style.display='block';
+
+                    //document.getElementById('selected').value=1;
+                    // $("#selected").val('1');
+
+                }
+
+                if ((selected) == (total  )) {
+
+                    document.getElementById('termine-m').style.display = 'block';
+
+                    document.getElementById('item' + selected+'-m').style.display = 'none';
+                    document.getElementById('showNext-m').style.display = 'none';
+                    document.getElementById('add2-m').style.display = 'none';
+                    document.getElementById('valide-m').style.display = 'none';
+                    document.getElementById('validation-m').style.display = 'none';
+                    document.getElementById('add2prest-m').style.display='none';
+
+
+                } else {
+
+                    if ((selected != 0) && (selected <= total + 1)) {
+                        document.getElementById('add2-m').style.display = 'block';
+                        document.getElementById('valide-m').style.display = 'block';
+                        document.getElementById('validation-m').style.display = 'block';
+                        document.getElementById('add2prest-m').style.display='block';
+                        document.getElementById('termine-m').style.display = 'none';
+                        document.getElementById('item' + selected+'-m').style.display = 'none';
+                        document.getElementById('item' + next+'-m').style.display = 'block';
+
+
+                        $("#selected-m").val(next);
+
+
+
+                    }
+                }
+
+
+
+                  if(next>parseInt(total)+1) {
+                    // document.getElementById('item' + selected).style.display = 'none';
+                }
+            /*    if( document.getElementById('idprestation').value>0 ){
+                      document.getElementById('idprestation').value=0
+                      document.getElementById('selectedprest').value = 0;
+                      document.getElementById('detailsprest').value='';
+                   ////   document.getElementById('prestation').style.display='none';
+                      document.getElementById('statutprest').selectedIndex =0;
+
+                  }*/
+    /*        }
+            else{
+                if(document.getElementById('selectedprest').selectedIndex  >0) {
+                  Swal.fire({
+                     type: 'error',
+                     title: 'Attendez...',
+                     text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
+
+                 })
+
+            }
+
+            }
+*/
+			
+				
+				
+				
+		  $('#add2-m').prop('disabled', true);
+		  
+	  }		
+	 document.getElementById('start-m').value =0;
+	
+	  $('#showNext-m').prop('disabled', true);
+
+ 			 
+
+        });
+  $("#showNext").click(function() {
 	var start=  document.getElementById('start').value ;
 	  var  prest =document.getElementById('selectedprest').value;
     ///// Enregistrement prestation
@@ -5690,6 +6132,7 @@ $('#showNext').prop('disabled', true);
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
 
+
                 // reinitialiser le champs de statut
                         if(document.getElementById('selectedprest').value ==0) {
                             document.getElementById('statutprest').value ='';
@@ -5812,128 +6255,6 @@ $('#showNext').prop('disabled', true);
 
         });
 
-$("#showNext-m").click(function() {
-            var shownext=false;var infos=false;
-            // reinitialiser le champs de statut
-            /*if(document.getElementById('selectedprest').value ==0) {
-                document.getElementById('statutprest').value ='';
-            document.getElementById('detailsprest').value ='';}*/
-
-            // si une prestation a èté ajoutée
-            if(document.getElementById('idprestation-m').value >0) {
-                if ((document.getElementById('statutprest-m').value == 'autre') && (document.getElementById('detailsprest-m').value != '')) {
-                    shownext=true;infos=true
-                }
-                if ((document.getElementById('statutprest-m').value == 'nonjoignable') || (document.getElementById('statutprest-m').value == 'nondisponible')) {
-                    shownext=true;infos=true
-                }
-            }
-            else{shownext=true;}
-             if(shownext==true)
-              {
-            if(infos==true){
-                // enregistrement des infos de prestation  + envoi des emails
-
-                var _token = $('input[name="_token"]').val();
-                var  prestation =document.getElementById('idprestation-m').value;
-                var  prestataire =document.getElementById('selectedprest-m').value;
-                var  statut =document.getElementById('statutprest-m').value;
-                var  details =document.getElementById('detailsprest-m').value;
-
-                $.ajax({
-                    url:"{{ route('prestations.updatestatut') }}",
-                    method:"POST",
-                    data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
-                    success:function(data){
-
-                // reinitialiser le champs de statut
-                        if(document.getElementById('selectedprest-m').value ==0) {
-                            document.getElementById('statutprest-m').value ='';
-                            document.getElementById('detailsprest-m').value ='';}
-
-                    }
-                });
-                document.getElementById('statutprest-m').selectedIndex =0;
-
-                      if(document.getElementById('idprestation-m').value >0) {
-                          document.getElementById('prestation-m').style.display='none';
-                      }
-
-            }
-                document.getElementById('selectedprest-m').value = 0;
-                document.getElementById('detailsprest-m').value='';
-
-                var selected = document.getElementById('selected-m').value;
-                var total = parseInt(document.getElementById('total-m').value);
-
-
-                var next = parseInt(selected) + 1;
-                document.getElementById('selected-m').value = next;
-
-                if ((selected == 0)) {
-                    document.getElementById('termine-m').style.display = 'none';
-                    document.getElementById('item1-m').style.display = 'block';
-                    document.getElementById('add2-m').style.display = 'block';
-                    document.getElementById('add2prest-m').style.display='block';
-
-                    //document.getElementById('selected').value=1;
-                    // $("#selected").val('1');
-
-                }
-
-                if ((selected) == (total  )) {
-
-                    document.getElementById('termine-m').style.display = 'block';
-
-                    document.getElementById('item'+(selected)+'-m').style.display = 'none';
-                    document.getElementById('showNext-m').style.display = 'none';
-                    document.getElementById('add2-m').style.display = 'none';
-                    document.getElementById('add2prest-m').style.display='none';
-
-
-                } else {
-
-                    if ((selected != 0) && (selected <= total + 1)) {
-                        document.getElementById('add2-m').style.display = 'block';
-                        document.getElementById('add2prest-m').style.display='block';
-                        document.getElementById('termine-m').style.display = 'none';
-                        document.getElementById('item' + selected+'-m').style.display = 'none';
-                        document.getElementById('item' + next+'-m').style.display = 'block';
-
-
-                        $("#selected-m").val(next);
-
-
-
-                    }
-                }
-
-                if(next>parseInt(total)+1) {
-                    // document.getElementById('item' + selected).style.display = 'none';
-                }
-                if( document.getElementById('idprestation-m').value>0 ){
-                      document.getElementById('idprestation-m').value=0
-                      document.getElementById('selectedprest-m').value = 0;
-                      document.getElementById('detailsprest-m').value='';
-                      document.getElementById('prestation-m').style.display='none';
-                      document.getElementById('statutprest-m').selectedIndex =0;
-
-                  }
-            }
-            else{
-                if(document.getElementById('selectedprest-m').selectedIndex  >0) {
-                  Swal.fire({
-                     type: 'error',
-                     title: 'Attendez...',
-                     text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
-
-                 })
-
-            }
-
-            }
-
-        });
 
 
 
