@@ -317,14 +317,19 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2>
-<input type="text" list="inter__garage" name="inter__garage"  value="<?php  if(isset ($inter__garage)) echo $inter__garage; ?>"  />
-        <datalist id="inter__garage">
-            <?php
+<select id="inter__garage" name="inter__garage" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-        echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';
- }
+      echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+}
 ?>
+</select>
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -375,22 +380,17 @@ foreach ($array_tel as $tel) {
 <p class=rvps11><span class=rvts18> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
 </form>
 <script type="text/javascript">
-document.querySelector('input[list="inter__garage"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+  var e = document.getElementById("inter__garage");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("inter__garage");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 
 </script>
 </body></html>

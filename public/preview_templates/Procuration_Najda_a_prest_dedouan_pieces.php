@@ -247,14 +247,19 @@ foreach ($array_client as $client) {
  }
 ?>
 attestons par la présente que la société </span><span class=rvts7>
-<input type="text" list="prest__dossier" name="prest__dossier"  value="<?php  if(isset ($prest__dossier)) echo $prest__dossier;?>"  />
-        <datalist id="prest__dossier">
-            <?php
+<select id="prest__dossier" name="prest__dossier" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-   echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
 }
 ?>
+</select>
 </span><span class=rvts2> <input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input>représentée par son gérant Mr <input name="CL_name_gerant" placeholder="Name GERANT" value="<?php if(isset ($CL_name_gerant)) echo $CL_name_gerant; ?>"></input> titulaire de la CIN N° <input name="CL_cin_gerant" placeholder="Cin GERANT" value="<?php if(isset ($CL_cin_gerant)) echo $CL_cin_gerant; ?>"></input>  est chargée par nos soins de procéder auprès des services concernés à la récupération des documents originaux et le retrait des marchandises objet de la LTA N° <input name="CL_nlta" placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>"></input>  relatif au véhicule <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> pour le compte de son propriétaire Mr <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  .</span></p>
 <p><span class=rvts2>Cette procuration est établie pour servir et valoir ce que de droit.</span></p>
 <p><span class=rvts2><br></span></p>
@@ -269,22 +274,17 @@ foreach ($array_prest as $prest) {
 <p><span class=rvts8><br></span></p>
 </form>
 <script type="text/javascript">
-document.querySelector('input[list="prest__dossier"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+var e = document.getElementById("prest__dossier");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__dossier");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 </body></html>
 

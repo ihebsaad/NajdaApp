@@ -291,13 +291,21 @@ foreach ($array_client as $client) {
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2>
-<input type="text" list="inter__remor" name="inter__remor"  value="<?php  if(isset ($inter__remor)) echo $inter__remor; ?>" />
-        <datalist id="inter__remor" >
-            <?php
+<select id="inter__remor" name="inter__remor" autocomplete="off" onchange="intremorqchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
+ echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';   
+  }
+else {
     
-   echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+    echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+}
+    
+   
 ?>
+</select>
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -357,22 +365,18 @@ foreach ($array_prest as $prest) {
 </body></html>
 </form>
 <script type="text/javascript">
-document.querySelector('input[list="inter__remor"]').addEventListener('input', onInput);
+// initialisation id remorquage intervenant
+ 
+    var e = document.getElementById("inter__remor");
+    var idpres = e.options[e.selectedIndex].id;
+    document.getElementById("id__prestataire").value = idpres;
 
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+    //changement de id remorquage intervenant lors changement select
+    function intremorqchange() {
+        var e = document.getElementById("inter__remor");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 <?php
         }

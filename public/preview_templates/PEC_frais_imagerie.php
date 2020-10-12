@@ -315,15 +315,19 @@ foreach ($array_client as $client) {
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2>
 <!--<input name="prest__imag" style="width:300px" placeholder="Prestataire centre imagerie" value="<?php // if(isset ($prest__imag)) echo $prest__imag; ?>"></input>-->
-<input type="text" list="prest__imag" name="prest__imag"  value="<?php  if(isset ($prest__imag)) echo $prest__imag; ?>" />
-        <datalist id="prest__imag">
-            <?php
-foreach ($array_imag as $imag) {
+<select id="prest__imag" name="prest__imag" autocomplete="off" onchange="prestchange();" >
+<?php
+
+foreach ($array_imag as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-    //echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
-    echo '<option value="'.$imag["name"].'" id="'.$imag["id"].'" >'.$imag["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
 }
 ?>
+</select>
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -388,22 +392,19 @@ if (obj.value > 0)
             {document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value) }
 
         }//fin de keypressHandler
-document.querySelector('input[list="prest__imag"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+// initialisation id prestataires
+    
+        var e = document.getElementById("prest__imag");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__imag");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 </body></html>
 <?php

@@ -269,14 +269,19 @@ foreach ($array_client as $client) {
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2> <!--<input name="prest__optic" style="width:300px" placeholder="Prestataire opticien" value="<?php if(isset ($prest__optic)) echo $prest__optic; ?>"></input> -->
-<input type="text" list="prest__optic" name="prest__optic" value="<?php  if(isset ($prest__optic)) echo $prest__optic;?>" />
-        <datalist id="prest__optic">
-            <?php
+<select id="prest__optic" name="prest__optic" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-  echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
 }
 ?>
+</select>
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -342,22 +347,17 @@ if (obj.value > 0)
             {document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value) }
 
         }//fin de keypressHandler
-document.querySelector('input[list="prest__optic"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+   var e = document.getElementById("prest__optic");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__optic");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 </body></html>
 <?php

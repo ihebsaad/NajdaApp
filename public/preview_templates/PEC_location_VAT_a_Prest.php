@@ -355,14 +355,19 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2>
-<input type="text" list="prest__location_voiture" name="prest__location_voiture" value="<?php  if(isset ($prest__location_voiture)) echo $prest__location_voiture;?>"  />
-        <datalist id="prest__location_voiture">
-            <?php
+<select id="prest__location_voiture" name="prest__location_voiture" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
- echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
 }
 ?>
+</select>
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
@@ -472,23 +477,19 @@ foreach ($array_tel as $tel) {
         document.getElementById("CL_duree_location").value = diffDays;
         document.getElementById("CL_duree_location").onchange();
     }
-document.querySelector('input[list="prest__location_voiture"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
-
+// initialisation id prestataires
+    
+        var e = document.getElementById("prest__location_voiture");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__location_voiture");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 </body></html>
 <?php

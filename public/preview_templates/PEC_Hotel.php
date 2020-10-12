@@ -66,14 +66,14 @@ mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1)AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 18)";
+$sqlvh = "SELECT id,name,prenom,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1)AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 18)";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
 
         $array_prest = array();
         while($rowvh = $resultvh->fetch_assoc()) {
-            $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"]  );
+            $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"] ,"prenom" => $rowvh["prenom"] );
         }
 // infos agent
 	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
@@ -293,15 +293,19 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
 <p><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2>
 
-    <!--<input name="prest__hotel" style="width:300px" placeholder="Prestataire hotel" value="<?php //if(isset ($prest__hotel)) echo $prest__hotel; ?>"></input>-->
-<input type="text" list="prest__hotel" name="prest__hotel" value="<?php  if(isset ($prest__hotel)) echo $prest__hotel; ?>" />
-        <datalist id="prest__hotel">
-            <?php
+<select id="prest__hotel" name="prest__hotel" autocomplete="off" onchange="prestchange();" >
+<?php
+
 foreach ($array_prest as $prest) {
+if(($prest['id'] === $id__prestataire)) {
     
-echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].''.$prest["prenom"].'" id="'.$prest["id"].'" selected >'.$prest["name"].''.$prest["prenom"].'</option>';}
+else {
+    
+    echo '<option value="'.$prest["name"].''.$prest["prenom"].'" id="'.$prest["id"].'" >'.$prest["name"].''.$prest["prenom"].'</option>';}
 }
 ?>
+</select>
 
 </span></p>
 <p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
@@ -350,22 +354,19 @@ if (obj.value > 0)
             {document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value) }
 
         }//fin de keypressHandler
-document.querySelector('input[list="prest__hotel"]').addEventListener('input', onInput);
-
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
-
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
-	      break;
-	    }
-	  }
-	}
+// initialisation id prestataires
+    
+        var e = document.getElementById("prest__hotel");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+ 
+    //changement de id prestataire lors changement select
+    function prestchange() {
+        //var optionSelected = $("option:selected", this);
+        var e = document.getElementById("prest__hotel");
+        var idpres = e.options[e.selectedIndex].id;
+        document.getElementById("id__prestataire").value = idpres;
+     }
 </script>
 </body></html>
 <?php

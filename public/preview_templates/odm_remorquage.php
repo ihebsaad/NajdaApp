@@ -60,6 +60,7 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
                 // output data of each row
                 $agtsign = $resultsign->fetch_assoc();
                 $signaturetype = strtolower($agtsign['type_dossier']);
+if($signaturetype=='medical') {$signaturetype="médicale";}
             }
 }
 else
@@ -74,6 +75,7 @@ else
 
         // recuperer type dossier pour la signature (medicale ou technique)
         $signaturetype = strtolower($detaildoss['type_dossier']);
+if($signaturetype=='medical') {$signaturetype="médicale";}
 
         // infos client
         $sqlcl = "SELECT name, groupe FROM clients WHERE id=".$detaildoss['customer_id'];
@@ -304,6 +306,17 @@ if (!empty($resultspec) && $resultspec->num_rows > 0) {
     }
     //print_r($array_prest);
 }
+$sqladr = "SELECT id,champ FROM adresses where nature='teldoss' and parent=".$dossier;
+	$resultadr = $conn->query($sqladr);
+	if ($resultadr->num_rows > 0) {
+	    // output data of each row
+	    $array_adr = array();
+	    while($rowadr = $resultadr->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_adr[] = array('id' => $rowadr["id"],'champ' => $rowadr["champ"]);
+	    }
+	 //  print_r($array_adr);
+		}
 
 header("Content-Type: text/html;charset=UTF-8");
 ?>
@@ -571,7 +584,7 @@ foreach ($array_spec as $spec) {
     <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV pour </span><span style="font-family:'Times New Roman'; font-weight:bold"> le remorquage </span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
         <input type="time" id="CL_heure_RDV" name="CL_heure_RDV" min="00:00" max="23:59"  <?php if (isset($detailom)) { if (isset($detailom['CL_heure_RDV'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_RDV']))."'";}} ?> >
         <span style="font-family:'Times New Roman'; color:#0070c0">            </span><span style="font-family:'Times New Roman'; font-weight:bold">Contact téléphonique</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:   </span><span style="font-family:'Times New Roman'; color:#31849b">
-<input name="CL_contacttel" placeholder="Contact téléphonique" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_contacttel'])) {echo "value='".$detailom['CL_contacttel']."'";}} ?> ></input>
+<input name="CL_contacttel" placeholder="Contact téléphonique" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_contacttel'])) {echo "value='".$detailom['CL_contacttel']."'";}} else  {  if(isset($array_adr[0]['champ'])) {echo "value='".$array_adr[0]['champ']."'";} else { echo "value=''";}} ?>  ></input>
 				 </span><span style="font-family:'Times New Roman'">Qualité</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">: </span>
         <input name="CL_qualite" placeholder="Qualité" <?php if (isset($detailom)) { if (isset($detailom['CL_qualite'])) {echo "value='".$detailom['CL_qualite']."'";}} ?> ></input>
     </p>
@@ -579,7 +592,7 @@ foreach ($array_spec as $spec) {
     </div>
 
     <p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
-        <input type="text" list="CL_lieuprest_pc" name="CL_lieuprest_pc" <?php if (isset($detailom)) { if (isset($detailom['CL_lieuprest_pc'])) {echo "value='".$detailom['CL_lieuprest_pc']."'";}} ?> />
+        <input type="text" id="lieuprest" list="CL_lieuprest_pc" name="CL_lieuprest_pc" <?php if (isset($detailom)) { if (isset($detailom['CL_lieuprest_pc'])) {echo "value='".$detailom['CL_lieuprest_pc']."'";}} ?> />
         <!--<datalist id="CL_lieuprest_pc">
             <?php
             //foreach ($array_prest as $prest) {
@@ -600,7 +613,7 @@ foreach ($array_spec as $spec) {
         <span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
         <input name="CL_prestatairetel_pc" id="CL_prestatairetel_pc" placeholder="Téléphone du prestataire" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_prestatairetel_pc'])) {echo "value='".$detailom['CL_prestatairetel_pc']."'";}} ?> ></input>
         <span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:Wingdings; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span>
-        <input type="text" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec" <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo "value='".$detailom['CL_lieudecharge_dec']."'";}} ?> />
+        <input type="text" id="lieudecharge" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec" <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo "value='".$detailom['CL_lieudecharge_dec']."'";}} ?> />
         <!--<datalist id="CL_lieudecharge_dec">
             <?php
             /*foreach ($array_prest as $prest) {
