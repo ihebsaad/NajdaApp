@@ -51,7 +51,13 @@ class DocumentsController extends Controller
 
                 if (isset($_POST['annule']))
                     {$file=public_path($arrfile['template_annulation']);}
-                else {$file=public_path($arrfile['template_remplace']);}
+                else {
+if(isset($_POST['modif']) && $_POST['modif']=='0')
+{
+$file=public_path($arrfile['template_remplace']);}
+if(isset($_POST['modif']) && $_POST['modif']==='1')
+{
+$file=public_path($arrfile['template_modif']);}}
             }
         }
         //return $_POST;
@@ -559,7 +565,14 @@ $nomuser = $user->name ." ".$user->lastname ;
             {$infoparent = Document::where('id',$parent)->first();
 
        $docparent=$infoparent['titre'];
+if(isset($_POST['modif']) && $_POST['modif']=='1')
+{
+Log::info('[Agent : '.$nomuser.' ] modification du document '.$docparent.' dans le dossier: '.$refdoss );
+}
+else
+{
 Log::info('[Agent : '.$nomuser.' ] remplacement du document '.$docparent.' dans le dossier: '.$refdoss );
+}
 if(!empty($_POST['id__prestataire']))
 {
 $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();

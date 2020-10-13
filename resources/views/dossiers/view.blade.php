@@ -1160,12 +1160,28 @@ array_push($listepr,$pr['prestataire_id']);
 
                                     <div class="btn-group">
                                         <?php
+
                                             if (stristr($doc->emplacement,'annulation')=== FALSE) 
                                             {
+$remplace='remplace';
+$modif='modif';
                                         ?>
+<?php
+ if ((! strstr($doc->titre, 'Demande_refoulement')) && (! strstr($doc->titre, 'Fax_Ima'))&& (! strstr($doc->titre, 'Procu_abonne_pr_Najda_rapat_vhl'))&& (! strstr($doc->titre, 'RM_'))) 
+                                {
+?> 
                                         <div class="btn-group" style="margin-right: 10px">
+<input type="hidden" value=""  id="modif" />
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
-                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $doc->montantgop;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo '0'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $doc->montantgop;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                            </button>
+                                        </div>
+<?php
+                                            }
+                                        ?>
+ <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnmodif">
+                                                <a style="color:black" href="#" id="modif" onclick="remplacedoc(<?php echo '1'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $doc->montantgop;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Modifier</a>
                                             </button>
                                         </div>
 
@@ -3563,20 +3579,23 @@ function modalodoc(titre,emplacement,commentaire=null,idutag=null)
 }
 
 
-function remplacedoc(iddoc,template,montantgopprec,idgopprec)
+function remplacedoc(modif,iddoc,template,montantgopprec,idgopprec)
 {
+if(modif===0)
+{document.getElementById('modif').value=0;}
+if(modif===1)
+{document.getElementById('modif').value=1;}
 
         var dossier = $('#dossier').val();
         var tempdoc = template;
-        $("#gendochtml").prop("disabled",false);
-        
+
         if ((dossier != '') )
         {
             var _token = $('input[name="_token"]').val();
             $.ajax({
                 url:"{{ route('documents.htmlfilled') }}",
                 method:"POST",
-                data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
+                data:{dossier:dossier,modif:modif,template:tempdoc,parent:iddoc, _token:_token},
                 success:function(data){
 
                         // set iddocparent value
@@ -4378,6 +4397,8 @@ $("#templateom").val("Select").change();
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
         var comdoc = $("#doccomment").val();
+var modif = $("#modif").val()
+
         var idparent = '';
         var idgop = '';
         var idMissionDoc=$("#idMissionDoc").val();
@@ -4402,7 +4423,7 @@ $("#templateom").val("Select").change();
                 url:"{{ route('documents.adddocument') }}",
                 method:"post",
                 //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&comdoc='+comdoc+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&modif='+modif+'&comdoc='+comdoc+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
 
                    // alert(data);
