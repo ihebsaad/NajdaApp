@@ -3692,6 +3692,8 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                 
         }
 
+ $columns = array_column($listetags, 'created_at');
+array_multisort($columns, SORT_DESC, $listetags);
         return $listetags;
     }
 

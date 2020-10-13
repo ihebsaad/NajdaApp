@@ -687,6 +687,9 @@ use App\Attachement ;
 
                       $tagsentree = Tag::where(['entree' => $entree['id'], 'dernier' => 1 ])->orderBy('created_at','desc')->get();
                       $tags = array_merge($tags,$tagsentree->toArray());
+ $columns = array_column($tags, 'created_at');
+array_multisort($columns, SORT_DESC, $tags);
+        
                       
                        ?>  
                       <div id="ajouttag" style="display:none;margin-top: 30px">
