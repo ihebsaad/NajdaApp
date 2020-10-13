@@ -4827,6 +4827,7 @@ function toggle(className, displayState){
 
         $('#valide').click(function(){
             var prestation=  document.getElementById('idprestation').value;
+            var firstsaved= parseInt(  document.getElementById('firstsaved').value);
             var _token = $('input[name="_token"]').val();
 // creation prestation  si ce n'est pas la premiere
 			
@@ -4841,6 +4842,7 @@ function toggle(className, displayState){
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
 
+				if(firstsaved==0){
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                 {
@@ -4883,6 +4885,28 @@ function toggle(className, displayState){
 
                 }
 				
+				
+				
+				}else{
+					
+									
+			   $.ajax({
+                url:"{{ route('prestations.valide') }}",
+                method:"POST",
+                data:{prestation:prestation, _token:_token},
+                success:function(data){
+                 //   var prestation=parseInt(data);
+                    /// window.location =data;
+                    window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+
+            });
+			
+				}
 			/*
 			// validation
 			prestation= document.getElementById('idprestation').value;
@@ -5046,6 +5070,7 @@ $('#valide-m').click(function(){
                    document.getElementById('valide').style.display='block';
                    document.getElementById('validation').style.display='block';
                     document.getElementById('idprestation').value =prestation;
+                    document.getElementById('firstsaved').value =1;
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
