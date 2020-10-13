@@ -3661,7 +3661,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
             foreach ($entreesdossier as $entr) {
                 //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                $coltags = Tag::get()->where('entree', '=', $entr['id'] )->where('type', '=', 'email')->where('dernier', '=', 1);
+                $coltags = Tag::orderBy('created_at', 'DESC')->get()->where('entree', '=', $entr['id'] )->where('type', '=', 'email')->where('dernier', '=', 1);
 
                 if (!empty($coltags))
                 {
@@ -3676,7 +3676,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                 if (!empty($colattachs))
                 {
                     foreach ($colattachs as $lattach) {
-                        $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('dernier', '=', 1);
+                        $coltagsattach = Tag::orderBy('created_at', 'DESC')->get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('dernier', '=', 1);
 
                         if (!empty($coltagsattach))
                         {
