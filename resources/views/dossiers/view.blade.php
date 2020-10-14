@@ -4848,6 +4848,7 @@ function toggle(className, displayState){
 
         $('#valide').click(function(){
             var prestation=  document.getElementById('idprestation').value;
+            var firstsaved= parseInt(  document.getElementById('firstsaved').value);
             var _token = $('input[name="_token"]').val();
 // creation prestation  si ce n'est pas la premiere
 			
@@ -4862,6 +4863,7 @@ function toggle(className, displayState){
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
 
+				if(firstsaved==0){
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                 {
@@ -4904,6 +4906,28 @@ function toggle(className, displayState){
 
                 }
 				
+				
+				
+				}else{
+					
+									
+			   $.ajax({
+                url:"{{ route('prestations.valide') }}",
+                method:"POST",
+                data:{prestation:prestation, _token:_token},
+                success:function(data){
+                 //   var prestation=parseInt(data);
+                    /// window.location =data;
+                    window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+
+            });
+			
+				}
 			/*
 			// validation
 			prestation= document.getElementById('idprestation').value;
@@ -4926,9 +4950,9 @@ function toggle(className, displayState){
 			
 			*/
         });
- 
-$('#valide-m').click(function(){
-            var prestation=  document.getElementById('idprestation-m').value;
+ $('#valide-m').click(function(){
+          var prestation=  document.getElementById('idprestation-m').value;
+var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
             var _token = $('input[name="_token"]').val();
 // creation prestation  si ce n'est pas la premiere
 			
@@ -4955,7 +4979,7 @@ $('#valide-m').click(function(){
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
                 var date = $('#pres_datem').val();
-
+				if(firstsavedm==0){
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                 {
@@ -4978,7 +5002,7 @@ $('#valide-m').click(function(){
                 success:function(data){
                  //   var prestation=parseInt(data);
                     /// window.location =data;
-                 document.getElementById('typeaffect').style.display='none';
+                    document.getElementById('typeaffect').style.display='none';
                  //document.getElementById('prestselected').value = document.getElementById('selectedprest-m').value;
                  var prestvalid=document.getElementById('selectedprest-m').value;
                  console.log(prestvalid);
@@ -5012,6 +5036,42 @@ $('#valide-m').click(function(){
 
                 }
 				
+				
+				
+				}else{
+					
+									
+			   $.ajax({
+                url:"{{ route('prestations.valide') }}",
+                method:"POST",
+                data:{prestation:prestation, _token:_token},
+                success:function(data){
+                 //   var prestation=parseInt(data);
+                    /// window.location =data;
+                 document.getElementById('typeaffect').style.display='none';
+                 //document.getElementById('prestselected').value = document.getElementById('selectedprest-m').value;
+                 var prestvalid=document.getElementById('selectedprest-m').value;
+                 console.log(prestvalid);
+                 var prestvaltext = $("#selectedprest-m option[value='"+prestvalid+"']").text();
+
+          console.log("text: "+prestvaltext);
+                 //document.getElementById('prestselected').val = prestvaltext;
+                 $("#prestselected").val(prestvaltext);
+                 $("#idprestselected").val(prestation);
+                 document.getElementById('externaffect').style.display='block';
+                 
+                 $("#affectationprest").prop('disabled', true);
+                 
+                 $('#optprestataire').hide();
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+
+            });
+			
+				}
 			/*
 			// validation
 			prestation= document.getElementById('idprestation').value;
@@ -5034,6 +5094,8 @@ $('#valide-m').click(function(){
 			
 			*/
         });
+ 
+
 
        
 
@@ -5067,6 +5129,7 @@ $('#valide-m').click(function(){
                    document.getElementById('valide').style.display='block';
                    document.getElementById('validation').style.display='block';
                     document.getElementById('idprestation').value =prestation;
+                    document.getElementById('firstsaved').value =1;
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -5227,7 +5290,7 @@ $('#add2-m').click(function(){
                    document.getElementById('valide-m').style.display='block';
                    document.getElementById('validation-m').style.display='block';
                     document.getElementById('idprestation-m').value =prestation;
-
+document.getElementById('firstsaved-m').value =1;
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
 
