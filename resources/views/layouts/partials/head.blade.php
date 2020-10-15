@@ -663,10 +663,12 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 	// checkboite();
 		
 <?php
-$user = auth()->user();
- $iduser=$user->id;
-$user_type=$user->user_type;
 
+$iduser=0;
+$user = auth()->user();
+if isset($user){
+ $iduser=$user->id;
+ }
 $seance =  DB::table('seance')
     ->where('id','=', 1 )->first();
 	
