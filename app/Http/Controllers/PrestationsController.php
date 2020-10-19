@@ -320,7 +320,10 @@ class PrestationsController extends Controller
         $now=date('d/m/Y H:i');
          $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
         $contenu = 'Bonjour ' . $nomprest . ',<br>
-        Najda vous informe que vous avez été choisi le '.$now.' pour mission le '.$datep.' mais vous étiez '.$raison.'<br>';
+        Najda vous informe que vous avez été choisi le '.$now.' pour mission le '.$datep.' mais vous étiez '.$raison.'<br>
+		Prestation : '.$TypePrest.', '.$Specialite.'<br>
+		Dossier : '.$ref.'
+		';
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
