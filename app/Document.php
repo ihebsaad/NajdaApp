@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     //
-    protected $fillable = ['id','dossier','titre','description','emplacement','template','valchamps','comment','parent','dernier','idtaggop','montantgop'];
+    protected $fillable = ['id','dossier','titre','name','description','emplacement','template','valchamps','comment','parent','dernier','idtaggop','montantgop'];
 
 
 }

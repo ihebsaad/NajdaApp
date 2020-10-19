@@ -1,4 +1,4 @@
-﻿@extends('layouts.mainlayout')
+@extends('layouts.mainlayout')
 <?php 
 use App\User ; 
 use App\Prestataire ;
@@ -10,7 +10,6 @@ use App\Adresse;
 use App\Mission;
 use App\Facture;
 use App\Tag;
-
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
      use  \App\Http\Controllers\PrestatairesController;
@@ -20,8 +19,6 @@ use  \App\Http\Controllers\EnvoyesController ;
 use  \App\Http\Controllers\EntreesController ;
 use \App\Http\Controllers\UsersController;
 use \App\Http\Controllers\TagsController;
-
-
 function formatBytes($size){
     $base = log($size) / log(1024);
     $suffix = array("", " KO", " MO", " GO", " TO");
@@ -40,8 +37,6 @@ function custom_echo($x, $length)
         echo $y;
     }
 }
-
-
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -87,7 +82,6 @@ function custom_echo($x, $length)
          <?php
          $idagent=$dossier->user_id;
          $CurrentUser = auth()->user();
-
          $iduser=$CurrentUser->id;
          // les agents ne voient pas l'aaffectation - à vérifier
          if (Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ) { ?>
@@ -100,21 +94,17 @@ function custom_echo($x, $length)
             { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';
               }
              if( ($dossier->affecte >0)){ echo $agentname['name'].' '.$agentname['lastname'];}
-
              if(Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) )
             { echo '</a>';}
-
         ?>
         <?php }
         else
         {
             if($statut=='Cloture'){ } else {
-
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
             {echo '<a style="color:#FD9883" href="#" data-toggle="modal" data-target="#attrmodal">merci cliquer pour affecter</a>';}
             else
             {echo '<b style="color:#FD9883">non affecté</b>';}
-
             }
         } ?>
 
@@ -122,7 +112,6 @@ function custom_echo($x, $length)
              if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}
              echo 'Affecté à : ';
                echo $agentname['name'].' '.$agentname['lastname'];
-
              }?>
     </div>
     <div class="col-md-5" style="text-align: right;padding-right: 35px">
@@ -319,8 +308,6 @@ function custom_echo($x, $length)
                if($dossier->created==null){ $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ));}else{
                 $createdat=  date('d/m/Y H:i', strtotime($dossier->created ));
                 }
-
-
                 ;?>
                 Dossier créé par <B><?php echo $creator ;?></B> - Date :<?php echo $createdat ?>
 
@@ -366,7 +353,6 @@ function custom_echo($x, $length)
                                        $communin['reception'] .'<i class="fa fa-fw fa-clock-o"></i><br>
                                         </span>';
                                         }
-
                                         ?>
                                              <?php if ($communin['boite']==1 && $communin['par']>0 )
                                             {
@@ -514,7 +500,6 @@ function custom_echo($x, $length)
                                 appId: 'plCFMZRCP0KR',
                                 apiKey: 'aafa6174d8fa956cd4789056c04735e1',
                                 container: document.querySelector('#villepr2'),
-
                             });
                             placesAutocomplete3.on('change', function resultSelected(e) {
                                 document.querySelector('#villecode2').value = e.suggestion.postcode || '';
@@ -551,7 +536,6 @@ function custom_echo($x, $length)
         $villeid=intval($do['ville_id']);
         if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
         else{$ville=$do['ville'];}
-
         $gouvs=  PrestatairesController::PrestataireGouvs($id);
         $typesp=  PrestatairesController::PrestataireTypesP($id);
         $specs=  PrestatairesController::PrestataireSpecs($id);
@@ -583,7 +567,6 @@ function custom_echo($x, $length)
         echo '<td colspan="2"><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
         } else
         { echo  '<td colspan="2"></td>';}
-
         echo '</tr> ';
         }
         ?>
@@ -606,11 +589,8 @@ function custom_echo($x, $length)
                      <h3>Ajouter une nouvelle prestation</h3><br>
                      <?php
                      $users=UsersController::ListeUsers();
-
                      $CurrentUser = auth()->user();
-
                      $iduser=$CurrentUser->id;
-
                      ?>
                      <div class="form-group">
 
@@ -685,7 +665,6 @@ function custom_echo($x, $length)
                                          appId: 'plCFMZRCP0KR',
                                          apiKey: 'aafa6174d8fa956cd4789056c04735e1',
                                          container: document.querySelector('#villepr'),
-
                                      });
                                      placesAutocomplete2.on('change', function resultSelected(e) {
                                          document.querySelector('#villecode').value = e.suggestion.postcode || '';
@@ -706,9 +685,7 @@ function custom_echo($x, $length)
                              </div>
                              <!--
                                                          <div style="align:center;text-align:center">
-
                                                              <span style="align:center" id="check" class="btn btn-danger">Chercher des prestataires</span>
-
                                                          </div>
                              -->
                              <div id="data" ><style>#data b{text-align:center;}</style>
@@ -877,7 +854,6 @@ foreach($prestations as $pr )
     {          $effectue= $pr['effectue'];
               if($effectue ==1)
                   {
-
                $prest= $pr['prestataire_id'];
                /*
 $villeid=intval($prest['ville_id']);
@@ -885,7 +861,6 @@ if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
 else{$ville=$prest['ville'];}
 */
 $interv = PrestationsController::PrestById($prest);
-
             $gouvs=  PrestatairesController::PrestataireGouvs($prest);
             $typesp=  PrestatairesController::PrestataireTypesP($prest);
             $specs=  PrestatairesController::PrestataireSpecs($prest);
@@ -901,9 +876,7 @@ $interv = PrestationsController::PrestById($prest);
 
 <?php }
 array_push($listepr,$pr['prestataire_id']);
-
 }
-
 }
     ?>
                    </tbody>
@@ -927,14 +900,11 @@ array_push($listepr,$pr['prestataire_id']);
 
                    <?php foreach($intervenants as $interv )
                    {  $prest= $interv['prestataire_id'];
-
                    $interven = PrestationsController::PrestById($prest);
-
                    $gouvs=  PrestatairesController::PrestataireGouvs($prest);
                    $typesp=  PrestatairesController::PrestataireTypesP($prest);
                    $specs=  PrestatairesController::PrestataireSpecs($prest);
                    $ville= PrestatairesController::ChampById('ville',$prest);
-
                    ?> <tr>
                        <td style="font-size:14px;width:20%"><a href="{{action('PrestatairesController@view', $prest)}}" ><?php echo '<i>'.$interven['civilite'] .'</i> <b>'. $interven['name'] .'</b> '.$interven['prenom']; ?></a></td>
                        <td style="font-size:12px;width:15%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
@@ -985,7 +955,6 @@ array_push($listepr,$pr['prestataire_id']);
                 $filesize=$attach->filesize;
                         if($filesize >0)
                          { $tailleA=formatBytes($filesize);}else{$tailleA='';}
-
                             $descriptionAttach=$attach->description;
                             if($attach->entree_id>0){
                             $descriptionEmail= EntreesController::ChampById('commentaire',$parent);
@@ -1037,8 +1006,6 @@ array_push($listepr,$pr['prestataire_id']);
                                         default:
                                         echo '<i class="far fa-2X  fa-file"></i>';
                                         }
-
-
                                         ?>
                                         <?php  echo $attach->nom;  ?></small>
 
@@ -1098,7 +1065,6 @@ array_push($listepr,$pr['prestataire_id']);
                              <?php   } ?>
                              <!-- add block when the tag is for attachement  -->
                              <?php if ($dtag->type == "piecejointe") { 
-
                                 $entreeattach = DB::table('attachements')->where('id',$dtag->entree)->first();
                                 
                                 ?>
@@ -1160,7 +1126,6 @@ array_push($listepr,$pr['prestataire_id']);
 
                                     <div class="btn-group">
                                         <?php
-
                                             if (stristr($doc->emplacement,'annulation')=== FALSE) 
                                             {
 $remplace='remplace';
@@ -1201,8 +1166,17 @@ $modif='modif';
                                             }
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
+<?php
+                                            
+       $attach = DB::table('attachements')->where('nom',$doc->name)->first();  
+if($attach!==null)   
+{$existe='1';}  
+else                          
+{$existe='0';}  
+$null=null;
+?>
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
-                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}","<?php echo $doc->comment; ?>","<?php echo $doc->idtaggop; ?>");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+                                              <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}","<?php echo 'doc' ?>","<?php echo $null ?>","<?php echo $doc->comment; ?>","<?php echo $doc->idtaggop; ?>","<?php echo $doc->name; ?>","<?php echo $doc->emplacement; ?>",<?php echo $existe ?>,);' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
@@ -1277,7 +1251,6 @@ $modif='modif';
                                          appId: 'plCFMZRCP0KR',
                                          apiKey: 'aafa6174d8fa956cd4789056c04735e1',
                                          container: document.querySelector('#villeprm'),
-
                                      });
                                      placesAutocomplete2.on('change', function resultSelected(e) {
                                          document.querySelector('#villecodem').value = e.suggestion.postcode || '';
@@ -1397,7 +1370,8 @@ $modif='modif';
             </div>
             <textarea name="apercucomment" id="apercucomment" placeholder="Commentaire..." style="margin-left: 2%;margin-right: 2.5%;margin-bottom: 1%;width: 95%; background: #efefef;" readonly></textarea>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="attachdoc" onclick="document.getElementById('attachdoc').disabled=true;" class="btn btn-primary" >Enregistrer</button>
+                <button type="button" id="fermedoc" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -1431,9 +1405,7 @@ $omstot = array_merge($omtaxis->toArray(),$omambs->toArray(),$omrem->toArray() )
     {
         return strcmp($b["created_at"],$a["created_at"]);
     }
-
     usort($omstot, "cmp");
-
 ?>
                         <?php if (!empty ($omstot)) { ?>
                         @foreach($omstot as $om)
@@ -1488,14 +1460,10 @@ if ($om['statut'] =="Annulé"){
 echo "<span style='color:black'>".$om['statut']."</span>";}}
 else {
 echo "<span style='color:red'> Non Validé </span>" ;
-
-
 }
                                 }}
 else {
 echo "";
-
-
 }
                             ?>
                             </td>
@@ -1508,14 +1476,10 @@ if (stristr( $om['titre'],'ambulance')!== FALSE)
 { $omtaxii = DB::table('om_ambulance')->where('id',$om['parent'])->first();}
 if (stristr( $om['titre'],'remorquage')!== FALSE)
 { $omtaxii = DB::table('om_remorquage')->where('id',$om['parent'])->first();}
-
-
-
       $heuredaterdv=$omtaxii->CL_heuredateRDV;  }
 else{ $heuredaterdv=$om['CL_heuredateRDV'];
                    }  
 $heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
-
       $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
 
 <td style="width:10%"><?php echo $heuredaterdv2; ?></td>
@@ -1542,7 +1506,6 @@ if (stristr( $om['titre'],'ambulance')!== FALSE)
 { $omd='omamb';}
 if (stristr( $om['titre'],'remorquage')!== FALSE)
 {$omd='omre';}
-
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtx">
@@ -1576,7 +1539,17 @@ if (stristr( $om['titre'],'remorquage')!== FALSE)
 
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
-                                                <a style="color:black" onclick='modalodoc("<?php echo $om['titre']; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+<?php
+   $titre=$om['titre'].'.pdf';                                       
+       $attachom = DB::table('attachements')->where('nom',$titre)->where('dossier',$dossier->id)->first();  
+if($attachom!==null)   
+{$existe='1';}  
+else                          
+{$existe='0';}  
+$null=null;
+?>
+
+                                                <a style="color:black" onclick='modalodoc("<?php echo $om['titre']; ?>","{{ URL::asset('storage'.$empsub) }}","<?php echo 'om' ?>","<?php echo $om['parent']; ?>","<?php echo $null; ?>","<?php echo $null; ?>","<?php echo $null; ?>","<?php echo $null; ?>","<?php echo $existe; ?>");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
@@ -1596,7 +1569,6 @@ if (stristr( $om['titre'],'remorquage')!== FALSE)
                                     if ($ommie->parent !== null)
                                     {
                                        echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$ommie->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
-
                                     }
                                     else
                                     {
@@ -1613,13 +1585,10 @@ echo "";
    if (stristr( $ommie->titre,'annulation')!== FALSE) 
                                             {
 $ommiei = DB::table('om_medicinternationnal')->where('id',$ommie->parent)->first();
-
-
       $heuredaterdv=$ommiei->CL_date_heure_prise;  }
 else{ $heuredaterdv=$ommie->CL_date_heure_prise;
                    }  
 $heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
-
       $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
 
 <td style=";"><?php echo $heuredaterdv2; ?></td>
@@ -1657,7 +1626,16 @@ echo $heurecrea1; ?></td>
                                             ?>
                                             <div class="btn-group" style="margin-right: 10px">
                                                 <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
-                                                    <a style="color:black" onclick='modalodoc("<?php echo $ommie->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+<?php
+   $titre=$ommie['titre'].'.pdf';                                       
+       $attachom = DB::table('attachements')->where('nom',$titre)->where('dossier',$dossier->id)->first();  
+if($attachom!==null)   
+{$existe='1';}  
+else                          
+{$existe='0';}  
+$null=null;
+?>
+                                                    <a style="color:black" onclick='modalodoc("<?php echo $ommie->titre; ?>","{{ URL::asset('storage'.$empsub) }}","<?php echo 'om' ?>","<?php echo $ommie['parent']; ?>","<?php echo $null; ?>","<?php echo $null; ?>","<?php echo $null; ?>","<?php echo $null; ?>","<?php echo $existe; ?>");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                                 </button>
                                             </div>
                                         </div>
@@ -1896,55 +1874,40 @@ echo $heurecrea1; ?></td>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModal2">Ajouter une adresse Email </h5>
-
             </div>
             <div class="modal-body">
                 <div class="card-body">
-
-
                     <div class="form-group">
-
                         <form id="addemailform" novalidate="novalidate">
                             {{-- csrf_field() --}}
-
                             <input id="parent" name="parent" type="hidden" value="{{-- $dossier->id --}}">
                             <div class="form-group " >
                                 <label for="emaildoss">Email</label>
                                 <div class=" row  ">
                                     <input class="form-control" type="email" required id="emaildoss"/>
-
                                 </div>
                             </div>
-
                             <div class="form-group ">
                                 <label for="DescrEmail">nom</label>
                                 <div class="row">
                                     <input type="text" class="form-control"  id="DescrEmail" />
-
                                 </div>
                             </div>
-
                             <div class="form-group ">
                                 <label for="DescrEmail">qualité</label>
                                 <div class="row">
                                     <input type="text" class="form-control"  id="qualite" />
-
                                 </div>
                             </div>
-
                             <div class="form-group ">
                                 <label for="DescrEmail">Tel</label>
                                 <div class="row">
                                     <input type="text" class="form-control"  id="telmail" />
-
                                 </div>
                             </div>
                         </form>
                     </div>
-
-
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -2599,7 +2562,6 @@ if(strstr($dossier['reference_medic'],"MI")){
                                     <select id ="iddossier"  class="form-control " style="width: 100%;color:black!important;">
                                         <option></option>
                                         <?php foreach($dossiers as $ds)
-
                                         {
 											if($ds->id== $dossier->id){$selected='selected="selected"';}else{$selected='';}
                                             echo '<option   '.$selected.' style="color:black!important" title="'.$ds->id.'" value="'.$ds->id.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name .' '.$ds->subscriber_lastname .' </option>';}     ?>
@@ -2638,7 +2600,6 @@ if(strstr($dossier['reference_medic'],"MI")){
                                  <select id="selectable" style="margin-top:10px;margin-bottom:10px;width:350px"      class="form-control  "  >
                                     <option></option>
                                     <?php
-
                                         foreach($prestataires as $prest)
                                       {
                                      // $prestat= $pr['prestataire_id'];
@@ -2649,7 +2610,6 @@ if(strstr($dossier['reference_medic'],"MI")){
                                     <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name .' '.$prest->prenom;?></option>
                               <?php // }
                                    // }
-
                                     }
                                     ?>
                                  </select>
@@ -2849,16 +2809,12 @@ if(strstr($dossier['reference_medic'],"MI")){
 
                        <!-- <div class="form-group">
                             <label for="sujet">Dossier :</label>
-
                             <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
                                 <option></option>
                                 <?php /* foreach($listedossiers as $ds)
-
                                 {
                                 echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  */ ?>
                             </select>
-
-
                         </div>
                         -->
                         <div class="form-group">
@@ -2997,7 +2953,6 @@ if(strstr($dossier['reference_medic'],"MI")){
                                     appId: 'plCFMZRCP0KR',
                                     apiKey: 'aafa6174d8fa956cd4789056c04735e1',
                                     container: document.querySelector('#villepr3'),
-
                                 });
                                 placesAutocomplete4.on('change', function resultSelected(e) {
                                     document.querySelector('#villecode3').value = e.suggestion.postcode || '';
@@ -3139,19 +3094,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                      <?php foreach($phonesDossier   as $phone)
                                         {
                                     echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.'  | '.$phone->remarque.') )</option>';
-
                                     }
                                     ?>
                                           <?php foreach($phonesCl   as $phone)
                                         {
                                         echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'  ( '.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.') </option>';
-
                                         }
                                         ?>
                                          <?php foreach($phonesInt   as $phone)
                                         {
                                         echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.'))</option>';
-
                                         }
                                         ?>
 
@@ -3249,11 +3201,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
-
 //script pour activer l onglet OM si lurl contient le mot CreerOM 
-
-
-
  $(document).ready(function() {
  
  
@@ -3271,7 +3219,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                         success:function(data){
                             //   alert('Added successfully');
                             window.location =data;
-
                         }
                     });
                 }else{
@@ -3280,106 +3227,65 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             });
 			
 			
-
                      var urllocale=top.location.href;
                      var posit=urllocale.indexOf("/dossiers/view/CreerOM/");
-
                       // alert(pos);
                      if(posit != -1)
                      {
-
                         var urlloc2=urllocale;
-
                        var n = urllocale.lastIndexOf("/");
                        var res = urllocale.substr(n+1);
-
                        document.location.href=urlloc2+"#tab7";
                        //location.reload();
-
                    //  alert(res);
-
                     // $('#ViewDosstabs a[href="#tab7"]').trigger();
-
                        $('#idMissionOM').val(res);
-
                        // alert( $('#idEntreeMissionOnMarker').val());
-
                        //alert($('#idMissionOM').val());
-
                        if(res.indexOf('#')!=-1)
                        {
-
-
                            var re = res.substr(0,(res.indexOf('#')));
                             $('#idMissionOM').val(re);
                              //alert($('#idMissionOM').val()+"kkk");
-
-
                        }
-
                      }
-
-
       });
-
 </script>
 <script>
 //script pour activer l onglet OM si lurl contient le mot CreerDoc 
-
  $(document).ready(function() {
-
                      var urllocale=top.location.href;
                      var posit=urllocale.indexOf("/dossiers/view/CreerDoc/");
-
                       // alert(pos);
                      if(posit != -1)
                      {
-
                         var urlloc2=urllocale;
-
                        var n = urllocale.lastIndexOf("/");
                        var res = urllocale.substr(n+1);
-
                        document.location.href=urlloc2+"#tab6";
                        //location.reload();
-
                    //  alert(res);
-
                     // $('#ViewDosstabs a[href="#tab7"]').trigger();
-
                        $('#idMissionDoc').val(res);
-
                        // alert( $('#idEntreeMissionOnMarker').val());
-
                        //alert($('#idMissionOM').val());
-
                        if(res.indexOf('#')!=-1)
                        {
-
-
                            var re = res.substr(0,(res.indexOf('#')));
                             $('#idMissionDoc').val(re);
                              //alert($('#idMissionOM').val()+"kkk");
-
-
                        }
-
                      }
-
-
       });
-
 </script>
 <script src="{{ asset('public/js/nombre_en_lettre.js') }}"></script>
 
 <script>
-
     function ShowNumsCc() {
         $('.telsassures').css('display','none');
         $('.telsintervs').css('display','none');
         $('.telsclients').css('display','block');
     }
-
     function ShowNumsInt() {
         $('.telsassures').css('display','none');
         $('.telsintervs').css('display','block');
@@ -3390,7 +3296,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $('.telsintervs').css('display','none');
         $('.telsclients').css('display','none');
     }
-
     function hideinfos() {
         $('#tab31').css('display','none');
     }
@@ -3403,7 +3308,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     function showinfos() {
         $('#tab31').css('display','block');
     }
-
     function showinfos2() {
         $('#tab32').css('display','block');
     }
@@ -3424,19 +3328,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     function showinfos82() {
         $('#tab82').css('display','block');
     }
-
-
     function modalattach(titre,emplacement,type)
     {
         document.getElementById('attachiframe').style.display='none';
         document.getElementById('imgattach').style.display='none';
           $("#attTitle").text(titre);
-
         if  (type ==  'pdf')
         {
             document.getElementById('attachiframe').src =emplacement;
             document.getElementById('attachiframe').style.display='block';
-
             // document.getElementById('attachiframe').src =emplacement;
         }
         if ( (type ==  'doc') || ( type ==  'docx'  ) || ( type ==  'xls'  ) || ( type ==  'xlsx'  )  )
@@ -3449,29 +3349,21 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             document.getElementById('imgattach').src =emplacement;
            // document.getElementById('attachiframe').src =emplacement;
         }
-
-
         // cas DOC fichier DOC
         $("#openattach").modal('show');
     }
-
     function modalattach2(id,description,titre,taille,par)
     {          $("#attTitle2").text(titre);
-
         document.getElementById('selectedAttach').value=id;
         document.getElementById('descAttach').value=description;
         document.getElementById('fileCreator').innerHTML=par;
         document.getElementById('fileSize').innerHTML=taille;
-
         $("#openattachDesc").modal('show');
-
     }
-
 function remplaceom(id,affectea,verif)
 {
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
-
     if (verif === "ommie")
      { document.getElementById('claffect1').style.display = 'none';
             document.getElementById('claffect2').style.display = 'none';}
@@ -3484,7 +3376,6 @@ function remplaceom(id,affectea,verif)
             $('#affectea').val(affectea);
             
         }
-
     //ajout id user conncte
     var cnctuserid = $("#cnctuserid").val();
  var dossier = $('#dossom').val();
@@ -3496,22 +3387,18 @@ function remplaceom(id,affectea,verif)
         var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
     if(verif==='ommie')
         var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&dossier='+dossier+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
-
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
         $('#templateordrem').val("remplace");
         
         $("#templatehtmlom").modal('show');
  }
-
 function completeom(id,affectea,verifc)
 {
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
-
     //ajout id user conncte
     var cnctuserid = $("#cnctuserid").val();
-
     if(verifc==='omtx')
     {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?complete=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
     if(verifc==='omamb')
@@ -3532,8 +3419,26 @@ function completeom(id,affectea,verifc)
         
         $("#templatehtmlom").modal('show');
  }
-function modalodoc(titre,emplacement,commentaire=null,idutag=null)
+function modalodoc(titre,emplacement,type=null,parent=null,commentaire=null,idutag=null,name=null,emp=null,existe=null)
 {
+
+//alert(existe);
+//alert(type);
+//alert(parent);
+if(existe=='0')
+{
+
+ document.getElementById('attachdoc').style.display = 'inline';
+ 
+
+}
+else
+{
+
+ document.getElementById('attachdoc').style.display = 'none';
+
+}
+
      $("#doctitle").text(titre);
      if (commentaire != null)
      {$("#apercucomment").text(commentaire);
@@ -3542,6 +3447,9 @@ function modalodoc(titre,emplacement,commentaire=null,idutag=null)
       {
         document.getElementById('apercucomment').style.display = 'none';
       }
+ 
+var dossier = $('#dossier').val();
+
       //<i class="fas fa-tag"></i> 
       if (idutag)
      {
@@ -3576,19 +3484,45 @@ function modalodoc(titre,emplacement,commentaire=null,idutag=null)
         document.getElementById('dociframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;
     }*/
     $("#opendoc").modal('show');
+
+ $('#attachdoc').click(function(){
+ var _token = $('input[name="_token"]').val();
+if(type==='doc')
+{
+ $.ajax({
+                        url:"{{ route('documents.attachdocs') }}",
+                        method:"POST",
+                        data:{emplacement:emp,titre:titre,dossier:dossier,name:name, _token:_token},
+                        success:function(data){
+                            
+                            location.reload();
+
+                        }
+                    });}
+if(type==='om')
+{
+ $.ajax({
+                        url:"{{ route('ordremissions.attachoms') }}",
+                        method:"POST",
+                        data:{emplacement:emplacement,titre:titre,dossier:dossier,parent:parent, _token:_token},
+                        success:function(data){
+                            
+                            location.reload();
+
+                        }
+                    });}
+
+  
+ });
 }
-
-
 function remplacedoc(modif,iddoc,template,montantgopprec,idgopprec)
 {
 if(modif===0)
 {document.getElementById('modif').value=0;}
 if(modif===1)
 {document.getElementById('modif').value=1;}
-
         var dossier = $('#dossier').val();
         var tempdoc = template;
-
         if ((dossier != '') )
         {
             var _token = $('input[name="_token"]').val();
@@ -3597,7 +3531,6 @@ if(modif===1)
                 method:"POST",
                 data:{dossier:dossier,modif:modif,template:tempdoc,parent:iddoc, _token:_token},
                 success:function(data){
-
                         // set iddocparent value
                         $('#iddocparent').val(iddoc);
                         filltemplate(data,tempdoc,montantgopprec,idgopprec);
@@ -3606,20 +3539,16 @@ if(modif===1)
         }else{
          }
 }
-
 function annuledoc(titre,iddoc,template)
 {
-
         var dossier = $('#dossier').val();
         var tempdoc = template;
         //ajout id user conncte
         var cnctuserid = $("#cnctuserid").val();
-
         $("#gendochtml").prop("disabled",false);
         
          var r = confirm("Êtes-vous sûr de vouloir Annuler le document: "+titre+" ? ");
         if (r == true) {
-
           if ((dossier != '') )
             {
                 var _token = $('input[name="_token"]').val();
@@ -3628,17 +3557,14 @@ function annuledoc(titre,iddoc,template)
                     method:"POST",
                     data:{dossier:dossier,template:tempdoc,parent:iddoc,iduser:cnctuserid, _token:_token},
                 success:function(data){
-
                     console.log(data);
                     location.reload();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                      Swal.fire({
                         type: 'error',
                         title: 'Oups...',
                         text: 'Erreur lors de lannulation du document',
-
                     });
                     console.log('jqXHR:');
                     console.log(jqXHR);
@@ -3651,18 +3577,15 @@ function annuledoc(titre,iddoc,template)
             }
         }
 }
-
 function annuleom(titre,iddoc)
 {
         //ajout id user hs change
         var cnctuserid = $("#cnctuserid").val();
-
         var dossier = $('#dossier').val();
         $("#genomhtml").prop("disabled",false);
         
          var r = confirm("Êtes-vous sûr de vouloir Annuler l'ordre de mission: "+titre+" ? ");
         if (r == true) {
-
           if ((dossier != '') )
             {
                 var _token = $('input[name="_token"]').val();
@@ -3671,17 +3594,14 @@ function annuleom(titre,iddoc)
                     method:"POST",
                     data:{dossier:dossier,title:titre,parent:iddoc,iduser:cnctuserid, _token:_token},
                 success:function(data){
-
                     //alert(data);
                     location.reload();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                      Swal.fire({
                         type: 'error',
                         title: 'Oups...',
                         text: 'Erreur lors de l`annulation du l`ordre de mission',
-
                     });
                     console.log('jqXHR:');
                     console.log(jqXHR);
@@ -3694,7 +3614,6 @@ function annuleom(titre,iddoc)
             }
         }
 }
-
 // affichage de lhistorique du document
     
     function historiquedoc(doc){
@@ -3706,7 +3625,6 @@ function annuleom(titre,iddoc)
                 //'&_token='+_token
                 data:'_token='+_token+'&doc='+doc,
                 success:function(data){
-
                     var histdoc = JSON.parse(data);
                     // vider le contenu du table historique
                     $("#tabledocshisto tbody").empty();
@@ -3716,31 +3634,23 @@ function annuleom(titre,iddoc)
                     });
                     // affichage template dans iframe
                     $.each(items, function(index, val) {
-
                     //titre du document
                     if (val[0]==0)
                     {
                         $("#dochistoname").text(val[1]['titre']);
                     }
-
-
                     urlf="{{ URL::asset('storage'.'/app/') }}";
-aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\",\""+val[1]['comment']+"\",\""+val[1]['idtaggop']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
-
+aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\",null,null,\""+val[1]['comment']+"\",\""+val[1]['idtaggop']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
                   // aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
                     $("#tabledocshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
-
                     });
-
                     $("#modalhistodoc").modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                      Swal.fire({
                         type: 'error',
                         title: 'Oups...',
                         text: 'Erreur lors de recuperation de l historique du document',
-
                     });
                     console.log('jqXHR:');
                     console.log(jqXHR);
@@ -3762,7 +3672,6 @@ aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\
                 //'&_token='+_token
                 data:'_token='+_token+'&tag='+tag,
                 success:function(data){
-
                     var histtag = JSON.parse(data);
                     // vider le contenu du table historique
                     $("#tabletagshisto tbody").empty();
@@ -3772,27 +3681,20 @@ aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\
                     });
                     // affichage template dans iframe
                     $.each(items, function(index, val) {
-
                     //titre du tag
                     if (val[0]==0)
                     {
                         $("#taghistoname").text(val[1]['titre']+" | "+titretag);
                     }
-
-
                     $("#tabletagshisto tbody").append("<tr><td>"+val[1]['titre']+"</td><td>"+val[1]['contenu']+"</td><td>"+val[1]['created_at']+"</td><td>"+val[1]['montant']+" "+val[1]['devise']+"</td><td>"+val[1]['mrestant']+" "+val[1]['devise']+"</td></tr>");
-
                     });
-
                     $("#modalhistotag").modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                      Swal.fire({
                         type: 'error',
                         title: 'Oups...',
                         text: 'Erreur lors de recuperation de l historique du document',
-
                     });
                     console.log('jqXHR:');
                     console.log(jqXHR);
@@ -3814,7 +3716,6 @@ aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\
                 //'&_token='+_token
                 data:'_token='+_token+'&om='+om+'&titre='+titre,
                 success:function(data){
-
                     var histom = JSON.parse(data);
                     // vider le contenu du table historique
                     $("#tableomshisto tbody").empty();
@@ -3824,36 +3725,28 @@ aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\
                     });
                     // affichage template dans iframe
                     $.each(items, function(index, val) {
-
                     //titre du document
                     if (val[0]==0)
                     {
                         $("#omhistoname").text(val[1]['titre']);
                     }
-
-
                     urlf="{{ URL::asset('storage') }}";
                     posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
                     empom=val[1]['emplacement'].slice(posom+1);
 aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+empom+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
-
                    // aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
 if(titre!==4 ) {if(val[1]['affectea'] !="externe" ) { if(val[1]['statut']!=="Validé" ){statut="Non Validé";} else {statut= val[1]['statut'];}} else{statut="";}} else {statut="";}
           if(titre!==4 ) {if(val[1]['affectea'] !="externe" ) { if(val[1]['supervisordate']) {supervisordate=val[1]['supervisordate'];} else {supervisordate= "";}} else{supervisordate="";}} else {supervisordate="";}          
                     $("#tableomshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+statut+"</td><td>"+supervisordate+"</td><td>"+aurlf+"</td></tr>");
                     
                     });
-
                     $("#modalhistoom").modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
-
                     Swal.fire({
                         type: 'error',
                         title: 'Oups...',
                         text: 'Erreur lors de recuperation de l historique du om taxi',
-
                     });
                     console.log('jqXHR:');
                     console.log(jqXHR);
@@ -3885,27 +3778,22 @@ if(titre!==4 ) {if(val[1]['affectea'] !="externe" ) { if(val[1]['statut']!=="Val
                     });
                     // affichage template dans iframe
                     $.each(items, function (index, val) {
-
                         //titre du document
                         if (val[0] == 0) {
                             $("#omhistoname").text(val[1]['titre']);
                         }
-
                         //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
                         urlf = "{{ URL::asset('storage') }}";
                         posom = val[1]['emplacement'].indexOf("/OrdreMissions/");
                         empom = val[1]['emplacement'].slice(posom + 1);
                         aurlf = "<a style='color:black' href='" + urlf + "/" + empom + "' ><i class='fa fa-download'></i> Télécharger</a>";
                         $("#tableomshisto tbody").append("<tr><td>" + val[1]['updated_at'] + "</td><td>" + aurlf + "</td></tr>");
-
                     });
                 });
 */
    var items = [];
    var html_string="";
-
 function filltemplate(data,tempdoc,mgopprec,idgopprec)
-
 {
    // window.location =data; hde gendocform and display template filled
    if ($('#generatedoc').hasClass('in'))
@@ -3914,21 +3802,18 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
    var templateexist = true;
    var needgop =false;
    var parsed = data;
-
    items.length = 0;
    $.each(parsed, function(i, field){
       items.push([ i,field ]);
     });
    // affichage template dans iframe
   $.each(items, function(index, val) {
-
         //recuperer la template html du document
         if(val[0] ==='templatehtml')
             {
                 if ((val[1].includes(undefined)) || (!val[1]))
                 {
                     templateexist = false;
-
                     Swal.fire({
                         type: 'error',
                         title: 'Oups...',
@@ -3939,9 +3824,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 {
                     html_string= "{{asset('public/') }}"+"/"+val[1];
                     //alert(html_string);
-
                 }
-
             }
         //verifier la templte rtf du document
         if(val[0] ==='templatertf')
@@ -3959,13 +3842,9 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 {
                     $("#templatedocument").val(tempdoc);
                 }
-
             }
-
         //verifier les tags du document
-
         if((val[0] ==='lestags') && (val[1].indexOf("VERIFglist") !== -1 ))
-
             {
                 console.log('les tags: '+val[1] );
                 var tagstr = val[1].replace('allow_VERIFglist(','');
@@ -3974,10 +3853,8 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 //var arr_tags = tagstr.split(",");
                 arr_tags = tagstr.split(",");
                 console.log('nouv tags: '+tagstr );
-
                     // vider select gop options
                     $('#gopdoc').find('option').remove();
-
                 $.each(arr_tags, function(i, field){
                     var strt = [ field ] + "" ;
                    // alert(strt);
@@ -3994,7 +3871,6 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                                 {var mgop = champgop[1];}
                             else
                                 {var mgop = parseInt(mgopprec) + parseInt(champgop[1]);}
-
                             $('#gopdoc').append('<option value="'+champgop[0]+'" selected="selected">'+champgop[2]+' | '+'montant max: '+mgop+' | '+champgop[3]+'</option>');
                         }
                         else {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant max: "+champgop[1]+' | '+champgop[3], champgop[0]));}
@@ -4006,19 +3882,14 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 arr_tags = null;
                 $('#templatedoc').attr('value', '');
             }
-
         /*if(val[0] ==='montantgop')
             {
                 console.log('montantgop: '+val[1] );
-
             }*/
-
     });
-
 // on n'affiche pas liste de gop ici
     if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_location_VAT_a_Prest") !== -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_Hotel") !== -1 ) && !(needgop) )
     {
-
         // remplissage de la template dans iframe
         var numparam = 0;
         $.each(items, function(index, val) {
@@ -4033,28 +3904,18 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 {
                     html_string=html_string+'&';
                 }
-
                 html_string=html_string+val[0]+'='+val[1];
-
                 numparam ++;
             }
         });
-
         //ajout id user hs change
         var cnctuserid = $("#cnctuserid").val();
         html_string = html_string+"&iduser="+cnctuserid;
-
-
         //chargement du contenu et affichage du preview du document
         document.getElementById('templatefilled').src = html_string;
         $("#templatehtmldoc").modal('show');
-
-
-
     }
 }
-
-
     $(document).ready(function() {
     $("#typeprest").select2();
     $("#typeprest2").select2();
@@ -4080,7 +3941,6 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
         //alert(goptxt);
             if ((gopselected !== 'undefined' && gopselected !== null))
             {
-
                 // remplissage de la template dans iframe
                 var numparam = 0;
                 $.each(items, function(index, val) {
@@ -4095,13 +3955,10 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                         {
                             html_string=html_string+'&';
                         }
-
                         html_string=html_string+val[0]+'='+val[1];
-
                         numparam ++;
                     }
                 });
-
                 // ajout idgop a lurl
                 html_string=html_string+'&idtaggop='+gopselected;
                 // ajout montant a lurl
@@ -4109,16 +3966,11 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 //ajout id user hs change
                 var cnctuserid = $("#cnctuserid").val();
                 html_string = html_string+"&iduser="+cnctuserid;
-
                 //chargement du contenu et affichage du preview du document
                 document.getElementById('templatefilled').src = html_string;
                 $("#templatehtmldoc").modal('show');
-
-
             }
         });
-
-
         // fermerdossier
         $('#fermerdossier').click(function(){
             var dossier = $('#dossier').val();
@@ -4129,23 +3981,18 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
             else{
                 sanssuite=0;
             }
-
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('dossiers.changestatut') }}",
                     method:"POST",
                     data:{dossier:dossier,statut:statut,sanssuite:sanssuite,  _token:_token},
                     success:function(data){
-
                        // window.location =data;
                         alert("opération envoyée !");
                         window.location.reload();
-
                     }
                 });
-
         });
-
         // ouvrirdossier
         $('#ouvrirdossier').click(function(){
             var dossier = $('#dossier').val();
@@ -4156,24 +4003,17 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 method:"POST",
                 data:{dossier:dossier,statut:statut,  _token:_token},
                 success:function(data){
-
                     // window.location =data;
                     alert("dossier Ouvert !");
                     window.location.reload();
-
                 }
             });
-
         });
-
-
          $('#envoisms').click(function(){
             var description = $('#ladescription').val();
             var destinataire = $('#ledestinataire').val();
              var message = $('#lemessagel').val();
              var dossier = $('#ledossier').val();
-
-
             if ((message != '') &&(destinataire!='')&&(description!=''))
             {
                 var _token = $('input[name="_token"]').val();
@@ -4182,7 +4022,6 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     method:"POST",
                     data:{description:description,destinataire:destinataire,message:message,dossier:dossier, _token:_token},
                     success:function(data){
-
                          Swal.fire({
                             type: 'success',
                             title: 'Envoyé...',
@@ -4190,14 +4029,11 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                         });
                        // window.location =data;
                         $("#sendsms").modal('hide');
-
                     }
                 });
             }else{
-
             }
         });
-
     $('#emailadd').click(function(){
         var parent = $('#parent').val();
         var champ = $('#emaildoss').val();
@@ -4212,16 +4048,12 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 method:"POST",
                 data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite, _token:_token},
                 success:function(data){
-
                      window.location =data;
-
                 }
             });
         }else{
-
         }
     });
-
 // fonction du remplissage de la template web du document
     $('#gendoc').click(function(){
         var dossier = $('#dossier').val();
@@ -4239,7 +4071,6 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 method:"POST",
                 data:{dossier:dossier,template:tempdoc, _token:_token},
                 success:function(data){
-
                     console.log(data);
                      if (typeof data !== "string")
                     {
@@ -4268,7 +4099,6 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
         }else{
          }
     });
-
 //document.getElementById('targetFrame').contentWindow.keyUpHandler();
 function keyUpHandler(){
            // document.getElementById('dociframe').contentWindow.document.getElementById('CL_montant_toutes_lettres').firstChild.nodeValue  =   NumberToLetter(obj.value)
@@ -4317,14 +4147,12 @@ if (tempom==="Ambulance")
                 text: "Veuillez selectionner l'entitée qui émis l'ordre de mission"
             });
             return false;
-
         }
         /*var affectea = $("#affectea").val();
         if (affectea==="Select")
         {
             alert("Veuillez selectionner à qui sera affecté l'ordre de mission");
             return false;
-
         }*/
         //$("#gendochtml").prop("disabled",false);
         // renitialise la val de parentdoc
@@ -4340,32 +4168,23 @@ if (tempom==="Ambulance")
                         afficheom(data,tempom);
                 }
             });*/
-
             document.getElementById('claffect1').style.display = 'block';
             document.getElementById('claffect2').style.display = 'block';
             if (tempom === "Medic Internationnal")
             { document.getElementById('claffect1').style.display = 'none';
             document.getElementById('claffect2').style.display = 'none';}
             $("#affectationprest").val("Select").change();
-
             afficheom(tempom,dossier,affectea);
-
-
         }else{
-
         }
 $("#affectationprest").val("Select").change();
 $("#templateom").val("Select").change();
     });
-
     function afficheom(tempom,dossier,affectea)
     {
         $("#affectationprest").val("Select").change();
         $("#generateom").modal('hide');
-
-
         var cnctuserid = $("#cnctuserid").val();
-
         if (affectea === undefined && affectea === null)
         {
             affectea = "";
@@ -4378,19 +4197,14 @@ $("#templateom").val("Select").change();
         {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?dossier='+dossier+'&affectea='+affectea+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
         if (tempom === "Medic Internationnal")
             {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?dossier='+dossier+'&affectea='+affectea+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
-
          document.getElementById("omfilled").src = url;
-
-
         $("#templatehtmlom").modal('show');
         $('#templateordrem').val("");
          if (affectea !== "")
          {
             $('#affectationprest').val(affectea);
          }
-
     }
-
     $('#gendochtml').click(function(){
          //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
@@ -4398,7 +4212,6 @@ $("#templateom").val("Select").change();
         var tempdoc = $("#templatedocument").val();
         var comdoc = $("#doccomment").val();
 var modif = $("#modif").val()
-
         var idparent = '';
         var idgop = '';
         var idMissionDoc=$("#idMissionDoc").val();
@@ -4415,9 +4228,7 @@ var modif = $("#modif").val()
         }
          if($('#idMissionDoc').val()==null)
         {
-
            alert(" attention l id mission null. Veuillez Contacter l admin");
-
         }
         $.ajax({
                 url:"{{ route('documents.adddocument') }}",
@@ -4425,10 +4236,21 @@ var modif = $("#modif").val()
                 //'&_token='+_token
                 data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&modif='+modif+'&comdoc='+comdoc+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
-
                    // alert(data);
                      console.log(data);
-                    location.reload();
+                   var doc = JSON.parse(data);
+emplacement=doc['emplacement'];
+titre=doc['titre'];
+dossier=doc['dossier'];
+name=doc['name'];
+urlf="{{ URL::asset('storage'.'/app/') }}";
+$("#templatehtmldoc").modal('hide');
+modalodoc(doc['titre'],urlf+"/"+doc['emplacement'],'doc',null,doc['comment'],doc['idtaggop'],doc['name'],doc['emplacement'],'0');
+
+$('#fermedoc').click(function(){
+ 
+                            window.location.reload();
+});
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                       Swal.fire({
@@ -4445,7 +4267,6 @@ var modif = $("#modif").val()
                 }
             });
     });
-
     $('#genomhtml').click(function(){
          //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
@@ -4453,7 +4274,6 @@ var modif = $("#modif").val()
         var tempdoc = $("#templateordrem").val();
         var affectea = $("#affectea").val();
         var srctemp = document.getElementById('omfilled').src;
-
 if (srctemp.indexOf("/odm_medic") === -1 )
       { var heuredateRDV =document.omfilled.CL_heuredateRDV.value;
        if (heuredateRDV==="")
@@ -4465,7 +4285,6 @@ if (srctemp.indexOf("/odm_medic") === -1 )
             });
             return false;
               
-
         }
 var heureRDV =document.omfilled.CL_heure_RDV.value;
        if (heureRDV==="")
@@ -4477,9 +4296,7 @@ var heureRDV =document.omfilled.CL_heure_RDV.value;
             });
             return false;
               
-
         }
-
 var lieuprestpc =document.omfilled.lieuprest.value;
        if (lieuprestpc==="")
         {document.getElementById('genomhtml').disabled = false;
@@ -4490,7 +4307,6 @@ var lieuprestpc =document.omfilled.lieuprest.value;
             });
             return false;
               
-
         }
 var lieudechargedec =document.omfilled.lieudecharge.value;
        if (lieudechargedec==="")
@@ -4502,18 +4318,13 @@ var lieudechargedec =document.omfilled.lieudecharge.value;
             });
             return false;
               
-
         }
-
-
 }
         if (srctemp.indexOf("/odm_medic") === -1 )
             {
 if((affectea==="mmentite" && tempdoc==="remplace")|| (affectea==="interne" && tempdoc==="complete") )
      { var dateheuredep =document.omfilled.dateheuredep.value;
-
        if (dateheuredep==="")
-
         
         {document.getElementById('genomhtml').disabled = false;
              Swal.fire({
@@ -4523,12 +4334,9 @@ if((affectea==="mmentite" && tempdoc==="remplace")|| (affectea==="interne" && te
             });
             return false;
               
-
         }
       var dateheuredispprev =document.omfilled.dateheuredispprev.value;
-
        if (dateheuredispprev==="")
-
         
         {document.getElementById('genomhtml').disabled = false;
              Swal.fire({
@@ -4538,12 +4346,9 @@ if((affectea==="mmentite" && tempdoc==="remplace")|| (affectea==="interne" && te
             });
             return false;
               
-
         }
 var dhretbaseprev =document.omfilled.dhretbaseprev.value;
-
        if (dhretbaseprev==="")
-
         
         {document.getElementById('genomhtml').disabled = false;
              Swal.fire({
@@ -4553,11 +4358,9 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
             });
             return false;
               
-
         }}}
   
         var srctemp = document.getElementById('omfilled').src;
-
         if (affectea == "interne")
         {
           var type_affectation = $("#type_affectation").val();
@@ -4578,10 +4381,7 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
             var type_affectation = "";
             var nomprestextern = $("#prestselected").val();
             var idprestextern = $("#idprestselected").val();
-
         }
-
-
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();
         /*if ($('#templateordrem').val())
@@ -4598,9 +4398,7 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
         }
          if($('#idMissionOM').val()==null)
         {
-
            alert(" attention l id mission null. Veuillez Contacter l admin");
-
         }
         //alert(type_affectation+" | "+nomprestextern);
         if (srctemp.indexOf("/odm_taxi") !== -1 )
@@ -4611,24 +4409,35 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
         {var routeom = "{{ route('ordremissions.export_pdf_odmremorquage') }}"; }
         if (srctemp.indexOf("/odm_medic") !== -1 )
         {var routeom = "{{ route('ordremissions.export_pdf_odmmedicinternationnal') }}"; }
-
         $.ajax({
                 url:routeom,
                 method:"POST",
                 //'&_token='+_token
-
                 data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&prestextern='+nomprestextern+'&idprestextern='+idprestextern+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
-
-                success:function(data){
+              dataType: 'json',  
+ success:function(data){
                      console.log(data);
                     $('#idomparent').val("");
                     $('#templateordrem').val("");
 
+
+
                     if (!$.trim(data))
                     {location.reload();}
                     else
-                        {alert(data);
-                        location.reload();}
+                        {//alert(data['titre']);
+ if(data['resultatNote']!='' && data['resultatNote']!=undefined ){alert(data['resultatNote']);}
+urlf="{{ URL::asset('storage'.'/OrdreMissions/') }}";
+//alert(urlf+"/"+dossier+"/"+data['titre']);
+$("#templatehtmlom").modal('hide');
+                        modalodoc(data['titre'],urlf+"/"+dossier+"/"+data['titre']+'.pdf','om',data['parent'],null,null,null,null,'0');
+
+
+$('#fermedoc').click(function(){
+ 
+                            window.location.reload();
+});
+}
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                       Swal.fire({
@@ -4647,14 +4456,11 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
     });
 function toggle(className, displayState){
             var elements = document.getElementsByClassName(className);
-
             for (var i = 0; i < elements.length; i++){
                 elements[i].style.display = displayState;
             }
         }
-
     $("#affectationprest").change(function() {
-
             if ($("#affectationprest").val()==="interne")
             {
                 document.getElementById('typeaffect').style.display = 'block';
@@ -4664,7 +4470,6 @@ function toggle(className, displayState){
                 document.getElementById('typeaffect').style.display = 'none';
                 if ($("#affectationprest").val()==="externe")
                 {
-
                     document.getElementById('externaffect').style.display = 'none';
                     // afficher les specialite par type de prestation selectionné
                     var srctemp = document.getElementById('omfilled').src;
@@ -4692,9 +4497,7 @@ function toggle(className, displayState){
                     $("#affectea").val("");
                 }
             }
-
         });
-
         $('#btnaddemail').click(function(){
             var parent = $('#dossier').val();
             var nom = $('#nome').val();
@@ -4711,18 +4514,12 @@ function toggle(className, displayState){
                     method:"POST",
                     data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,email:email,observ: observ, nature:nature, _token:_token},
                     success:function(data){
-
-
                         window.location =data;
-
                     }
                 });
             }else{
-
             }
         });
-
-
         $('#btnaddtel').click(function(){
             var parent = $('#dossier').val();
             var nom = $('#nomt').val();
@@ -4739,21 +4536,13 @@ function toggle(className, displayState){
                     method:"POST",
                     data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,tel:tel,observ: observ, nature:nature, _token:_token},
                     success:function(data){
-
-
                         window.location =data;
-
                     }
                 });
             }else{
-
             }
         });
-
 });
-
-
-
 </script>
 
 
@@ -4761,7 +4550,6 @@ function toggle(className, displayState){
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
-
     function deleteattach() {
         var attach= document.getElementById('selectedAttach').value;
          var _token = $('input[name="_token"]').val();
@@ -4772,13 +4560,9 @@ function toggle(className, displayState){
                data: {  attach:attach , _token: _token},
                success: function ( ) {
                    location.reload()
-
                }
            });
-
-
        }
-
     }
     function updateDesc() {
         var attach= document.getElementById('selectedAttach').value;
@@ -4795,28 +4579,16 @@ function toggle(className, displayState){
                 $('#descAttach').animate({
                     opacity: '1',
                 });
-
             }
         });
-
     }
-
     $(function () {
-
       //  $("#iddossier").select2();
-
-
-
         $('#phoneicon').click(function() {
-
             $('#crendu').modal({show: true});
-
         });
-
-
         // Ajout Compte Rendu
         $('#ajoutcompter').click(function() {
-
             var _token = $('input[name="_token"]').val();
             var dossier = document.getElementById('iddossier').value;
             var refdossier = document.getElementById('refdossier').value;
@@ -4829,23 +4601,16 @@ function toggle(className, displayState){
                     url: "{{ route('entrees.ajoutcompter') }}",
                     method: "POST",
                     data: { emetteur:emetteur, dossier:dossier,refdossier:refdossier,contenu:contenu, media:media,description:description, _token: _token},
-
                     success: function (data) {
                         alert('Ajouté avec succès');
                         $('#crendu').modal('hide');
                         //     $('#crendu').modal({show: false});
-
                     }
                 });
-
             }else{
                 alert('le contenu est obligatoire !');
             }
-
-
-
         }); //end click
-
         $('#valide').click(function(){
             var prestation=  document.getElementById('idprestation').value;
             var firstsaved= parseInt(  document.getElementById('firstsaved').value);
@@ -4862,7 +4627,6 @@ function toggle(className, displayState){
                 var gouvernorat = $('#gouvcouv').val();
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
-
 				if(firstsaved==0){
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
@@ -4887,23 +4651,16 @@ function toggle(className, displayState){
                  //   var prestation=parseInt(data);
                     /// window.location =data;
                     window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                 }
-
             });
  
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-
-
                         }
-
                     });
                 }else{
-
                 }
 				
 				
@@ -4919,12 +4676,9 @@ function toggle(className, displayState){
                  //   var prestation=parseInt(data);
                     /// window.location =data;
                     window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                 }
-
             });
 			
 				}
@@ -4940,12 +4694,9 @@ function toggle(className, displayState){
                  //   var prestation=parseInt(data);
                     /// window.location =data;
                     window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                 }
-
             });
 			
 			*/
@@ -5007,7 +4758,6 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                  var prestvalid=document.getElementById('selectedprest-m').value;
                  console.log(prestvalid);
                  var prestvaltext = $("#selectedprest-m option[value='"+prestvalid+"']").text();
-
           console.log("text: "+prestvaltext);
                  //document.getElementById('prestselected').val = prestvaltext;
                  $("#prestselected").val(prestvaltext);
@@ -5017,23 +4767,16 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                  $("#affectationprest").prop('disabled', true);
                  
                  $('#optprestataire').hide();
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                 }
-
             });
  
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-
-
                         }
-
                     });
                 }else{
-
                 }
 				
 				
@@ -5053,7 +4796,6 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                  var prestvalid=document.getElementById('selectedprest-m').value;
                  console.log(prestvalid);
                  var prestvaltext = $("#selectedprest-m option[value='"+prestvalid+"']").text();
-
           console.log("text: "+prestvaltext);
                  //document.getElementById('prestselected').val = prestvaltext;
                  $("#prestselected").val(prestvaltext);
@@ -5063,12 +4805,9 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                  $("#affectationprest").prop('disabled', true);
                  
                  $('#optprestataire').hide();
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                 }
-
             });
 			
 				}
@@ -5084,35 +4823,24 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                  //   var prestation=parseInt(data);
                     /// window.location =data;
                     window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
                 }
-
             });
 			
 			*/
         });
  
-
-
        
-
-
         $('#add2').click(function(){
-
             selected=   document.getElementById('selected').value;
             document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
-
             var prestataire = $('#selectedprest').val();
             var dossier_id = $('#dossier').val();
-
             var typeprest = $('#typeprest').val();
             var gouvernorat = $('#gouvcouv').val();
             var specialite = $('#specialite').val();
             var date = $('#pres_date').val();
-
             //   gouvcouv
             if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                {
@@ -5124,33 +4852,22 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                 success:function(data){
            var prestation=parseInt(data);
                /// window.location =data;
-
                     document.getElementById('prestation').style.display='block';
                    document.getElementById('valide').style.display='block';
                    document.getElementById('validation').style.display='block';
                     document.getElementById('idprestation').value =prestation;
                     document.getElementById('firstsaved').value =1;
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
-
                 }
-
             });
               }else{
-
              }
         });
-
         // ajout prestation
-
         $('#selectionnerprest').click(function(){
-
             var prestataire = $('#selectedprest2').val();
-
             var dossier_id = $('#dossier').val();
-
             var typeprest = $('#ajout_typeprest').val();
             var gouvernorat = $('#pres_gouv').val();
             var specialite = $('#ajout_specialite').val();
@@ -5158,7 +4875,6 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
             var autorise = $('#autorise').val();
             var details = $('#details').val();
             var ville = $('#villepr3').val();
-
             //   gouvcouv
             if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0) )
             {
@@ -5170,7 +4886,6 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                     success:function(data){
                         //var prestation=parseInt(data);
                         /// window.location =data;
-
                         /*Swal.fire({
                             type: 'success',
                             title: 'Enregistrée...',
@@ -5181,28 +4896,18 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                          location.reload() ;
                         // window.location =data;
                         $("#openmodalprest").modal('hide');
-
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-
-
                     }
-
                 });
             }else{
             alert('il manque des informations');
             }
         });
-
-
-
         // filtrer specialités selon type de prestation
-
-
         $('#ajout_typeprest').change(function() {
             var typeprestation = $('#ajout_typeprest').val();
             $("#ajout_specialite").val('');
-
             var liste ;
             var _token = $('input[name="_token"]').val();
             $.ajax({
@@ -5212,18 +4917,10 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                 success:function(data){
                     liste=data;
                     console.log('data : '+data);
-
                     //   alert('Added successfully');
-
-
                     $('#ajout_specialite option').each(function() {
-
                         $(this).css("display", "none");
-
-
                     });
-
-
                     $('#ajout_specialite option').each(function() {
                         // console.log(  $(this).val());
                         for (i=0;i< liste.length ;i++){
@@ -5233,27 +4930,15 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                                 break;
                             }
                         }
-
-
                     });
-
-
-
-
                 }
             });
-
-
-
         });
 $('#add2-m').click(function(){
-
            selected=   document.getElementById('selected-m').value;
             document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_'+selected+'-m').value ;
-
              var prestataire = $('#selectedprest-m').val();
             var dossier_id = $('#dossier-m').val();
-
             var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
             var specialite = $('#specialitem').val();
@@ -5270,8 +4955,6 @@ $('#add2-m').click(function(){
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2;}
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
-
-
             var date = $('#pres_datem').val();
            
             //   gouvcouv
@@ -5285,7 +4968,6 @@ $('#add2-m').click(function(){
                 success:function(data){
            var prestation=parseInt(data);
                /// window.location =data;
-
                     document.getElementById('prestation-m').style.display='block';
                    document.getElementById('valide-m').style.display='block';
                    document.getElementById('validation-m').style.display='block';
@@ -5293,91 +4975,59 @@ $('#add2-m').click(function(){
 document.getElementById('firstsaved-m').value =1;
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-
-
                 }
-
             });
               }else{
-
              }
         });
-
-
-
-
       
-
         $('.radio1').click(function() {
-
             var   div=document.getElementById('montantfr');
             if(div.style.display==='none')
             {div.style.display='block';  }
             else
             {div.style.display='none';     }
-
             var   div2=document.getElementById('plafondfr');
             if(div2.style.display==='none')
             {div2.style.display='block';     }
             else
             {div2.style.display='none';     }
         });
-
         $('#btn01').click(function() {
-
             var   div=document.getElementById('ben2');
             if(div.style.display==='none')
             {div.style.display='block';  }
             else
             {div.style.display='none';     }
-
-
         });
-
         $('#btn02').click(function() {
-
             var   div=document.getElementById('ben3');
             if(div.style.display==='none')
             {div.style.display='block';  }
             else
             {div.style.display='none';     }
-
-
         });
-
-
         $('#btn03').click(function() {
-
             var   div=document.getElementById('adresse2');
             if(div.style.display==='none')
             {div.style.display='block';  }
             else
             {div.style.display='none';     }
-
         });
-
-
         $('#btn04').click(function() {
-
             var   div=document.getElementById('adresse3');
             if(div.style.display==='none')
             {div.style.display='block';  }
             else
             {div.style.display='none';     }
-
-
         });
-
         function toggle(className, displayState){
             var elements = document.getElementsByClassName(className);
-
             for (var i = 0; i < elements.length; i++){
                 elements[i].style.display = displayState;
             }
         }
-
         $("#typeprest").change(function() {
-
             document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
             document.getElementById('prestation').style.display='none';
@@ -5386,30 +5036,19 @@ document.getElementById('firstsaved-m').value =1;
             document.getElementById('validation').style.display='none';
             document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
-
                 // afficher les specialite par type de prestation selectionné
             toggle('tprest', 'none');
            var typeprest=  document.getElementById('typeprest').value;
-
            // document.getElementById('tprest-'+typeprest).style.display='block';
             toggle('tprest-'+typeprest, 'block');
-
         });
-
-
         $("#typeprest2").change(function() {
-
-
             // afficher les specialite par type de prestation selectionné
-
             toggle('tprest2', 'none');
             var typeprest=  document.getElementById('typeprest2').value;
              //document.getElementById('tprest2-'+typeprest).style.display='block';
             toggle('tprest2-'+typeprest, 'block');
-
         });
-
-
         $("#rechercher").click(function(){
             // document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
@@ -5417,17 +5056,12 @@ document.getElementById('firstsaved-m').value =1;
             document.getElementById('add2').style.display='none';
             document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
-
             toggle('tprest', 'none');
             var typeprest=  document.getElementById('typeprest').value;
-
         //   document.getElementById('tprest-'+typeprest).style.display='block';
-
             toggle('tprest', 'block');
-
             //  prest = $(this).val();
             document.getElementById('selectedprest').value=0;
-
             var  type =document.getElementById('typeprest').value;
             var  gouv =document.getElementById('gouvcouv').value;
             var  specialite =document.getElementById('specialite').value;
@@ -5436,17 +5070,13 @@ document.getElementById('firstsaved-m').value =1;
             if((type !="")&&(gouv !=""))
             {
                 var _token = $('input[name="_token"]').val();
-
                 document.getElementById('termine').style.display = 'none';
                 document.getElementById('add2').style.display = 'none';
                 document.getElementById('add2prest').style.display='none';
-
                console.log('Gouv: '+gouv+' Type P: '+type+' Specialite: '+specialite+' Ville: '+ville+' Postal: '+postal) ;
-
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",
                     method:"post",
-
                     data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
                     success:function(data){
                         $('#data').html(data);
@@ -5454,18 +5084,15 @@ document.getElementById('firstsaved-m').value =1;
                         console.log(data);
                         ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
                         var  total =parseInt(document.getElementById('total').value);
-
                         if(total>0)
                         {
                             document.getElementById('showNext').style.display='block';
                         }
 						if(  document.getElementById('showNext').firstChild.data =='Suivant'){
 							document.getElementById('item1').style.display = 'block';
-
 						}
                     }
                 }); // ajax
-
             }else{
                  Swal.fire({
                     type: 'error',
@@ -5479,8 +5106,6 @@ document.getElementById('firstsaved-m').value =1;
             //selected= document.getElementById('selected').value;
             selected=    $("#selected").val();
             document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
-
-
         });
 */
        
@@ -5490,8 +5115,6 @@ document.getElementById('firstsaved-m').value =1;
              document.getElementById('showNext-m').firstChild.data ='Commencer';
             document.getElementById('add2prest-m').style.display='none';
             document.getElementById('selectedprest-m').value=0;
-
-
             var typeprestom=  document.getElementById('templateom').value;
             var specialite=  document.getElementById('specialitem').value;
             
@@ -5502,7 +5125,6 @@ document.getElementById('firstsaved-m').value =1;
             */
             // TAXI
             if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
-
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; }
             // REMORQUAGE
@@ -5516,10 +5138,8 @@ document.getElementById('firstsaved-m').value =1;
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
             //document.getElementById('tprest2-'+typeprest).style.display='block';
-
             //  prest = $(this).val();
             document.getElementById('selectedprest-m').value=0;
-
             //var  type =document.getElementById('typeprest2').value;
             var  gouv =document.getElementById('gouvcouvm').value;
             //var  specialite =document.getElementById('specialite').value;
@@ -5528,17 +5148,13 @@ document.getElementById('firstsaved-m').value =1;
             if((type !="")&&(gouv !=""))
             {
                 var _token = $('input[name="_token"]').val();
-
                 document.getElementById('termine-m').style.display = 'none';
                 document.getElementById('add2-m').style.display = 'none';
                 document.getElementById('add2prest-m').style.display='none';
-
                console.log('in ajax') ;
-
                 $.ajax({
                     url:"{{ route('dossiers.listepresm') }}",
                     method:"post",
-
                     data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
                     success:function(data){
                         $('#data-m').html(data);
@@ -5547,18 +5163,15 @@ document.getElementById('firstsaved-m').value =1;
                         console.log(data);
                         ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
                         var  total =parseInt(document.getElementById('total-m').value);
-
                         if(total>0)
                         {
                             document.getElementById('showNext-m').style.display='block';
                         }
 						if(  document.getElementById('showNext-m').firstChild.data =='Suivant'){
 							document.getElementById('item1-m').style.display = 'block';
-
 						}
                     }
                 }); // ajax
-
             }else{
                  Swal.fire({
                     type: 'error',
@@ -5567,9 +5180,6 @@ document.getElementById('firstsaved-m').value =1;
                 });
             }
         });
-
-
-
         $("#essai2").click(function() {
    /*         document.getElementById('start').value = 1;
             document.getElementById('termine').style.display = 'none';
@@ -5586,17 +5196,13 @@ document.getElementById('firstsaved-m').value =1;
    $('#showNext').prop('disabled', true);
 	  $('#add2').prop('disabled', false);
 */
-
      document.getElementById('selected').value = 1;
      document.getElementById('selectedprest').value = 0;
-
   $( "#rechercher" ).trigger( "click" );
  
  //$( "#showNext" ).trigger( "click" );
-
  document.getElementById('selected').value=1; var selected=1; next=selected+1;
    document.getElementById('selectedprest').value = document.getElementById('prestataire_id_1').value ;
-
    
 document.getElementById('item1').style.display = 'block';
 document.getElementById('add2').style.display = 'block';
@@ -5605,7 +5211,6 @@ document.getElementById('add2').style.display = 'block';
   
   $('#showNext').prop('disabled', true);
 	  $('#add2').prop('disabled', false);
-
   document.getElementById('add2').style.display = 'block';
                         document.getElementById('valide').style.display = 'block';
                         document.getElementById('validation').style.display = 'block';
@@ -5632,17 +5237,13 @@ $("#essai2-m").click(function() {
    $('#showNext').prop('disabled', true);
 	  $('#add2').prop('disabled', false);
 */
-
      document.getElementById('selected-m').value = 1;
      document.getElementById('selectedprest-m').value = 0;
-
   $( "#rechercherm" ).trigger( "click" );
  
  //$( "#showNext" ).trigger( "click" );
-
  document.getElementById('selected-m').value=1; var selected=1; next=selected+1;
    document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_1-m').value ;
-
    
 document.getElementById('item1-m').style.display = 'block';
 document.getElementById('add2-m').style.display = 'block';
@@ -5651,7 +5252,6 @@ document.getElementById('add2-m').style.display = 'block';
   
   $('#showNext-m').prop('disabled', true);
 	  $('#add2-m').prop('disabled', false);
-
   document.getElementById('add2-m').style.display = 'block';
                         document.getElementById('valide-m').style.display = 'block';
                         document.getElementById('validation-m').style.display = 'block';
@@ -5662,34 +5262,23 @@ document.getElementById('add2-m').style.display = 'block';
  document.getElementById('showNext-m').firstChild.data ='Suivant';
  //  $('#showNext').prop('disabled', false);
      });
-
       
-
-
         $("#statutprest").change(function() {
  if(document.getElementById('statutprest').value=='autre'){
     document.getElementById('detailsprest').style.display='block';
-
 }else{
     document.getElementById('detailsprest').style.display='none';
-
 }
  $('#showNext').prop('disabled', false);
-
  });
    $("#statutprest-m").change(function() {
  if(document.getElementById('statutprest-m').value=='autre'){
     document.getElementById('detailsprest-m').style.display='block';
-
 }else{
     document.getElementById('detailsprest-m').style.display='none';
-
 }
  $('#showNext-m').prop('disabled', false);
-
  });
-
-
    $("#showNext-m").click(function() {
 	var start=  document.getElementById('start-m').value ;
 	  var  prest =document.getElementById('selectedprest-m').value;
@@ -5700,8 +5289,6 @@ document.getElementById('add2-m').style.display = 'block';
    document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_1-m').value ;
 $('#showNext-m').prop('disabled', true);
  $('#add2-m').prop('disabled', false);
-
-
  document.getElementById('add2-m').style.display = 'block';
                         document.getElementById('valide-m').style.display = 'block';
                         document.getElementById('validation-m').style.display = 'block';
@@ -5710,10 +5297,7 @@ $('#showNext-m').prop('disabled', true);
                         document.getElementById('item1-m').style.display = 'block';
                      //   document.getElementById('item'+String(selected)).style.display = 'none';
                      //   document.getElementById('item'+String(next)).style.display = 'block';
-
-
                  //      $("#selected").val(next);
-
  document.getElementById('showNext-m').firstChild.data ='Suivant';
   }
   else{
@@ -5725,22 +5309,17 @@ $('#showNext-m').prop('disabled', true);
                 var  details =document.getElementById('detailsprest-m').value;
 				
 	            ///////    $("#selected").val(selected+1);
-
 /*
                 selected=  parseInt(document.getElementById('selected').value);
 				alert(selected) ;
                 if(selected >1 ) {
                 document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
-
-
                 var prestataire = $('#selectedprest').val();
                 var dossier_id = $('#dossier').val();
-
                 var typeprest = $('#typeprest').val();
                 var gouvernorat = $('#gouvcouv').val();
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
-
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                 {
@@ -5752,37 +5331,25 @@ $('#showNext-m').prop('disabled', true);
                         success:function(data){
                             var prestation=parseInt(data);
                             /// window.location =data;
-
                         //    document.getElementById('prestation').style.display='block';
                         //    document.getElementById('valide').style.display='block';
                         //    document.getElementById('idprestation').value =prestation;
-
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-
-
                         }
-
                     });
                 }else{
-
                 }
-
     }
  */
-
-
                 document.getElementById('showNext-m').firstChild.data  ='Suivant';
-
                 var shownext=false;var infos=false;
-
 				if( document.getElementById('firstsaved-m').value==0)
 				{
 				  var prestataire = $('#selectedprest-m').val();
 			  var nomprestataire = $('#selectedprest-m option:selected').text();
  			//  alert(nomprestataire);
                 var dossier_id = $('#dossier').val();
-
               var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
             var specialite = $('#specialitem').val();
@@ -5800,7 +5367,6 @@ $('#showNext-m').prop('disabled', true);
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
               var date = $('#pres_datem').val();
-
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                 {
@@ -5813,20 +5379,14 @@ $('#showNext-m').prop('disabled', true);
                             var prestation=parseInt(data);
                             // window.location =data;
 							document.getElementById('idprestation-m').value=prestation;
-
                         //    document.getElementById('prestation').style.display='block';
                         //    document.getElementById('valide').style.display='block';
                         //    document.getElementById('idprestation').value =prestation;
-
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-
-
                         }
-
                     });
                 }else{
-
                 }
 				
 				 }
@@ -5847,24 +5407,20 @@ $('#showNext-m').prop('disabled', true);
                     method:"POST",
                     data:{prestation:prestation,prestataire:prest,statut:statut,details:details, _token:_token},
                     success:function(data){
-
                 // reinitialiser le champs de statut
                     ///    if(document.getElementById('selectedprest').value ==0) {
                     ///        document.getElementById('statutprest').value ='';
                     ///        document.getElementById('detailsprest').value ='';}
-
                     }
                 });				
 				
 				
 				
 				
-
             // reinitialiser le champs de statut
             /*if(document.getElementById('selectedprest').value ==0) {
                 document.getElementById('statutprest').value ='';
             document.getElementById('detailsprest').value ='';}*/
-
 			
 			
 			
@@ -5874,12 +5430,10 @@ $('#showNext-m').prop('disabled', true);
                 if ((document.getElementById('statutprest').value == 'autre') && (document.getElementById('detailsprest').value != '')) {
                     shownext=true;infos=true;
 					$('#showNext').prop('disabled', false);
-
                 }
                 if ((document.getElementById('statutprest').value == 'nonjoignable') || (document.getElementById('statutprest').value == 'nondisponible')) {
                     shownext=true;infos=true;
 					$('#showNext').prop('disabled', false);
-
                 }
             }
             else{shownext=true;}
@@ -5892,41 +5446,32 @@ $('#showNext-m').prop('disabled', true);
                 var  prestataire =document.getElementById('selectedprest').value;
                 var  statut =document.getElementById('statutprest').value;
                 var  details =document.getElementById('detailsprest').value;
-
                 $.ajax({
                     url:"{{ route('prestations.updatestatut') }}",
                     method:"POST",
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
-
                 // reinitialiser le champs de statut
                         if(document.getElementById('selectedprest').value ==0) {
                             document.getElementById('statutprest').value ='';
                             document.getElementById('detailsprest').value ='';}
-
                     }
                 });
                 document.getElementById('statutprest').selectedIndex =0;
-
                       if(document.getElementById('idprestation').value >0) {
                        ////   document.getElementById('prestation').style.display='none';
                       }
-
             }
 			
 			****/
                 document.getElementById('selectedprest-m').value = 0;
                 document.getElementById('detailsprest-m').value='';
-
                 var selected =parseInt(document.getElementById('selected-m').value);
                 var total = parseInt(document.getElementById('total-m').value);
                 document.getElementById('statutprest-m').value='';
-
-
                 var next = parseInt(selected) + 1;
 				
 				 if ((selected != 0) && (next <=  total  )) {
-
                 document.getElementById('selected-m').value = next;
             document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_'+next+'-m').value ;
 				 }
@@ -5942,26 +5487,18 @@ $('#showNext-m').prop('disabled', true);
                     document.getElementById('valide-m').style.display = 'block';
                     document.getElementById('validation-m').style.display = 'block';
                     document.getElementById('add2prest-m').style.display='block';
-
                     //document.getElementById('selected').value=1;
                     // $("#selected").val('1');
-
                 }
-
                 if ((selected) == (total  )) {
-
                     document.getElementById('termine-m').style.display = 'block';
-
                     document.getElementById('item' + selected+'-m').style.display = 'none';
                     document.getElementById('showNext-m').style.display = 'none';
                     document.getElementById('add2-m').style.display = 'none';
                     document.getElementById('valide-m').style.display = 'none';
                     document.getElementById('validation-m').style.display = 'none';
                     document.getElementById('add2prest-m').style.display='none';
-
-
                 } else {
-
                     if ((selected != 0) && (selected <= total + 1)) {
                         document.getElementById('add2-m').style.display = 'block';
                         document.getElementById('valide-m').style.display = 'block';
@@ -5970,17 +5507,9 @@ $('#showNext-m').prop('disabled', true);
                         document.getElementById('termine-m').style.display = 'none';
                         document.getElementById('item' + selected+'-m').style.display = 'none';
                         document.getElementById('item' + next+'-m').style.display = 'block';
-
-
                         $("#selected-m").val(next);
-
-
-
                     }
                 }
-
-
-
                   if(next>parseInt(total)+1) {
                     // document.getElementById('item' + selected).style.display = 'none';
                 }
@@ -5990,7 +5519,6 @@ $('#showNext-m').prop('disabled', true);
                       document.getElementById('detailsprest').value='';
                    ////   document.getElementById('prestation').style.display='none';
                       document.getElementById('statutprest').selectedIndex =0;
-
                   }*/
     /*        }
             else{
@@ -5999,11 +5527,8 @@ $('#showNext-m').prop('disabled', true);
                      type: 'error',
                      title: 'Attendez...',
                      text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
-
                  })
-
             }
-
             }
 */
 			
@@ -6016,9 +5541,7 @@ $('#showNext-m').prop('disabled', true);
 	 document.getElementById('start-m').value =0;
 	
 	  $('#showNext-m').prop('disabled', true);
-
  			 
-
         });
   $("#showNext").click(function() {
 	var start=  document.getElementById('start').value ;
@@ -6030,8 +5553,6 @@ $('#showNext-m').prop('disabled', true);
    document.getElementById('selectedprest').value = document.getElementById('prestataire_id_1').value ;
 $('#showNext').prop('disabled', true);
  $('#add2').prop('disabled', false);
-
-
  document.getElementById('add2').style.display = 'block';
                         document.getElementById('valide').style.display = 'block';
                         document.getElementById('validation').style.display = 'block';
@@ -6040,10 +5561,7 @@ $('#showNext').prop('disabled', true);
                         document.getElementById('item1').style.display = 'block';
                      //   document.getElementById('item'+String(selected)).style.display = 'none';
                      //   document.getElementById('item'+String(next)).style.display = 'block';
-
-
                  //      $("#selected").val(next);
-
  document.getElementById('showNext').firstChild.data ='Suivant';
   }
   else{
@@ -6055,22 +5573,17 @@ $('#showNext').prop('disabled', true);
                 var  details =document.getElementById('detailsprest').value;
 				
 	            ///////    $("#selected").val(selected+1);
-
 /*
                 selected=  parseInt(document.getElementById('selected').value);
 				alert(selected) ;
                 if(selected >1 ) {
                 document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
-
-
                 var prestataire = $('#selectedprest').val();
                 var dossier_id = $('#dossier').val();
-
                 var typeprest = $('#typeprest').val();
                 var gouvernorat = $('#gouvcouv').val();
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
-
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                 {
@@ -6082,42 +5595,29 @@ $('#showNext').prop('disabled', true);
                         success:function(data){
                             var prestation=parseInt(data);
                             /// window.location =data;
-
                         //    document.getElementById('prestation').style.display='block';
                         //    document.getElementById('valide').style.display='block';
                         //    document.getElementById('idprestation').value =prestation;
-
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-
-
                         }
-
                     });
                 }else{
-
                 }
-
     }
  */
-
-
                 document.getElementById('showNext').firstChild.data  ='Suivant';
-
                 var shownext=false;var infos=false;
-
 				if( document.getElementById('firstsaved').value==0)
 				{
 				  var prestataire = $('#selectedprest').val();
 			  var nomprestataire = $('#selectedprest option:selected').text();
  			//  alert(nomprestataire);
                 var dossier_id = $('#dossier').val();
-
                 var typeprest = $('#typeprest').val();
                 var gouvernorat = $('#gouvcouv').val();
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
-
                 //   gouvcouv
                 if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
                 {
@@ -6130,20 +5630,14 @@ $('#showNext').prop('disabled', true);
                             var prestation=parseInt(data);
                             // window.location =data;
 							document.getElementById('idprestation').value=prestation;
-
                         //    document.getElementById('prestation').style.display='block';
                         //    document.getElementById('valide').style.display='block';
                         //    document.getElementById('idprestation').value =prestation;
-
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-
-
                         }
-
                     });
                 }else{
-
                 }
 				
 				 }
@@ -6164,24 +5658,20 @@ $('#showNext').prop('disabled', true);
                     method:"POST",
                     data:{prestation:prestation,prestataire:prest,statut:statut,details:details, _token:_token},
                     success:function(data){
-
                 // reinitialiser le champs de statut
                     ///    if(document.getElementById('selectedprest').value ==0) {
                     ///        document.getElementById('statutprest').value ='';
                     ///        document.getElementById('detailsprest').value ='';}
-
                     }
                 });				
 				
 				
 				
 				
-
             // reinitialiser le champs de statut
             /*if(document.getElementById('selectedprest').value ==0) {
                 document.getElementById('statutprest').value ='';
             document.getElementById('detailsprest').value ='';}*/
-
 			
 			
 			
@@ -6191,12 +5681,10 @@ $('#showNext').prop('disabled', true);
                 if ((document.getElementById('statutprest').value == 'autre') && (document.getElementById('detailsprest').value != '')) {
                     shownext=true;infos=true;
 					$('#showNext').prop('disabled', false);
-
                 }
                 if ((document.getElementById('statutprest').value == 'nonjoignable') || (document.getElementById('statutprest').value == 'nondisponible')) {
                     shownext=true;infos=true;
 					$('#showNext').prop('disabled', false);
-
                 }
             }
             else{shownext=true;}
@@ -6209,42 +5697,32 @@ $('#showNext').prop('disabled', true);
                 var  prestataire =document.getElementById('selectedprest').value;
                 var  statut =document.getElementById('statutprest').value;
                 var  details =document.getElementById('detailsprest').value;
-
                 $.ajax({
                     url:"{{ route('prestations.updatestatut') }}",
                     method:"POST",
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
-
-
                 // reinitialiser le champs de statut
                         if(document.getElementById('selectedprest').value ==0) {
                             document.getElementById('statutprest').value ='';
                             document.getElementById('detailsprest').value ='';}
-
                     }
                 });
                 document.getElementById('statutprest').selectedIndex =0;
-
                       if(document.getElementById('idprestation').value >0) {
                        ////   document.getElementById('prestation').style.display='none';
                       }
-
             }
 			
 			****/
                 document.getElementById('selectedprest').value = 0;
                 document.getElementById('detailsprest').value='';
-
                 var selected =parseInt(document.getElementById('selected').value);
                 var total = parseInt(document.getElementById('total').value);
                 document.getElementById('statutprest').value='';
-
-
                 var next = parseInt(selected) + 1;
 				
 				 if ((selected != 0) && (next <=  total  )) {
-
                 document.getElementById('selected').value = next;
             document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+next).value ;
 				 }
@@ -6260,26 +5738,18 @@ $('#showNext').prop('disabled', true);
                     document.getElementById('valide').style.display = 'block';
                     document.getElementById('validation').style.display = 'block';
                     document.getElementById('add2prest').style.display='block';
-
                     //document.getElementById('selected').value=1;
                     // $("#selected").val('1');
-
                 }
-
                 if ((selected) == (total  )) {
-
                     document.getElementById('termine').style.display = 'block';
-
                     document.getElementById('item'+(selected)).style.display = 'none';
                     document.getElementById('showNext').style.display = 'none';
                     document.getElementById('add2').style.display = 'none';
                     document.getElementById('valide').style.display = 'none';
                     document.getElementById('validation').style.display = 'none';
                     document.getElementById('add2prest').style.display='none';
-
-
                 } else {
-
                     if ((selected != 0) && (selected <= total + 1)) {
                         document.getElementById('add2').style.display = 'block';
                         document.getElementById('valide').style.display = 'block';
@@ -6288,17 +5758,9 @@ $('#showNext').prop('disabled', true);
                         document.getElementById('termine').style.display = 'none';
                         document.getElementById('item'+String(selected)).style.display = 'none';
                         document.getElementById('item'+String(next)).style.display = 'block';
-
-
                         $("#selected").val(next);
-
-
-
                     }
                 }
-
-
-
                   if(next>parseInt(total)+1) {
                     // document.getElementById('item' + selected).style.display = 'none';
                 }
@@ -6308,7 +5770,6 @@ $('#showNext').prop('disabled', true);
                       document.getElementById('detailsprest').value='';
                    ////   document.getElementById('prestation').style.display='none';
                       document.getElementById('statutprest').selectedIndex =0;
-
                   }*/
     /*        }
             else{
@@ -6317,11 +5778,8 @@ $('#showNext').prop('disabled', true);
                      type: 'error',
                      title: 'Attendez...',
                      text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
-
                  })
-
             }
-
             }
 */
 			
@@ -6334,14 +5792,8 @@ $('#showNext').prop('disabled', true);
 	 document.getElementById('start').value =0;
 	
 	  $('#showNext').prop('disabled', true);
-
  			 
-
         });
-
-
-
-
         $('#addpr1').click(function(){
             var nom = $('#nom').val();
             var prenom = $('#prenom').val();
@@ -6354,77 +5806,49 @@ $('#showNext').prop('disabled', true);
                     method:"POST",
                     data:{nom:nom,prenom:prenom,dossier:dossier, _token:_token},
                     success:function(data){
-
-
                         window.location =data;
-
-
                     }
                 });
             }else{
-
             }
         });
-
         $('#addpr2').click(function(){
             var prestataire = $('#selectable').val();
              var dossier = $('#dossier').val();
-
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('intervenants.saving') }}",
                     method:"POST",
                     data:{prestataire:prestataire,dossier:dossier, _token:_token},
                     success:function(data){
-
-
                         location.reload();
-
 /// here
                     }
                 });
-
         });
-
-
-
-
         var url = document.location.toString();
         if (url.match('#')) {
             $('.nav-item a[href="#' + url.split('#')[1] + '"]').tab('show');
         }
-
 // Change hash for page-reload
         $('.nav-item a').on('shown.bs.tab', function (e) {
             window.location.hash = e.target.hash;
         })
-
-
-
     }); // $ function
-
-
     function setTel(elm)
     {
         var num=elm.className;
         document.getElementById('ledestinataire').value=parseInt(num);
-
     }
-
-
     function init(id,nom)
     {
-
         document.getElementById('selectedprest2').value =id;
         document.getElementById('inputprest').value =nom;
         filtre(id);
-
-
     }
 // filtrer type prestation dans ajout prestation
     function filtre(prestataire) {
         $("#ajout_typeprest").val('');
-
         var liste ;
         var _token = $('input[name="_token"]').val();
         $.ajax({
@@ -6434,18 +5858,10 @@ $('#showNext').prop('disabled', true);
             success:function(data){
                 liste=data;
                 console.log('data : '+data);
-
                 //   alert('Added successfully');
-
-
                 $('#ajout_typeprest option').each(function() {
-
                     $(this).css("display", "none");
-
-
                 });
-
-
                 $('#ajout_typeprest option').each(function() {
                     // console.log(  $(this).val());
                     for (i=0;i< liste.length ;i++){
@@ -6455,29 +5871,15 @@ $('#showNext').prop('disabled', true);
                             break;
                         }
                     }
-
-
                 });
-
-
-
-
             }
         });
-
-
-
     }
-
-
-
 </script>
 <script>
-
    $(document).on('click','#actualiserAtt',function(e){
     
      location.reload();
-
    });
  $(document).on("submit","#formFileExterne",function(e) {
  // $("#formFileExterne").submit(function(e) {
@@ -6489,11 +5891,9 @@ $('#showNext').prop('disabled', true);
       alert('Vous devez sélectionner un fichier à envoyer');
       en=false;
      }
-
     if(en==true)
    {
     //var donnees = $('#formFileExterne').serialize();
-
     var dataString = new FormData(jQuery(document).find('#formFileExterne')[0]);
     
     $.ajax({
@@ -6515,14 +5915,10 @@ $('#showNext').prop('disabled', true);
                     {
                         //alert(response);
                        $("#successUloadExterneFile").empty().html('<span style="color:green">le fichier est envoyé avec succès</span>');
-
                     },
                       error: function(jqXHR, textStatus, errorThrown) {
-
                         //alert('erreur lors de création de la mission');
                     $("#successUloadExterneFile").empty().html('<span style="color:red">Erreur lors de l\'envoi du fichier au serveur</span>');
-
-
             }
                 });
 }
@@ -6533,14 +5929,11 @@ $('#showNext').prop('disabled', true);
                                 window.open('http://192.168.1.249/najdatest/public/webphone/samples/mobile.php?wp_callto='+num,'phone',
                                'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=295,height=575,');
                                 $("#faireappel").modal('hide');
-
                                }
-
 </script>
 <!-- <script src="http://malsup.github.com/jquery.form.js"></script>
 <script>
 $(document).ready(function(){
-
     $('#formFilekbs').ajaxForm({
       beforeSend:function(){
         $('#success').empty();
@@ -6567,7 +5960,6 @@ $(document).ready(function(){
         }
       }
     });
-
 });
 </script> -->
 <style>.headtable{background-color: grey!important;color:white;}
@@ -6577,7 +5969,6 @@ $(document).ready(function(){
 
 
 <style>
-
     /* The check */
     .check {
         display: block;
@@ -6592,14 +5983,12 @@ $(document).ready(function(){
         -ms-user-select: none;
         user-select: none;
     }
-
     /* Hide the browser's default checkbox */
     .check input {
         position: absolute;
         opacity: 0;
         cursor: pointer;
     }
-
     /* Create a custom checkbox */
     .checkmark {
         position: absolute;
@@ -6612,26 +6001,20 @@ $(document).ready(function(){
         border-style:solid;
         border-width:2px;
     }
-
-
-
     /* When the checkbox is checked, add a blue background */
     .check input:checked ~ .checkmark {
         background-color: #fff  ;
     }
-
     /* Create the checkmark/indicator (hidden when not checked) */
     .checkmark:after {
         content: "";
         position: absolute;
         display: none;
     }
-
     /* Show the checkmark when checked */
     .check input:checked ~ .checkmark:after {
         display: block;
     }
-
     /* Style the checkmark/indicator */
     .check .checkmark:after {
         left: 5px;
@@ -6645,9 +6028,6 @@ $(document).ready(function(){
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
     }
-
-
-
     section#timeline {
         width: 100%;
         margin: 20px auto;
@@ -6739,30 +6119,24 @@ $(document).ready(function(){
         color: #656565;
         border-radius: 0 0 6px 6px;
     }
-
-
     section#timeline article:nth-child(2n+2) div.inner {
         /* float: right;*/
     }
     section#timeline article:nth-child(2n+2) div.inner h2:after {
         /*left: -5px;*/
     }
-
-
     section#timeline  article div.inner.sent {
         float: right;
     }
     section#timeline article div.inner.sent h2:after {
         left: -5px;
     }
-
     section#timeline article  div.inner h2 {
         background: #e74c3c;
     }
     section#timeline article  div.inner h2:after {
         background: #e74c3c;
     }
-
     section#timeline article:nth-child(1) div.inner h2 {
         background: #e74c3c;
     }
@@ -6793,7 +6167,6 @@ $(document).ready(function(){
     section#timeline article:nth-child(5) div.inner h2:after {
         background: #9b59b6;
     }
-
     section#timeline article:nth-child(6) div.inner h2 {
         background: #F8C471;
     }
@@ -6848,11 +6221,9 @@ $(document).ready(function(){
 .swal2-container.swal2-center.swal2-fade.swal2-shown {
     z-index: 1000000!important;
 }
-
     .dataTables_filter{
         float:right;
     }
-
 </style>
 
 
@@ -6881,21 +6252,17 @@ $(document).ready(function(){
 
     <script type="text/javascript">
         $(document).ready(function() {
-
-
             $('#mytable thead tr:eq(1) th').each( function () {
                 var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
                 //  $(this).html( '<input class="searchfield" type="text" placeholder="'+title+'" />' );
                 $(this).html( '<input class="searchfield" type="text"   />' );
             } );
-
             var table = $('#mytable').DataTable({
                 "aaSorting": [],
                 orderCellsTop: true,
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
-
                     'csv', 'excel', 'pdf', 'print'
                 ],
                 "columnDefs": [ {
@@ -6928,9 +6295,7 @@ $(document).ready(function(){
                             "sortDescending": ": activer pour un tri descendant"
                         }
                     }
-
             });
-
 // Apply the search
             function delay(callback, ms) {
                 var timer = 0;
@@ -6942,44 +6307,33 @@ $(document).ready(function(){
                     }, ms || 0);
                 };
             }
-
             table.columns().every(function (index) {
                 $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
                     table.column($(this).parent().index() + ':visible')
                         .search(this.value)
                         .draw();
                 });
-
                 $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
                     console.log('Time elapsed!', this.value);
                     $(this).blur();
-
                 }, 2000));
             });
-
-
-
         });
-
     </script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-
-
             $('#mytableMA thead tr:eq(1) th').each( function () {
                 var title = $('#mytableMA thead tr:eq(0) th').eq( $(this).index() ).text();
                 //  $(this).html( '<input class="searchfield" type="text" placeholder="'+title+'" />' );
                 $(this).html( '<input class="searchfield" type="text"   />' );
             } );
-
             var table = $('#mytableMA').DataTable({
                 "aaSorting": [],
                 orderCellsTop: true,
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
-
                     'csv', 'excel', 'pdf', 'print'
                 ],
                 "columnDefs": [ {
@@ -7012,9 +6366,7 @@ $(document).ready(function(){
                             "sortDescending": ": activer pour un tri descendant"
                         }
                     }
-
             });
-
               function delay(callback, ms) {
                 var timer = 0;
                 return function() {
@@ -7025,45 +6377,33 @@ $(document).ready(function(){
                     }, ms || 0);
                 };
             }
-
-
             table.columns().every(function (index) {
                 $('#mytableMA thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
                     table.column($(this).parent().index() + ':visible')
                         .search(this.value)
                         .draw();
                 });
-
                 $('#mytableMA thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
                     console.log('Time elapsed!', this.value);
                     $(this).blur();
-
                 }, 2000));
             });
-
-
-
         });
-
     </script>
 
      <script type="text/javascript">
         $(document).ready(function() {
-
-
             $('#mytableMACC thead tr:eq(1) th').each( function () {
                 var title = $('#mytableMACC thead tr:eq(0) th').eq( $(this).index() ).text();
                 //  $(this).html( '<input class="searchfield" type="text" placeholder="'+title+'" />' );
                 $(this).html( '<input class="searchfield" type="text"   />' );
             } );
-
             var table = $('#mytableMACC').DataTable({
                 "aaSorting": [],
                 orderCellsTop: true,
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
-
                     'csv', 'excel', 'pdf', 'print'
                 ],
                 "columnDefs": [ {
@@ -7096,9 +6436,7 @@ $(document).ready(function(){
                             "sortDescending": ": activer pour un tri descendant"
                         }
                     }
-
             });
-
               function delay(callback, ms) {
                 var timer = 0;
                 return function() {
@@ -7109,32 +6447,23 @@ $(document).ready(function(){
                     }, ms || 0);
                 };
             }
-
-
             table.columns().every(function (index) {
                 $('#mytableMACC thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
                     table.column($(this).parent().index() + ':visible')
                         .search(this.value)
                         .draw();
                 });
-
                 $('#mytableMACC thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
                     console.log('Time elapsed!', this.value);
                     $(this).blur();
-
                 }, 2000));
             });
-
-
-
         });
-
     </script>
 
 <script type="text/javascript">
    
  $(document).on('click','.macvd', function() {
-
    var macvd=$(this).attr("id");
     macvd=macvd.substr(5);
   //alert(idw);
@@ -7142,35 +6471,27 @@ $(document).ready(function(){
  
   // var typemiss=$('#workflowht'+macvd).attr("value");
      // $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
-
            $.ajax({
-
                url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflow/"+macvd,
                type : 'GET',
               // data : 'idw=' + idw,
                success: function(data){
                
               // alert(data);
-
                //alert(JSON.stringify(data));
               $('#contenumodalworkflowMAA').empty().html(data);
-
               $('#myworkflowMAA').modal('show');
-
                   //alert(JSON.stringify(retour))   ;
                  // location.reload();
             }
-
              
            });
-
   });
   </script>
   
   <script type="text/javascript">
    
  $(document).on('click','.mhivd', function() {
-
    var mhivd=$(this).attr("id");
     mhivd=mhivd.substr(5);
  // alert(mhivd);
@@ -7178,28 +6499,21 @@ $(document).ready(function(){
  
   // var typemiss=$('#workflowht'+macvd).attr("value");
      // $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
-
            $.ajax({
-
                url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflowMach/"+mhivd,
                type : 'GET',
               // data : 'idw=' + idw,
                success: function(data){
                
               // alert(data);
-
                //alert(JSON.stringify(data));
               $('#contenumodalworkflowMAA').empty().html(data);
-
               $('#myworkflowMAA').modal('show');
-
                   //alert(JSON.stringify(retour))   ;
                  // location.reload();
             }
-
              
            });
-
   });
   </script>
 <script>
@@ -7210,30 +6524,22 @@ $(document).ready(function(){
    /*var nomact=$('#workflowh'+idw).attr("value");
    var typemiss=$('#workflowht'+idw).attr("value");
       $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');*///ou la methode html
-
            $.ajax({
-
                url: "<?php echo $urlapp; ?>/Mission/getMailGenerator/"+mailGenermacvd,
                type : 'GET',
               // data : 'idw=' + idw,
                success: function(data){
                
               //alert(data);
-
                //alert(JSON.stringify(data));
                $('#contenumodalworkflowMAA').empty().html(data);
-
               $('#myworkflowMAA').modal('show');
-
                   //alert(JSON.stringify(retour))   ;
                  // location.reload();
             }
-
              
            });
-
   });
-
   </script>
 
   <script>
@@ -7244,33 +6550,22 @@ $(document).ready(function(){
    /*var nomact=$('#workflowh'+idw).attr("value");
    var typemiss=$('#workflowht'+idw).attr("value");
       $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');*///ou la methode html
-
            $.ajax({
-
                url: "<?php echo $urlapp; ?>/Mission/getMailGeneratorMAch/"+mailGenermhivd,
                type : 'GET',
               // data : 'idw=' + idw,
                success: function(data){
                
               //alert(data);
-
                //alert(JSON.stringify(data));
              $('#contenumodalworkflowMAA').empty().html(data);
-
               $('#myworkflowMAA').modal('show');
-
                   //alert(JSON.stringify(retour))   ;
                  // location.reload();
             }
-
              
            });
-
-
-
-
        $( "#pres_date2" ).datepicker({
-
            altField: "#datepicker",
            closeText: 'Fermer',
            prevText: 'Précédent',
@@ -7283,20 +6578,14 @@ $(document).ready(function(){
            dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
            weekHeader: 'Sem.',
            buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAATCAYAAAB2pebxAAABGUlEQVQ4jc2UP06EQBjFfyCN3ZR2yxHwBGBCYUIhN1hqGrWj03KsiM3Y7p7AI8CeQI/ATbBgiE+gMlvsS8jM+97jy5s/mQCFszFQAQN1c2AJZzMgA3rqpgcYx5FQDAb4Ah6AFmdfNxp0QAp0OJvMUii2BDDUzS3w7s2KOcGd5+UsRDhbAo+AWfyU4GwnPAYG4XucTYOPt1PkG2SsYTbq2iT2X3ZFkVeeTChyA9wDN5uNi/x62TzaMD5t1DTdy7rsbPfnJNan0i24ejOcHUPOgLM0CSTuyY+pzAH2wFG46jugupw9mZczSORl/BZ4Fq56ArTzPYn5vUA6h/XNVX03DZe0J59Maxsk7iCeBPgWrroB4sA/LiX/R/8DOHhi5y8Apx4AAAAASUVORK5CYII=",
-
            firstDay: 1,
            dateFormat: "dd/mm/yy"
-
        });
-
-
-
   });
-
 function valideom(idom,idsuperviseur,types){
+document.getElementById('btnvalid').disabled=true
         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
-
         $.ajax({
                 url:"{{ route('ordremissions.valide') }}",
                 method:"POST",
@@ -7306,8 +6595,9 @@ function valideom(idom,idsuperviseur,types){
                                      location.reload();  }
  });
                                      }
-
   </script>
 
 
 @stop
+
+

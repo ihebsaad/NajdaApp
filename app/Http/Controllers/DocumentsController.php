@@ -253,8 +253,6 @@ $titref =utf8_encode($arrfile['nom'].'_'.$datesc);}
         else 
             {
                 $name_file = utf8_encode($arrfile['nom'].'_'.$refdoss.'.doc');
-
-
                 $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }*/
 
@@ -281,7 +279,6 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         /*$miss->update(['date_spec_affect'=>1]); 
                     
                         $miss->update(['date_spec_affect2'=>1]); 
-
                         $miss->update(['h_fin_sejour'=>$datespe]);*/
 
                         //return 'date affectée'; 
@@ -297,23 +294,17 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         {
             if (isset($_POST['CL_date_fin_location']))
             {
-
               $format = "Y-m-d\TH:i";              
               $datespe = \DateTime::createFromFormat($format,$_POST['CL_date_fin_location']);
-
                $miss=Mission::where('id',$_POST['idMissionDoc'])->first();
-
                     if($miss->type_Mission==46)// location voiture
                     {
                      
                        $miss->update(['date_spec_affect'=>1]); 
                     
                         $miss->update(['date_spec_affect2'=>1]);
-
                         $miss->update(['date_spec_affect3'=>1]);  
-
                         $miss->update(['h_fin_location_voit'=>$datespe]);  
-
                         //return 'date affectée'; 
                    
                     }
@@ -343,7 +334,6 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                      
                                                  
                         /* $miss->update(['date_spec_affect'=>1]); 
-
                           $miss->update(['h_rdv'=>$datespe]);  */
 
                         //return 'date affectée'; 
@@ -361,14 +351,11 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
     // mise a jour montant GOP
     /*if (isset($_POST['CL_montant_numerique']) || isset($_POST['CL_montant_total']) )
     {
-
      if (isset($_POST['CL_montant_numerique']))
      {$montantgp = intval($_POST['CL_montant_numerique']); }
         elseif (isset($_POST['CL_montant_total']))
         {$montantgp = intval($_POST['CL_montant_total']); }
-
        $doss = Dossier::where('id', $dossier)->first();
-
             if($montantgp!==0)
             {
              
@@ -530,6 +517,7 @@ $Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
             'dossier' => $dossier,
             'titre' => $titref,
             'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
+            'name' => $nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
@@ -544,6 +532,7 @@ $Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
             'dossier' => $dossier,
             'titre' => $titref,
             'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
+            'name' => $nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
@@ -606,11 +595,9 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
         //redirect()->route('docgen');
         //return url('/dossiers/view/'.$dossier) ;
         // enregistrement de lattachement
-        $attachement = new Attachement([
-
-            'type'=>'pdf','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $nfsansext.'pdf','boite'=>2,'dossier'=>$dossier
-        ]);
-        $attachement->save();
+        
+ $doc = Document::select('id','titre','emplacement','comment','dernier','parent','idtaggop','created_at','dossier','name')->where('id', $doc->id)->first();
+return json_encode($doc);
     }
 
     public function htmlfilled(Request $request)
@@ -852,7 +839,6 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                     $coltags = Tag::where("entree","=",$entr['id'])->get();
                     if (!empty($coltags))
                     {
-
                         foreach ($coltags as $ltag) {
                              if (strpos( $ltag['abbrev'],"RMtraduit") !== FALSE)
                              {
@@ -869,8 +855,6 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                     $resp = "allow_RMtraduit";
                  }
                 break;
-
-
                 case "RM_francais":
                 $dossRM = false;
                 foreach ($entreesdos as $entr) {
@@ -878,7 +862,6 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                     $coltags = Tag::where("entree","=",$entr['id'])->get();
                     if (!empty($coltags))
                     {
-
                         foreach ($coltags as $ltag) {
                              if ((strpos( $ltag['abbrev'],"RM") !== FALSE) && (strpos( $ltag['abbrev'],"RMtraduit") === FALSE))
                              {
@@ -1068,7 +1051,6 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                                 }
                                 else
                                     { $valchamp = "undefined index";}
-
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
@@ -1216,8 +1198,6 @@ $valchamp = str_replace('<br />', "\\", $valchamp);
 /*if(stristr($champtemp,'ville') == TRUE)
 {
 $valchamp = str_replace('?', '', $valchamp);
-
-
 }*/
                                 $array += [ $champtemp =>$valchamp];
 
@@ -1732,6 +1712,7 @@ $valchamp = str_replace('<br />', "\n", $valchamp);
             'dossier' => $dossier,
             'titre' => $titref,
             'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
+             'name' => $nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parentdoc,
             'dernier' => 1,
@@ -1760,4 +1741,16 @@ Log::info('[Agent : '.$nomuser.' ] Annulation du document '.$docparent.' dans le
         $attachement->save();
         return "document annulé avec succès";
     }
+public function attachdocument(Request $request)
+{
+ $dossier= $request->get('dossier') ;
+ $emplacement= $request->get('emplacement') ;
+$name= $request->get('name') ;
+$attachement = new Attachement([
+
+            'type'=>'pdf','path' => '/app/'.$emplacement, 'nom' => $name,'boite'=>2,'dossier'=>$dossier
+        ]);
+        $attachement->save();
+
+}
 }

@@ -60,18 +60,18 @@ class OrdreMissionsController extends Controller
 
                 	if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
                 	{// supprimer attachement precedent (du parent)
-				        $iddoss = $_POST['dossdoc'];
-				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				       // $iddoss = $_POST['dossdoc'];
+				       // Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
 				        // enregistrement de nouveau attachement
 	                	
-				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
-		        		$name='OM - '.$name;
-				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-				        $attachement = new Attachement([
+				       // $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+		        		//$name='OM - '.$name;
+				       // $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				       // $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
-				        ]);
-				        $attachement->save();
+				            //'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        //]);
+				        //$attachement->save();
                 	}
 /*mettre à jour kilométrage véhicule
                 if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['idvehic']))
@@ -352,9 +352,18 @@ $idprestation=$omparent['idprestation'];
  Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs'=> $filename]);
 
                 // cas exit 1
-                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);            
+if($affectea!="externe")
+{
+                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);      }      
              
-                return($resultatNote);
+               // return($resultatNote);
+header('Content-type: application/json');  
+
+   $om = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
 
                 exit();}
         		    //exit();
@@ -388,14 +397,14 @@ $idprestation=$omparent['idprestation'];
 			        $pdfcomp->save($path.$iddoss.'/'.$name.'.pdf');
 
 			        // supprimer attachement precedent (du parent)
-				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				       /* Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
 				        // enregistrement de nouveau attachement
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
 
 				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
-				        $attachement->save();
+				        $attachement->save();*/
 
         			// enregistrement dans la BD
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_taxi' => $presttaxi,'idprestation'=> $omparent['idprestation']]);
@@ -670,7 +679,14 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
               // cas exit 2
                 $resultatNote=$this->retourner_notes_om_taxi($omtaxi);             
              
-                return($resultatNote);
+                //return($resultatNote);
+header('Content-type: application/json');  
+
+   $om = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
 
                     exit();
         		}
@@ -815,17 +831,23 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmtaxi',['prestataire_taxi' => $prestataireom,'idprestation' => $idprestation])->setPaper('a4', '');
                             $pdf2->save($path.$iddossom.'/'.$name.'.pdf');
 			    // enregistrement de nouveau attachement
-		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
+		        /*$path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
 		        $attachement = new Attachement([
 
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
 		        ]);
-		        $attachement->save();
+		        $attachement->save();*/
 
                 // cas exit 3
                 $resultatNote=$this->retourner_notes_om_taxi($omtaxi);              
-             
-                return($resultatNote);
+             header('Content-type: application/json');  
+
+   $om = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
+                //return($resultatNote);
 		        exit();
         	}
 
@@ -895,18 +917,25 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 }
 Prestation::where('id', $idprestation)->update(['oms_docs'=> $filename]);
 					    // enregistrement de nouveau attachement
-				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				       /* $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
 
 				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
-				        $attachement->save();
+				        $attachement->save();*/
 	        		}
 	        		else
 			        {
 			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
 			        	$result = $omtaxi->update($request->all());
 			        }
+  header('Content-type: application/json');  
+
+   $om = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);
 
 	        	}
 	        	/* verifier si le bloc est necessaire
@@ -1127,6 +1156,8 @@ $dossier1= $dossiersms1['reference_medic'];
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
 			    $result = $omtaxi->update($request->all());
+$nameom=$name;
+
 if ($omtaxi->save()) {
 
 $par=Auth::id();
@@ -1672,6 +1703,15 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
            	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
                {$result5 = $omtaxi2->update($requestData);}
                else { $result5 = $omtaxi2->update($request->all()); }
+
+				        // enregistrement de nouveau attachement
+	                	
+				       
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				        ]);
+				        $attachement->save();
 if ($omtaxi2->save()) {
 
 $par=Auth::id();
@@ -1710,6 +1750,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
    
     return($resultatNote);*/
     // fin recherhce note;
+
 
 }
 
@@ -1793,6 +1834,13 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                 }*/
 
                // return ("khaled");
+header('Content-type: application/json');  
+
+   $om = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $nameom)->first();
+
+$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);
 
     }
 
@@ -1955,17 +2003,17 @@ $idambulancier22=$omparent2['idambulancier2'];
                 	if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
                 	{// supprimer attachement precedent (du parent)
 				        $iddoss = $_POST['dossdoc'];
-				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        //Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
 				        // enregistrement de nouveau attachement
 	                	
 				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
 		        		$name='OM - '.$name;
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-				        $attachement = new Attachement([
+				       /* $attachement = new Attachement([
 
 				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
-				        $attachement->save();
+				        $attachement->save();*/
                 	}
 
                        // mettre à jour kilométrage véhicule
@@ -2451,9 +2499,17 @@ $idprestation=$omparent['idprestation'];
  Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs'=> $filename]);
 
                  // cas 1exit ambulance
-                 $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
+if($affectea!="externe")
+                 {$resultatNote=$this->retourner_notes_om_ambulance($omambulance);}             
              
-                 return($resultatNote);
+                 header('Content-type: application/json');  
+
+   $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
+
                 exit();}
         		// end remplace
         	   }
@@ -2484,14 +2540,14 @@ $idprestation=$omparent['idprestation'];
 			        $pdfcomp->save($path.$iddoss.'/'.$name.'.pdf');
 
 			        // supprimer attachement precedent (du parent)
-				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        //Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
 				        // enregistrement de nouveau attachement
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-				        $attachement = new Attachement([
+				       /* $attachement = new Attachement([
 
 				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
-				        $attachement->save();
+				        $attachement->save();*/
 
         			// enregistrement dans la BD
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance,'idprestation'=>$omparent['idprestation']]);
@@ -2976,7 +3032,13 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['v
                  // cas 2 exit ambulance
                  $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
              
-                 return($resultatNote);
+                   header('Content-type: application/json');  
+
+   $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
 
                     exit();
         		}
@@ -3087,16 +3149,22 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                             $pdf2->save($path.$iddossom.'/'.$name.'.pdf');
 			    // enregistrement de nouveau attachement
 		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
-		        $attachement = new Attachement([
+		       /* $attachement = new Attachement([
 
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
 		        ]);
-		        $attachement->save();
+		        $attachement->save();*/
 
                   // cas 3 exit ambulance
                  $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
              
-                 return($resultatNote);
+                  header('Content-type: application/json');  
+
+   $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
 		        exit();
         	}
         	// affectation en externe
@@ -3129,18 +3197,25 @@ Prestation::where('id', $idprestation)->update(['oms_docs'=> $filename]);
 
 					    	
 					    // enregistrement de nouveau attachement
-				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				      /*  $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
 
 				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
-				        $attachement->save();
+				        $attachement->save();*/
 	        		}
 	        		else
 			        {
 			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
 			        	$result = $omambulance->update($request->all());
 			        }
+header('Content-type: application/json');  
+
+   $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);
 
 	        	}
 	        	/* verifier si le bloc est necessaire
@@ -3292,6 +3367,7 @@ $description='ordre de mission';
 $dossiersms = Dossier::find($iddoss);
 $dateheure = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
 $dateheures=date('d/m/Y H:i',strtotime($dateheure));
+
 $contenu="Bonjour,
 Nous vous informons que vous avez confié à une mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures;
   $contenu= str_replace ( '&' ,'' ,$contenu);
@@ -3631,6 +3707,7 @@ $dossier5= $dossiersms5['reference_medic'];
 }
 
                     }
+$nameom=$name;
 $pdf = PDFomme::loadView('ordremissions.pdfodmambulance',['idprestation' => $idprestation])->setPaper('a4', '');
                      $pdf->save($path.$iddoss.'/'.$name.'.pdf');
         			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
@@ -4145,6 +4222,14 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
            	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
                {$result5 = $omambulance2->update($requestData);}
                else { $result5 = $omambulance2->update($request->all()); }
+// enregistrement de nouveau attachement
+	                	
+				       
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				        ]);
+				        $attachement->save();
 if ($omambulance2->save()) {
 
 $par=Auth::id();
@@ -4154,11 +4239,21 @@ $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
 
 }
+
+
         	}
         	
         }
 
-    }}
+    }
+
+header('Content-type: application/json');  
+
+   $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $nameom)->first();
+
+$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);}
 
     
     public function pdfodmambulance()
@@ -4317,17 +4412,17 @@ $omparent2=OMRemorquage::where('id', $parent)->first();
                     if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
                     {// supprimer attachement precedent (du parent)
                         $iddoss = $_POST['dossdoc'];
-                        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+                       // Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
                         // enregistrement de nouveau attachement
 
                         $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
                         $name='OM - '.$name;
                         $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-                        $attachement = new Attachement([
+                       /* $attachement = new Attachement([
 
                             'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
                         ]);
-                        $attachement->save();
+                        $attachement->save();*/
                     }
 /*mettre à jour kilométrage véhicule
                 if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['idvehic']))
@@ -4585,9 +4680,16 @@ $idprestation=$omparent['idprestation'];
  Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs'=> $filename]);
 	              
                     // cas 1 exit remorquage
-                 $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
+if($affectea!="externe")
+                 {$resultatNote=$this->retourner_notes_om_remorquage($omremorquage);}             
              
-                 return($resultatNote);
+                   header('Content-type: application/json');  
+
+   $om = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
 
                     exit();}
                     //exit();
@@ -4625,14 +4727,14 @@ $idprestation=$omparent['idprestation'];
                     $pdfcomp->save($path.$iddoss.'/'.$name.'.pdf');
 
                     // supprimer attachement precedent (du parent)
-                    Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+                   // Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
                     // enregistrement de nouveau attachement
                     $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-                    $attachement = new Attachement([
+                    /*$attachement = new Attachement([
 
                         'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
                     ]);
-                    $attachement->save();
+                    $attachement->save();*/
 
                     // enregistrement dans la BD
                     $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_remorquage' => $prestambulance,'idprestation'=>$omparent['idprestation']]);
@@ -4874,7 +4976,13 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
                  // cas 2 exit remorquage
                  $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
              
-                 return($resultatNote);
+                 header('Content-type: application/json');  
+
+   $om = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
                     exit();
                 }
             }
@@ -4989,15 +5097,23 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                             $pdf2->save($path.$iddossom.'/'.$name.'.pdf');
 			    // enregistrement de nouveau attachement
 		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
-		        $attachement = new Attachement([
+		       /* $attachement = new Attachement([
 
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
 		        ]);
-		        $attachement->save();
+		        $attachement->save();*/
                  // cas 3 exit remorquage
                  $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
              
-                 return($resultatNote);
+                           
+             
+                  header('Content-type: application/json');  
+
+   $om = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
+
+return json_encode($omarray);
 		        exit();
         	}
 
@@ -5029,17 +5145,24 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 }
                     // enregistrement de nouveau attachement
                     $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-                    $attachement = new Attachement([
+                   /* $attachement = new Attachement([
 
                         'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
                     ]);
-                    $attachement->save();
+                    $attachement->save();*/
                 }
                 else
                 {
                     $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
                     $result = $omremorquage->update($request->all());
                 }
+header('Content-type: application/json');  
+
+   $om = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
+
+$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);
 
             }
             /* verifier si le bloc est necessaire
@@ -5265,6 +5388,7 @@ $pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',['idprestation' => $id
         			$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
 			    $result = $omremorquage->update($request->all());
+$nameom=$name;
 if ($omremorquage->save()) {
 
 $par=Auth::id();
@@ -5787,6 +5911,14 @@ $reqlieup->request->add(['dossier' => $iddnew]);
            	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
                {$result5 = $omremorquage2->update($requestData);}
                else { $result5 = $omremorquage2->update($request->all()); }
+// enregistrement de nouveau attachement
+	                	
+				       
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				        ]);
+				        $attachement->save();
 if ($omremorquage2->save()) {
 
 $par=Auth::id();
@@ -5802,7 +5934,14 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 
 
 
-    } }
+    } 
+header('Content-type: application/json');  
+
+   $om = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $nameom)->first();
+
+$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);}
 
     public function export_pdf_odmmedicinternationnal(Request $request)
     {
@@ -5830,17 +5969,17 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                     if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
                     {// supprimer attachement precedent (du parent)
                         $iddoss = $_POST['dossdoc'];
-                        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+                       // Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
                         // enregistrement de nouveau attachement
 
                         $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
                         $name='OM - '.$name;
                         $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-                        $attachement = new Attachement([
+                        /*$attachement = new Attachement([
 
                             'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
                         ]);
-                        $attachement->save();
+                        $attachement->save();*/
                     }
 $prestation1 = Prestation::where(['dossier_id' => $iddoss,'prestataire_id' => $_POST['id_prestataire'] ,'effectue' => 1])->orderBy('created_at', 'desc')->first();
               $prestation1  ->update(['oms_docs' => $filename]);
@@ -5855,8 +5994,7 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
 
 
 
-
-
+  
 
 
                     //exit();
@@ -5884,14 +6022,14 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
                     $pdfcomp->save($path.$iddoss.'/'.$name.'.pdf');
 
                     // supprimer attachement precedent (du parent)
-                    Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+                    //Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
                     // enregistrement de nouveau attachement
                     $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-                    $attachement = new Attachement([
+                    /*$attachement = new Attachement([
 
                         'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
                     ]);
-                    $attachement->save();
+                    $attachement->save();*/
 
                     // enregistrement dans la BD
                     $ommedicinternationnal=  OMMedicInternational::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1]);
@@ -5899,6 +6037,13 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
                     //return 'complete action '.$result;
 
                     // affecter date  prévue destination ( prévue fin de mission)
+header('Content-type: application/json');  
+
+   $om = OMMedicInternational::select('id','titre','emplacement','dernier','parent','created_at')->where('titre', $name)->first();
+
+ $omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);
 
 
 
@@ -5955,16 +6100,23 @@ $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first()
 
                     // enregistrement de nouveau attachement
                     $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
-                    $attachement = new Attachement([
+                   /* $attachement = new Attachement([
 
                         'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
                     ]);
-                    $attachement->save();
+                    $attachement->save();*/
                 }
                 else
                 {
                     $ommedicinternationnal = OMMedicInternational::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
                 }
+header('Content-type: application/json');  
+
+   $om = OMMedicInternational::select('id','titre','emplacement','dernier','parent','created_at')->where('titre', $name)->first();
+
+ $omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);
 
             }
             else
@@ -6322,6 +6474,13 @@ if (isset($_POST['CL_adls']))
 							}
 						}
                 }
+header('Content-type: application/json');  
+
+   $om = OMMedicInternational::select('id','titre','emplacement','dernier','parent','created_at')->where('titre', $name)->first();
+
+ $omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);
+
+return json_encode($omarray);
 
 
 
@@ -6512,7 +6671,7 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 
 	    	if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
 	    	{// supprimer attachement precedent (du parent)
-		        Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
+		      //  Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
 		        // enregistrement de nouveau attachement
 	        	
 		        $attachement = new Attachement([
@@ -6764,7 +6923,7 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 
 	        if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
 	    	{// supprimer attachement precedent (du parent)
-		        Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
+		       // Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
 		        // enregistrement de nouveau attachement
 	        	
 		        $attachement = new Attachement([
@@ -6913,7 +7072,7 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 
 	        if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
 	    	{// supprimer attachement precedent (du parent)
-		        Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
+		       // Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
 		        // enregistrement de nouveau attachement
 	        	
 		        $attachement = new Attachement([
@@ -6996,18 +7155,14 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 
 	        if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
 	    	{// supprimer attachement precedent (du parent)
-		        Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
+		        //Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
 		        // enregistrement de nouveau attachement
 	        	
-		        $attachement = new Attachement([
-
-		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
-		        ]);
-		        $attachement->save();
+		      
 		      
 	    	}
 
-
+ 
   
 	    	compact($omparent);
 	    	// Send data to the view using loadView function of PDF facade
@@ -7022,6 +7177,11 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
 	        $ommedic = OMMedicInternational::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
 OMMedicEquipement::where('idom', $parent)->delete();
+ $attachement = new Attachement([
+
+		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		        ]);
+		        $attachement->save();
 if ($ommedic->save()) {
 $par=Auth::id();
 $user = User::find($par);
@@ -7059,7 +7219,7 @@ $omvalid=DB::table('validation_omtaxi')->where('idom', $idom)->first();
 			        $omparent=OMTaxi::where('id', $idom)->first();
 			        $filename='taxi_Remplace-'.$idom;
                                  $iddoss = $omparent['dossier'];
-				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				       // Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
 				        // enregistrement de nouveau attachement
 	                	
 				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -7123,7 +7283,7 @@ $omvalid=DB::table('validation_omambulance')->where('idom', $idom)->first();
 			        $omparent=OMAmbulance::where('id', $idom)->first();
 			        $filename='ambulance_Remplace-'.$idom;
                                  $iddoss = $omparent['dossier'];
-				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        //Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
 				        // enregistrement de nouveau attachement
 	                	
 				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -7186,7 +7346,7 @@ $omvalid=DB::table('validation_omremorquage')->where('idom', $idom)->first();
 			        $omparent=OMRemorquage::where('id', $idom)->first();
 			        $filename='remorquage_Remplace-'.$idom;
                                  $iddoss = $omparent['dossier'];
-				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				       // Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
 				        // enregistrement de nouveau attachement
 	                	
 				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -7232,6 +7392,30 @@ $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first()
 
 Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
 }  } }
+public function attachordremission(Request $request)
+{
 
+ $dossier= $request->get('dossier') ;
+ $emplacement= $request->get('emplacement') ;
+ $titre= $request->get('titre') ;
+ $parent= $request->get('parent') ;
+
+
+ 
+ 
+				        // enregistrement de nouveau attachement
+
+	                	
+				        
+				        $path2='/OrdreMissions/'.$dossier.'/'.$titre.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $titre.'.pdf','boite'=>3,'dossier'=>$dossier,
+				        ]);
+				        $attachement->save();
+return;
+exit();
+
+}
 
 }

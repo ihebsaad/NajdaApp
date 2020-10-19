@@ -686,7 +686,7 @@ Route::post('/documents/adddocument','DocumentsController@adddocument')->name('d
 Route::post('/documents/htmlfilled','DocumentsController@htmlfilled')->name('documents.htmlfilled');
 Route::post('/documents/historique','DocumentsController@historique')->name('documents.historique');
 Route::post('/documents/canceldoc','DocumentsController@canceldoc')->name('documents.canceldoc');
-
+Route::post('/documents/attachdocs','DocumentsController@attachdocument')->name('documents.attachdocs');
 
 /*** Ordre Missions  ***/
 
@@ -703,7 +703,7 @@ Route::get('/ordremissions/pdfodmremorquage','OrdreMissionsController@pdfodmremo
 Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@export_pdf_odmremorquage')->name('ordremissions.export_pdf_odmremorquage'); 
 Route::get('/ordremissions/pdfodmmedicinternationnal','OrdreMissionsController@pdfodmmedicinternationnal')->name('ordremissions.pdfodmmedicinternationnal');
 Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsController@export_pdf_odmmedicinternationnal')->name('ordremissions.export_pdf_odmmedicinternationnal');
-
+Route::post('/ordremissions/attachoms','OrdreMissionsController@attachordremission')->name('ordremissions.attachoms');
 
 
 Route::get('/update_time_miss', function () {
