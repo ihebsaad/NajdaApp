@@ -33,6 +33,8 @@ $listeusers=DossiersController::users_work_on_folder($id);
  // nombre des missions
  $missions=DossiersController::countMissions($id);
  $missionsT=DossiersController::countMissionsT($id);
+
+
  
    // nombre de factures
   $Factures =   DossiersController::countFactures ($id);
@@ -161,6 +163,12 @@ foreach ($listeusers as $user)
 	 $missionsUser=DossiersController::countMissionsUser($id,$user);
 	 $missionsUserT=DossiersController::countMissionsUserT($id,$user);
 
+   $missionsUsCreees=DossiersController::countMissionsUsCreees($id,$user);
+   $missionsUsTerminees=DossiersController::countMissionsUsTerminees($id,$user);
+   $missionsUsCourAff=DossiersController::countMissionsUsCourAff($id,$user);
+   $missionsUsPart=DossiersController::countMissionsUsPart($id,$user);
+
+
  
 ?>
 
@@ -170,8 +178,10 @@ foreach ($listeusers as $user)
              <tr><td  style="width:300px"><span><i class="fa fa-fax"></i>  Fax envoyés </span></td><td><b><?php echo $FaxsSentUser;?></b></td></tr>
              <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS envoyés </span></td><td><b><?php echo $SmsSentUser;?></b></td></tr>
         <!--    <tr><td  style="width:300px"><span><i class="fa fa-comment-dots"></i>  Compte rendus  </span></td><td><b><?php // echo $RendusUser;?></b></td></tr>-->
-            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions en cours  </span></td><td><b><?php echo $missionsUser;?></b></td></tr>
-            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo $missionsUserT;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions créées  </span></td><td><b><?php echo $missionsUsCreees;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions couramment affectées  </span></td><td><b><?php echo $missionsUsCourAff;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Nombre de missions à lesquelles l'utilisateur a participé  </span></td><td><b><?php echo $missionsUsPart;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo  $missionsUsTerminees;?></b></td></tr>
         </table> 
   </div> 
 		
@@ -207,15 +217,18 @@ $tot=count($listeusers);
 foreach ($listeusers as $user)
 {  $c++;
 	  $nom="";
+    $theuser= \App\User::where('id',$user)->first();
+
 	  if(isset($theuser)){
 		 $nom=$theuser->name.' '.$theuser->lastname ;
 
 	  }
 	  
- 	  $missionsUser=DossiersController::countMissionsUser($id,$user);
-	 $missionsUserT=DossiersController::countMissionsUserT($id,$user);
- if($c!=$tot) {echo "['".$nom."',    ".$missionsUserT."],";}else{
-echo "['".$nom."',    ".$missionsUserT."] ";	 
+ 	 // $missionsUser=DossiersController::countMissionsUser($id,$user);
+	 //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   $totalm=DossiersController::countMissionsUsCreees($id,$user);;
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";	 
  }
  
 }
@@ -224,7 +237,7 @@ echo "['".$nom."',    ".$missionsUserT."] ";
         ]);
 
         var options = {
-          title: 'Missions par Agents',
+          title: 'Missions créées',
 		  is3D: true,
 		    colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
 		 //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
@@ -238,9 +251,150 @@ echo "['".$nom."',    ".$missionsUserT."] ";
 		  
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+         var data2 = google.visualization.arrayToDataTable([
+          ['Agent', 'Missions'],
+      
+      
+<?php
+$c=0;
+$tot=count($listeusers);
+foreach ($listeusers as $user)
+{  $c++;
+    $nom="";
+    $theuser= \App\User::where('id',$user)->first();
 
+    if(isset($theuser)){
+     $nom=$theuser->name.' '.$theuser->lastname ;
+
+    }
+    
+   // $missionsUser=DossiersController::countMissionsUser($id,$user);
+   //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   $totalm=DossiersController::countMissionsUsCourAff($id,$user);
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";   
+ }
+ 
+}
+?>      
+ 
+        ]);
+
+        var options2 = {
+          title: 'Missions couramment affectées',
+      is3D: true,
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+     //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+
+      /* slices: {
+            0: { color: "#a0d468" },
+            1: { color: "#4fc1e9" },
+            2: { color: "#fd9883" },
+            3: { color: "#dcdcdc" }
+       } */
+      
+        };
+
+
+         var data3 = google.visualization.arrayToDataTable([
+          ['Agent', 'Missions'],
+      
+      
+<?php
+$c=0;
+$tot=count($listeusers);
+foreach ($listeusers as $user)
+{  $c++;
+    $nom="";
+    $theuser= \App\User::where('id',$user)->first();
+
+    if(isset($theuser)){
+     $nom=$theuser->name.' '.$theuser->lastname ;
+
+    }
+    
+    $missionsUser=DossiersController::countMissionsUser($id,$user);
+   $missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   $totalm=$missionsUser+$missionsUserT;
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";   
+ }
+ 
+}
+?>      
+ 
+        ]);
+
+        var options3 = {
+          title: 'Participation aux missions',
+      is3D: true,
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+     //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+
+      /* slices: {
+            0: { color: "#a0d468" },
+            1: { color: "#4fc1e9" },
+            2: { color: "#fd9883" },
+            3: { color: "#dcdcdc" }
+       } */
+      
+        };
+
+         var data4 = google.visualization.arrayToDataTable([
+          ['Agent', 'Missions'],
+      
+      
+<?php
+$c=0;
+$tot=count($listeusers);
+foreach ($listeusers as $user)
+{  $c++;
+    $nom="";
+    $theuser= \App\User::where('id',$user)->first();
+
+    if(isset($theuser)){
+     $nom=$theuser->name.' '.$theuser->lastname ;
+
+    }
+    
+    $missionsUser=DossiersController::countMissionsUser($id,$user);
+   $missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   $totalm=$missionsUser+$missionsUserT;
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";   
+ }
+ 
+}
+?>      
+ 
+        ]);
+
+        var options4 = {
+          title: 'Missions achevées',
+      is3D: true,
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+     //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+
+      /* slices: {
+            0: { color: "#a0d468" },
+            1: { color: "#4fc1e9" },
+            2: { color: "#fd9883" },
+            3: { color: "#dcdcdc" }
+       } */
+      
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
         chart.draw(data, options);
+
+        var chart2 = new google.visualization.PieChart(document.getElementById('piechart2'));
+        chart2.draw(data2, options2);
+
+        var chart3 = new google.visualization.PieChart(document.getElementById('piechart3'));
+        chart3.draw(data3, options3);
+
+        var chart4 = new google.visualization.PieChart(document.getElementById('piechart4'));
+        chart4.draw(data4, options4);
       }
 	   
 	  	  	
@@ -266,7 +420,22 @@ echo "['".$nom."',    ".$missionsUserT."] ";
     </script>
   </head>
   <body>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
+    <div class="row">
+      <div class="col-lg-6">
+      <div id="piechart" style="width: 900px; height: 500px;"></div>
+      </div>
+      <div class="col-lg-6">
+      <div id="piechart2" style="width: 900px; height: 500px;"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+      <div id="piechart3" style="width: 900px; height: 500px;"></div>
+      </div>
+      <div class="col-lg-6">
+      <div id="piechart4" style="width: 900px; height: 500px;"></div>
+      </div>
+    </div>
   </body>
 </html>
 

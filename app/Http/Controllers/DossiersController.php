@@ -4691,6 +4691,68 @@ array_multisort($columns, SORT_DESC, $listetags);
       } 
 
 
+      public static function countMissionsUsCreees($id,$user)
+      {
+         $count1= \App\MissionHis::where('dossier_id',$id)->where('origin_id',$user)->count();
+         $count2= \App\Mission::where('dossier_id',$id)->where('origin_id',$user)->count();
+         $count=$count1+$count2;
+         return $count;
+
+      }
+
+       public static function countMissionsUsTerminees($id,$user)
+      {
+         $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
+         return $count;
+      }
+
+     public static function countMissionsUsCourAff($id,$user)
+      {
+         $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->count();
+        
+         return $count;
+
+      }
+
+       public static function countMissionsUsPart($id,$user)
+      {
+         $count1=0;
+         $count2=0;
+         $mish= \App\MissionHis::where('dossier_id',$id)->get(['id_origin_miss','dossier_id']);
+         foreach ($mish as $mh) {
+            
+            $res=\App\ActionEC::where('mission_id',$mh->id_origin_miss)->where('user_id',$user)->where(function($q){                             
+                               $q->where('statut',"faite")
+                               ->orWhere('statut',"repotee")
+                               ->orWhere('statut',"rappelee") 
+                               ->orWhere('statut',"rfaite") 
+                               ->orWhere('statut',"ignoree");                            
+                                })->first();
+            if($res)
+            {
+              $count1++;  
+            }
+         }
+
+         $miss= \App\Mission::where('dossier_id',$id)->get(['id','dossier_id']);
+         foreach ($miss as $ms) {
+            
+            $res=\App\Action::where('mission_id',$ms->id)->where('user_id',$user)->where(function($q){                             
+                               $q->where('statut',"faite")
+                               ->orWhere('statut',"repotee")
+                               ->orWhere('statut',"rappelee") 
+                               ->orWhere('statut',"rfaite") 
+                               ->orWhere('statut',"ignoree");                            
+                                })->first();
+            if($res)
+            {
+              $count2++;  
+            }
+         }
+         $count=$count1+$count2;
+         return $count;
+
+      }
 	  
 	  
 	  
