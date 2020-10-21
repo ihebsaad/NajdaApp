@@ -973,10 +973,437 @@ return json_encode($omarray);
 
         // verification affectation et creation de processus
         if (isset($_POST['affectea']))
-        {$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+        {$dossieromref= Dossier::where('id', $iddoss)->first();
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
-        	{$typep=2;
+        	{
+
+if ($_POST['dossierexistant'] !== "")
+{
+$dossierexis= Dossier::where('id', trim($_POST['dossierexistant']))->first();
+$typep=2;
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
+
+        		// creation om pour le dossier courant
+        		if (isset($dossierexis["type_affectation"]))
+        		
+                        
+        		{if($dossierexis["type_affectation"]=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($dossierexis["type_affectation"]=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($dossierexis["type_affectation"]=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddoss,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1,
+                    'date_prestation' =>$newformat,
+                     'oms_docs' =>$filename
+            ]);
+        			$prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+
+}
+$idprestation=$prestation['id'];
+
+        			$prestomtx = $dossierexis["type_affectation"];
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+
+$prestomtx = $omparent['prestataire_taxi'];
+                        $idprestation = $omparent['idprestation'];
+if (isset($_POST['complete']) && ! empty($_POST['complete']))
+{
+$lchauff=$omparent['lchauff'];
+if(isset($_POST['idchauff']) && $_POST['idchauff']!="" && $_POST['lchauff']!=$lchauff)
+{
+$numm= Personne::where('id', $_POST['idchauff'])->select('tel')->first();
+$num=$numm['tel'];
+$description='ordre de mission';
+$dossiersms = Dossier::find($iddoss);
+$dateheure = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures=date('d/m/Y H:i',strtotime($dateheure));
+$contenu="Bonjour,
+Nous vous informons que vous avez confié à une mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures;
+  $contenu= str_replace ( '&' ,'' ,$contenu);
+        $contenu= str_replace ( '<' ,'' ,$contenu);
+        $contenu= str_replace ( '>' ,'' ,$contenu);
+$dossier= $dossiersms['reference_medic'];
+
+        $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num.'</gsm>
+            <texte>'.$contenu.'</texte>
+        </sms>';
+
+        $date=date('dmYHis');
+        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+       file_put_contents($filepath,$xmlString,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+        $from='sms najda '.$nomuser;
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => $from,
+            'destinataire' => $num,
+            'sujet' => $description,
+            'description' => $description,
+            'contenu'=> $contenu,
+            'statut'=> 1,
+            'par'=> $par,
+            'dossier'=>$dossier,
+            'type'=>'sms'
+        ]);
+
+        $envoye->save();
+
+
+        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+if(isset($idchauff2) && $idchauff2!="" )
+{
+$numm1= Personne::where('id', $idchauff2)->select('tel')->first();
+$num1=$numm1['tel'];
+$description1='ordre de mission';
+$dossiersms1 = Dossier::find($iddoss);
+$dateheure1 = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures1=date('d/m/Y H:i',strtotime($dateheure1));
+$contenu1="Bonjour,
+Nous vous informons que vous avez été remplace par un autre chaffeur pour la mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures;
+  $contenu1= str_replace ( '&' ,'' ,$contenu1);
+        $contenu1= str_replace ( '<' ,'' ,$contenu1);
+        $contenu1= str_replace ( '>' ,'' ,$contenu1);
+$dossier1= $dossiersms1['reference_medic'];
+
+        $xmlString1 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num1.'</gsm>
+            <texte>'.$contenu1.'</texte>
+        </sms>';
+
+        $date1=date('dmYHis');
+        $filepath1 = storage_path() . '/SENDSMS/sms_'.$num1.'_'.$date1.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath1,$xmlString1,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user1 = auth()->user();
+        $nomuser1=$user1->name.' '.$user1->lastname;
+        $from1='sms najda '.$nomuser1;
+        $par1=Auth::id();
+
+        $envoye1 = new Envoye([
+            'emetteur' => $from1,
+            'destinataire' => $num1,
+            'sujet' => $description1,
+            'description' => $description1,
+            'contenu'=> $contenu1,
+            'statut'=> 1,
+            'par'=> $par1,
+            'dossier'=>$dossier1,
+            'type'=>'sms'
+        ]);
+
+        $envoye1->save();
+
+
+        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+
+
+}
+
+
+}
+
+}
+                    }
+                     $pdf = PDFomme::loadView('ordremissions.pdfodmtaxi',['idprestation' => $idprestation,'prestataire_taxi'=>$prestomtx])->setPaper('a4', '');
+                     $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+        			$omtaxi = OMTaxi::create(['prestataire_taxi'=>$prestomtx,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
+        		} else {
+        			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		}
+			    $result = $omtaxi->update($request->all());
+$nameom=$name;
+
+if ($omtaxi->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+                    }
+else
+{
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+   //return("hello");
+// début recherche note
+   /* if($omtaxi->dateheuredep)
+    {
+     $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
+    }
+    else
+    {
+     return("hello");
+    }
+
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
+
+
+}
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+{
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs' => $filename]);
+
+}
+
+			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+		    // creation nouveau dossier et l'om assigné
+               { 
+        		
+				// recuperation de reference de nouveau dossier et la changer dans request
+				$dossnouveau=Dossier::where('id', $_POST['dossierexistant'])->first();
+$typeaffect=$dossnouveau['type_affectation'];
+$iddossnew=$dossnouveau['id'];
+$iddnew=$dossnouveau['id'];
+				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+				{
+					$nref=$dossnouveau["reference_medic"];
+
+					$requestData = $request->all();
+					$requestData['reference_medic'] = $nref;
+					$requestData['reference_medic2'] = $nref;
+
+
+					/*$request->replace([ 'reference_medic' => $nref]);
+					$request->replace([ 'reference_medic2' => $nref]);*/
+
+
+				}
+				if(isset($typeaffect) && ! empty($typeaffect))
+                {$emispar="najda";
+                	
+                	if($typeaffect==="VAT"||$typeaffect==="Transport VAT")
+                	{
+                		$emispar="vat";
+                	}	
+                	if($typeaffect==="Medic International")
+                	{
+                		$emispar="medici";
+                	}
+                	if($typeaffect==="MEDIC"||$typeaffect==="Transport MEDIC")
+                		{
+                		$emispar="medicm";
+                	    }
+                	
+                	$requestData['emispar'] = $emispar;
+                }
+                $dossnouveau1=Dossier::where('id', $iddossnew) ->first();
+                if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+				{
+					$ncustomer=$dossnouveau1["customer_id"];
+                    $Clientdoss=CLient::where('id', $ncustomer)->first();
+
+					$client_dossier=$Clientdoss['name'];
+					$requestData['client_dossier'] = $client_dossier;
+
+
+
+
+				}
+				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+				{
+					$reference_customer=$dossnouveau1["reference_customer"];
+                    $requestData['reference_customer'] = $reference_customer.'/'.$idprestation;
+
+
+
+
+				}
+					if (isset($requestData))
+					{
+						/*$omn = new OrdreMission();
+
+						$nrequest = $omn->post('ordremissions.pdfodmtaxi',$requestData);
+
+						$nresponse = $nrequest->send();*/
+					// duplication de lom dans le nouveau dossier
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi',['prestataire_taxi'=>$prestomtx,'reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar,'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer,'idprestation' => $idprestation])->setPaper('a4', '');
+					}
+					else
+					{
+					// duplication de lom dans le nouveau dossier
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
+					}
+
+$emplacOM = storage_path()."/OrdreMissions/".$iddnew;
+
+                if (!file_exists($emplacOM)) {
+                    mkdir($emplacOM, 0777, true);
+                }
+                date_default_timezone_set('Africa/Tunis');
+                setlocale (LC_TIME, 'fr_FR.utf8','fra');
+                $mc=round(microtime(true) * 1000);
+                $datees = strftime("%d-%B-%Y"."_".$mc);
+
+		        	$filename='taxi_'.$datees;
+
+			        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			        $name='OM - '.$name;
+		        // If you want to store the generated pdf to the server then you can use the store function
+		        $pdf2->save($path.$iddnew.'/'.$name.'.pdf');
+
+		        // enregistrement dans la base
+
+		        if (isset($typeaffect))
+		        {$omtaxi2 = OMTaxi::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew, 'prestataire_taxi' => $typeaffect]);}
+		    	else
+		    	{
+		    		$omtaxi2 = OMTaxi::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew]);
+		    	}
+		        
+				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+				{$result2 = $omtaxi2->update($requestData);}
+		        else { $result2 = $omtaxi2->update($request->all()); }
+		           if(isset($typeaffect)&& !(empty($typeaffect)))
+               {$result3 = $omtaxi2->update($requestData);}
+               else { $result3 = $omtaxi2->update($request->all()); }
+               if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+              
+                  {$result4 = $omtaxi2->update($requestData);}
+               else { $result4 = $omtaxi2->update($request->all()); }
+           	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+               {$result5 = $omtaxi2->update($requestData);}
+               else { $result5 = $omtaxi2->update($request->all()); }
+
+				        // enregistrement de nouveau attachement
+	                	
+				       
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				        ]);
+				        $attachement->save();
+if ($omtaxi2->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+
+// début recherche note
+ /*  $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
+
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
+
+
+}
+
+        	}
+
+
+}
+else{
+$typep=2;
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
@@ -1754,7 +2181,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 
 }
 
-        	}
+        	}}
         }}
 
         /*if (isset($_POST['idvehic']))
@@ -3301,12 +3728,601 @@ return json_encode($omarray);
 
         // verification affectation et creation de processus
         if (isset($_POST['affectea']))
-        {
+        {$dossieromref= Dossier::where('id', $iddoss)->first();
 
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
-        	{$typep=4;
-$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+        	{
+
+if($_POST['dossierexistant']!=='')
+{
+$dossierexis= Dossier::where('id', trim($_POST['dossierexistant']))->first();
+$typep=4;
+
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
+        		// creation om pour le dossier courant
+        		if (isset($_POST["type_affectation"]))
+        		
+
+                   { if($dossierexis["type_affectation"]=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($dossierexis["type_affectation"]=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($dossierexis["type_affectation"]=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddoss,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1,
+                     'date_prestation' =>$newformat,
+                    'oms_docs' =>$filename
+            ]);
+        			$prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}
+$idprestation=$prestation['id'];
+ 
+        			$prestomamb = $dossierexis["type_affectation"];
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                        $prestomamb = $omparent['prestataire_ambulance'];
+                        $idprestation = $omparent['idprestation'];
+if (isset($_POST['complete']) && ! empty($_POST['complete']))
+{
+$lambulancier1=$omparent['lambulancier1'];
+if(isset($_POST['idambulancier1']) && $_POST['idambulancier1']!="" && $_POST['lambulancier1']!=$lambulancier1)
+{
+$numm= Personne::where('id', $_POST['idambulancier1'])->select('tel')->first();
+$num=$numm['tel'];
+$description='ordre de mission';
+$dossiersms = Dossier::find($iddoss);
+$dateheure = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures=date('d/m/Y H:i',strtotime($dateheure));
+
+$contenu="Bonjour,
+Nous vous informons que vous avez confié à une mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures;
+  $contenu= str_replace ( '&' ,'' ,$contenu);
+        $contenu= str_replace ( '<' ,'' ,$contenu);
+        $contenu= str_replace ( '>' ,'' ,$contenu);
+$dossier= $dossiersms['reference_medic'];
+
+        $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num.'</gsm>
+            <texte>'.$contenu.'</texte>
+        </sms>';
+
+        $date=date('dmYHis');
+        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath,$xmlString,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+        $from='sms najda '.$nomuser;
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => $from,
+            'destinataire' => $num,
+            'sujet' => $description,
+            'description' => $description,
+            'contenu'=> $contenu,
+            'statut'=> 1,
+            'par'=> $par,
+            'dossier'=>$dossier,
+            'type'=>'sms'
+        ]);
+
+        $envoye->save();
+
+
+        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+if(isset($idambulancier12) && $idambulancier12!="" )
+{
+$numm1= Personne::where('id', $idambulancier12)->select('tel')->first();
+$num1=$numm1['tel'];
+$description1='ordre de mission';
+$dossiersms1 = Dossier::find($iddoss);
+$dateheure1 = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures1=date('d/m/Y H:i',strtotime($dateheure1));
+$contenu1="Bonjour,
+Nous vous informons que vous avez été remplace par un autre chaffeur pour la mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures;
+  $contenu1= str_replace ( '&' ,'' ,$contenu1);
+        $contenu1= str_replace ( '<' ,'' ,$contenu1);
+        $contenu1= str_replace ( '>' ,'' ,$contenu1);
+$dossier1= $dossiersms1['reference_medic'];
+
+        $xmlString1 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num1.'</gsm>
+            <texte>'.$contenu1.'</texte>
+        </sms>';
+
+        $date1=date('dmYHis');
+        $filepath1 = storage_path() . '/SENDSMS/sms_'.$num1.'_'.$date1.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath1,$xmlString1,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user1 = auth()->user();
+        $nomuser1=$user1->name.' '.$user1->lastname;
+        $from1='sms najda '.$nomuser1;
+        $par1=Auth::id();
+
+        $envoye1 = new Envoye([
+            'emetteur' => $from1,
+            'destinataire' => $num1,
+            'sujet' => $description1,
+            'description' => $description1,
+            'contenu'=> $contenu1,
+            'statut'=> 1,
+            'par'=> $par1,
+            'dossier'=>$dossier1,
+            'type'=>'sms'
+        ]);
+
+        $envoye1->save();
+
+
+        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+
+
+}
+
+
+}
+$lambulancier2=$omparent['lambulancier2'];
+if(isset($_POST['idambulancier2']) && $_POST['idambulancier2']!="" && $_POST['lambulancier2']!=$lambulancier2)
+{
+$numm2= Personne::where('id', $_POST['idambulancier2'])->select('tel')->first();
+$num2=$numm2['tel'];
+$description2='ordre de mission';
+$dossiersms2 = Dossier::find($iddoss);
+$dateheure2 = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures2=date('d/m/Y H:i',strtotime($dateheure2));
+$contenu2="Bonjour,
+Nous vous informons que vous avez confié à une mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures2;
+  $contenu2= str_replace ( '&' ,'' ,$contenu2);
+        $contenu2= str_replace ( '<' ,'' ,$contenu2);
+        $contenu2= str_replace ( '>' ,'' ,$contenu2);
+$dossier2= $dossiersms2['reference_medic'];
+
+        $xmlString2 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num2.'</gsm>
+            <texte>'.$contenu2.'</texte>
+
+        </sms>';
+
+        $date2=date('dmYHis');
+        $filepath2 = storage_path() . '/SENDSMS/sms_'.$num2.'_'.$date2.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath2,$xmlString2,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user2= auth()->user();
+        $nomuser2=$user2->name.' '.$user2->lastname;
+        $from2='sms najda '.$nomuser2;
+        $par2=Auth::id();
+
+        $envoye2 = new Envoye([
+            'emetteur' => $from2,
+            'destinataire' => $num2,
+            'sujet' => $description2,
+            'description' => $description2,
+            'contenu'=> $contenu2,
+            'statut'=> 1,
+            'par'=> $par2,
+            'dossier'=>$dossier2,
+            'type'=>'sms'
+        ]);
+
+        $envoye2->save();
+
+
+        Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+if(isset($idambulancier22) && $idambulancier22!="" )
+{
+$numm3= Personne::where('id', $idambulancier22)->select('tel')->first();
+$num3=$numm3['tel'];
+$description3='ordre de mission';
+$dossiersms3 = Dossier::find($iddoss);
+$dateheure3 = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures3=date('d/m/Y H:i',strtotime($dateheure3));
+$contenu3="Bonjour,
+Nous vous informons que vous avez été remplace par un autre chaffeur pour la mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures3;
+  $contenu3= str_replace ( '&' ,'' ,$contenu3);
+        $contenu3= str_replace ( '<' ,'' ,$contenu3);
+        $contenu3= str_replace ( '>' ,'' ,$contenu3);
+$dossier3= $dossiersms3['reference_medic'];
+
+        $xmlString3 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num3.'</gsm>
+            <texte>'.$contenu3.'</texte>
+        </sms>';
+
+        $date3=date('dmYHis');
+        $filepath3 = storage_path() . '/SENDSMS/sms_'.$num3.'_'.$date3.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath3,$xmlString3,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user3 = auth()->user();
+        $nomuser3=$user3->name.' '.$user3->lastname;
+        $from3='sms najda '.$nomuser3;
+        $par3=Auth::id();
+
+        $envoye3 = new Envoye([
+            'emetteur' => $from3,
+            'destinataire' => $num3,
+            'sujet' => $description3,
+            'description' => $description3,
+            'contenu'=> $contenu3,
+            'statut'=> 1,
+            'par'=> $par3,
+            'dossier'=>$dossier3,
+            'type'=>'sms'
+        ]);
+
+        $envoye3->save();
+
+
+        Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+
+
+}
+
+
+}
+$lparamed=$omparent['lparamed'];
+if(isset($_POST['idparamed']) && $_POST['idparamed']!="" && $_POST['lparamed']!=$lparamed)
+{
+$numm4= Personne::where('id', $_POST['idparamed'])->select('tel')->first();
+$num4=$numm4['tel'];
+$description4='ordre de mission';
+$dossiersms4 = Dossier::find($iddoss);
+$dateheure4 = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures4=date('d/m/Y H:i',strtotime($dateheure4));
+$contenu4="Bonjour,
+Nous vous informons que vous avez confié à une mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures4;
+  $contenu4= str_replace ( '&' ,'' ,$contenu4);
+        $contenu4= str_replace ( '<' ,'' ,$contenu4);
+        $contenu4= str_replace ( '>' ,'' ,$contenu4);
+$dossier4= $dossiersms4['reference_medic'];
+
+        $xmlString4 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num4.'</gsm>
+            <texte>'.$contenu4.'</texte>
+        </sms>';
+
+        $date4=date('dmYHis');
+        $filepath4 = storage_path() . '/SENDSMS/sms_'.$num4.'_'.$date4.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath4,$xmlString4,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user4= auth()->user();
+        $nomuser4=$user4->name.' '.$user4->lastname;
+        $from4='sms najda '.$nomuser4;
+        $par4=Auth::id();
+
+        $envoye4 = new Envoye([
+            'emetteur' => $from4,
+            'destinataire' => $num4,
+            'sujet' => $description4,
+            'description' => $description4,
+            'contenu'=> $contenu4,
+            'statut'=> 1,
+            'par'=> $par4,
+            'dossier'=>$dossier4,
+            'type'=>'sms'
+        ]);
+
+        $envoye4->save();
+
+
+        Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+if(isset($idparamed2) && $idparamed2!="" )
+{
+$numm5= Personne::where('id', $idparamed2)->select('tel')->first();
+$num5=$numm5['tel'];
+$description5='ordre de mission';
+$dossiersms5 = Dossier::find($iddoss);
+$dateheure5 = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures5=date('d/m/Y H:i',strtotime($dateheure5));
+$contenu5="Bonjour,
+Nous vous informons que vous avez été remplace par un autre chaffeur pour la mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures5;
+  $contenu5= str_replace ( '&' ,'' ,$contenu5);
+        $contenu5= str_replace ( '<' ,'' ,$contenu5);
+        $contenu5= str_replace ( '>' ,'' ,$contenu5);
+$dossier5= $dossiersms5['reference_medic'];
+
+        $xmlString5 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num5.'</gsm>
+            <texte>'.$contenu5.'</texte>
+        </sms>';
+
+        $date5=date('dmYHis');
+        $filepath5 = storage_path() . '/SENDSMS/sms_'.$num5.'_'.$date5.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath5,$xmlString5,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user5 = auth()->user();
+        $nomuser5=$user5->name.' '.$user5->lastname;
+        $from5='sms najda '.$nomuser5;
+        $par5=Auth::id();
+
+        $envoye5 = new Envoye([
+            'emetteur' => $from5,
+            'destinataire' => $num5,
+            'sujet' => $description5,
+            'description' => $description5,
+            'contenu'=> $contenu5,
+            'statut'=> 1,
+            'par'=> $par5,
+            'dossier'=>$dossier5,
+            'type'=>'sms'
+        ]);
+
+        $envoye5->save();
+
+
+        Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+
+
+}
+
+
+}
+}
+
+                    }
+$nameom=$name;
+$pdf = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_ambulance'=>$prestomamb,'idprestation' => $idprestation])->setPaper('a4', '');
+                     $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+        			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
+        		} else {
+        			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		}
+			    $result = $omambulance->update($request->all());
+if ($omambulance->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+                    }
+else
+{
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+
+
+}
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+{
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs' => $filename]);
+
+}
+
+
+			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+            {
+        		
+				// recuperation de reference de nouveau dossier et la changer dans request
+				$dossnouveau=Dossier::where('id', $_POST['dossierexistant'])->first();
+$typeaffect=$dossnouveau['type_affectation'];
+$iddossnew=$dossnouveau['id'];
+$iddnew=$dossnouveau['id'];
+				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+				{
+					$nref=$dossnouveau["reference_medic"];
+
+					$requestData = $request->all();
+					$requestData['reference_medic'] = $nref;
+					$requestData['reference_medic2'] = $nref;
+
+
+					/*$request->replace([ 'reference_medic' => $nref]);
+					$request->replace([ 'reference_medic2' => $nref]);*/
+
+
+				}
+				 if(isset($typeaffect) && ! empty($typeaffect))
+                {$emispar="najda";
+                	
+                	if($typeaffect==="VAT"||$typeaffect==="Transport VAT")
+                	{
+                		$emispar="vat";
+                	}	
+                	if($typeaffect==="Medic International")
+                	{
+                		$emispar="medici";
+                	}
+                	if($typeaffect==="MEDIC"||$typeaffect==="Transport MEDIC")
+                		{
+                		$emispar="medicm";
+                	    }
+                	
+                	$requestData['emispar'] = $emispar;
+                }
+                 $dossnouveau1=Dossier::where('id', $iddossnew) ->first();
+                if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+				{
+					$ncustomer=$dossnouveau1["customer_id"];
+                    $Clientdoss=CLient::where('id', $ncustomer)->first();
+
+					$client_dossier=$Clientdoss['name'];
+					$requestData['client_dossier'] = $client_dossier;
+
+
+
+
+				}
+				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+				{
+					$reference_customer=$dossnouveau1["reference_customer"];
+                    $requestData['reference_customer'] = $reference_customer.'/'.$idprestation;
+
+
+
+
+				}
+					if (isset($requestData))
+					{
+						/*$omn = new OrdreMission();
+
+						$nrequest = $omn->post('ordremissions.pdfodmtaxi',$requestData);
+
+						$nresponse = $nrequest->send();*/
+					// duplication de lom dans le nouveau dossier
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance',['prestataire_ambulance'=>$prestomamb,'reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer,'idprestation' => $idprestation])->setPaper('a4', '');
+					}
+					else
+					{
+					// duplication de lom dans le nouveau dossier
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
+					}
+
+
+		        $emplacOM = storage_path()."/OrdreMissions/".$iddossnew;
+
+                if (!file_exists($emplacOM)) {
+                    mkdir($emplacOM, 0777, true);
+                }
+                date_default_timezone_set('Africa/Tunis');
+                setlocale (LC_TIME, 'fr_FR.utf8','fra');
+                $mc=round(microtime(true) * 1000);
+                $datees = strftime("%d-%B-%Y"."_".$mc);
+
+		        	$filename='ambulance__'.$datees;
+
+			        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			        $name='OM - '.$name;
+		        // If you want to store the generated pdf to the server then you can use the store function
+		        $pdf2->save($path.$iddossnew.'/'.$name.'.pdf');
+
+		        // enregistrement dans la base
+
+		        if (isset($typeaffect))
+		        {$omambulance2 = OMAmbulance::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew, 'prestataire_ambulance' => $typeaffect]);}
+		    	else
+		    	{
+		    		$omambulance2 = OMAmbulance::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew]);
+		    	}
+		        
+				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+				{$result2 = $omambulance2->update($requestData);}
+		        else { $result2 = $omambulance2->update($request->all()); }
+           if(isset($typeaffect)&& !(empty($typeaffect)))
+               {$result3 = $omambulance2->update($requestData);}
+               else { $result3 = $omambulance2->update($request->all()); }
+               if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+              
+                  {$result4 = $omambulance2->update($requestData);}
+               else { $result4 = $omambulance2->update($request->all()); }
+           	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+               {$result5 = $omambulance2->update($requestData);}
+               else { $result5 = $omambulance2->update($request->all()); }
+// enregistrement de nouveau attachement
+	                	
+				       
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				        ]);
+				        $attachement->save();
+if ($omambulance2->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+
+}
+
+
+        	}
+        	
+
+}
+
+else
+{
+$typep=4;
+
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
@@ -4241,7 +5257,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 }
 
 
-        	}
+        	}}
         	
         }
 
@@ -5200,11 +6216,382 @@ return json_encode($omarray);
 
         // verification affectation et creation de processus
         if (isset($_POST['affectea']))
-        {
+        {$dossieromref= Dossier::where('id', $iddoss)->first();
             // affectation en interne
             if ($_POST['affectea'] === "interne")
-            {$typep=1;
-$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+            {
+if($_POST['dossierexistant'] !== "")
+{
+$dossierexis= Dossier::where('id', trim($_POST['dossierexistant']))->first();
+$typep=1;
+
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
+                // creation om pour le dossier courant
+        		if (isset($_POST["type_affectation"]))
+        		
+        		{ if($dossierexis["type_affectation"]=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($dossierexis["type_affectation"]=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($dossierexis["type_affectation"]=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        	if($dossierexis["type_affectation"]=="X-Press")
+        	{
+        		$prest=1696;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddoss,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1,
+'date_prestation' =>$newformat,
+'oms_docs'=>$filename
+            ]);
+        			$prestation->save();
+
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}
+$idprestation=$prestation['id'];
+
+
+        			$prestomrem = $dossierexis["type_affectation"];
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                       $prestomrem= $omparent['prestataire_remorquage'];
+                       $idprestation = $omparent['idprestation'];
+if (isset($_POST['complete']) && ! empty($_POST['complete']))
+{
+$lchauff=$omparent['lchauff'];
+if(isset($_POST['idchauff']) && $_POST['idchauff']!="" && $_POST['lchauff']!=$lchauff)
+{
+$numm= Personne::where('id', $_POST['idchauff'])->select('tel')->first();
+$num=$numm['tel'];
+$description='ordre de mission';
+$dossiersms = Dossier::find($iddoss);
+$dateheure = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures=date('d/m/Y H:i',strtotime($dateheure));
+$contenu="Bonjour,
+Nous vous informons que vous avez confié à une mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures;
+  $contenu= str_replace ( '&' ,'' ,$contenu);
+        $contenu= str_replace ( '<' ,'' ,$contenu);
+        $contenu= str_replace ( '>' ,'' ,$contenu);
+$dossier= $dossiersms['reference_medic'];
+
+        $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num.'</gsm>
+            <texte>'.$contenu.'</texte>
+        </sms>';
+
+        $date=date('dmYHis');
+        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+       file_put_contents($filepath,$xmlString,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+        $from='sms najda '.$nomuser;
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => $from,
+            'destinataire' => $num,
+            'sujet' => $description,
+            'description' => $description,
+            'contenu'=> $contenu,
+            'statut'=> 1,
+            'par'=> $par,
+            'dossier'=>$dossier,
+            'type'=>'sms'
+        ]);
+
+        $envoye->save();
+
+
+        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+if(isset($idchauff2) && $idchauff2!="" )
+{
+$numm1= Personne::where('id', $idchauff2)->select('tel')->first();
+$num1=$numm1['tel'];
+$description1='ordre de mission';
+$dossiersms1 = Dossier::find($iddoss);
+$dateheure1 = str_replace('T', ' ', $_POST['CL_heuredateRDV']);
+$dateheures1=date('d/m/Y H:i',strtotime($dateheure1));
+$contenu1="Bonjour,
+Nous vous informons que vous avez été remplace par un autre chaffeur pour la mission de ".$_POST['CL_lieuprest_pc']." à ".$_POST['CL_lieudecharge_dec']." le ".$dateheures;
+  $contenu1= str_replace ( '&' ,'' ,$contenu1);
+        $contenu1= str_replace ( '<' ,'' ,$contenu1);
+
+        $contenu1= str_replace ( '>' ,'' ,$contenu1);
+$dossier1= $dossiersms1['reference_medic'];
+
+        $xmlString1 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num1.'</gsm>
+            <texte>'.$contenu1.'</texte>
+        </sms>';
+
+        $date1=date('dmYHis');
+        $filepath1 = storage_path() . '/SENDSMS/sms_'.$num1.'_'.$date1.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath1,$xmlString1,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user1 = auth()->user();
+        $nomuser1=$user1->name.' '.$user1->lastname;
+        $from1='sms najda '.$nomuser1;
+        $par1=Auth::id();
+
+        $envoye1 = new Envoye([
+            'emetteur' => $from1,
+            'destinataire' => $num1,
+            'sujet' => $description1,
+            'description' => $description1,
+            'contenu'=> $contenu1,
+            'statut'=> 1,
+            'par'=> $par1,
+            'dossier'=>$dossier1,
+            'type'=>'sms'
+        ]);
+
+        $envoye1->save();
+
+
+        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+
+
+}
+
+
+}
+
+}
+                    }
+                    
+$pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',['idprestation' => $idprestation,'prestataire_remorquage'=>$prestomrem])->setPaper('a4', '');
+                     $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+        			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
+        		} else {
+        			$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		}
+			    $result = $omremorquage->update($request->all());
+$nameom=$name;
+if ($omremorquage->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+                    }
+else
+{
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+
+
+}
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+{
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs' => $filename]);
+
+}
+
+
+
+			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+        		{
+              
+                // recuperation de reference de nouveau dossier et la changer dans request
+                $dossnouveau=Dossier::where('id', $_POST['dossierexistant'])->first();
+$typeaffect=$dossnouveau['type_affectation'];
+$iddossnew=$dossnouveau['id'];
+$iddnew=$dossnouveau['id'];
+                if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+                {
+                    $nref=$dossnouveau["reference_medic"];
+
+                    $requestData = $request->all();
+                    $requestData['reference_medic'] = $nref;
+                    $requestData['reference_medic2'] = $nref;
+
+
+                    /*$request->replace([ 'reference_medic' => $nref]);
+                    $request->replace([ 'reference_medic2' => $nref]);*/
+
+
+                }
+                if(isset($typeaffect) && ! empty($typeaffect))
+                {$emispar="najda";
+                	if($typeaffect==="X-Press")
+                	{
+                		$emispar="xpress";
+                	}
+                	if($typeaffect==="VAT"||$typeaffect==="Transport VAT")
+                	{
+                		$emispar="vat";
+                	}	
+                	if($typeaffect==="Medic International")
+                	{
+                		$emispar="medici";
+                	}
+                	if($typeaffect==="MEDIC"||$typeaffect==="Transport MEDIC")
+                		{
+                		$emispar="medicm";
+                	    }
+                	
+                	$requestData['emispar'] = $emispar;
+                }
+                 $dossnouveau1=Dossier::where('id', $iddossnew) ->first();
+                if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+				{
+					$ncustomer=$dossnouveau1["customer_id"];
+                    $Clientdoss=CLient::where('id', $ncustomer)->first();
+
+					$client_dossier=$Clientdoss['name'];
+					$requestData['client_dossier'] = $client_dossier;
+                  
+
+
+
+				}
+                else 
+                    {
+                    $client_dossier=" ";
+                    $requestData['client_dossier'] = $client_dossier;
+                    }
+				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+				{
+					$reference_customer=$dossnouveau1["reference_customer"];
+                    $requestData['reference_customer'] = $reference_customer.'/'.$idprestation;
+
+
+
+
+				}
+                if (isset($requestData))
+                {
+                    /*$omn = new OrdreMission();
+
+                    $nrequest = $omn->post('ordremissions.pdfodmremorquage',$requestData);
+
+                    $nresponse = $nrequest->send();*/
+                    // duplication de lom dans le nouveau dossier
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['prestataire_remorquage'=>$prestomrem,'reference_medic' => $nref, 'reference_medic2' => $nref,'emispar' =>$emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer,'idprestation' => $idprestation])->setPaper('a4', '');
+                }
+                else
+                {
+                    // duplication de lom dans le nouveau dossier
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
+                }
+                
+                $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
+
+                if (!file_exists($emplacOM)) {
+                    mkdir($emplacOM, 0777, true);
+                }
+                date_default_timezone_set('Africa/Tunis');
+                setlocale (LC_TIME, 'fr_FR.utf8','fra');
+                $mc=round(microtime(true) * 1000);
+                $datees = strftime("%d-%B-%Y"."_".$mc);
+
+                $filename='remorquage__'.$datees;
+
+                $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+                $name='OM - '.$name;
+                // If you want to store the generated pdf to the server then you can use the store function
+                $pdf2->save($path.$iddossnew.'/'.$name.'.pdf');
+
+                // enregistrement dans la base
+
+                if (isset($typeaffect))
+                {$omremorquage2 = OMRemorquage::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew, 'prestataire_remorquage' => $typeaffect]);}
+                else
+                {
+                    $omremorquage2 = OMRemorquage::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew]);
+                }
+
+                if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+                {$result2 = $omremorquage2->update($requestData);}
+                else { $result2 = $omremorquage2->update($request->all()); }
+                 /*if(isset($typeaffect)&& !(empty($typeaffect)))
+               {$result3 = $omremorquage2->update($requestData);}
+               else { $result3 = $omremorquage2->update($request->all()); }
+            }*/
+             if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+              
+                  {$result4 = $omremorquage2->update($requestData);}
+               else { $result4 = $omremorquage2->update($request->all()); }
+           	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+               {$result5 = $omremorquage2->update($requestData);}
+               else { $result5 = $omremorquage2->update($request->all()); }
+// enregistrement de nouveau attachement
+	                	
+				       
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				        ]);
+				        $attachement->save();
+if ($omremorquage2->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+
+}
+
+            }
+        } 
+
+
+
+else{
+
+$typep=1;
+
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
@@ -5930,7 +7317,11 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 }
 
             }
-        }
+        }  
+
+
+
+}
 
 
 
@@ -7415,6 +8806,28 @@ public function attachordremission(Request $request)
 				        $attachement->save();
 return;
 exit();
+
+}
+public function verifdossierexistant(Request $request)
+{
+
+ $dossier= $request->get('dossier') ;
+$xp= $request->get('xp') ;
+$dossiercourant=Dossier::where('id',$dossier)->first();
+$refclient="ES".$dossiercourant['reference_medic'];
+if($xp==='1')
+{
+  $dossiers=Dossier::where('reference_customer',$refclient)->where('type_affectation','X-Press')->select('reference_medic','id')->get();
+}
+else
+{
+$dossiers=Dossier::where('reference_customer',$refclient)->select('reference_medic','id')->get();
+}
+ 
+ 
+				     
+return json_encode($dossiers) ;
+
 
 }
 

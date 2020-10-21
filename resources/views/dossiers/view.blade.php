@@ -2060,6 +2060,8 @@ if(strstr($dossier['reference_medic'],"MI")){
                                           <option value="medici">Medic International </option>
                                      </select>-->
                                      <input type="hidden" name="affectea" id="affectea" value="">
+<input type="hidden" name="affecteasecondaire" id="affecteasecondaire" value="">
+<input type="hidden" name="dossierexistant" id="dossierexistant" value="">
                                   </div>
                                   <!--<div class=" row  " style="margin-top: 15px">
                                     <div class="col-md-3"><label for="affectea">Affecté à</label></div>
@@ -2155,22 +2157,31 @@ if(strstr($dossier['reference_medic'],"MI")){
                 </div>
 
             </div>
-            <div class="modal-footer">
-                <div class="row">
+            <div class="modal-footer" >
+                <div class="row"  >
                     <div id="claffect1" class="col-md-2" style="float: left!important;">
                         Assigner à: 
 
                     </div>
-                    <div id="claffect2" class="col-md-4" style="float: left!important;">
-                        <select id="affectationprest" name="affectationprest" class="form-control" style="width: 230px">
+                    <div id="claffect2" class="col-md-2" style="float: left!important;padding-left:50px;">
+                        <select id="affectationprest" name="affectationprest" class="form-control" style="width: 140px">
                                                     <option value="Select">Selectionner</option>
                                                     <option value="mmentite">Meme entite</option>
                                                     <option value="interne">Entite-soeur</option>
                                                     <option value="externe">Prestataire externe</option>
                         </select>
                     </div>
-                    <div id="typeaffect" class="col-md-3" style="float: left!important;display: none;">
-                        <select id="type_affectation" name="type_affectation" class="form-control" style="width: 230px">
+                    
+ <div id="typeaffect1" class="col-md-2" style="float: left!important;display: none;padding-left:50px;">
+                        <select id="type_affectation_exis" name="type_affectation_exis" class="form-control" style="width: 140px">
+                                  
+                                                        
+                                                    
+                                                    
+                        </select>
+                    </div>
+<div id="typeaffect" class="col-md-2" style="float: left!important;display: none;padding-left:50px;">
+                        <select id="type_affectation" name="type_affectation" class="form-control" style="width: 140px">
                                                     <option value="Select">Selectionner</option>
                                                     <option value="Transport VAT">Transport VAT</option>
                                                     <option value="Transport MEDIC">Transport MEDIC</option>
@@ -4273,6 +4284,11 @@ $('#fermedoc').click(function(){
         var dossier = $('#dossom').val();
         var tempdoc = $("#templateordrem").val();
         var affectea = $("#affectea").val();
+var affecteasecondaire = $("#affecteasecondaire").val();
+var dossierexistant = $("#dossierexistant").val();
+//alert(affectea);
+//alert(affecteasecondaire);
+//alert(dossierexistant);
         var srctemp = document.getElementById('omfilled').src;
 if (srctemp.indexOf("/odm_medic") === -1 )
       { var heuredateRDV =document.omfilled.CL_heuredateRDV.value;
@@ -4364,12 +4380,24 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
         if (affectea == "interne")
         {
           var type_affectation = $("#type_affectation").val();
- if ((type_affectation==="Select") && ((tempdoc !== 'remplace') &&  (tempdoc !== 'complete')))
-        {document.getElementById('genomhtml').disabled = false;
+ if (  ((tempdoc !== 'remplace') &&  (tempdoc !== 'complete') ) && ((affecteasecondaire==="") ||  (dossierexistant==="Select") ||  (dossierexistant==="")) && !(affecteasecondaire==="nouveau")  )
+        {
+document.getElementById('genomhtml').disabled = false;
              Swal.fire({
                 type: 'error',
                 title: 'oups...',
-                text: "Veuillez selectionner une entité soeur"
+                text: "Veuillez selectionner une entité soeur ou un dossier existant"
+            });
+            return false;
+     
+        }
+ if (  ((tempdoc !== 'remplace') &&  (tempdoc !== 'complete') ) && (affecteasecondaire==="nouveau") && (type_affectation==="Select") )
+        {
+document.getElementById('genomhtml').disabled = false;
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez selectionner une entité soeur "
             });
             return false;
      
@@ -4413,7 +4441,7 @@ var dhretbaseprev =document.omfilled.dhretbaseprev.value;
                 url:routeom,
                 method:"POST",
                 //'&_token='+_token
-                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&prestextern='+nomprestextern+'&idprestextern='+idprestextern+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&affecteasecondaire='+affecteasecondaire+'&dossierexistant='+dossierexistant+'&type_affectation='+type_affectation+'&prestextern='+nomprestextern+'&idprestextern='+idprestextern+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
               dataType: 'json',  
  success:function(data){
                      console.log(data);
@@ -4460,13 +4488,75 @@ function toggle(className, displayState){
                 elements[i].style.display = displayState;
             }
         }
+ $("#type_affectation_exis").change(function() { 
+if ($("#type_affectation_exis").val()==="nouveau")
+{
+
+document.getElementById('typeaffect').style.display = 'block';
+$("#affecteasecondaire").val("nouveau");
+$("#dossierexistant").val("");
+}
+else
+{
+
+document.getElementById('typeaffect').style.display = 'none';
+$("#affecteasecondaire").val("ancien");
+$("#dossierexistant").val($("#type_affectation_exis").children("option:selected").val());}
+
+});
     $("#affectationprest").change(function() {
             if ($("#affectationprest").val()==="interne")
-            {
-                document.getElementById('typeaffect').style.display = 'block';
+            {var dossier = $('#dossier').val();
+             var srctemp = document.getElementById('omfilled').src;
+ if (srctemp.indexOf("/odm_remorquage") !== -1 )
+        {var xp =1;
+
+
+  }
+else
+        {var xp =0; 
+   }
+//alert(xp);
+             var _token = $('input[name="_token"]').val();
+                  $.ajax({
+                    url:"{{ route('ordremissions.verifdossiers') }}",
+                    method:"POST",
+                    dataType: 'json',
+                    data:{dossier:dossier,xp:xp,_token:_token},
+                    success:function(data){
+                   if (data!="")
+                       { //alert(data);
+nov="nouveau";
+Nov="Nouveau";
+var select = document.getElementById("type_affectation_exis");
+var length = select.options.length;
+for (i = length-1; i >= 0; i--) {
+  select.options[i] = null;
+}
+if(document.getElementById('type_affectation_exis').options.length===0)
+{
+$('#type_affectation_exis').append('<option value="'+'Select'+'" ">'+'Selectionner'+'</option>');
+for (i = 0; i < data.length; i++)
+{
+ $('#type_affectation_exis').append('<option value="'+data[i]['id']+'" ">'+data[i]['reference_medic']+'</option>');}
+
+$('#type_affectation_exis').append('<option value="'+nov+'" ">'+Nov+'</option>');}
+            
+document.getElementById('typeaffect1').style.display = 'block';
                 $("#affectea").val("interne");
+}
+else
+{document.getElementById('typeaffect').style.display = 'block';
+document.getElementById('typeaffect1').style.display = 'none'
+                $("#affectea").val("interne");
+$("#affecteasecondaire").val("nouveau");
+$("#dossierexistant").val("");}
+                    }
+                });   
+                
             }else
             {
+                document.getElementById('typeaffect1').style.display = 'none'
                 document.getElementById('typeaffect').style.display = 'none';
                 if ($("#affectationprest").val()==="externe")
                 {
@@ -4485,16 +4575,22 @@ function toggle(className, displayState){
                     
                     $("#optprestataire").modal('show');
                     $("#affectea").val("externe");
+$("#affecteasecondaire").val("");
+$("#dossierexistant").val("");
                 }
                 // condition affecte a mm entite <hs change>
                 else if ($("#affectationprest").val()==="mmentite")
                 {
                    document.getElementById('externaffect').style.display = 'none';
                    $("#affectea").val("mmentite");
+$("#affecteasecondaire").val("");
+$("#dossierexistant").val("");
                 }
                 else
                 {
                     $("#affectea").val("");
+$("#affecteasecondaire").val("");
+$("#dossierexistant").val("");
                 }
             }
         });
