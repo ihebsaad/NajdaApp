@@ -4540,10 +4540,12 @@ array_multisort($columns, SORT_DESC, $listetags);
     {
 		 $id = $request->get('id');
 		 $debut = $request->get('debut');
+		 $hdebut = $request->get('hdebut');
 		 $fin = $request->get('fin');
+		 $hfin = $request->get('hfin');
 
        
-     return view('dossiers.details2', ['id' => $id,'debut'=>$debut,'fin'=>$fin]);
+     return view('dossiers.details2', ['id' => $id,'debut'=>$debut,'fin'=>$fin,'hdebut'=>$hdebut,'hfin'=>$hfin]);
 
    } 
    
@@ -4761,10 +4763,15 @@ array_multisort($columns, SORT_DESC, $listetags);
 
  
 
-      public static function users_work_on_folderDate( $iddoss ,$debut,$fin)
+      public static function users_work_on_folderDate( $iddoss ,$debut,$fin ,$hdebut,$hfin)
    {
-	     $debut= new \DateTime($debut);
+	    if($hdebut=="" || $hfin=="" ){ 
+		$debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4790,10 +4797,15 @@ array_multisort($columns, SORT_DESC, $listetags);
    }
 
       // nombre de factures
-      public  static function countFacturesDate ($id,$debut,$fin)
+      public  static function countFacturesDate ($id,$debut,$fin ,$hdebut,$hfin)
       {
-		    $debut= new \DateTime($debut);
+	    if($hdebut=="" || $hfin=="" ){ 
+		$debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4805,10 +4817,15 @@ array_multisort($columns, SORT_DESC, $listetags);
       }
 
    // nombre de prestations
-       public  static function countPrestationsDate ($id,$debut,$fin)
+       public  static function countPrestationsDate ($id,$debut,$fin ,$hdebut,$hfin)
       {
-		    $debut= new \DateTime($debut);
+	    if($hdebut=="" || $hfin=="" ){ 
+		$debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4819,10 +4836,15 @@ array_multisort($columns, SORT_DESC, $listetags);
           return $count;
       }
    // nombre des emails recus
-        public  static function countEmailsDossDate ($id,$debut,$fin)
+        public  static function countEmailsDossDate ($id,$debut,$fin,$hdebut,$hfin)
       {   
-	  $debut= new \DateTime($debut);
+	    if($hdebut=="" || $hfin=="" ){ 
+		$debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4834,10 +4856,15 @@ array_multisort($columns, SORT_DESC, $listetags);
       }
    
    // nombre de Fax reçus
-           public  static function countFaxsDate ($id,$debut,$fin)
+           public  static function countFaxsDate ($id,$debut,$fin,$hdebut,$hfin)
       {
-		    $debut= new \DateTime($debut);
+	    if($hdebut=="" || $hfin=="" ){ 
+		$debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4849,10 +4876,15 @@ array_multisort($columns, SORT_DESC, $listetags);
       }
 	  
    // nombre des sms reçus
-           public  static function countSmsDate ($id,$debut,$fin)
+           public  static function countSmsDate ($id,$debut,$fin,$hdebut,$hfin)
       {
-		    $debut= new \DateTime($debut);
+	    if($hdebut=="" || $hfin=="" ){ 
+		$debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4863,13 +4895,18 @@ array_multisort($columns, SORT_DESC, $listetags);
           return $count;
       }
    // nombre des emails envoyés
-           public  static function countEmailsSentDate ($id,$debut,$fin)
+           public  static function countEmailsSentDate ($id,$debut,$fin,$hdebut,$hfin)
       {
-		    $debut= new \DateTime($debut);
+	    if($hdebut=="" || $hfin=="" ){ 
+		$debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
+ 
          $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
          $count= \App\Envoye::where('dossier',$ref)
 		   ->where('created_at', '>=', $debut)
@@ -4878,13 +4915,18 @@ array_multisort($columns, SORT_DESC, $listetags);
           return $count;
       }
    // nombre des emails envoyés par un agent
-       public  static function countEmailsSentUserDate ($id,$user,$debut,$fin)
+       public  static function countEmailsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
       { 
-	    $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
          $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
          $count= \App\Envoye::where('dossier',$ref)
 		   ->where('created_at', '>=', $debut)
@@ -4893,10 +4935,16 @@ array_multisort($columns, SORT_DESC, $listetags);
           return $count;
       }
    // nombre des fax envoyés
-          public  static function countFaxsSentDate ($id,$debut,$fin)
+          public  static function countFaxsSentDate ($id,$debut,$fin,$hdebut,$hfin)
       {
-		    $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4908,9 +4956,18 @@ array_multisort($columns, SORT_DESC, $listetags);
           return $count;
       }
    // nombre des fax envoyés par un agent
-      public  static function countFaxsSentUserDate ($id,$user,$debut,$fin)
-      {
-               $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
+      public  static function countFaxsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
+      {	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
+      $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+           $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
          $count= \App\Envoye::where('dossier',$ref)
 		   ->where('created_at', '>=', $debut)
 		   ->where('created_at', '<=', $fin)
@@ -4918,10 +4975,16 @@ array_multisort($columns, SORT_DESC, $listetags);
           return $count;
       }
    // nombre des sms envoyés
-         public  static function countSmsSentDate ($id,$debut,$fin)
+         public  static function countSmsSentDate ($id,$debut,$fin,$hdebut,$hfin)
       {
-           $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  
@@ -4933,10 +4996,16 @@ array_multisort($columns, SORT_DESC, $listetags);
           return $count;
       }
    // nombre des sms envoyés par un agent
-      public static  function countSmsSentUserDate ($id,$user,$debut,$fin)
+      public static  function countSmsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
       {
-		    $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	  $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
@@ -4948,10 +5017,16 @@ array_multisort($columns, SORT_DESC, $listetags);
       }
    
         // nombre des  comptes rendus
-      public static  function countRendusDate  ($id,$debut,$fin)
+      public static  function countRendusDate  ($id,$debut,$fin,$hdebut,$hfin)
       {
-          $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\Entree::where('dossierid',$id)
@@ -4962,10 +5037,16 @@ array_multisort($columns, SORT_DESC, $listetags);
       } 
       
      // nombre des compte rendu   par un agent
-      public static  function countRendusUserDate ($id,$user,$debut,$fin)
+      public static  function countRendusUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
       {
-          $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\Entree::where('dossierid',$id)
@@ -4976,10 +5057,16 @@ array_multisort($columns, SORT_DESC, $listetags);
       } 
    
         // nombre des missions en cours
-      public static  function countMissionsDate  ($id,$debut,$fin)
+      public static  function countMissionsDate  ($id,$debut,$fin,$hdebut,$hfin)
       {
-          $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\Mission::where('dossier_id',$id)
@@ -4990,10 +5077,16 @@ array_multisort($columns, SORT_DESC, $listetags);
       } 
       
       // nombre des missions
-      public static  function countMissionsTDate  ($id,$debut,$fin)
+      public static  function countMissionsTDate  ($id,$debut,$fin,$hdebut,$hfin)
       {
-          $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\MissionHis::where('dossier_id',$id)
@@ -5005,10 +5098,16 @@ array_multisort($columns, SORT_DESC, $listetags);
       
    
         // nombre des missions  encours  par un agent
-      public static  function countMissionsUserDate ($id,$user,$debut,$fin)
+      public static  function countMissionsUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
       {
-          $debut= new \DateTime($debut);
+	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\Mission::where('dossier_id',$id)
@@ -5020,10 +5119,17 @@ array_multisort($columns, SORT_DESC, $listetags);
    
    
            // nombre des missions  terminées  par un agent
-      public static  function countMissionsUserTDate ($id,$user,$debut,$fin)
+      public static  function countMissionsUserTDate ($id,$user,$debut,$fin,$hdebut,$hfin)
       {
-          $debut= new \DateTime($debut);
+		  
+      	  if($hdebut=="" || $hfin=="" ){ 
+	   
+	   $debut= new \DateTime($debut);
 	   $fin= new \DateTime($fin);
+	   }else{
+	    $debut= new \DateTime($debut.' '.$hdebut);
+	   $fin= new \DateTime($fin.' '.$hfin);
+   }
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\MissionHis::where('dossier_id',$id)

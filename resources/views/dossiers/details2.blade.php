@@ -29,27 +29,37 @@ use \App\Http\Controllers\UsersController;
 <div class="row">
 <h1 style="color:#4fc1e9"><a href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo $dossier->reference_medic .' - '.$dossier->subscriber_name .' '.$dossier->subscriber_lastname  ;?> </a></h1><br>
 
-	<h2> Les statistiques par période entre <b style="color:#4fc1e9"><?php echo $debut ;?></b> et <b style="color:#4fc1e9"><?php echo $fin ;?></b>  </h2><br>
+	<h2> Les statistiques par période entre <b style="color:#4fc1e9"><?php echo $debut.' '.$hdebut ;?></b> et <b style="color:#4fc1e9"><?php echo $fin.' '.$hfin ;?></b>  </h2><br>
 
 	
  <form    action="{{action('DossiersController@details2')}}" >
 	<div class="row">
     <input id="id"   type="hidden" name="id"   value="<?php echo $id ;?>"   />
 
-  <div class="form-group col-xs-12 col-md-3">
-<label for="debut">Début:</label>
-    <input id="debut"  autocomplete="off" placeholder="<?php echo $debut ;?>" class="form-control datepicker" name="debut" required value="" format='jj-mm-aaaa' />
+    <div class="form-group col-xs-12 col-md-2">
+<label for="debut">Date de Début *:</label>
+    <input id="debut"  autocomplete="off" placeholder="<?php echo $debut ;?>" class="form-control datepicker" name="debut" required value="" format='jj-mm-aaaa' style="width:150px;" />
+   </div>
+   <div class="form-group col-xs-12 col-md-2">
+	<label for="hdebut">Heure de Début:</label>
+<input id="hdebut"  autocomplete="off" class="form-control timepicker" name="hdebut"  placeholder="<?php echo $hdebut ;?>" style="width:150px;"  />
   </div>
 
-  <div class="form-group col-xs-12 col-md-3">
-<label for="fin">Fin:</label>
-    <input id="fin"  autocomplete="off" placeholder="<?php echo $fin ;?>" class="form-control datepicker" name="fin" required value="" format='jj-mm-aaaa' />
+  <div class="form-group col-xs-12 col-md-1">
+  </div>
+  <div class="form-group col-xs-12 col-md-2">
+<label for="fin">Date de Fin *:</label>
+    <input id="fin"  autocomplete="off" placeholder="<?php echo $fin ;?>" class="form-control datepicker" name="fin" required value="" format='jj-mm-aaaa' style="width:150px;"  />
+   </div>
+   <div class="form-group col-xs-12 col-md-2">
+	<label for="hfin">Heure de Fin:</label>
+	<input id="hfin"    autocomplete="off" class="form-control timepicker" name="hfin"  placeholder="<?php echo $hfin ;?>"  style="width:150px;"   />
   </div>
 	
 	
  <div class="form-group col-xs-12 col-md-2">
    <label></label> 
-	 <input  type="submit" class="form-control btn btn-success"  value="Voir" style="margin-top:5px" />
+	 <input  type="submit" class="form-control btn btn-success"  value="Voir" style="margin-top:5px">
   </div>
 	 
 </div>
@@ -61,45 +71,45 @@ use \App\Http\Controllers\UsersController;
 		
 
 // Liste utilisateurs qui ont travaillé sur le dossier
-$listeusers=DossiersController::users_work_on_folderDate($id,$debut,$fin);
+$listeusers=DossiersController::users_work_on_folderDate($id,$debut,$fin,$hdebut,$hfin);
 
  // nombre des Actions en cours
- $actions=UsersController::countactionsDossierDate($id,$debut,$fin);
+ $actions=UsersController::countactionsDossierDate($id,$debut,$fin,$hdebut,$hfin);
  // notifications en cours
- $notifications=UsersController::countnotifsDossierDate($id,$debut,$fin);
+ $notifications=UsersController::countnotifsDossierDate($id,$debut,$fin,$hdebut,$hfin);
  
  
  // nombre des missions
- $missions=DossiersController::countMissionsDate($id,$debut,$fin);
- $missionsT=DossiersController::countMissionsTDate($id,$debut,$fin);
+ $missions=DossiersController::countMissionsDate($id,$debut,$fin,$hdebut,$hfin);
+ $missionsT=DossiersController::countMissionsTDate($id,$debut,$fin,$hdebut,$hfin);
  
    // nombre de factures
-  $Factures =   DossiersController::countFacturesDate ($id,$debut,$fin);
+  $Factures =   DossiersController::countFacturesDate ($id,$debut,$fin,$hdebut,$hfin);
 	 
    // nombre de prestations
-  $Prestations = DossiersController::countPrestationsDate ($id,$debut,$fin);
+  $Prestations = DossiersController::countPrestationsDate ($id,$debut,$fin,$hdebut,$hfin);
 	  
    // nombre des emails recus
-   $EmailsDoss =  DossiersController::countEmailsDossDate ($id,$debut,$fin);
+   $EmailsDoss =  DossiersController::countEmailsDossDate ($id,$debut,$fin,$hdebut,$hfin);
    
    // nombre de Fax reçus
-  $Faxs =    DossiersController::countFaxsDate ($id,$debut,$fin);
+  $Faxs =    DossiersController::countFaxsDate ($id,$debut,$fin,$hdebut,$hfin);
  
    // nombre des sms reçus
-   $Sms =  DossiersController::countSmsDate ($id,$debut,$fin);
+   $Sms =  DossiersController::countSmsDate ($id,$debut,$fin,$hdebut,$hfin);
  
    // nombre des emails envoyés
-   $EmailsSent =  DossiersController::countEmailsSentDate ($id,$debut,$fin);
+   $EmailsSent =  DossiersController::countEmailsSentDate ($id,$debut,$fin,$hdebut,$hfin);
  
 
    // nombre des fax envoyés
-   $FaxsSent=   DossiersController::countFaxsSentDate ($id,$debut,$fin);
+   $FaxsSent=   DossiersController::countFaxsSentDate ($id,$debut,$fin,$hdebut,$hfin);
   
    // nombre des sms envoyés
-	$SmsSent= DossiersController::countSmsSentDate ($id,$debut,$fin);
+	$SmsSent= DossiersController::countSmsSentDate ($id,$debut,$fin,$hdebut,$hfin);
 	
 	// nombre des compte rendus  
-	$Rendus= DossiersController::countRendusDate ($id,$debut,$fin);
+	$Rendus= DossiersController::countRendusDate ($id,$debut,$fin,$hdebut,$hfin);
  	 		
 		
 		
@@ -316,6 +326,9 @@ foreach ($listeusers as $user)
 <!----- Datepicker ------->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!----- TimePicker ------->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -389,6 +402,18 @@ echo "['".$nom."',    ".$missionsUserT."] ";
             dateFormat: "dd-mm-yy"
 
         });
+		
+				    $('.timepicker').timepicker({
+    timeFormat: 'hh:mm',
+    interval: 60,
+  /*  minTime: '9',
+    maxTime: '6:00pm',
+    defaultTime: '9',*/
+    startTime: '08:00', 
+    dynamic: false,
+    dropdown: true,
+    scrollbar: true
+});
     </script>
   </head>
   <body>

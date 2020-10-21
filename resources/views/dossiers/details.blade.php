@@ -90,14 +90,24 @@ $listeusers=DossiersController::users_work_on_folder($id);
     <input id="id"   type="hidden" name="id"   value="<?php echo $id ;?>"   />
 
  
-  <div class="form-group col-xs-12 col-md-3">
-<label for="debut">Début:</label>
-    <input id="debut"  autocomplete="off" placeholder="jj-mm-aaaa" class="form-control datepicker" name="debut" required value="" format='jj-mm-aaaa' />
+  <div class="form-group col-xs-12 col-md-2">
+<label for="debut">Date de Début *:</label>
+    <input id="debut"  autocomplete="off" placeholder="jj-mm-aaaa" class="form-control datepicker" name="debut" required value="" format='jj-mm-aaaa' style="width:150px;" />
+   </div>
+   <div class="form-group col-xs-12 col-md-2">
+	<label for="hdebut">Heure de Début:</label>
+<input id="hdebut"  autocomplete="off" class="form-control timepicker" name="hdebut"  placeholder="hh:mm" style="width:150px;"  />
   </div>
 
-  <div class="form-group col-xs-12 col-md-3">
-<label for="fin">Fin:</label>
-    <input id="fin"  autocomplete="off" placeholder="jj-mm-aaaa" class="form-control datepicker" name="fin" required value="" format='jj-mm-aaaa' />
+  <div class="form-group col-xs-12 col-md-1">
+  </div>
+  <div class="form-group col-xs-12 col-md-2">
+<label for="fin">Date de Fin *:</label>
+    <input id="fin"  autocomplete="off" placeholder="jj-mm-aaaa" class="form-control datepicker" name="fin" required value="" format='jj-mm-aaaa' style="width:150px;"  />
+   </div>
+   <div class="form-group col-xs-12 col-md-2">
+	<label for="hfin">Heure de Fin:</label>
+	<input id="hfin"   autocomplete="off"  class="form-control timepicker" name="hfin"  placeholder="hh:mm"  style="width:150px;"   />
   </div>
 	
 	
@@ -194,11 +204,18 @@ foreach ($listeusers as $user)
 </div>
 
 </div>
+
 		
-<!----- Datepicker ------->
+		
+<!----- DatePicker ------->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		
+ <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!----- TimePicker ------->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -417,6 +434,18 @@ echo "['".$nom."',    ". $totalm."] ";
 
         });
 		
+		
+		    $('.timepicker').timepicker({
+    timeFormat: 'hh:mm',
+    interval: 60,
+  /*  minTime: '9',
+    maxTime: '6:00pm',
+    defaultTime: '9',*/
+    startTime: '08:00', 
+    dynamic: false,
+    dropdown: true,
+    scrollbar: true
+});
     </script>
   </head>
   <body>
@@ -451,3 +480,5 @@ echo "['".$nom."',    ". $totalm."] ";
         #tabstats tr{margin-bottom:15px;text-align: center;height: 40px;}
         </style>		
 @endsection
+
+ 
