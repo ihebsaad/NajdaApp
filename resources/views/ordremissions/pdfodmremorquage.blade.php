@@ -105,7 +105,7 @@
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_remorquage" style="font-family:'Times New Roman'; "><?php echo $_POST['prestataire_remorquage']; ?></span>
 <?php } ?>
-<?php if (isset($_POST['type_affectation']) && !(empty($_POST['type_affectation']))) { ?>
+<?php if (isset($_POST['type_affectation']) && !(empty($_POST['type_affectation'])) && ($_POST['type_affectation']!=="Select")) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_remorquage" style="font-family:'Times New Roman'; "><?php echo $_POST['type_affectation']; ?></span>
 <?php } ?>

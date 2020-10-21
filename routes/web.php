@@ -704,6 +704,7 @@ Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@e
 Route::get('/ordremissions/pdfodmmedicinternationnal','OrdreMissionsController@pdfodmmedicinternationnal')->name('ordremissions.pdfodmmedicinternationnal');
 Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsController@export_pdf_odmmedicinternationnal')->name('ordremissions.export_pdf_odmmedicinternationnal');
 Route::post('/ordremissions/attachoms','OrdreMissionsController@attachordremission')->name('ordremissions.attachoms');
+Route::post('/ordremissions/verifdossiers','OrdreMissionsController@verifdossierexistant')->name('ordremissions.verifdossiers');
 
 
 Route::get('/update_time_miss', function () {
