@@ -623,6 +623,7 @@ Route::get('/users/create','UsersController@create')->name('users.create');
 Route::post('/users/saving','UsersController@saving')->name('users.saving');
 Route::post('/users/updating','UsersController@updating')->name('users.updating');
 Route::get('/users/view/{id}', 'UsersController@view');
+Route::get('/users/stats/{id}', 'UsersController@stats');
 Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
 Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('users.createuserrole');
 Route::post('/users/removeuserrole', 'UsersController@removeuserrole')->name('users.removeuserrole');

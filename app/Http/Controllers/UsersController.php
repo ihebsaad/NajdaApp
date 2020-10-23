@@ -136,19 +136,27 @@ class UsersController extends Controller
      */
     public function view($id)
     {
-
-
+ 
         $user = User::find($id);
-
-
-
-
-        //$roles = DB::table('roles')->get();
-
+  
         return view('users.view',  compact('user','id'));
 
     }
 
+
+	    public function stats($id,Request $request)
+    {
+	  
+		 $debut = $request->get('debut');
+		 $hdebut = $request->get('hdebut');
+		 $fin = $request->get('fin');
+		 $hfin = $request->get('hfin');
+
+       
+     return view('users.stats', ['id' => $id,'debut'=>$debut,'fin'=>$fin,'hdebut'=>$hdebut,'hfin'=>$hfin]);
+
+    }
+	
     public function profile($id)
     {
         if(  Auth::id() ==$id )
