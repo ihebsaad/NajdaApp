@@ -98,7 +98,7 @@ class GarantiesController extends Controller
 	foreach($rubriques as $rb){
 	
 	DB::table('rubriques_assure')->insert(
-    ['id_assure' => $assure , 'rubrique' => $rb->id, 'annee' => $annee]);	
+    ['id_assure' => $assure , 'rubrique' => $rb->id,'montant' =>$rb->montant,'mrestant' =>$rb->montant, 'annee' => $annee,]);	
 		
 	}
 	
@@ -153,6 +153,13 @@ class GarantiesController extends Controller
         Rubrique::where('id', $id)->update(array($champ => $val));
  
     }	
+public function inforubrique (Request $request)
+    {
+        $idrubrique = $request->get('rubrique');
+        $arrrubrique = Rubrique::select('id','nom','commentaire','created_at')->where('id', $idrubrique)->first();
+        header('Content-type: application/json');    
+        return json_encode($arrrubrique);
+    }
 	
 	public function edit( $id)
 	{

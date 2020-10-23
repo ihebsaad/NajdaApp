@@ -75,7 +75,7 @@ function custom_echo($x, $length)
         ?>
 
         <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
-
+        <input type="hidden" id="typedossier" value="<?php echo $dossier->type_affectation; ?>">
     </div>
      <div class="col-md-2">
 
@@ -3464,7 +3464,34 @@ var dossier = $('#dossier').val();
       //<i class="fas fa-tag"></i> 
       if (idutag)
      {
+var typedossier = $('#typedossier').val();
+
         var _token = $('input[name="_token"]').val();
+if(typedossier==='Najda TPA')
+{
+
+ $.ajax({
+                url:"{{ route('garanties.inforubrique') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&rubrique='+idutag,
+                dataType: 'json',
+                success:function(data){
+                    if ($.trim(data)){ 
+if(data['commentaire']!==null)
+{comment=data['commentaire'];}
+else{
+comment="";
+}
+                        $("#tagudoc").html("<i class='fas fa-tag'></i> "+data['nom']+" : "+comment+" | "+data['created_at']);
+                    }
+                }
+            })
+
+
+}
+else
+{
         $.ajax({
                 url:"{{ route('tags.infotag') }}",
                 method:"POST",
@@ -3476,7 +3503,7 @@ var dossier = $('#dossier').val();
                         $("#tagudoc").html("<i class='fas fa-tag'></i> "+data['titre']+" : "+data['contenu']+" | "+data['created_at']);
                     }
                 }
-            });
+            });}
 
 
         document.getElementById('tagudoc').style.display = 'block';
@@ -3628,6 +3655,7 @@ function annuleom(titre,iddoc)
 // affichage de lhistorique du document
     
     function historiquedoc(doc){
+
         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
         $.ajax({
@@ -3873,7 +3901,9 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     // ajout des options pour select gop
                     // verifier s'il ya gop precedent
                     if (idgopprec == undefined)
-                    {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant max: "+champgop[1]+" | "+champgop[3], champgop[0]));}
+                    {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant max: "+champgop[1]+" | "+champgop[3], champgop[0]));
+
+}
                     else
                     {
                         if (idgopprec === parseInt(champgop[0]))

@@ -13,6 +13,7 @@ use App\Template_doc ;
 use App\Document;
 use App\Mission;
 use App\Prestation;
+use App\Rubrique;
 use App\Prestataire;
 use App\Parametre;
 use DB;
@@ -23,7 +24,9 @@ class DocumentsController extends Controller
 {
     public function adddocument(Request $request)
     {
+
         $dossier= $_POST['dossdoc'] ;
+$dossiertpa=Dossier::where('id',$dossier)->first();
         $templateid = $_POST['templatedocument'] ;
         $comment= $_POST['comdoc'] ;
         $parent =null;
@@ -379,16 +382,29 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 {$montantgp = intval($_POST['CL_tarif_convention']); }
 
             // recuperation devise de GOP utilisé
-            $devisegop = Tag::where("id",$_POST['idtaggop'])->first();
-
             $paramdev=Parametre::select('euro_achat','dollar_achat')->first();
 
-            // CONVERSION MONTANT GOP
-                if ( $devisegop['devise'] === "EUR")
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
+            $devisegop = Tag::where("id",$_POST['idtaggop'])->first();
+  if ( $devisegop['devise'] === "EUR")
                     $montantgp = $montantgp / floatval($paramdev['euro_achat']);
                 if ( $devisegop['devise'] === "USD")
                     $montantgp = $montantgp / floatval($paramdev['dollar_achat']);
 
+}
+else
+{
+ $devisegop = Rubrique::where("id",$_POST['idtaggop'])->first();
+ if ( $devisegop['devise'] === "EUR")
+                    $montantgp = $montantgp / floatval($paramdev['euro_achat']);
+                if ( $devisegop['devise'] === "USD")
+                    $montantgp = $montantgp / floatval($paramdev['dollar_achat']);
+}
+
+
+            // CONVERSION MONTANT GOP
+              
             // verifier si le montant est reel
             /*if (is_float($montantgp)) {
                 // rondre 3 num apres virgule
@@ -414,17 +430,32 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     {
                                         // update gop du dossier
                                         $nmntgop =intval($infoparent['montantgop']) - $diffmontant;
-                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
+                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);}
+else
+{
+DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmntgop]);
+}
                                     }
                                     else
                                     {
                                         // update gop du dossier
                                         $nmntgop =intval($infoparent['montantgop']) + $diffmontant;
-                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
+                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);}
+else
+{
+DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmntgop]);
+}
+      
                                     }
                                 }
                                 else
                                 {
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
                                     // avec un different taggop
                                     // maj montant ex tag
                                     $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
@@ -439,7 +470,25 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                        // update gop du dossier
                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
                                    
-                                    }
+                                    }}
+else {
+ // avec un different taggop
+                                    // maj montant ex tag
+
+                       $tagprecinfo = DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->first();
+                                    $mntgop = intval($tagprecinfo->mrestant) + intval($infoparent['montantgop']);
+                DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $mntgop]);
+                                    // maj montant nouveau tag
+
+                                    $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->first();
+                                    if($montantgp>0)
+                                    {
+                                     
+                                       $nmontant = intval($tag->mrestant) - $montantgp;
+                                       // update gop du dossier
+                                       $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmontant]);
+                                   
+                                    }}
 
                                 }
                             }
@@ -454,6 +503,8 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     }
                     else {       
                        //cas premiere generation du document
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
                        $tag = Tag::where('id', $idtaggop)->first();
 
                             if($montantgp!==0)
@@ -463,11 +514,25 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                // update gop du dossier
                                Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
                            
+                            } }
+else{
+ $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->first();
+
+                            if($montantgp!==0)
+                            {
+                             
+                               $nmontant = intval($tag->mrestant) - $montantgp;
+                               // update gop du dossier
+                               DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmontant]);
+                           
                             }
+}
                     }
                 }
             else {       
                //cas premiere generation du document
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
                $tag = Tag::where('id', $idtaggop)->first();
 
                     if($montantgp!==0)
@@ -477,7 +542,20 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                        // update gop du dossier
                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
                    
-                    }
+                    }}
+else
+{
+
+               $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->first();
+
+                    if($montantgp!==0)
+                    {
+                     
+                       $nmontant = intval($tag->mrestant) - $montantgp;
+                       // update gop du dossier
+                       DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmontant]);
+                   
+                    }}
 
                 //$titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
 		$titref =utf8_decode($arrfile['nom'].'_'.$refdoss);
@@ -621,10 +699,16 @@ return json_encode($doc);
         //$refdoss = Dossier->RefDossierById($dossier);
         $infodossier=Dossier::select('reference_medic','franchise','montant_franchise','GOP','montant_GOP')->where('id',$dossier)->first();
         $refdoss = trim($infodossier['reference_medic']);
+
+
         $entreesdos=Entree::where("dossier",$refdoss)->get();
         $paramapp=Parametre::select('euro_achat','dollar_achat')->first();
+$dossiertpa=Dossier::where('id',$dossier)->first();
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
         
         if ( ! empty($entreesdos)) {
+
         switch ($arrfile['nom']) {
             case "PEC_analyses_medicales":
             case "PEC_frais_medicaux":
@@ -636,8 +720,10 @@ return json_encode($doc);
                 $dossplafond = false;
                 $arr_gopmed = array();
                 foreach ($entreesdos as $entr) {
+
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                    $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
+                    $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
+
                     if (!empty($coltags))
                     {
 
@@ -675,6 +761,52 @@ return json_encode($doc);
                             }
                         }
                     }
+$colattachs = Attachement::where("parent","=",$entr['id'])->get();
+                        if (!empty($colattachs))
+                        {
+                            foreach ($colattachs as $lattach) {
+                                $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+
+                             
+
+                    if (!empty($coltagsattach))
+                    {
+
+                        foreach ($coltagsattach as $ltagatt) {
+                            if ((strpos( $ltagatt['abbrev'],"Franchise") !== FALSE) || (strpos( $ltagatt['abbrev'], "Plafond") !== FALSE) || (strpos( $ltagatt['abbrev'], "GOPmed") !== FALSE))
+                            {
+                             //if ($resp === "notallow") {$resp="allow";}
+                             if (strpos( $ltagatt['abbrev'],"GOPmed") !== FALSE)
+                             {
+                                $dossgopmed = true;
+                                // VERIFICATION DEVISE GOP
+                                    if ( $ltagatt['devise'] === "TND") 
+                                    {$Montanttag = $ltagatt['mrestant'];}
+                                    if ( $ltagatt['devise'] === "EUR")
+                                       { $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['euro_achat']);}
+                                    if ( $ltagatt['devise'] === "USD")
+                                       { $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['dollar_achat']);}
+
+                                $arr_gopmed[]=$ltagatt['id']."_".$Montanttag."_".$ltagatt['contenu']."_".$ltagatt['updated_at'];
+                             }
+                             if (strpos( $ltagatt['abbrev'],"Franchise") !== FALSE)
+                             {
+                                /*if ($indossier['franchise'] == 1)
+                                {$resp= $resp."&Franchise_".$entr['id'];}
+                                elseif (($indossier['franchise'] == 0) && ($resp === "allow"))
+                                    {$resp="notallow";}*/
+                                $dossfranchise = true;
+                             }
+                             if (strpos( $ltagatt['abbrev'], "Plafond") !== FALSE)
+                             {
+                                //$resp= $resp."&Plafond_".$entr['id'];
+                                $dossplafond = true;
+                             }
+                             
+                            }
+                        }
+                    }
+                  } }
                 }
                 //return $arrtags;
                 if ($dossgopmed === false)
@@ -698,7 +830,7 @@ return json_encode($doc);
                     $arr_gopmed = array();
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                        $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
+                        $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
                         if (!empty($coltags))
                         {
 
@@ -709,14 +841,12 @@ return json_encode($doc);
                                  if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
                                  {
                                     // VERIFICATION DEVISE GOP
-                                    switch ($ltag['devise']) {
-                                        case "TND":
-                                            $Montanttag = $ltag['mrestant'];
-                                        case "EUR":
-                                            $Montanttag = intval($ltag['mrestant']) * intval($paramapp['euro_achat']);
-                                        case "USD":
-                                            $Montanttag = intval($ltag['mrestant']) * intval($paramapp['dollar_achat']);
-                                    }
+                                      if ( $ltag['devise'] === "TND") 
+                                    {$Montanttag = $ltag['mrestant'];}
+                                    if ( $ltag['devise'] === "EUR")
+                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);}
+                                    if ( $ltag['devise'] === "USD")
+                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);}
                                     $arr_gopmed[]=$ltag['id']."_".$Montanttag."_".$ltag['contenu']."_".$ltag['updated_at'];
                                     $dossgopmed = true;
                                  }
@@ -728,6 +858,40 @@ return json_encode($doc);
                                 }
                             }
                         }
+ $colattachs = Attachement::where("parent","=",$entr['id'])->get();
+                        if (!empty($colattachs))
+                        {
+                            foreach ($colattachs as $lattach) {
+                                $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+
+                             
+                       if (!empty($coltagsattach))
+                        {
+
+                            foreach ($coltagsattach as $ltagatt) {
+                                if ((strpos( $ltagatt['abbrev'], "Plafond") !== FALSE) || (strpos( $ltagatt['abbrev'], "GOPmed") !== FALSE))
+                                {
+                                 //if ($resp === "notallow") {$resp="allow";}
+                                 if (strpos( $ltagatt['abbrev'],"GOPmed") !== FALSE)
+                                 {
+                                    // VERIFICATION DEVISE GOP
+                                      if ( $ltagatt['devise'] === "TND") 
+                                    {$Montanttag = $ltagatt['mrestant'];}
+                                    if ( $ltagatt['devise'] === "EUR")
+                                       { $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['euro_achat']);}
+                                    if ( $ltagatt['devise'] === "USD")
+                                       { $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['dollar_achat']);}
+                                    $arr_gopmed[]=$ltagatt['id']."_".$Montanttag."_".$ltagatt['contenu']."_".$ltagatt['updated_at'];
+                                    $dossgopmed = true;
+                                 }
+                                 if (strpos( $ltagatt['abbrev'], "Plafond") !== FALSE)
+                                 {
+                                    $dossplafond = true;
+                                 }
+                                 
+                                }
+                            }}}}
+
                     }
                     //return $arrtags;
                     if ($dossgopmed === false)
@@ -748,7 +912,7 @@ return json_encode($doc);
                     $arr_gopmtn = array();
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                        $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
+                        $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
                         if (!empty($coltags))
                         {
 
@@ -777,6 +941,41 @@ return json_encode($doc);
                                 }
                             }
                         }
+   $colattachs = Attachement::where("parent","=",$entr['id'])->get();
+                        if (!empty($colattachs))
+                        {
+                            foreach ($colattachs as $lattach) {
+                                $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+
+                             
+                       if (!empty($coltagsattach))
+                        {
+
+                            foreach ($coltagsattach as $ltagatt) {
+                                if ((strpos( $ltagatt['abbrev'], "PlafondRem") !== FALSE) || (strpos( $ltagatt['abbrev'], "GOPtn") !== FALSE))
+                                {
+                                 //if ($resp === "notallow") {$resp="allow";}
+                                 if (strpos( $ltagatt['abbrev'],"GOPtn") !== FALSE)
+                                 {
+                                    // VERIFICATION DEVISE GOP
+                                    if ( $ltagatt['devise'] === "TND") 
+                                    $Montanttag = $ltagatt['mrestant'];
+                                    if ( $ltagatt['devise'] === "EUR")
+                                        $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['euro_achat']);
+                                    if ( $ltagatt['devise'] === "USD")
+                                        $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['dollar_achat']);
+
+                                    $arr_gopmtn[]=$ltagatt['id']."_".$Montanttag."_".$ltagatt['contenu']."_".$ltagatt['updated_at'];
+                                    $dossgoptn = true;
+                                 }
+                                 if (strpos( $ltagatt['abbrev'], "PlafondRem") !== FALSE)
+                                 {
+                                    $dossplafondrm = true;
+                                 }
+                                 
+                                }
+                            }
+                        }}}
                     }
                     //return $arrtags;
                     if (($dossgoptn === false) || ($dossplafondrm === false))
@@ -808,18 +1007,50 @@ return json_encode($doc);
                 $arr_gopmtn = array();
                 foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                    $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
+                    $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
                     if (!empty($coltags))
                     {
 
                         foreach ($coltags as $ltag) {
                              if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
                              {
-                                $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu']."_".$ltag['updated_at'];
+                                if ( $ltag['devise'] === "TND") 
+                                    $Montanttag = $ltag['mrestant'];
+                                    if ( $ltag['devise'] === "EUR")
+                                        $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);
+                                    if ( $ltag['devise'] === "USD")
+                                        $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);
+
+                                $arr_gopmtn[]=$ltag['id']."_".$Montanttag ."_".$ltag['contenu']."_".$ltag['updated_at'];
                                 $dossgoptn = true;
                              }
                         }
                     }
+  $colattachs = Attachement::where("parent","=",$entr['id'])->get();
+                        if (!empty($colattachs))
+                        {
+                            foreach ($colattachs as $lattach) {
+                                $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+
+                             
+                       if (!empty($coltagsattach))
+                        {
+
+                        foreach ($coltagsattach as $ltagatt) {
+                             if (strpos( $ltagatt['abbrev'],"GOPtn") !== FALSE)
+                             {
+                                if ( $ltagatt['devise'] === "TND") 
+                                    $Montanttag = $ltagatt['mrestant'];
+                                    if ( $ltagatt['devise'] === "EUR")
+                                        $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['euro_achat']);
+                                    if ( $ltagatt['devise'] === "USD")
+                                        $Montanttag = intval($ltagatt['mrestant']) * floatval($paramapp['dollar_achat']);
+
+                                $arr_gopmtn[]=$ltagatt['id']."_".$Montanttag ."_".$ltagatt['contenu']."_".$ltagatt['updated_at'];
+                                $dossgoptn = true;
+                             }
+                        }
+                    }}}
                 }
                 //return $arrtags;
                 if ($dossgoptn === false)
@@ -879,7 +1110,74 @@ return json_encode($doc);
                 }
                 break;*/
         }
-        }
+        }}
+
+
+else
+{
+ $annee=date('Y');
+ $rubriques_assure=DB::table('rubriques_assure')->orderBy('rubrique', 'desc')->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+switch ($arrfile['nom']) {
+            case "PEC_analyses_medicales":
+            case "PEC_frais_medicaux":
+            case "PEC_opticien":
+            case "PEC_frais_imagerie":
+            case "PEC_consultation":
+            case "PEC_Reeducation":
+            case "PEC_pharmacie":
+            case "PEC_depannage":
+            case "PEC_gardiennage":
+            case "PEC_location_Najda_a_VAT":
+            case "Procuration_Najda_pr_prestataire_rapat_veh":
+            case "PEC_Reparation":
+            case "PEC_Pompes_funebres":
+            case "PEC_expertise":
+            case "PEC_evasan_armee":
+            case "PEC_deplacement":
+            case "PEC_dedouanement_pieces":
+            case "PEC_Cargo":
+if(!empty($rubriques_assure))
+{
+
+foreach($rubriques_assure as $rubrique)
+{
+$ltag= Rubrique::where("id",$rubrique->rubrique)->first();
+
+if ( $ltag['devise'] === "TND") 
+                                    {$Montanttag = $rubrique->mrestant;}
+                                    if ( $ltag['devise'] === "EUR")
+                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['euro_achat']);}
+                                    if ( $ltag['devise'] === "USD")
+                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['dollar_achat']);}
+
+$arr_gopmed[]=$rubrique->rubrique."_".$Montanttag."_".$ltag['nom']."_".$ltag['created_at'];
+
+
+$sgoptn =implode(',', $arr_gopmed);
+                        $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";} 
+
+
+
+
+}
+
+
+
+
+
+                        
+                    
+            
+
+
+          
+ else
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP Spécifié!";}
+                }}
+
+
+                      
+               
 
 
             // verifier si la template a un champ date/heure
@@ -1682,10 +1980,18 @@ $valchamp = str_replace('<br />', "\n", $valchamp);
         }
 
         // maj montant ex tag
+$dossiertpa=Dossier::where('id',$dossier)->first();
+if($dossiertpa['type_affectation']!=="Najda TPA")
+{
         $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
         $mntgop = intval($tagprecinfo['mrestant']) + intval($infoparent['montantgop']);
-        Tag::where('id', $infoparent['idtaggop'])->update(['mrestant' => $mntgop]);
-                                    
+        Tag::where('id', $infoparent['idtaggop'])->update(['mrestant' => $mntgop]);}
+
+   else
+{
+        $tagprecinfo = DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->first();
+        $mntgop = intval($tagprecinfo->mrestant) + intval($infoparent['montantgop']);
+        DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $mntgop]);}                                 
         //marque le document precedent comme non dernier
          Document::where('id', $parentdoc)->update(['dernier' => 0]);
         

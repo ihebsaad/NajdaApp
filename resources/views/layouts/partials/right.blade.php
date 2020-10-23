@@ -790,7 +790,7 @@ array_multisort($columns, SORT_DESC, $tags);
  <?php if ((isset($tag['montant'])) && (! empty($tag['montant']))) { 
                                                     if ($tag['montant'] !== null){
                                                 ?>
-                                <td style="">{{$tag['montant']}}</td>
+                                <td style="">{{$tag['montant']}}{{$tag['devise']}}</td>
  <?php }}else { ?>
                             
  <td style=""></td>
@@ -1148,7 +1148,7 @@ var type = $('ul#mailpiece').find('li.active').data('type');
                 if (val[1]['montant']==null)   
 {montant="";} 
 else   
-{montant=val[1]['montant'];}  
+{montant=val[1]['montant']+val[1]['devise'];}  
                     $("#tabletags tbody").append("<tr><td>"+val[1]['titre']+"</td><td>"+val[1]['contenu']+"</td><td>"+montant+"</td></tr>");
                     
                     });
