@@ -189,7 +189,7 @@ foreach ($listeusers as $user)
              <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS envoyés </span></td><td><b><?php echo $SmsSentUser;?></b></td></tr>
         <!--    <tr><td  style="width:300px"><span><i class="fa fa-comment-dots"></i>  Compte rendus  </span></td><td><b><?php // echo $RendusUser;?></b></td></tr>-->
             <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions créées  </span></td><td><b><?php echo $missionsUsCreees;?></b></td></tr>
-            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions couramment affectées  </span></td><td><b><?php echo $missionsUsCourAff;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions maintenant affectées  </span></td><td><b><?php echo $missionsUsCourAff;?></b></td></tr>
             <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Nombre de missions à lesquelles l'utilisateur a participé  </span></td><td><b><?php echo $missionsUsPart;?></b></td></tr>
             <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo  $missionsUsTerminees;?></b></td></tr>
         </table> 
@@ -298,7 +298,7 @@ echo "['".$nom."',    ". $totalm."] ";
         ]);
 
         var options2 = {
-          title: 'Missions couramment affectées',
+          title: 'Missions maintenant affectées',
       is3D: true,
         colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
      //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
