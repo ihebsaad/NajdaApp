@@ -72,7 +72,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                         <div class="form-group">
                             <label class="control-label">Date de prestation <span class="required" aria-required="true">   </span></label>
-                            <input value="{{$prestation->date_prestation}}" class="form-control datepicker-default" name="date_prestation" id="date_prestation" data-required="1" required="" aria-required="true">
+                            <input onchange="changing(this)" value="{{$prestation->date_prestation}}" class="form-control datepicker-default" name="date_prestation" id="date_prestation" data-required="1" required="" aria-required="true">
                         </div>
                  <div class="form-group">
                      <label class="control-label">Type de Prestation <span class="required" aria-required="true">   </span></label>
