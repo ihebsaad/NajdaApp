@@ -157,16 +157,21 @@ foreach ($listeusers as $user)
 	  }
 	// echo '<h5>'.$nom.'</h5><br>' ;
    // nombre des emails envoyés par un agent
-    $EmailsSentUser=   DossiersController::countEmailsSentUserDate ($id,$user,$debut,$fin);	 
+    $EmailsSentUser=   DossiersController::countEmailsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin);	 
    // nombre des fax envoyés par un agent
-    $FaxsSentUser=   DossiersController::countFaxsSentUserDate ($id,$user,$debut,$fin);			
+    $FaxsSentUser=   DossiersController::countFaxsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin);			
    // nombre des sms envoyés par un agent
-    $SmsSentUser=   DossiersController::countSmsSentUserDate ($id,$user,$debut,$fin);	
+    $SmsSentUser=   DossiersController::countSmsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin);	
 	 // nombre des compte rendus par un agent
    // $RendusUser=   DossiersController::countRendusUserDate ($id,$user,$debut,$fin);	
 	  // mission agent
-	 $missionsUser=DossiersController::countMissionsUserDate($id,$user,$debut,$fin);	
-	 $missionsUserT=DossiersController::countMissionsUserTDate($id,$user,$debut,$fin);	
+	 $missionsUser=DossiersController::countMissionsUserDate($id,$user,$debut,$fin,$hdebut,$hfin);	
+	 $missionsUserT=DossiersController::countMissionsUserTDate($id,$user,$debut,$fin,$hdebut,$hfin);	
+
+   $missionsUsCreees=DossiersController::countMissionsUsCreeesDate($id,$user,$debut,$fin,$hdebut,$hfin);
+   $missionsUsTerminees=DossiersController::countMissionsUsTermineesDate($id,$user,$debut,$fin,$hdebut,$hfin);
+   $missionsUsCourAff=DossiersController::countMissionsUsCourAffDate($id,$user,$debut,$fin,$hdebut,$hfin);
+   $missionsUsPart=DossiersController::countMissionsUsPartDate($id,$user,$debut,$fin,$hdebut,$hfin);
 
  
 ?>
@@ -177,8 +182,12 @@ foreach ($listeusers as $user)
              <tr><td  style="width:300px"><span><i class="fa fa-fax"></i>  Fax envoyés </span></td><td><b><?php echo $FaxsSentUser;?></b></td></tr>
              <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS envoyés </span></td><td><b><?php echo $SmsSentUser;?></b></td></tr>
         <!--    <tr><td  style="width:300px"><span><i class="fa fa-comment-dots"></i>  Compte rendus  </span></td><td><b><?php // echo $RendusUser;?></b></td></tr>-->
-            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions en cours  </span></td><td><b><?php echo $missionsUser;?></b></td></tr>
-            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo $missionsUserT;?></b></td></tr>
+           <!--  <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions en cours  </span></td><td><b><?php //echo $missionsUser;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php //echo $missionsUserT;?></b></td></tr> -->
+             <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions créées  </span></td><td><b><?php echo $missionsUsCreees;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions couramment affectées  </span></td><td><b><?php echo $missionsUsCourAff;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Nombre de missions à lesquelles l'utilisateur a participé  </span></td><td><b><?php echo $missionsUsPart;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo  $missionsUsTerminees;?></b></td></tr>
         </table> 
   </div> 
 		
@@ -292,6 +301,11 @@ foreach ($listeusers as $user)
 	 $missionsUser=DossiersController::countMissionsUser($id,$user);
 	 $missionsUserT=DossiersController::countMissionsUserT($id,$user);
 
+   $missionsUsCreees=DossiersController::countMissionsUsCreees($id,$user);
+   $missionsUsTerminees=DossiersController::countMissionsUsTerminees($id,$user);
+   $missionsUsCourAff=DossiersController::countMissionsUsCourAff($id,$user);
+   $missionsUsPart=DossiersController::countMissionsUsPart($id,$user);
+
  
 ?>
 
@@ -301,8 +315,12 @@ foreach ($listeusers as $user)
              <tr><td  style="width:300px"><span><i class="fa fa-fax"></i>  Fax envoyés </span></td><td><b><?php echo $FaxsSentUser;?></b></td></tr>
              <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS envoyés </span></td><td><b><?php echo $SmsSentUser;?></b></td></tr>
         <!--    <tr><td  style="width:300px"><span><i class="fa fa-comment-dots"></i>  Compte rendus  </span></td><td><b><?php // echo $RendusUser;?></b></td></tr>-->
-            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions en cours  </span></td><td><b><?php echo $missionsUser;?></b></td></tr>
-            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo $missionsUserT;?></b></td></tr>
+            <!-- <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions en cours  </span></td><td><b><?php //echo $missionsUser;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php //echo $missionsUserT;?></b></td></tr> -->
+             <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions créées  </span></td><td><b><?php echo $missionsUsCreees;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions couramment affectées  </span></td><td><b><?php echo $missionsUsCourAff;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Nombre de missions à lesquelles l'utilisateur a participé  </span></td><td><b><?php echo $missionsUsPart;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo  $missionsUsTerminees;?></b></td></tr>
         </table> 
   </div> 
 		
@@ -335,52 +353,263 @@ foreach ($listeusers as $user)
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
+  function drawChart() {
 
         var data = google.visualization.arrayToDataTable([
           ['Agent', 'Missions'],
-		  
-		  
+      
+      
+<?php
+$c=0;
+//$listeusers=DossiersController::users_work_on_folder($id);
+
+$tot=count($listeusers);
+foreach ($listeusers as $user)
+{  $c++;
+    $nom="";
+    $theuser= \App\User::where('id',$user)->first();
+
+    if(isset($theuser)){
+     $nom=$theuser->name.' '.$theuser->lastname ;
+
+    }
+    
+   // $missionsUser=DossiersController::countMissionsUser($id,$user);
+   //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   //$totalm=DossiersController::countMissionsUsCreees($id,$user);
+    // $totalm=$missionsUsCreees;
+
+    if (isset($debut) && isset($fin)) {
+    $debut=$_GET['debut'];
+    $fin=$_GET['fin'];
+
+    $totalm=DossiersController::countMissionsUsCreeesDate($id,$user,$debut,$fin,$hdebut,$hfin);
+
+  }
+  else
+  {
+
+     $totalm=DossiersController::countMissionsUsCreees($id,$user);
+
+
+  }
+
+
+
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";   
+ }
+ 
+}
+?>      
+ 
+        ]);
+
+        var options = {
+          title: 'Missions créées',
+      is3D: true,
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+     //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+
+      /* slices: {
+            0: { color: "#a0d468" },
+            1: { color: "#4fc1e9" },
+            2: { color: "#fd9883" },
+            3: { color: "#dcdcdc" }
+       } */
+      
+        };
+
+         var data2 = google.visualization.arrayToDataTable([
+          ['Agent', 'Missions'],
+      
+      
 <?php
 $c=0;
 $tot=count($listeusers);
 foreach ($listeusers as $user)
 {  $c++;
-	  $nom="";
-	  if(isset($theuser)){
-		 $nom=$theuser->name.' '.$theuser->lastname ;
+    $nom="";
+    $theuser= \App\User::where('id',$user)->first();
 
-	  }
-	  
- 	  $missionsUser=DossiersController::countMissionsUser($id,$user);
-	 $missionsUserT=DossiersController::countMissionsUserT($id,$user);
- if($c!=$tot) {echo "['".$nom."',    ".$missionsUserT."],";}else{
-echo "['".$nom."',    ".$missionsUserT."] ";	 
+    if(isset($theuser)){
+     $nom=$theuser->name.' '.$theuser->lastname ;
+
+    }
+    
+   // $missionsUser=DossiersController::countMissionsUser($id,$user);
+   //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   //$totalm=DossiersController::countMissionsUsCourAff($id,$user);
+    //$totalm=$missionsUsCourAff;
+
+     if (isset($debut) && isset($fin)) {
+    $debut=$_GET['debut'];
+    $fin=$_GET['fin'];
+
+    $totalm=DossiersController::countMissionsUsCourAffDate($id,$user,$debut,$fin,$hdebut,$hfin);
+
+  }
+  else
+  {
+
+     $totalm=DossiersController::countMissionsUsCourAff($id,$user);
+
+
+  }
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";   
  }
  
 }
-?>		  
+?>      
  
         ]);
 
-        var options = {
-          title: 'Missions par Agents',
-		  is3D: true,
-		    colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
-		 //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+        var options2 = {
+          title: 'Missions couramment affectées',
+      is3D: true,
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+     //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
 
-		  /* slices: {
+      /* slices: {
             0: { color: "#a0d468" },
             1: { color: "#4fc1e9" },
             2: { color: "#fd9883" },
             3: { color: "#dcdcdc" }
-		   } */
-		  
+       } */
+      
+        };
+
+
+         var data3 = google.visualization.arrayToDataTable([
+          ['Agent', 'Missions'],
+      
+      
+<?php
+$c=0;
+$tot=count($listeusers);
+foreach ($listeusers as $user)
+{  $c++;
+    $nom="";
+    $theuser= \App\User::where('id',$user)->first();
+
+    if(isset($theuser)){
+     $nom=$theuser->name.' '.$theuser->lastname ;
+
+    }
+    
+   // $missionsUser=DossiersController::countMissionsUser($id,$user);
+   //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   //$totalm=$missionsUsPart;
+
+      if (isset($debut) && isset($fin)) {
+    $debut=$_GET['debut'];
+    $fin=$_GET['fin'];
+
+    $totalm=DossiersController::countMissionsUsPartDate($id,$user,$debut,$fin,$hdebut,$hfin);
+
+  }
+  else
+  {
+
+     $totalm=DossiersController::countMissionsUsPart($id,$user);
+
+
+  }
+
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";   
+ }
+ 
+}
+?>      
+ 
+        ]);
+
+        var options3 = {
+          title: 'Participation aux missions',
+      is3D: true,
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+     //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+
+      /* slices: {
+            0: { color: "#a0d468" },
+            1: { color: "#4fc1e9" },
+            2: { color: "#fd9883" },
+            3: { color: "#dcdcdc" }
+       } */
+      
+        };
+
+         var data4 = google.visualization.arrayToDataTable([
+          ['Agent', 'Missions'],
+      
+      
+<?php
+$c=0;
+$tot=count($listeusers);
+foreach ($listeusers as $user)
+{  $c++;
+    $nom="";
+    $theuser= \App\User::where('id',$user)->first();
+
+    if(isset($theuser)){
+     $nom=$theuser->name.' '.$theuser->lastname ;
+
+    }
+    
+    //$missionsUser=DossiersController::countMissionsUser($id,$user);
+   //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   //$totalm=$missionsUser+$missionsUserT;
+     if (isset($debut) && isset($fin)) {
+    $debut=$_GET['debut'];
+    $fin=$_GET['fin'];
+
+    $totalm=DossiersController::countMissionsUsTermineesDate($id,$user,$debut,$fin,$hdebut,$hfin);
+
+  }
+  else
+  {
+
+     $totalm=DossiersController::countMissionsUsTerminees($id,$user);
+
+
+  }
+ if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
+echo "['".$nom."',    ". $totalm."] ";   
+ }
+ 
+}
+?>      
+ 
+        ]);
+
+        var options4 = {
+          title: 'Missions achevées',
+      is3D: true,
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+     //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+
+      /* slices: {
+            0: { color: "#a0d468" },
+            1: { color: "#4fc1e9" },
+            2: { color: "#fd9883" },
+            3: { color: "#dcdcdc" }
+       } */
+      
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
         chart.draw(data, options);
+
+        var chart2 = new google.visualization.PieChart(document.getElementById('piechart2'));
+        chart2.draw(data2, options2);
+
+        var chart3 = new google.visualization.PieChart(document.getElementById('piechart3'));
+        chart3.draw(data3, options3);
+
+        var chart4 = new google.visualization.PieChart(document.getElementById('piechart4'));
+        chart4.draw(data4, options4);
       }
 	  
 	  	
@@ -416,8 +645,23 @@ echo "['".$nom."',    ".$missionsUserT."] ";
 });
     </script>
   </head>
-  <body>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
+ <body>
+    <div class="row">
+      <div class="col-lg-6">
+      <div id="piechart" style="width: 900px; height: 500px;"></div>
+      </div>
+      <div class="col-lg-6">
+      <div id="piechart2" style="width: 900px; height: 500px;"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+      <div id="piechart3" style="width: 900px; height: 500px;"></div>
+      </div>
+      <div class="col-lg-6">
+      <div id="piechart4" style="width: 900px; height: 500px;"></div>
+      </div>
+    </div>
   </body>
 </html>
 

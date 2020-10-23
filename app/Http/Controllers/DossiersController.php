@@ -4723,7 +4723,7 @@ array_multisort($columns, SORT_DESC, $listetags);
          $mish= \App\MissionHis::where('dossier_id',$id)->get(['id_origin_miss','dossier_id']);
          foreach ($mish as $mh) {
             
-            $res=\App\ActionEC::where('mission_id',$mh->id_origin_miss)->where('user_id',$user)->where(function($q){                             
+            $res=\App\Action::where('mission_id',$mh->id_origin_miss)->where('user_id',$user)->where(function($q){                             
                                $q->where('statut',"faite")
                                ->orWhere('statut',"repotee")
                                ->orWhere('statut',"rappelee") 
@@ -4739,7 +4739,7 @@ array_multisort($columns, SORT_DESC, $listetags);
          $miss= \App\Mission::where('dossier_id',$id)->get(['id','dossier_id']);
          foreach ($miss as $ms) {
             
-            $res=\App\Action::where('mission_id',$ms->id)->where('user_id',$user)->where(function($q){                             
+            $res=\App\ActionEC::where('mission_id',$ms->id)->where('user_id',$user)->where(function($q){                             
                                $q->where('statut',"faite")
                                ->orWhere('statut',"repotee")
                                ->orWhere('statut',"rappelee") 
@@ -4774,8 +4774,7 @@ array_multisort($columns, SORT_DESC, $listetags);
 		}
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-    $usersFolder = array();
+	$usersFolder = array();
     
     $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)
 			   ->where('created_at', '>=', $debut)
@@ -5070,8 +5069,8 @@ array_multisort($columns, SORT_DESC, $listetags);
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\Mission::where('dossier_id',$id)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
+		   ->where('date_deb', '>=', $debut)
+		   ->where('date_fin', '<=', $fin)
 		->count();
           return $count;
       } 
@@ -5090,8 +5089,8 @@ array_multisort($columns, SORT_DESC, $listetags);
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\MissionHis::where('dossier_id',$id)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
+		   ->where('date_deb', '>=', $debut)
+		   ->where('date_fin', '<=', $fin)
 		->count();
           return $count;
       } 
@@ -5111,8 +5110,8 @@ array_multisort($columns, SORT_DESC, $listetags);
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\Mission::where('dossier_id',$id)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)		
+		   ->where('date_deb', '>=', $debut)
+		   ->where('date_fin', '<=', $fin)		
 		->where('user_id',$user)->count();
           return $count;
       } 
@@ -5133,11 +5132,109 @@ array_multisort($columns, SORT_DESC, $listetags);
 	   $debut = ($debut )->format('Y-m-d\TH:i');
 	   $fin = ($fin )->format('Y-m-d\TH:i');
 	    $count= \App\MissionHis::where('dossier_id',$id)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
+		   ->where('date_deb', '>=', $debut)
+		   ->where('date_fin', '<=', $fin)
 		   ->where('user_id',$user)->count();
           return $count;
       } 
+
+       public static function countMissionsUsCreeesDate($id,$user,$debut,$fin,$hdebut,$hfin)
+      {
+        if($hdebut=="" || $hfin=="" ){
+       
+           $debut= new \DateTime($debut);
+           $fin= new \DateTime($fin);
+           }else{
+            $debut= new \DateTime($debut.' '.$hdebut);
+           $fin= new \DateTime($fin.' '.$hfin);
+          }
+       $debut = ($debut )->format('Y-m-d\TH:i');
+       $fin = ($fin )->format('Y-m-d\TH:i');
+         $count1= \App\MissionHis::where('dossier_id',$id)->where('origin_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
+         $count2= \App\Mission::where('dossier_id',$id)->where('origin_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
+         $count=$count1+$count2;
+         return $count;
+
+      }
+
+       public static function countMissionsUsTermineesDate($id,$user,$debut,$fin,$hdebut,$hfin)
+      {
+        if($hdebut=="" || $hfin=="" ){
+       
+           $debut= new \DateTime($debut);
+           $fin= new \DateTime($fin);
+           }else{
+            $debut= new \DateTime($debut.' '.$hdebut);
+           $fin= new \DateTime($fin.' '.$hfin);
+          }
+         $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_fin','<=', $fin)->count();
+         return $count;
+      }
+
+     public static function countMissionsUsCourAffDate($id,$user,$debut,$fin,$hdebut,$hfin)
+      {
+        if($hdebut=="" || $hfin=="" ){
+       
+           $debut= new \DateTime($debut);
+           $fin= new \DateTime($fin);
+           }else{
+            $debut= new \DateTime($debut.' '.$hdebut);
+           $fin= new \DateTime($fin.' '.$hfin);
+          }
+         $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
+        
+         return $count;
+
+      }
+
+       public static function countMissionsUsPartDate($id,$user,$debut,$fin,$hdebut,$hfin)
+      {
+          if($hdebut=="" || $hfin=="" ){
+       
+           $debut= new \DateTime($debut);
+           $fin= new \DateTime($fin);
+           }else{
+            $debut= new \DateTime($debut.' '.$hdebut);
+           $fin= new \DateTime($fin.' '.$hfin);
+          }
+         $count1=0;
+         $count2=0;
+         $mish= \App\MissionHis::where('dossier_id',$id)->get(['id_origin_miss','dossier_id']);
+         foreach ($mish as $mh) {
+            
+            $res=\App\Action::where('mission_id',$mh->id_origin_miss)->where('user_id',$user)->where(function($q){                             
+                               $q->where('statut',"faite")
+                               ->orWhere('statut',"repotee")
+                               ->orWhere('statut',"rappelee") 
+                               ->orWhere('statut',"rfaite") 
+                               ->orWhere('statut',"ignoree");                            
+                                })->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->first();
+            if($res)
+            {
+              $count1++;  
+            }
+         }
+
+         $miss= \App\Mission::where('dossier_id',$id)->get(['id','dossier_id']);
+         foreach ($miss as $ms) {
+            
+            $res=\App\ActionEC::where('mission_id',$ms->id)->where('user_id',$user)->where(function($q){                             
+                               $q->where('statut',"faite")
+                               ->orWhere('statut',"repotee")
+                               ->orWhere('statut',"rappelee") 
+                               ->orWhere('statut',"rfaite") 
+                               ->orWhere('statut',"ignoree");                            
+                                })->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->first();
+            if($res)
+            {
+              $count2++;  
+            }
+         }
+         $count=$count1+$count2;
+         return $count;
+
+      }
+      
 
 
 /************/
