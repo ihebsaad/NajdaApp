@@ -20,15 +20,17 @@
             <th>ID</th>
             <th>Nom</th>
             <th>Qualification</th>
-            <th>Statut</th>
-            <th>Actions</th>
+            <th class="no-sort">Statistiques</th>
+            <th >Statut</th>
+           <!-- <th class="no-sort">Actions</th>-->
         </tr>
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
                 <th>Qualification</th>
+                <th class="no-sort">Statistiques</th>
                 <th>Statut</th>
-                <th> </th>
+              <!--  <th> </th>-->
               </tr>
             </thead>
             <tbody>
@@ -37,20 +39,20 @@
                     <td>{{$user->id}}</td>
                      <td><a href="{{action('UsersController@view', $user['id'])}}" >{{$user->name .' '.$user->lastname }}</a></td>
                     <td><?php echo $qual;?></td>
+				 <td><a href="{{action('UsersController@stats', $user['id'])}}" >Statistiques</a></td>
                     <td><?php if ($user->isOnline() && $user->statut!= -1 ){  if(  $user->statut == 1) {echo '<span class="label label-success">Connecté</span> ';} else{ if ($user->statut==2){echo '<span class="label label-warning">En Pause</span> ';  }  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
-                  <td>  @can('isAdmin')
-                    <!--    <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+               <!--    <td>  @can('isAdmin')
+                       <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                             <span class="fa fa-fw fa-trash-alt"></span> Supprimer
-                        </a> -->
-                      @endcan</td>
+                        </a> 
+                      @endcan</td>-->
                 </tr>
             @endforeach
             </tbody>
         </table>
  @endsection
 
-
-
+ 
 
 @section('footer_scripts')
 

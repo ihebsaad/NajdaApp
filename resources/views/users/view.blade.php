@@ -105,6 +105,8 @@
             <tr><td><span>Actions Actives </span></td><td><b><?php echo $actives;?></b></td></tr>
         </table>
 
+		<a href="{{action('UsersController@stats', $user['id'])}}" ><span class="btn btn-success" style='color:white;margin-left:80px ;margin-top:60px ;width:250px;font-weight: 600;font-size:20px;'>Statistiques détaillés </span></a>
+		
       <!--  <div class="form-group">
             <div class="col-md-6 col-md-offset-4 ">
                 <button type="submit" class="btn btn-primary">
