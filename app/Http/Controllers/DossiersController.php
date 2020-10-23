@@ -5181,7 +5181,22 @@ array_multisort($columns, SORT_DESC, $listetags);
             $debut= new \DateTime($debut.' '.$hdebut);
            $fin= new \DateTime($fin.' '.$hfin);
           }
-         $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
+          if($fin){
+
+            $count=0;
+            $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+            if($dtc<=$fin)
+            {
+
+            $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_deb', '<=', $fin)->count(); 
+            }
+
+          }
+          else
+          {
+            $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->count(); 
+          }
+        
         
          return $count;
 
