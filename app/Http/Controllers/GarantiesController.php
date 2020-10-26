@@ -98,7 +98,7 @@ class GarantiesController extends Controller
 	foreach($rubriques as $rb){
 	
 	DB::table('rubriques_assure')->insert(
-    ['id_assure' => $assure , 'rubrique' => $rb->id,'montant' =>$rb->montant,'mrestant' =>$rb->montant, 'annee' => $annee,]);	
+    ['id_assure' => $assure , 'rubrique' => $rb->id,'montant' =>$rb->montant,'mrestant' =>$rb->montant, 'annee' => $annee,'updated_at'=>NOW()]);	
 		
 	}
 	

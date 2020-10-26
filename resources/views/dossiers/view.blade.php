@@ -3483,7 +3483,7 @@ if(data['commentaire']!==null)
 else{
 comment="";
 }
-                        $("#tagudoc").html("<i class='fas fa-tag'></i> "+data['nom']+" : "+comment+" | "+data['created_at']);
+                        $("#tagudoc").html("<i class='fas fa-tag'></i> "+data['nom']+" : "+data['created_at']);
                     }
                 }
             })
