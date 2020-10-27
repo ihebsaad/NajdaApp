@@ -5175,8 +5175,8 @@ array_multisort($columns, SORT_DESC, $listetags);
       {
         if($hdebut=="" || $hfin=="" ){
        
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
+           $debut= new \DateTime($debut.' 00:00:00');
+           $fin= new \DateTime($fin.' 00:00:00');
            }else{
             $debut= new \DateTime($debut.' '.$hdebut);
            $fin= new \DateTime($fin.' '.$hfin);
@@ -5187,7 +5187,7 @@ array_multisort($columns, SORT_DESC, $listetags);
             $dtc = (new \DateTime())->format('Y-m-d H:i:s');
             $format = "Y-m-d H:i:s";
             $dateSys = \DateTime::createFromFormat($format, $dtc);
-            $datefin  = \DateTime::createFromFormat($format, $fin);
+            $datefin  = \DateTime::createFromFormat($format, $fin->format('Y-m-d H:i:s'));
             if($dateSys<=$datefin)
             {
 
