@@ -5185,7 +5185,10 @@ array_multisort($columns, SORT_DESC, $listetags);
 
             $count=0;
             $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-            if($dtc<=$fin)
+            $format = "Y-m-d H:i:s";
+            $dateSys = \DateTime::createFromFormat($format, $dtc);
+            $datefin  = \DateTime::createFromFormat($format, $fin);
+            if($dateSys<=$datefin)
             {
 
             $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_deb', '<=', $fin)->count(); 
