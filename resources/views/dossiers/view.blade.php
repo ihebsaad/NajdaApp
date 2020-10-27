@@ -3725,7 +3725,20 @@ aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\
                     {
                         $("#taghistoname").text(val[1]['titre']+" | "+titretag);
                     }
-                    $("#tabletagshisto tbody").append("<tr><td>"+val[1]['titre']+"</td><td>"+val[1]['contenu']+"</td><td>"+val[1]['created_at']+"</td><td>"+val[1]['montant']+" "+val[1]['devise']+"</td><td>"+val[1]['mrestant']+" "+val[1]['devise']+"</td></tr>");
+if(val[1]['mrestant']!==null)
+{mrestant=val[1]['mrestant'];}
+else
+{mrestant="";}
+if(val[1]['montant']!==null)
+{montant=val[1]['montant'];}
+else
+{montant="";}
+if(val[1]['devise']!==null)
+{devise=val[1]['devise'];}
+else
+{devise="";}
+
+                    $("#tabletagshisto tbody").append("<tr><td>"+val[1]['titre']+"</td><td>"+val[1]['contenu']+"</td><td>"+val[1]['created_at']+"</td><td>"+montant+" "+devise+"</td><td>"+mrestant+" "+devise+"</td></tr>");
                     });
                     $("#modalhistotag").modal('show');
                 },
