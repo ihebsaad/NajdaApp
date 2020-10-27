@@ -8817,11 +8817,11 @@ $dossiercourant=Dossier::where('id',$dossier)->first();
 $refclient="ES".$dossiercourant['reference_medic'];
 if($xp==='1')
 {
-  $dossiers=Dossier::where('reference_customer',$refclient)->where('type_affectation','X-Press')->select('reference_medic','id')->get();
+  $dossiers=Dossier::where('reference_customer',$refclient)->orderBy('created_at', 'desc')->where('type_affectation','X-Press')->select('reference_medic','id')->get();
 }
 else
 {
-$dossiers=Dossier::where('reference_customer',$refclient)->select('reference_medic','id')->get();
+$dossiers=Dossier::where('reference_customer',$refclient)->orderBy('created_at', 'desc')->select('reference_medic','id')->get();
 }
  
  
