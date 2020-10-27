@@ -330,9 +330,11 @@ foreach ($listeusers as $user)
 
     }
     
-    $missionsUser=DossiersController::countMissionsUser($id,$user);
-   $missionsUserT=DossiersController::countMissionsUserT($id,$user);
-   $totalm=$missionsUser+$missionsUserT;
+   // $missionsUser=DossiersController::countMissionsUser($id,$user);
+   //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   //$totalm=$missionsUser+$missionsUserT;
+    $totalm=DossiersController::countMissionsUsPart($id,$user);
+
  if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
 echo "['".$nom."',    ". $totalm."] ";   
  }
@@ -374,9 +376,11 @@ foreach ($listeusers as $user)
 
     }
     
-    $missionsUser=DossiersController::countMissionsUser($id,$user);
-   $missionsUserT=DossiersController::countMissionsUserT($id,$user);
-   $totalm=$missionsUser+$missionsUserT;
+   // $missionsUser=DossiersController::countMissionsUser($id,$user);
+   //$missionsUserT=DossiersController::countMissionsUserT($id,$user);
+   // $totalm=$missionsUser+$missionsUserT;
+    $totalm=DossiersController::countMissionsUsTerminees($id,$user);
+   
  if($c!=$tot) {echo "['".$nom."',    ". $totalm."],";}else{
 echo "['".$nom."',    ". $totalm."] ";   
  }

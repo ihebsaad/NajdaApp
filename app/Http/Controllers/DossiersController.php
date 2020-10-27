@@ -5176,7 +5176,7 @@ array_multisort($columns, SORT_DESC, $listetags);
         if($hdebut=="" || $hfin=="" ){
        
            $debut= new \DateTime($debut.' 00:00:00');
-           $fin= new \DateTime($fin.' 00:00:00');
+           $fin= new \DateTime($fin.' 23:59:59');
            }else{
             $debut= new \DateTime($debut.' '.$hdebut);
            $fin= new \DateTime($fin.' '.$hfin);
