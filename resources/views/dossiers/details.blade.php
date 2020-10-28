@@ -256,7 +256,7 @@ echo "['".$nom."',    ". $totalm."] ";
         var options = {
           title: 'Missions créées',
 		  is3D: true,
-		    colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+		    colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f', '#f6c7b6']
 		 //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
 
 		  /* slices: {
@@ -300,7 +300,7 @@ echo "['".$nom."',    ". $totalm."] ";
         var options2 = {
           title: 'Missions maintenant affectées',
       is3D: true,
-        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f', '#f6c7b6']
      //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
 
       /* slices: {
@@ -347,7 +347,7 @@ echo "['".$nom."',    ". $totalm."] ";
         var options3 = {
           title: 'Participation aux missions',
       is3D: true,
-        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f','#f6c7b6']
      //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
 
       /* slices: {
@@ -393,7 +393,7 @@ echo "['".$nom."',    ". $totalm."] ";
         var options4 = {
           title: 'Missions achevées',
       is3D: true,
-        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+        colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f', '#f6c7b6']
      //   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
 
       /* slices: {
