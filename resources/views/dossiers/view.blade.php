@@ -10,6 +10,8 @@ use App\Adresse;
 use App\Mission;
 use App\Facture;
 use App\Tag;
+use App\Rubrique;
+use App\Parametre;
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
      use  \App\Http\Controllers\PrestatairesController;
@@ -1138,7 +1140,23 @@ $modif='modif';
                                         <div class="btn-group" style="margin-right: 10px">
 <input type="hidden" value=""  id="modif" />
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
-                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo '0'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $doc->montantgop;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+<?php
+$paramapp=Parametre::select('euro_achat','dollar_achat')->first();
+if($dossier->type_affectation!=='Najda TPA')
+{
+$ltag=Tag::where("id",$doc->idtaggop)->first();
+}
+else
+{$ltag=Rubrique::where("id",$doc->idtaggop)->first();}
+
+ if ( $ltag['devise'] === "TND") 
+                                    {$Montanttag = $doc->montantgop;}
+                                    if ( $ltag['devise'] === "EUR")
+                                       { $Montanttag = intval($doc->montantgop) * floatval($paramapp['euro_achat']);}
+                                    if ( $ltag['devise'] === "USD")
+                                       { $Montanttag = intval($doc->montantgop) * floatval($paramapp['dollar_achat']);}
+?>
+                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo '0'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $Montanttag;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
                                             </button>
                                         </div>
 <?php
@@ -1146,7 +1164,7 @@ $modif='modif';
                                         ?>
  <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnmodif">
-                                                <a style="color:black" href="#" id="modif" onclick="remplacedoc(<?php echo '1'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $doc->montantgop;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Modifier</a>
+                                                <a style="color:black" href="#" id="modif" onclick="remplacedoc(<?php echo '1'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $Montanttag;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Modifier</a>
                                             </button>
                                         </div>
 

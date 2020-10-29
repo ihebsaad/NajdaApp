@@ -723,19 +723,28 @@ $coltags=array();
                foreach ($entreesdos as $entr) {
 
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+
                    
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
+ $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
 
                     $coltags = array_merge($coltagsmails->toArray(), $coltags);
                     $colattachs = Attachement::where("parent","=",$entr['id'])->get();
                         if (!empty($colattachs))
                         {
                             foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+ $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
                                $coltags = array_merge( $coltagsattach->toArray(),$coltags);
 
 
+
 }}}
+ if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
+$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
+}
  $columns = array_column($coltags, 'updated_at');
 array_multisort($columns, SORT_DESC, $coltags);
   
@@ -757,8 +766,11 @@ array_multisort($columns, SORT_DESC, $coltags);
                                     if ( $ltag['devise'] === "USD")
                                        { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);}
 
+
                                 $arr_gopmed[]=$ltag['id']."_".$Montanttag."_".$ltag['contenu']."_".$ltag['updated_at'];
+
                              }
+
                              if (strpos( $ltag['abbrev'],"Franchise") !== FALSE)
                              {
                                 /*if ($indossier['franchise'] == 1)
@@ -801,18 +813,25 @@ $coltags=array();
 
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
                    
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
+ $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
 
                     $coltags = array_merge($coltagsmails->toArray(), $coltags);
                     $colattachs = Attachement::where("parent","=",$entr['id'])->get();
                         if (!empty($colattachs))
                         {
                             foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+ $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
                                $coltags = array_merge( $coltagsattach->toArray(),$coltags);
 
 
 }}}
+ if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->get();
+$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
+}
  $columns = array_column($coltags, 'updated_at');
 array_multisort($columns, SORT_DESC, $coltags);
                         if (!empty($coltags))
@@ -865,18 +884,25 @@ $coltags=array();
 
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
                    
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
+ $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
 
                     $coltags = array_merge($coltagsmails->toArray(), $coltags);
                     $colattachs = Attachement::where("parent","=",$entr['id'])->get();
                         if (!empty($colattachs))
                         {
                             foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+ $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
                                $coltags = array_merge( $coltagsattach->toArray(),$coltags);
 
 
 }}}
+if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
+$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
+}
  $columns = array_column($coltags, 'updated_at');
 array_multisort($columns, SORT_DESC, $coltags);
                         if (!empty($coltags))
@@ -941,18 +967,25 @@ array_multisort($columns, SORT_DESC, $coltags);
 
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
                    
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->orderBy('updated_at', 'desc')->get();
+ $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
 
                     $coltags = array_merge($coltagsmails->toArray(), $coltags);
                     $colattachs = Attachement::where("parent","=",$entr['id'])->get();
                         if (!empty($colattachs))
                         {
                             foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+ $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
                                $coltags = array_merge( $coltagsattach->toArray(),$coltags);
 
 
 }}}
+if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
+$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
+}
  $columns = array_column($coltags, 'updated_at');
 array_multisort($columns, SORT_DESC, $coltags);
                     if (!empty($coltags))
@@ -1037,7 +1070,17 @@ array_multisort($columns, SORT_DESC, $coltags);
 else
 {
  $annee=date('Y');
- $rubriques_assure=DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+ $rubriques_assure=DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 1)->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent= DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->where('rubrique', $infoparent['idtaggop'])->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+$rubriques_assure = array_merge( $coltagcurrent,$rubriques_assure);
+$columns = array_column($rubriques_assure, 'updated_at');
+array_multisort($columns, SORT_DESC, $rubriques_assure);
+
+}
 switch ($arrfile['nom']) {
             case "PEC_analyses_medicales":
             case "PEC_frais_medicaux":
@@ -1064,12 +1107,17 @@ foreach($rubriques_assure as $rubrique)
 {
 $ltag= Rubrique::where("id",$rubrique->rubrique)->first();
 
+
+
 if ( $ltag['devise'] === "TND") 
                                     {$Montanttag = $rubrique->mrestant;}
                                     if ( $ltag['devise'] === "EUR")
                                        { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['euro_achat']);}
                                     if ( $ltag['devise'] === "USD")
-                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['dollar_achat']);}
+                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['dollar_achat']);
+
+//dd($Montanttag);
+}
 
 $arr_gopmed[]=$rubrique->rubrique."_".$Montanttag."_".$ltag['nom']."_".$rubrique->updated_at;
 
