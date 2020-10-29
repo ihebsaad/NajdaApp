@@ -140,6 +140,9 @@ class MissionController extends Controller
 
       foreach ($missions as $miss ) {
 
+         // vérifier la fin des dates spécifiques
+        $this->verifier_fin_dates_spécifiques($miss);
+
         if($this->test_fin_mission($miss->id)==true)
           {
 
@@ -4757,6 +4760,389 @@ return $output;
 
 
     }// fin  function actionsStatistiques
+
+
+
+
+    public function verifier_fin_dates_spécifiques($miss)
+    {
+
+
+        $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+        $format = "Y-m-d H:i:s";
+        $dateSys = \DateTime::createFromFormat($format, $dtc);
+         
+       if($miss->type_Mission==7)// ambulance
+            {
+
+              if($miss->h_dep_pour_miss && $miss->date_spec_affect==1 )
+              {
+
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_dep_pour_miss);
+
+                if($dateSpec< $dateSys )
+                {
+                   $miss->update(['date_spec_affect'=>0]); 
+                }
+
+             
+              } 
+
+              if($miss->h_arr_prev_dest && $miss->date_spec_affect2==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
+
+                if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect2'=>0]); 
+                 } 
+              }     
+
+            }// fin ambulance 
+
+            if($miss->type_Mission==6)// taxi 
+            {
+
+              if($miss->h_dep_pour_miss && $miss->date_spec_affect==1 )
+              {
+                
+
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_dep_pour_miss);
+
+                if($dateSpec< $dateSys )
+                {
+                   $miss->update(['date_spec_affect'=>0]); 
+                }
+
+              }  
+
+              if($miss->h_arr_prev_dest && $miss->date_spec_affect2==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
+
+                if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect2'=>0]); 
+                 } 
+              }         
+
+            }// fin taxi
+
+            if($miss->type_Mission==30)// rapatriement véhicule sur Cargo 
+            {
+
+              if($miss->h_arr_prev_dest && $miss->date_spec_affect==1)
+              {
+                  
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 } 
+
+              
+              }  
+
+
+              if($miss->h_decoll_ou_dep_bat && $miss->date_spec_affect2==1)
+              {
+
+                 $dateSpec = \DateTime::createFromFormat($format, $miss->h_decoll_ou_dep_bat);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect2'=>0]); 
+                 } 
+            
+               
+              }     
+
+            }// fin rapatriement véhicule sur Cargo 
+
+             if($miss->type_Mission==26) // Escorte interna. fournie par MI
+            {
+
+              if($miss->h_decoll_ou_dep_bat && $miss->date_spec_affect==1)
+              {            
+                 $dateSpec = \DateTime::createFromFormat($format, $miss->h_decoll_ou_dep_bat);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 } 
+              }  
+
+            }// fin  Escorte interna. fournie par MI
+
+            if($miss->type_Mission==27) // Rapatriement véhicule avec chauffeur accompagnateur
+            {
+
+              if($miss->h_rdv && $miss->date_spec_affect==1)
+              {
+            
+               $dateSpec = \DateTime::createFromFormat($format, $miss->h_rdv);
+
+                 if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 } 
+              }  
+
+            }// fin Rapatriement véhicule avec chauffeur accompagnateur
+
+            if($miss->type_Mission==12) // Dédouanement de pièces
+            {
+
+              if($miss->h_rdv && $miss->date_spec_affect==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_rdv);
+
+                 if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 }  
+              }  
+
+            }// fin Dédouanement de pièces
+
+            if($miss->type_Mission==11) // consultation médicale
+            {
+
+               if($miss->h_rdv && $miss->date_spec_affect==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_rdv);
+
+                 if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 }  
+              }  
+
+            }// fin consultation médicale
+
+            
+
+            if($miss->type_Mission==16) // Devis transport international sous assistance
+            {
+
+              if($miss->h_decoll_ou_dep_bat && $miss->date_spec_affect==1)
+              {            
+                 $dateSpec = \DateTime::createFromFormat($format, $miss->h_decoll_ou_dep_bat);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 } 
+              }  
+            }// fin Devis transport international sous assistance
+
+
+             if($miss->type_Mission==18) // Demande d’evasan internationale
+            {
+
+              if($miss->h_arr_prev_dest && $miss->date_spec_affect==1)
+              {
+                  
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 } 
+
+              
+              }  
+            }// fin Demande d’evasan internationale
+
+          if($miss->type_Mission==19) // Demande d’evasan nationale
+            {
+
+             if($miss->h_arr_prev_dest && $miss->date_spec_affect==1)
+              {
+                  
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 } 
+
+              
+              }  
+
+            }// fin Demande d’evasan nationale
+
+             if($miss->type_Mission==22) // escorte à l étranger
+            {
+
+              if($miss->h_arr_av_ou_bat && $miss->date_spec_affect==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_arr_av_ou_bat);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 }  
+              }  
+
+
+            }// fin  escorte à l étranger
+
+
+             if($miss->type_Mission==32)// reservation hotel
+            {
+           
+              if($miss->h_fin_sejour && ($miss->date_spec_affect==1 || $miss->date_spec_affect2==1))
+              {
+
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_fin_sejour);
+                 if($dateSpec < $dateSys )
+                 {
+                     $miss->update(['date_spec_affect'=>0]);  
+                     $miss->update(['date_spec_affect2'=>0]);  
+                 }  
+                               
+              }           
+
+
+            }// fin reservation hotel
+
+             if($miss->type_Mission==35)// organisation visite médicale
+            {
+
+              if($miss->h_rdv && $miss->date_spec_affect==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_rdv);
+
+                 if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 }  
+              }  
+
+
+             }// fin organisation visite médicale
+
+
+            if($miss->type_Mission==39)// Expertise
+            {
+
+             if($miss->h_rdv && $miss->date_spec_affect==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_rdv);
+
+                 if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 }  
+              }  
+
+
+             }// fin expertise
+
+
+            
+
+           if($miss->type_Mission==43)// rapatriement de véhicule sur ferry
+            {
+
+              if($miss->h_decoll_ou_dep_bat && $miss->date_spec_affect==1)
+              {            
+                 $dateSpec = \DateTime::createFromFormat($format, $miss->h_decoll_ou_dep_bat);
+
+                 if($dateSpec< $dateSys )
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 } 
+              }  
+
+
+             }// fin rapatriement de véhicule sur ferry
+
+             if($miss->type_Mission==45)// réparation véhicule 
+            {
+
+              
+              if($miss->h_rdv && $miss->date_spec_affect==1)
+              {
+            
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_rdv);
+
+                 if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 }  
+              }  
+
+
+
+
+             }// fin réparation véhicule 
+
+
+            if($miss->type_Mission==44)// remorquage
+            {
+
+              if($miss->h_dep_pour_miss && $miss->date_spec_affect==1)
+              {
+                $dateSpec = \DateTime::createFromFormat($format, $miss->h_dep_pour_miss);
+
+                if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect'=>0]); 
+                 }   
+              }  
+
+
+
+              if($miss->h_retour_base && $miss->date_spec_affect==1)
+              {
+                 $dateSpec = \DateTime::createFromFormat($format, $miss->h_retour_base);
+                
+                 if($dateSpec< $dateSys)
+                 {
+                   $miss->update(['date_spec_affect2'=>0]); 
+                 }  
+
+              }     
+
+            }// fin remorquage 
+
+
+             if($miss->type_Mission==46)// location voiture
+            {
+          
+              if($miss->h_fin_location_voit && ($miss->date_spec_affect==1 || $miss->date_spec_affect2==1||$miss->date_spec_affect3==1 ))
+               {
+
+                 $dateSpec = \DateTime::createFromFormat($format, $miss->h_fin_location_voit);
+                 if($dateSpec < $dateSys )
+                 {
+                     $miss->update(['date_spec_affect'=>0]);  
+                     $miss->update(['date_spec_affect2'=>0]);  
+                     $miss->update(['date_spec_affect3'=>0]);
+                 }  
+
+                 
+              }
+           
+
+            }// fin location voiture
+
+
+
+
+
+
+    }// fin fonction  
 
 
 

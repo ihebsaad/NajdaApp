@@ -5175,8 +5175,8 @@ array_multisort($columns, SORT_DESC, $listetags);
       {
         if($hdebut=="" || $hfin=="" ){
        
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
+           $debut= new \DateTime($debut.' 00:00:00');
+           $fin= new \DateTime($fin.' 23:59:59');
            }else{
             $debut= new \DateTime($debut.' '.$hdebut);
            $fin= new \DateTime($fin.' '.$hfin);
@@ -5185,7 +5185,10 @@ array_multisort($columns, SORT_DESC, $listetags);
 
             $count=0;
             $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-            if($dtc<=$fin)
+            $format = "Y-m-d H:i:s";
+            $dateSys = \DateTime::createFromFormat($format, $dtc);
+            $datefin  = \DateTime::createFromFormat($format, $fin->format('Y-m-d H:i:s'));
+            if($dateSys<=$datefin)
             {
 
             $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_deb', '<=', $fin)->count(); 
