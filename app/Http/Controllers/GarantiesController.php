@@ -17,7 +17,7 @@ class GarantiesController extends Controller
 	 
 	 public function index()
 	{
-	 $garanties = Garantie::get();
+	 $garanties = Garantie::orderBy('nom','asc')->get();
 	 return view('garanties.index',['garanties'=>$garanties]);
  	}
 	
@@ -60,14 +60,13 @@ class GarantiesController extends Controller
 	
 		    public function savingRB(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+        if( ($request->get('rubriqueinitial'))!=null) {
 
 		  $garantie =$request->get('garantie');
 
             $rubrique = new Rubrique([
               'garantie' => $garantie,
-              'nom' => $request->get('nom'),
-              'commentaire' => $request->get('commentaire'),
+              'rubriqueinitial' => $request->get('rubriqueinitial'),
              'montant' => $request->get('montant'),
               'devise' => $request->get('devise'),
              ]);
@@ -98,7 +97,7 @@ class GarantiesController extends Controller
 	foreach($rubriques as $rb){
 	
 	DB::table('rubriques_assure')->insert(
-    ['id_assure' => $assure , 'rubrique' => $rb->id,'montant' =>$rb->montant,'mrestant' =>$rb->montant, 'annee' => $annee,'updated_at'=>NOW()]);	
+    ['id_assure' => $assure ,'rubriqueinitial' => $rb->rubriqueinitial,'rubrique' => $rb->id,'montant' =>$rb->montant,'mrestant' =>$rb->montant, 'annee' => $annee,'updated_at'=>NOW()]);	
 		
 	}
 	
@@ -151,6 +150,10 @@ class GarantiesController extends Controller
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
         Rubrique::where('id', $id)->update(array($champ => $val));
+       /* DB::table('rubriques_assure')->where('rubrique', $id)->update(array($champ => $val));
+if($champ="montant")
+{DB::table('rubriques_assure')->where('rubrique', $id)->update(array(mrestant => $val));}*/
+
  
     }	
 public function inforubrique (Request $request)

@@ -390,8 +390,11 @@ Route::post('/garanties/addgr', 'GarantiesController@addgr')->name('garanties.ad
 Route::post('/garanties/removegr', 'GarantiesController@removegr')->name('garanties.removegr');
 Route::post('/garanties/inforubrique','GarantiesController@inforubrique')->name('garanties.inforubrique');
 
-
-
+ Route::get('/rubriques', array('as' => 'rubriques','uses' => 'RubriquesController@index'));
+Route::post('/rubriques/saving','RubriquesController@saving')->name('rubriques.saving');
+Route::get('/rubriques/view/{id}', 'RubriquesController@view');
+Route::post('/rubriques/updating','RubriquesController@updating')->name('rubriques.updating');
+Route::get('/rubriques/destroy/{id}', 'RubriquesController@destroy');
 
 /*** Prestataires **/
 //Route::resource('/prestataires',  'PrestatairesController');

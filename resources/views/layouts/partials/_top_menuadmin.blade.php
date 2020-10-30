@@ -184,6 +184,13 @@ $seance =  DB::table('seance')
                     Garanties
                 </a>
             </div>
+ <div class="col-sm-2">
+                <a href="{{ route('rubriques') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-lg fa-stamp"></span>
+                    <br>
+                    Rubriques
+                </a>
+            </div>
 
 
         </div>

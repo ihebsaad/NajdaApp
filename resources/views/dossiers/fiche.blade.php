@@ -709,10 +709,11 @@ use App\Http\Controllers\DossiersController;
 									<?php	
 									foreach($rubriques_assure as $rb)
 										 { 
-										 $rubrique = \App\Rubrique::where('id',$rb->rubrique)->first();
+										 $rubriqueinit = \App\RubriqueInitial::where('id',$rb->rubriqueinitial)->first();
+$rubrique = \App\Rubrique::where('id',$rb->rubrique)->first();
 										 $garantie = \App\Garantie::where('id',$rubrique->garantie)->first();
 										 
-								 	echo '<tr><td> '.$garantie->nom.'</td><td>'.$rubrique->nom.'</td><td> '.$rubrique->montant.' '.$rubrique->devise.'</td><td> '.$rb->montant.'</td></tr>';
+								 	echo '<tr><td> '.$garantie->nom.'</td><td>'.$rubriqueinit->nom.'</td><td> '.$rubrique->montant.' '.$rubrique->devise.'</td><td> '.$rubrique->montant.'</td></tr>';
 										 }
 										} // count
 										 ?>
@@ -1166,7 +1167,8 @@ use App\Http\Controllers\DossiersController;
                                                                         <?php
 
                                                                         foreach($hopitaux as $hp)
-                                                                        { if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::ChampById('name',$hp->prestataire_id))) == 0) { $selected='selected="selected"'; }else{ $selected=''; }
+                                                                        { 
+if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::ChampById('name',$hp->prestataire_id))) == 0) { $selected='selected="selected"'; }else{ $selected=''; }
                                                                           if( PrestatairesController::ChampById('name',$hp->prestataire_id)!=''){ echo '<option title="'.$hp->prestataire_id.'" '.$selected.' value="'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'">'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'</option>';}
                                                                       }
                                                                       ?>

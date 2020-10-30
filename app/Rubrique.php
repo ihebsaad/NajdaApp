@@ -5,6 +5,6 @@ use Illuminate\Database\Eloquent\Model;
 class Rubrique extends Model
 {
 	
-protected $fillable = ['garantie','nom','montant','devise','commentaire'];
+protected $fillable = ['garantie','rubriqueinitial','nom','montant','devise','commentaire'];
 	
 }
