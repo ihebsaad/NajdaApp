@@ -1166,7 +1166,7 @@ use App\Http\Controllers\DossiersController;
                                                                         <?php
 
                                                                         foreach($hopitaux as $hp)
-                                                                        { if ($dossier->hospital_address == PrestatairesController::ChampById('name',$hp->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                        { if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::ChampById('name',$hp->prestataire_id))) == 0) { $selected='selected="selected"'; }else{ $selected=''; }
                                                                           if( PrestatairesController::ChampById('name',$hp->prestataire_id)!=''){ echo '<option title="'.$hp->prestataire_id.'" '.$selected.' value="'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'">'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'</option>';}
                                                                       }
                                                                       ?>
