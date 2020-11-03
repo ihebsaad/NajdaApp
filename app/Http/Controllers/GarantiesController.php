@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 
 use App\Garantie ;
 use App\Rubrique;
+use App\RubriqueInitial;
 use DB;
 
 class GarantiesController extends Controller
@@ -72,6 +73,14 @@ class GarantiesController extends Controller
              ]);
             if ($rubrique->save())
             {  
+$annee=date('Y');
+$grantiesassures=DB::table('garanties_assure')->where('garantie',$garantie)->get();
+foreach($grantiesassures as $grantiesassure)
+{
+DB::table('rubriques_assure')->insert(
+    ['id_assure' => $grantiesassure->id_assure ,'rubriqueinitial' => $request->get('rubriqueinitial'),'rubrique' => $rubrique->id,'montant' =>$rubrique->montant,'mrestant' =>$rubrique->montant, 'annee' => $annee,'updated_at'=>NOW()]);	
+
+}
 
                 return url('/garanties/view/'.$garantie);
             }
@@ -150,16 +159,31 @@ class GarantiesController extends Controller
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
         Rubrique::where('id', $id)->update(array($champ => $val));
-       /* DB::table('rubriques_assure')->where('rubrique', $id)->update(array($champ => $val));
+      
 if($champ="montant")
-{DB::table('rubriques_assure')->where('rubrique', $id)->update(array(mrestant => $val));}*/
+{
+$annee=date('Y');
+ $rubriques=DB::table('rubriques_assure')->where('rubrique', $id)->get();
+foreach( $rubriques as $rubrique)
+{
+$montantg=$rubrique->montant;
+$montantr=$rubrique->mrestant;
+$mutilise = $montantg - $montantr;
+$montantval=$val-$mutilise;
+DB::table('rubriques_assure')->where('rubrique', $rubrique->rubrique)->where('id_assure', $rubrique->id_assure)->where('annee', $annee)->update(['mrestant'=>$montantval,'montant'=>$val]);
+}
+
+
+
+}
 
  
     }	
 public function inforubrique (Request $request)
     {
         $idrubrique = $request->get('rubrique');
-        $arrrubrique = Rubrique::select('id','nom','commentaire','created_at')->where('id', $idrubrique)->first();
+$rubrique=Rubrique::where('id',$idrubrique)->first();
+        $arrrubrique = RubriqueInitial::select('id','nom','commentaire','created_at')->where('id', $rubrique->rubriqueinitial)->first();
         header('Content-type: application/json');    
         return json_encode($arrrubrique);
     }

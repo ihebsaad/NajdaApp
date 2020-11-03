@@ -238,7 +238,7 @@ use App\RubriqueInitial ;
                 var rubriqueinitial = $('#rubriqueg').val();
                 var montant = $('#montant').val();
                 var devise = $('#devise').val();
-alert(rubriqueinitial );
+//alert(rubriqueinitial );
                  if ((nom != '')  )
                 {
                     var _token = $('input[name="_token"]').val();

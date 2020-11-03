@@ -713,7 +713,7 @@ use App\Http\Controllers\DossiersController;
 $rubrique = \App\Rubrique::where('id',$rb->rubrique)->first();
 										 $garantie = \App\Garantie::where('id',$rubrique->garantie)->first();
 										 
-								 	echo '<tr><td> '.$garantie->nom.'</td><td>'.$rubriqueinit->nom.'</td><td> '.$rubrique->montant.' '.$rubrique->devise.'</td><td> '.$rubrique->montant.'</td></tr>';
+								 	echo '<tr><td> '.$garantie->nom.'</td><td>'.$rubriqueinit->nom.'</td><td> '.$rubrique->montant.' '.$rubrique->devise.'</td><td> '.$rb->mrestant.'</td></tr>';
 										 }
 										} // count
 										 ?>

@@ -9,6 +9,7 @@ use App\Tag ;
 use App\Dossier ;
 use App\Client ;
 use App\User ;
+use App\RubriqueInitial ;
 use App\Template_doc ;
 use App\Document;
 use App\Mission;
@@ -1069,18 +1070,7 @@ array_multisort($columns, SORT_DESC, $coltags);
 
 else
 {
- $annee=date('Y');
- $rubriques_assure=DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 1)->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
-if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent= DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->where('rubrique', $infoparent['idtaggop'])->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
-$rubriques_assure = array_merge( $coltagcurrent,$rubriques_assure);
-$columns = array_column($rubriques_assure, 'updated_at');
-array_multisort($columns, SORT_DESC, $rubriques_assure);
-
-}
+ 
 switch ($arrfile['nom']) {
             case "PEC_analyses_medicales":
             case "PEC_frais_medicaux":
@@ -1100,13 +1090,32 @@ switch ($arrfile['nom']) {
             case "PEC_deplacement":
             case "PEC_dedouanement_pieces":
             case "PEC_Cargo":
+$annee=date('Y');
+ $rubriques_assure=DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 1)->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent= DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->where('rubrique', $infoparent['idtaggop'])->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+$rubriques_assure = array_merge( $coltagcurrent,$rubriques_assure);
+$columns = array_column($rubriques_assure, 'updated_at');
+array_multisort($columns, SORT_DESC, $rubriques_assure);
+
+}
 if(!empty($rubriques_assure))
 {
+$rub=0;
 
 foreach($rubriques_assure as $rubrique)
 {
+
+
 $ltag= Rubrique::where("id",$rubrique->rubrique)->first();
 
+$ltaginitial= RubriqueInitial::where("id",$rubrique->rubriqueinitial)->first();
+$template=Template_doc::where("nom",$arrfile['nom'])->first();
+if($ltaginitial->pec!==0 && $ltaginitial->pec==$template->id)
+{
 
 
 if ( $ltag['devise'] === "TND") 
@@ -1119,18 +1128,25 @@ if ( $ltag['devise'] === "TND")
 //dd($Montanttag);
 }
 
-$arr_gopmed[]=$rubrique->rubrique."_".$Montanttag."_".$ltag['nom']."_".$rubrique->updated_at;
+$arr_gopmed[]=$rubrique->rubrique."_".$Montanttag."_".$ltaginitial['nom']."_".$rubrique->updated_at;
 
 
 $sgoptn =implode(',', $arr_gopmed);
-                        $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";} 
+                        $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
 
+ $rub=$rub+1;
+} 
+
+
+}
+if($rub===0)
+
+ {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
+                
 
 
 
 }
-
-
 
 
 
@@ -1141,8 +1157,9 @@ $sgoptn =implode(',', $arr_gopmed);
 
           
  else
-                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP Spécifié!";}
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
                 }}
+
 
 
                       
