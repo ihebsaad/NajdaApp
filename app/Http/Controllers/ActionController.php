@@ -551,7 +551,15 @@ class ActionController extends Controller
                          
                             if($miss->type_Mission==7)//ambulance 
                                 {
-                                    //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
+                                    //activer 8 suivre mission ambulance
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                     if($datespe <= $dateSys)
                                     {
@@ -664,7 +672,16 @@ class ActionController extends Controller
                          
                             if($miss->type_Mission==6)//taxi 
                                 {
-                                    //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
+                                    //activer l'action 6 
+
+                                   if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                     if($datespe <= $dateSys)
                                     {

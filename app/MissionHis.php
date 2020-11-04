@@ -12,7 +12,7 @@ class MissionHis extends Model
      protected $fillable = [
         'id_origin_miss','titre', 'descrip','miss_mere_id','nb_acts_ori','commentaire', 'date_deb','date_fin', 'statut_courant','realisee','affichee', 'dossier_id','nom_type_miss','type_Mission', 'origin_id',
         'user_id','assistant_id','emetteur_id','id_entree','url_doc_gen','equipement' , 'voiture', 'prestataire','intervenant','created_at','updated_at',
-        'deleted_at',
+        'deleted_at','om_in_ex',
         'type_heu_spec','type_heu_spec_archiv','date_spec_affect','date_spec_affect2','date_spec_affect3',
         'rdv','act_rdv','h_rdv',
         'dep_pour_miss','act_dep_pour_miss','h_dep_pour_miss',

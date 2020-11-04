@@ -1468,14 +1468,14 @@ public function getAjaxDeleguerMission($idmiss)
 
           $miss=Mission::where('id',$id)->first();
 
-         $output='<h4><b> <i><u>Extrait :</u><i/></span> '.$miss->titre.'</b> </h4> <br>';
+         $output='<h4><b> <i><u>Extrait :</u><i/></span> '.$miss->titre.'</b> </h4> ';
 
-         $output.='<h4><b><u> Type de  mission : </u>'.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>';
+         $output.='<h4><b><u> Type de  mission : </u>'.$miss->typeMission->nom_type_Mission.'</b> </h4> ';
 
-         $output.='<h4><b><u> Description de mission : </u>'.$miss->typeMission->des_miss.'</b> </h4> <br>';
+         $output.='<h4><b><u> Description de mission : </u>'.$miss->typeMission->des_miss.'</b> </h4>';
 
           $output.='<h4><b><u> Dossier - Assuré  : </u>'.$miss->dossier->reference_medic.' - '.
-          $miss->dossier->subscriber_name.' '.$miss->dossier->subscriber_lastname.'</b> </h4> <br>';
+          $miss->dossier->subscriber_name.' '.$miss->dossier->subscriber_lastname.'</b> </h4> ';
 
           if($miss->miss_mere_id)
           {
@@ -1486,7 +1486,7 @@ public function getAjaxDeleguerMission($idmiss)
           
           if($miss->commentaire)
           {
-         $output.='<h4><b><u> Commentaire : </u>'.$miss->commentaire.'</b> </h4> <br>';
+         $output.='<h4><b><u> Commentaire : </u>'.$miss->commentaire.'</b> </h4> ';
           }
           else
           {
@@ -3352,6 +3352,28 @@ public function getAjaxDeleguerMission($idmiss)
       }// fin location voiture
 
 
+  // om _ prestataire interne externe
+       $output.='<br><b><div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+        <div class="row"><br> L\'OM est dédié pour une prestation interne ou externe ?<b><br><br>';
+
+          if($miss->om_in_ex==1)
+          {
+            $output.='&nbsp;&nbsp<input type="radio" id="prest_om_in" name="pres_om" value="interne" checked>
+            <label for="prest_om_in">Prestation Interne</label><br>
+            &nbsp;&nbsp<input type="radio" id="prest_om_ex" name="pres_om" value="externe">
+            <label for="prest_om_ex">Prestation Externe </label><br>';
+          }
+          else
+          {
+             $output.='&nbsp;&nbsp<input type="radio" id="prest_om_in" name="pres_om" value="interne" >
+            <label for="prest_om_in">Prestation Interne</label><br>
+            &nbsp;&nbsp<input type="radio" id="prest_om_ex" name="pres_om" value="externe" checked>
+            <label for="prest_om_ex">Prestation Externe </label><br>';
+
+          }
+
+         $output.='<br></div>       
+       </div>';
 
 
      }
@@ -3361,6 +3383,27 @@ public function getAjaxDeleguerMission($idmiss)
 
 
           return $output;
+
+       }
+
+
+       public function traiterPrestOmIntExt(Request $req)
+       {
+
+           $miss=Mission::where('id',$req->idmissionDateSpeck)->first();
+           if($miss)
+           {
+              if($req->pres_om=='interne')
+              {
+              $miss->update(['om_in_ex'=>1]);
+              }
+              if($req->pres_om=='externe')
+              {
+              $miss->update(['om_in_ex'=>0]);
+              }
+           }
+
+         return 'La mise à jour est effectuée avec succès';
 
        }
 

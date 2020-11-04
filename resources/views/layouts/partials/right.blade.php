@@ -2848,6 +2848,45 @@ getNotificationDeleguerAct ();
 
 
 </script>
+<script> 
+  $(document).ready(function(){
+  
+          var pres_om= '';
+          var idmissionDateSpeck = '';
+
+      $(document).on("change","input[type=radio][name=pres_om]",function() {
+             idmissionDateSpeck = $('#idmissionDateSpecM').val();
+            if (this.value == 'interne') {
+              
+               pres_om= 'interne';
+               //alert("interne "+idmissionDateSpeck);
+              }
+              else if (this.value == 'externe') {
+              // var idmissionDateSpeck = $('#idmissionDateSpecM').val();
+               pres_om= 'externe';
+                 // alert("externe "+idmissionDateSpeck);
+              }
+
+                var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('mission.traiterPrestOmIntExt') }}",
+                method:"POST",
+                data:{idmissionDateSpeck:idmissionDateSpeck,pres_om:pres_om,_token:_token},
+                success:function(data){
+
+                alert(data);
+                 
+
+                }
+            });
+             });
+
+          
+
+    });
+
+</script>
+
 
 
 
