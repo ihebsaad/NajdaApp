@@ -533,7 +533,7 @@ Route::get('/missions/calendrier','MissionController@calendrierMissions')->name(
 Route::get('/missions/statistiques','MissionController@missionsStatistiques')->name('missions.statistiques');
 Route::get('/missions/actionsstatistiques/{idmiss}','MissionController@actionsStatistiques')->name('actions.statistiques');
 
-
+Route::post('/missions/traiterPrestOmIntExt','MissionController@traiterPrestOmIntExt')->name('mission.traiterPrestOmIntExt');
 
 
 

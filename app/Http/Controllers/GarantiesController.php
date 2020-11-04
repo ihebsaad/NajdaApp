@@ -45,6 +45,8 @@ class GarantiesController extends Controller
             $garantie = new Garantie([
               'nom' => $request->get('nom'),
              'description' => $request->get('description'),
+'montant' => $request->get('montant'),
+              'devise' => $request->get('devise'),
              ]);
             if ($garantie->save())
             { $id=$garantie->id;
@@ -131,6 +133,8 @@ DB::table('rubriques_assure')->insert(
 		     $garantie  = new Garantie([
               'nom' => $request->get('nom'),
               'description' => $request->get('description'),
+              'montant' => $request->get('montant'),
+              'devise' => $request->get('devise'),
           ]);
 
         $garantie->save();

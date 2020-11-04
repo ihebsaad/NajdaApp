@@ -17,14 +17,27 @@ use App\RubriqueInitial ;
     <form id="updateform">
   
                     <div class="row">					
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                          <label for="inputError" class="control-label">Nom</label>
  		               <input onchange="changing(this)" type="text" class="form-control input" name="nom" id="nom"  value="{{ $garantie->nom }}">
                        </div>
-					 <div class="col-md-8">
+					 <div class="col-md-6">
                          <label for="inputError" class="control-label">Description</label>
  		               <input onchange="changing(this)" type="text" class="form-control input" name="description" id="description"  value="{{ $garantie->description }}">
                       </div>	
+                            	 <div class="col-md-2">
+                         <label for="inputError" class="control-label">Montant</label>
+ 		               <input onchange="changing(this)" type="number" class="form-control input" name="montant" id="montant"  value="{{ $garantie->montant }}">
+                      </div>	
+                                  <div class="col-md-2">
+                         <label for="inputError" class="control-label">Devise</label>
+ 		               <select class="form-control input" name="devise" id="devise"  onchange="changing(this)"  >
+								 <option value="TND" <?php if($garantie->devise=='TND'){echo 'selected="selected"';}  ?>  >TND</option>
+								 <option value="EUR" <?php if($garantie->devise=='EUR'){echo 'selected="selected"';}  ?> >EUR</option>
+								 <option value="USD" <?php if($garantie->devise=='USD'){echo 'selected="selected"';}  ?> >USD</option>
+								 </select>
+                      </div>	
+	 
 	 
                     </div>
 					

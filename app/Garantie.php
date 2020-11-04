@@ -5,6 +5,6 @@ use Illuminate\Database\Eloquent\Model;
 class Garantie extends Model
 {
 	
-protected $fillable = [ 'nom','description'];
+protected $fillable = [ 'nom','description','montant','devise'];
 	
 }

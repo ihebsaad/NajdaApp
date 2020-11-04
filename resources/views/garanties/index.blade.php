@@ -31,14 +31,15 @@
             <tr id="headtable">
                 <th style="width:10%">ID</th>
                 <th style="width:30%">Nom</th>
-                <th style="width:40%">Description</th>
- 
+                <th style="width:30%">Description</th>
+                 <th style="width:10%">Plafond</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
 				<th style="width:30%">Nom</th>
-                <th style="width:40%">Description</th>
+                <th style="width:30%">Description</th>
+                <th style="width:10%">Plafond</th>
               <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
@@ -52,6 +53,7 @@
                     <td  ><a href="{{action('GarantiesController@view', $garantie['id'])}}" ><?php echo sprintf("%04d",$garantie->id);?></a></td>
 					<td><?php echo $garantie->nom ; ?></td>
 					<td><?php echo $garantie->description ; ?></td>
+                                        <td><?php echo $garantie->montant.' '.$garantie->devise;?></td>
                       <td    >
                           @can('isAdmin')
                               <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('GarantiesController@destroy', $garantie['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -102,6 +104,21 @@
                                  <textarea class="form-control"  id="description"  ></textarea>
 
                             </div> 
+  <div class="form-group">
+                                <label for="description">Montant :</label>
+                                 <input class="form-control"  id="montant"  type="number" />
+
+                            </div> 
+																			
+						 <div class="form-group">
+                                <label for="montant">Devise :</label>
+                                 <select class="form-control"   id="devise"   >
+								 <option value="TND">TND</option>
+								 <option value="EUR">EUR</option>
+								 <option value="USD">USD</option>
+								 </select>
+
+                            </div>
 							
                         </form>
                     </div>
@@ -228,13 +245,17 @@
             $('#add').click(function(){
                 var nom = $('#nom').val();
                 var description = $('#description').val();
+                var montant = $('#montant').val();
+                var devise = $('#devise').val();
+alert(montant);
+alert(devise);
                  if ((nom != '')  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url:"{{ route('garanties.saving') }}",
                         method:"POST",
-                        data:{nom:nom,description:description , _token:_token},
+                        data:{nom:nom,description:description,montant:montant,devise:devise, _token:_token},
                         success:function(data){
 
                             //   alert('Added successfully');

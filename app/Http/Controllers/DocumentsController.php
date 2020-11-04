@@ -29,6 +29,8 @@ class DocumentsController extends Controller
 
         $dossier= $_POST['dossdoc'] ;
 $dossiertpa=Dossier::where('id',$dossier)->first();
+$garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assure'])->get()->toArray();
+
         $templateid = $_POST['templatedocument'] ;
         $comment= $_POST['comdoc'] ;
         $parent =null;
@@ -386,7 +388,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
             // recuperation devise de GOP utilisé
             $paramdev=Parametre::select('euro_achat','dollar_achat')->first();
 
-if($dossiertpa['type_affectation']!=="Najda TPA")
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
             $devisegop = Tag::where("id",$_POST['idtaggop'])->first();
   if ( $devisegop['devise'] === "EUR")
@@ -432,7 +434,7 @@ else
                                     {
                                         // update gop du dossier
                                         $nmntgop =intval($infoparent['montantgop']) - $diffmontant;
-if($dossiertpa['type_affectation']!=="Najda TPA")
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
                                         Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);}
 else
@@ -444,7 +446,7 @@ DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', 
                                     {
                                         // update gop du dossier
                                         $nmntgop =intval($infoparent['montantgop']) + $diffmontant;
-if($dossiertpa['type_affectation']!=="Najda TPA")
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
                                         Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);}
 else
@@ -456,7 +458,7 @@ DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', 
                                 }
                                 else
                                 {
-if($dossiertpa['type_affectation']!=="Najda TPA")
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
                                     // avec un different taggop
                                     // maj montant ex tag
@@ -505,7 +507,7 @@ else {
                     }
                     else {       
                        //cas premiere generation du document
-if($dossiertpa['type_affectation']!=="Najda TPA")
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
                        $tag = Tag::where('id', $idtaggop)->first();
 
@@ -533,7 +535,7 @@ else{
                 }
             else {       
                //cas premiere generation du document
-if($dossiertpa['type_affectation']!=="Najda TPA")
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
                $tag = Tag::where('id', $idtaggop)->first();
 
@@ -729,7 +731,10 @@ return json_encode($doc);
         $entreesdos=Entree::where("dossier",$refdoss)->get();
         $paramapp=Parametre::select('euro_achat','dollar_achat')->first();
 $dossiertpa=Dossier::where('id',$dossier)->first();
-if($dossiertpa['type_affectation']!=="Najda TPA")
+//dd($dossiertpa['ID_assure']);
+$garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assure'])->get()->toArray();
+//dd($garanties);
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
         
         if ( ! empty($entreesdos)) {
@@ -2007,7 +2012,8 @@ $valchamp = str_replace('<br />', "\n", $valchamp);
 
         // maj montant ex tag
 $dossiertpa=Dossier::where('id',$dossier)->first();
-if($dossiertpa['type_affectation']!=="Najda TPA")
+$garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assure'])->get()->toArray();
+if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 {
         $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
         $mntgop = intval($tagprecinfo['mrestant']) + intval($infoparent['montantgop']);

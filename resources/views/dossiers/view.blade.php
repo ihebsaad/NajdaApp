@@ -78,6 +78,10 @@ function custom_echo($x, $length)
 
         <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
         <input type="hidden" id="typedossier" value="<?php echo $dossier->type_affectation; ?>">
+<?php
+$garanties=DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)->count();
+?>
+ <input type="hidden" id="countgarantie" value="<?php echo $garanties; ?>">
     </div>
      <div class="col-md-2">
 
@@ -1142,12 +1146,17 @@ $modif='modif';
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
 <?php
 $paramapp=Parametre::select('euro_achat','dollar_achat')->first();
-if($dossier->type_affectation!=='Najda TPA')
+
+$garanties=DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)->get()->toArray();
+
+if($dossier->type_affectation!=='Najda TPA' || empty($garanties) )
 {
 $ltag=Tag::where("id",$doc->idtaggop)->first();
+$count=0;
 }
 else
-{$ltag=Rubrique::where("id",$doc->idtaggop)->first();}
+{$ltag=Rubrique::where("id",$doc->idtaggop)->first();
+$count=1;}
 
  if ( $ltag['devise'] === "TND") 
                                     {$Montanttag = $doc->montantgop;}
@@ -1156,6 +1165,7 @@ else
                                     if ( $ltag['devise'] === "USD")
                                        { $Montanttag = intval($doc->montantgop) * floatval($paramapp['dollar_achat']);}
 ?>
+
                                                 <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo '0'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $Montanttag;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
                                             </button>
                                         </div>
@@ -3478,14 +3488,17 @@ else
       }
  
 var dossier = $('#dossier').val();
-
+//alert(idutag);
       //<i class="fas fa-tag"></i> 
       if (idutag)
      {
 var typedossier = $('#typedossier').val();
 
         var _token = $('input[name="_token"]').val();
-if(typedossier==='Najda TPA')
+var count = $('#countgarantie').val();
+
+
+if(typedossier==='Najda TPA' && count !== '0')
 {
 
  $.ajax({
@@ -3496,6 +3509,8 @@ if(typedossier==='Najda TPA')
                 dataType: 'json',
                 success:function(data){
                     if ($.trim(data)){ 
+
+
 if(data['commentaire']!==null)
 {comment=data['commentaire'];}
 else{
@@ -3504,12 +3519,14 @@ comment="";
                         $("#tagudoc").html("<i class='fas fa-tag'></i> "+data['nom']+" : "+data['created_at']);
                     }
                 }
-            })
+            });
 
 
 }
 else
+
 {
+
         $.ajax({
                 url:"{{ route('tags.infotag') }}",
                 method:"POST",
@@ -3518,6 +3535,7 @@ else
                 dataType: 'json',
                 success:function(data){
                     if ($.trim(data)){ 
+
                         $("#tagudoc").html("<i class='fas fa-tag'></i> "+data['titre']+" : "+data['contenu']+" | "+data['created_at']);
                     }
                 }
