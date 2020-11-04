@@ -15,6 +15,7 @@ use App;
 use Redirect;
 use URL;
 use Session;
+use App\Historique;
 
 
 class AffectDossController extends Controller

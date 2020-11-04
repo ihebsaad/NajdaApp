@@ -20,6 +20,7 @@ use Redirect;
 use URL;
 use Session;
 use Illuminate\Support\Facades\Log;
+use App\Historique;
 
 
 class ActionController extends Controller
@@ -2752,9 +2753,14 @@ class ActionController extends Controller
            $action->update(['user_id'=>auth::user()->id]);
 
            $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
-            Log::info('[Agent: ' . $nomuser . '] clique bouton fait de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
-
-
+             
+		$desc='clique bouton fait de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic;
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
            // calcul duree effective de cette action en heures
 
             // $datetime1 = new DateTime('2009-10-11');
@@ -2968,8 +2974,13 @@ class ActionController extends Controller
                        }
 
                         $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
-                       Log::info('[Agent: ' . $nomuser . '] clique bouton ignorer de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
-
+                   
+$desc='clique bouton ignorer de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic;
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
                    }  
                    else{
@@ -3027,8 +3038,14 @@ class ActionController extends Controller
                                  }
 
                                 $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
-                              Log::info('[Agent: ' . $nomuser . '] clique le bouton reporter de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
-
+                        
+  $desc= 'clique le bouton reporter de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic ;
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
                                 }
                             }
                          
@@ -3091,8 +3108,15 @@ class ActionController extends Controller
                                        }
 
                                        $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
-            Log::info('[Agent: ' . $nomuser . '] clique bouton mise en attente de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
-
+			$desc='clique bouton mise en attente de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic;					   
+		 
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	$hist->save();					   
+									   
+ 
 
                                 }
 

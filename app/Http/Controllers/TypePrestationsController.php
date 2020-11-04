@@ -11,6 +11,7 @@ use App\Prestation ;
 use App\TypePrestation ;
 use App\Ville ;
 use DB;
+use App\Historique;
 
 
 class TypePrestationsController extends Controller

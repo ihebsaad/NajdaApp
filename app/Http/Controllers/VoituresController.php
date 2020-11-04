@@ -10,6 +10,7 @@ use App\Prestataire ;
 use App\Prestation ;
 use App\Voiture ;
  use DB;
+use App\Historique;
 
 
 class VoituresController extends Controller

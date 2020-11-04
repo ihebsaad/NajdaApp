@@ -23,6 +23,7 @@ use Redirect;
 use URL;
 use Session;
 use Auth;
+use App\Historique;
 
 
 

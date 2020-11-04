@@ -10,12 +10,13 @@ use App\Notif;
 use App\Mission;
 use App\ActionEC;
 use App\Demande;
+use App\Historique;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
+ 
 
 class LoginController extends Controller
 {
@@ -44,8 +45,20 @@ class LoginController extends Controller
         $type = $user->user_type;
 
         $nomuser = $user->name . ' ' . $user->lastname;
-        Log::info('[Agent: ' . $nomuser . '] Login ');
+ 
+	 $ip = $_SERVER['REMOTE_ADDR'];
+	 $details = json_decode(file_get_contents("http://ipinfo.io/{$ip}/json"));
+		$adresse=$details->city .' '.$details->region.' '.$details->country;
+		$desc='Login de '.$adresse;
+		
+         $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);
 
+         $hist->save();
+		
         // logged in statut = 1
         User::where('id', $iduser)->update(array('statut' => '1'));
 
@@ -828,8 +841,7 @@ class LoginController extends Controller
                 {
                     $user_dest=$tech;
                     foreach ($dossiers as $doss) {
-                        //     Log::info("affectation automatique ligne 725 de".$iduser. "  vers". $user_dest);
-                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                         $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                         $this->migration_miss($doss->id,$user_dest);
                         $this->migration_notifs($doss->id,$user_dest);
                     }
@@ -1013,10 +1025,14 @@ class LoginController extends Controller
 
 
 
-            Log::info('[Agent: ' . $nomuser . '] Déconnexion '.$countdossiers);
+            
+			$desc='Déconnexion ' ;
 
-            //     Log::info('[Agent: ' . $nomuser . '] Déconnexion ');
-
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
             // changement statut dans la base
             // logged out statut = -1
             User::where('id', $iduser)->update(array('statut' => '-1'));
@@ -1114,8 +1130,14 @@ class LoginController extends Controller
         /*** changement de poste ***/
         $nomuser = $user->name . ' ' . $user->lastname;
 
-        Log::info('[Agent: ' . $nomuser . '] Changement de poste ');
+ 			$desc='Changement de poste ' ;
 
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
+		
         $this->guard()->logout();
 
         $request->session()->invalidate();

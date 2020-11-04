@@ -11,6 +11,7 @@ use App\Prestation ;
 use App\Contrat ;
 use App\Ville ;
 use DB;
+use App\Historique;
 
 
 class ContratsController extends Controller

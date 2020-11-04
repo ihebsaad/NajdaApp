@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Routing\UrlGenerator;
 use URL;
 use Session;
+use App\Historique;
 
 
 use App\Adresse;
@@ -691,8 +692,13 @@ class MissionController extends Controller
         }
 
         $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
-          Log::info('[Agent: ' . $nomuser . '] créé la mission: ' . $typeMiss->nom_type_Mission .' dans le dossier '. $dos->reference_medic);
-
+ 
+		   $desc='  créé la mission: ' . $typeMiss->nom_type_Mission .' dans le dossier '. $dos->reference_medic ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
          $da = (new \DateTime())->format('Y-m-d\TH:i');
 

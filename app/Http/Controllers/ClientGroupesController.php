@@ -11,6 +11,7 @@ use App\Prestation ;
 use App\ClientGroupe ;
 use App\Ville ;
 use DB;
+use App\Historique;
 
 
 class ClientGroupesController extends Controller

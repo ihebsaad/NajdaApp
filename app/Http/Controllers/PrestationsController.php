@@ -18,6 +18,7 @@ use App\Evaluation ;
 use DB;
 use Illuminate\Support\Facades\Mail;
 use Swift_Mailer;
+use App\Historique;
 
 
 
@@ -237,8 +238,13 @@ class PrestationsController extends Controller
             }
 
             $ref = app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);
-            Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' . $ref);
-
+ 
+		  $desc='Ajout de prestation pour le dossier: ' . $ref;
+			$hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
 
             $id = $prestation->id;
             $date = date('Y-m-d H:i:s');
@@ -623,8 +629,15 @@ class PrestationsController extends Controller
 
 
         Evaluation::where('id', $eval)->update(array('priorite' => $priorite));
-        Log::info('[Agent: ' . $nomuser . '] Modification de priorité prestataire : '.$nomprest. ' Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat );
-
+		
+ 		  $desc=' Modification de priorité prestataire : '.$nomprest. ' Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat ;
+			$hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
+		
+		
          }
 
 
@@ -656,8 +669,14 @@ class PrestationsController extends Controller
 
 
         Evaluation::where('id', $eval)->update(array('evaluation' => $note));
-        Log::info('[Agent: ' . $nomuser . '] Modification de l\'évaluation du prestataire : '.$nomprest. ' Note : '.$note.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat );
-
+ 
+     $desc='Modification de l\'évaluation du prestataire : '.$nomprest. ' Note : '.$note.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat ;
+			$hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
+		
     }
 }
 

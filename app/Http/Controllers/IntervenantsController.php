@@ -10,6 +10,7 @@ use App\Prestataire ;
 use App\Prestation ;
 use App\Intervenant ;
  use DB;
+use App\Historique;
 
 
 class IntervenantsController extends Controller

@@ -10,6 +10,7 @@ use App\Prestataire ;
 use App\Prestation ;
 use App\Personne ;
  use DB;
+use App\Historique;
 
 
 class PersonnesController extends Controller

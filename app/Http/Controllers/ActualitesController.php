@@ -11,6 +11,7 @@ use App\Prestation ;
 use App\Actualite ;
 use App\Ville ;
 use DB;
+use App\Historique;
 
 
 class ActualitesController extends Controller

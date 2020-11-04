@@ -9,6 +9,7 @@ use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use PDF;
+use App\Historique;
 
 
 class EnvoyesController extends Controller

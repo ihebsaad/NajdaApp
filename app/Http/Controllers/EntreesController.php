@@ -24,6 +24,7 @@ use Breadlesscode\Office\Converter;
 //use Codedge\Fpdf\Facades\Fpdf;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Facades\File;
+use App\Historique;
 
 
 ini_set('memory_limit','1024M');
@@ -107,8 +108,7 @@ class EntreesController extends Controller
 
     public function boite()
     {
-       // Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
-
+ 
         $entrees = Entree::orderBy('created_at', 'desc')
             ->where('destinataire','<>','finances@najda-assistance.com')
             ->where('statut','<','2')->paginate(10);
@@ -121,8 +121,7 @@ class EntreesController extends Controller
 
     public function archive()
     {
-        // Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
-
+ 
         $entrees = Entree::orderBy('created_at', 'desc')
             ->where('destinataire','<>','finances@najda-assistance.com')
             ->where('statut','=','3')->paginate(10);
@@ -279,8 +278,13 @@ class EntreesController extends Controller
         $user = User::find($par);
         $nomuser = $user->name ." ".$user->lastname ;
 
-        Log::info('[Agent : '.$nomuser.' ] Archivage d\'Email ' );
-
+ 		
+	   $desc='Archivage d\'Email  '.$sujet;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
         return redirect('/entrees/dispatching')->with('success', '  Archivé');
     }
@@ -327,9 +331,14 @@ class EntreesController extends Controller
         $user = User::find($par);
         $nomuser = $user->name ." ".$user->lastname ;
 
-        Log::info('[Agent : '.$nomuser.' ] Traiter un Email ' );
-
-
+ 
+	   $desc='Traiter un Email  ' ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
         //  return redirect('/home')->with('success', '  Traité');
         if($dossid >0) {return redirect('/dossiers/view/'.$dossid.'#tab2');}
         else{
@@ -351,7 +360,15 @@ class EntreesController extends Controller
         $user = User::find($par);
         $nomuser = $user->name ."".$user->lastname ;
 
-        Log::info('[Agent : '.$nomuser.' ] Supprimer un Email ' );
+ 
+	  $desc='Supprimer un Email : '  ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);$hist->save();
+		
+		 
 
 
         return redirect('/entrees/dispatching')->with('success', '  Supprimé');
@@ -370,8 +387,13 @@ class EntreesController extends Controller
         $user = User::find($par);
         $nomuser = $user->name ."".$user->lastname ;
 
-        Log::info('[Agent : '.$nomuser.' ] Supprimer un Email ' );
-
+ 
+	  $desc='Supprimer un Email  ';		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
         return redirect('/entrees')->with('success', '  Supprimé');
     }
@@ -590,7 +612,13 @@ class EntreesController extends Controller
         $user = User::find($par);
         $nomuser = $user->name ."".$user->lastname ;
 
-        Log::info('[Agent : '.$nomuser.' ] Dispatcher un Email - Dossier: '.$dossier );
+ 		
+	  $desc='Dispatcher un Email - Dossier: '.$dossier ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);$hist->save();
 
 
         //return url('/entrees/show/'.$identree);
@@ -770,7 +798,13 @@ class EntreesController extends Controller
      //   Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
 
-        Log::info('[Agent: '.$nomuser.'] Création Compte Rendu - Dossier : '.$refdoss);
+ 		
+			   $desc='Création Compte Rendu - Dossier : '.$refdoss;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
     }
 

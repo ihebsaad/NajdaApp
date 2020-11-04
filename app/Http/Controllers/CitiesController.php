@@ -11,6 +11,7 @@ use App\Prestation ;
 use App\Citie ;
 use App\Ville ;
 use DB;
+use App\Historique;
 
 
 class CitiesController extends Controller

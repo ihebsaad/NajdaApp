@@ -300,7 +300,14 @@ class UsersController extends Controller
         $nomuser=$user->name.' '.$user->lastname;
 
         User::where('id', $iduser)->update(array('statut' => '0'));
-        Log::info('[Agent: '.$nomuser.'] Retour de pause ' );
+ 		
+		$desc='Retour de pause';
+			$hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
+		
 
     }
 

@@ -15,6 +15,7 @@ use App\EnvoyerNote_his;
 use auth; 
 use Illuminate\Routing\UrlGenerator;
 use URL;
+use App\Historique;
 
 
 class NotesController extends Controller

@@ -27,6 +27,7 @@ Use Redirect;
 use App\Envoye ;
 use PDF as PDF2;
 use Illuminate\Support\Facades\Auth;
+use App\Historique;
 
 
  use Auth as auth2 ;
@@ -55,8 +56,7 @@ class EmailController extends Controller
 
     function index()
     {
-        Log::info('opening emails index');
-
+ 
         //     $oClient = Client::account('default');
         //       $oClient->connect();
         $oClient = new Client([
@@ -558,7 +558,14 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
                 if ($this->checkEmailExiste( $mailid)==0){
                     $entree->save();
                     $id=$entree->id;
-                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+ 					
+				     $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);		$hist->save();
+					
                 }
                 /*********************/
                 if($refdossier!= ''){
@@ -855,7 +862,13 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
                 if ($this->checkEmailExiste( $mailid)==0){
                     $entree->save();
                     $id=$entree->id;
-                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+ 			  $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);		$hist->save();
+		
                 }
                 /*********************/
   /*              if($refdossier!= ''){
@@ -1232,7 +1245,15 @@ $id=0;
                 if ($this->checkEmailExiste('b1-' . $mailid) == 0) {
                     $entree->save();
                     $id = $entree->id;
-                    Log::info('Email reçu de : ' . $from . ' Dossier: ' . $refdossier);
+ 					
+		 	 $desc='Email reçu de : ' . $from . ' Dossier: ' . $refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+           // 'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+
+		
 
                     //$dataentree=/*$entree->select('id','mailid','emetteur','destinataire','sujet','type','reception','dossier'); */array('id'=>$entree->id,'notifiable_id'=>$entree->notifiable_id,'reception'=>$entree->notifiable_id);
                 }
@@ -1623,7 +1644,13 @@ $id=0;
                 $id=$entree->id;
               //  $oMessage->delete() ;
 
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+ 				     $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);		$hist->save();
+		
             }
 
                 /*********************/
@@ -1995,7 +2022,13 @@ $id=0;
                 $entree->save();                $id=$entree->id;
               //  $oMessage->delete() ;
 
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+  $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);		$hist->save();
+		
             }
                 /*********************/
                 if($refdossier!= ''){
@@ -2350,7 +2383,14 @@ $id=0;
                 $id=$entree->id;
               //  $oMessage->delete() ;
 
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+ 				
+				 $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
             }
 
                 /*********************/
@@ -2718,7 +2758,13 @@ $id=0;
                 $entree->save();                 $id=$entree->id;
               //  $oMessage->delete() ;
 
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+ 				
+		  $desc='Email reçu de : ' . $from . ' Dossier: ' . $refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+           // 'user_id'=>auth::user()->id,
+        ]);	$hist->save();
             }
                 /*********************/
                 if($refdossier!= ''){
@@ -3082,7 +3128,14 @@ $id=0;
 
                 if ($this->checkEmailExiste('b6-'.$mailid)==0){
                     $entree->save();                $id=$entree->id;
-                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+ 		
+		$desc='Email reçu de : ' . $from . ' Dossier: ' . $refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+           // 'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
                 }
                 /*********************/
                 if($refdossier!= ''){
@@ -3446,8 +3499,14 @@ $id=0;
 
                 if ($this->checkEmailExiste('b7-'.$mailid)==0){
                     $entree->save(); $id=$entree->id;
-                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-                }
+					
+ $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		}
                 /*********************/
                 if($refdossier!= ''){
 
@@ -3812,8 +3871,15 @@ $id=0;
 
                 if ($this->checkEmailExiste('b8-'.$mailid)==0){
                     $entree->save();$id=$entree->id;
-                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-                }
+ $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+
+
+		}
 
                 /*********************/
                 if($refdossier!= ''){
@@ -4185,8 +4251,14 @@ $id=0;
                 if ($this->checkEmailExiste('b9-'.$mailid)==0){
                     $entree->save();                $id=$entree->id;
 
-                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-                }
+ $desc='Email reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+
+		}
                 /*********************/
                 if($refdossier!= ''){
 
@@ -4542,7 +4614,13 @@ $id=0;
                     $contenu= str_replace ( '<' ,'' ,$contenu);
                     $contenu= str_replace ( '>' ,'' ,$contenu);
 
-                    Log::info('SMS reçu $tel: '.$tel);
+ 					
+	  $desc='Sms reçu  Tel: ' . $tel  ;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+           // 'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
                     // $contenu=$arr->sms->texte ;
 
@@ -4822,7 +4900,13 @@ $id=0;
 
                     if ($this->checkEmailExiste( 'sms-'.$mailid)==0){
                         $entree->save();            $id=$entree->id;
-                        Log::info('SMS reçu : '.$sujet.' Dossier: '.$refdossier);
+ 						
+						 $desc='SMS reçu   : '.$sujet.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);	$hist->save();
                     }
 
                     /*********************/
@@ -5036,7 +5120,13 @@ $id=0;
                 if ($this->checkEmailExiste( 'FX-'.$mailid)==0){
                     $entree->save();                $id=$entree->id;
 
-                    Log::info('Fax reçu de : '.$from.' Dossier: '.$refdossier );
+ 					
+					 $desc='Fax reçu de : '.$from.' Dossier: '.$refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+          //  'user' => $nomuser,
+          //  'user_id'=>auth::user()->id,
+        ]);	$hist->save();
                 }
                 /*********************/
                 if($refdossier!= '') {
@@ -6029,7 +6119,13 @@ if ($from=='najdassist@gmail.com')
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
 
-                Log::info('[Agent: '.$nomuser.'] Envoi de mail '.$sujet);
+ 				
+				 $desc='Envoi de mail '.$sujet;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
                 $count=0;
 
@@ -6169,8 +6265,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 		}
         else{
 
-            Log::info('PB Attachement Envoi mail ');
-
+ 
         }
  
 		if($accuse==1){
@@ -6306,7 +6401,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             $user = auth()->user();
             $nomuser = $user->name . ' ' . $user->lastname;
 
-            Log::info('[Agent: ' . $nomuser . '] Envoi de mail ' . $sujet);
+ 			
+	  $desc='Envoi de mail ' . $sujet;		
+	 $hist = new Historique([
+              'description' => $desc,
+             'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
 
             $count = 0;
 
@@ -6431,7 +6533,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);}
         else{
 
-            Log::info('PB Attachement Envoi mail ');
+ 			
+			
 
         }
 
@@ -6579,7 +6682,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 $user = auth()->user();
                 $nomuser = $user->name . ' ' . $user->lastname;
 
-                Log::info('[Agent: ' . $nomuser . '] Envoi de mail ' . $sujet);
+ 				
+	   $desc='Envoi de mail   '.$sujet;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
                 $count = 0;
 
@@ -6704,8 +6813,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);}
         else{
 
-            Log::info('PB Attachement Envoi mail ');
-
+ 
         }
 
         return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
@@ -6812,8 +6920,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
-                Log::info('[Agent: '.$nomuser.'] Envoi de Fax à '.$to);
-
+				
+ 	  $desc='Envoi de mail ' . $sujet;		
+	 $hist = new Historique([
+              'description' => $desc,
+             'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
                /* if (App::environment('local')) {
                     // The environment is local
@@ -7350,11 +7463,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         ]);
 
         $envoye->save();
-
-
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
-
-
+ 
+ 
+	  $desc='Envoi de SMS à '.$num;		
+	 $hist = new Historique([
+              'description' => $desc,
+           'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
+		
         $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
         $urlsending=$urlapp.'/envoyes';
@@ -7428,9 +7546,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
-                Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
-
-
+ 
+	  $desc='Envoi de SMS à '.$num;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
 
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;

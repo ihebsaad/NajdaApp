@@ -7,6 +7,7 @@ use App\Garantie ;
 use App\Rubrique;
 use App\RubriqueInitial;
 use DB;
+use App\Historique;
 
 class GarantiesController extends Controller
 {

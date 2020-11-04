@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\RubriqueInitial ;
 use App\Rubrique;
 use DB;
+use App\Historique;
 
 class RubriquesController extends Controller
 {

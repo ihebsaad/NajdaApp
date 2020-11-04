@@ -28,6 +28,7 @@ use App\Prestation;
 use App\Personne;
 use App\Envoye;
 use App\Note;
+use App\Historique;
 
 
 class OrdreMissionsController extends Controller
@@ -236,7 +237,16 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+      $desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+
+		
 if(isset($idchauff2) && $idchauff2!="" )
 {
 $numm1= Personne::where('id', $idchauff2)->select('tel')->first();
@@ -290,8 +300,14 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
-
+      $desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -307,11 +323,29 @@ $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first()
 $titreparent = $omparent['titre'];
 if($affectea=='externe')
 {
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+ 
+      $desc='Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+
 }
 if($affectea=='mmentite')
 {
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+ 
+      $desc='Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+
 }
   // début recherche note
   /* $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
@@ -520,8 +554,15 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
-
+ 
+		      $desc='Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
+		
+		
 
 }
 }

@@ -21,6 +21,7 @@ use App\Mission;
 use App\Notif;
 use App\ActionEC;
 use App\Alerte;
+use App\Historique;
 
 
 class HomeController extends Controller
@@ -67,7 +68,13 @@ class HomeController extends Controller
             $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$vers).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$vers);
 
-             Log::info('[Agent: '.$nomuser.'] Demande de rôle '.$role.' à : '.$nomagent);
+ 			 
+			 	  $desc='Demande de rôle '.$role.' à : '.$nomagent ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);$hist->save();
 
         }
 
@@ -102,7 +109,13 @@ class HomeController extends Controller
             $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$supmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$supmedic);
 
-            Log::info('[Agent: '.$nomuser.'] Demande une Pause de durée : '.$duree.' mins à : '.$nomagent);
+ 			
+	   $desc='Demande une Pause de durée : '.$duree.' mins à : '.$nomagent ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);$hist->save();
 
         }
 
@@ -235,7 +248,13 @@ class HomeController extends Controller
             $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
-            Log::info('[Agent: '.$nomuser.'] Refuse de donner Pause à : '.$nomagent);
+ 	  $desc='  Refuse de donner Pause à : '.$nomagent ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
 
 
         }
@@ -259,7 +278,13 @@ class HomeController extends Controller
             $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
-            Log::info('[Agent: '.$nomuser.'] Accepte de donner Pause à : '.$nomagent);
+ 			
+	   $desc=' Accepte de donner Pause à : '.$nomagent ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);			$hist->save();
 
             $demande->save();
 
@@ -299,7 +324,14 @@ class HomeController extends Controller
             $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
-            Log::info('[Agent: '.$nomuser.'] Refuse de donner le rôle: '.$role.' à : '.$nomagent);
+ 			
+			 	  $desc='  Refuse de donner le rôle : '.$nomagent ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
 
             $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$vers) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$vers) ;
 
@@ -324,8 +356,13 @@ class HomeController extends Controller
             $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
-            Log::info('[Agent: '.$nomuser.'] Accepte de donner le rôle: '.$role.' à : '.$nomagent);
-
+     $desc=' Accepte de donner le rôle: '.$role.' à :  '.$nomagent ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
 
             $nomrole='';
             if ($role== 'Dispatcheur Emails')
@@ -2709,7 +2746,13 @@ return redirect('roles');
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
 
-        Log::info('[User: '.$nomuser.'] Modifications des paramètres :'.$champ.' => '.$val);
+ 		
+				  $desc=' Modification des paramètres :'.$champ.' => '.$val ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
 
     }
@@ -2773,7 +2816,14 @@ return redirect('roles');
             $agent=User::find($val);
             $nomag=$agent->name.' '.$agent->lastname;
 
-            Log::info('[Admin: '.$nomuser.'] Modification de la séance  :'.$champ.' => '.$nomag);
+ 			
+		  $desc=' Modification de la séance  :'.$champ.' => '.$nomag ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => 'Admin',
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
 
         }
 
@@ -2843,7 +2893,14 @@ return redirect('roles');
             $agent=User::find($val);
             $nomag=$agent->name.' '.$agent->lastname;
 
-            Log::info('[Admin: '.$nomuser.'] Modification de la séance  :'.$champ.' => '.$nomag);
+ 			
+		  $desc=' Modification de la séance  :'.$champ.' => '.$nomag ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => 'Admin',
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
+		
 
         }
 
@@ -2884,7 +2941,13 @@ return redirect('roles');
             $agent=User::find($val);
             $nomag=$agent->name.' '.$agent->lastname;
 
-            Log::info('[Admin: '.$nomuser.'] Modification de la séance  :'.$champ.' => '.$nomag);
+ 			
+		  $desc=' Modification de la séance  :'.$champ.' => '.$nomag ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => 'Admin',
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
         }
 
@@ -2910,7 +2973,13 @@ return redirect('roles');
             $agent=User::find($val);
             $nomag=$agent->name.' '.$agent->lastname;
 
-            Log::info('[Admin: '.$nomuser.'] Modification de la séance  :'.$champ.' => '.$nomag);
+ 			
+		   $desc=' Modification de la séance  :'.$champ.' => '.$nomag ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => 'Admin',
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
         }
 
@@ -2935,7 +3004,12 @@ return redirect('roles');
             $agent=User::find($val);
             $nomag=$agent->name.' '.$agent->lastname;
 
-            Log::info('[Admin: '.$nomuser.'] Modification de la séance  :'.$champ.' => '.$nomag);
+ 		  $desc=' Modification de la séance  :'.$champ.' => '.$nomag ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => 'Admin',
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();
 
         }
 
@@ -3102,5 +3176,26 @@ $url=storage_path().$attach->path ;
 
         return redirect('/home')->with('success', '  Supprimée');
     }
+	
+	
+	
+	public function logs()
+    {
+
+        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+ 
+		$historiques=Historique::orderBy('id', 'desc')->get();
+		
+        return view('historique', ['historiques' => $historiques]);
+          }else{ return back();}
+
+    }
+	
+	
+	
+	
+	
+	
+	
 
     }

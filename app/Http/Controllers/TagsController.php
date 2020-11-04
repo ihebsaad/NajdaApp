@@ -11,6 +11,7 @@ use App\Attachement ;
 use App\Parametre;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Historique;
 
 class TagsController extends Controller
 {
@@ -308,7 +309,14 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $entree = Entree::where('id','=',$identree)->first();
-Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' .$entree["dossier"]);
+ 
+$desc='Ajout de tag '.$titre.' pour le dossier: ' .$entree["dossier"];
+			$hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
+		
                     return 'true';
 
                 }
@@ -502,7 +510,14 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $attach = Attachement::where('id','=',$idattach)->first();
 $entree = Entree::where('id','=',$attach['parent'])->first();
-Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' .$entree["dossier"]);
+ 
+$desc='Ajout de tag '.$titre.' pour le dossier: ' .$entree["dossier"];
+			$hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
+		
                     return 'true';
                 }
                 else {

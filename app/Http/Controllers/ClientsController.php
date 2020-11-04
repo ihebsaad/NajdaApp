@@ -14,6 +14,7 @@ use App\Client ;
 use App\Ville ;
 use DB;
 use Illuminate\Support\Facades\Cache;
+use App\Historique;
 
 
 class ClientsController extends Controller

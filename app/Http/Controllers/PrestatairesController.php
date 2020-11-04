@@ -22,6 +22,7 @@ use DB;
 use Illuminate\Support\Facades\Cache;
 use Swift_Mailer;
 use Illuminate\Support\Facades\Mail;
+use App\Historique;
 
 
 
@@ -329,7 +330,14 @@ public function addrating(Request $request)
 
         }
 
-         Log::info('[Agent: ' . $nomuser . '] Ajout Intervenant: ' . $nom.' '.$prenom);
+ 		 
+	 $desc=' Ajout Intervenant: ' . $nom.' '.$prenom ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	 $hist->save();
+		
 
  } // if superviseur
     }

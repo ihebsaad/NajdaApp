@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Boite ;
 use App\Dossier ;
 use DB;
+use App\Historique;
 
 use Illuminate\Support\Facades\Auth;
 

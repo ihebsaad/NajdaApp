@@ -10,6 +10,7 @@ use App\Prestataire ;
 use App\Prestation ;
 use App\Equipement ;
  use DB;
+use App\Historique;
 
 
 class EquipementsController extends Controller
@@ -93,7 +94,13 @@ class EquipementsController extends Controller
 
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->name;
-        Log::info('[Agent: '.$nomuser.'] Ajout équipement ');
+ 		
+			  $desc='Ajout équipement '  ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);$hist->save();
     }
 
     public function updating(Request $request)

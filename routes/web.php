@@ -14,6 +14,9 @@ use App\Template_doc ;
 
 Auth::routes();
 
+ 
+Route::get('/logs', 'HomeController@logs')->name('logs');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/roles', 'HomeController@roles')->name('roles');
 Route::get('/pause', 'HomeController@pause')->name('pause');
@@ -641,7 +644,7 @@ Route::post('/edit/{id}','UsersController@update');
 
 
 /**** LOGS  ****/
-Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;
+//Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
 
 /**** TAGS  ****/

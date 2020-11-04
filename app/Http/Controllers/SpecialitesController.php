@@ -12,6 +12,7 @@ use App\Prestation ;
 use App\Specialite ;
 use App\Ville ;
 use DB;
+use App\Historique;
 
 
 class SpecialitesController extends Controller

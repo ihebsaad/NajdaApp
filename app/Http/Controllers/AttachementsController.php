@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Entree ;
 use App\Attachement ;
+use App\Historique;
 
 
 class AttachementsController extends Controller

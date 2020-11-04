@@ -10,6 +10,7 @@ use App\Prestation ;
 use App\Doc ;
 use App\Ville ;
 use DB;
+use App\Historique;
 
 
 class DocsController extends Controller

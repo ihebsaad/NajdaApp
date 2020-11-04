@@ -17,6 +17,7 @@ use App\Client;
  use Illuminate\Support\Facades\Auth;
  use Swift_Mailer;
  use Mail;
+use App\Historique;
 
 
 class FacturesController extends Controller
@@ -105,7 +106,14 @@ class FacturesController extends Controller
             if ($facture->save())
             { $id=$facture->id;
         $nomuser=$user->name.' '.$user->lastname;
-        Log::info('[Agent: '.$nomuser.'] Ajout de facture  '. $request->get('reference') );
+ 		
+	  $desc='Ajout de facture '.$request->get('reference') ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);$hist->save();
+		
 
                 return url('/factures/view/'.$id)/*->with('success', 'Dossier Créé avec succès')*/;
             }

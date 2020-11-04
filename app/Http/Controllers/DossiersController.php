@@ -154,7 +154,9 @@ class DossiersController extends Controller
                  $attachement->save();                                     
 
 
-                return  'ok';         
+                return  'ok';  
+
+ 			
     
     }
 
@@ -794,7 +796,13 @@ class DossiersController extends Controller
 
 
             $nomuser = $user->name . ' ' . $user->lastname;
-            Log::info('[Agent: ' . $nomuser . '] Ajout de dossier: ' . $reference_medic);
+ 		
+$desc='Ajout de dossier: ' . $reference_medic;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	
 
             // dispatch Email au dossier
            $entreeid= $request->get('entree');
@@ -932,8 +940,7 @@ class DossiersController extends Controller
         { $iddoss=$dossier->id;
 
             $nomuser=$user->name.' '.$user->lastname;
-            Log::info('[Agent: '.$nomuser.'] Ajout de dossier: '.$reference_medic);
-
+ 
             $identree = $request->get('entree');
         //    if($identree!=''){
           //  $entree  = Entree::find($identree);
@@ -1201,8 +1208,14 @@ class DossiersController extends Controller
             $files=null;$attachs=null;
             app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu,$files,$attachs) ;
 
-            Log::info('Envoi Accusé N Aff par : ' . $nomuser . ' Dossier: ' . $refdossier);
-
+			$desc='Envoi Accusé N Aff , Dossier: ' . $refdossier;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	
+		
+ 
         } catch (Exception $ex) {
             // Debug via $ex->getMessage();
             //      echo '<script>alert("Erreur !") </script>' ;
@@ -1366,8 +1379,15 @@ class DossiersController extends Controller
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
-        Log::info('[Agent: '.$nomuser.'] - Affectation de dossier :'.$ref.' à: '.$nomagent);
-         return back();
+       
+	   $desc='Affectation de dossier :'.$ref.' à: '.$nomagent ;
+	   	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	
+
+          return back();
 
     }
 
@@ -1409,7 +1429,15 @@ class DossiersController extends Controller
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
                 $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
-                Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
+               
+ 			   
+			   $desc='Affectation de dossier :'.$ref.' à: '.$nomagent;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	
+			   
             }   //foreach
         }
         return 'true';
@@ -3419,8 +3447,12 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                     }
                 }
 
-                Log::info('[Agent: ' . $nomuser . '] Clôture de dossier: ' . $refd .' '.$etat);
-
+     $desc=' Clôture de dossier: ' . $refd .' '.$etat;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>auth::user()->id,
+        ]);	
 
                 }
             }else{
@@ -3447,8 +3479,13 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
                 $alerte->save();
 
-                Log::info('[Agent: ' . $nomuser . '] Re-Ouverture de dossier: ' . $refd);
-
+ 
+    $desc='Re-Ouverture de dossier: ' . $refd;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	
 
             }
     }

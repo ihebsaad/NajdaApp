@@ -20,6 +20,7 @@ use App\Parametre;
 use DB;
 use WordTemplate;
 use Breadlesscode\Office\Converter;
+use App\Historique;
 
 class DocumentsController extends Controller
 {
@@ -635,11 +636,27 @@ $nomuser = $user->name ." ".$user->lastname ;
        $docparent=$infoparent['titre'];
 if(isset($_POST['modif']) && $_POST['modif']=='1')
 {
-Log::info('[Agent : '.$nomuser.' ] modification du document '.$docparent.' dans le dossier: '.$refdoss );
+ 
+ 			$desc='modification du document '.$docparent.' dans le dossier: '.$refdoss ;
+
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
+
 }
 else
 {
-Log::info('[Agent : '.$nomuser.' ] remplacement du document '.$docparent.' dans le dossier: '.$refdoss );
+ 
+ 			$desc='remplacement du document '.$docparent.' dans le dossier: '.$refdoss ;
+
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
+		
 }
 if(!empty($_POST['id__prestataire']))
 {
@@ -654,7 +671,14 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
 }
 else 
 {
-Log::info('[Agent : '.$nomuser.' ] Generation du document '.$titref.' dans le dossier: '.$refdoss );
+  			$desc='Generation du document '.$titref.' dans le dossier: '.$refdoss ;
+
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
+		
 if(!empty($_POST['id__prestataire']))
 {
 $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
@@ -1883,7 +1907,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$refdoss);
+ 
+ 			$desc='Annulation de prestation pour le dossier: ' .$refdoss ;
+
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
+		
 	 }}  
 if($champtemp ==='[ID__PRESTATAIRE1]')
 {
@@ -1895,7 +1927,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$refdoss);
+   		
+$desc='Annulation de prestation pour le dossier: ' .$refdoss;
+
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
+		
 	 }}  
                 }
                 elseif($champtemp ==='[DATE_HEURE]')
@@ -2021,8 +2061,15 @@ $nomuser = $user->name ." ".$user->lastname ;
  
 
  $docparent=$infoparent['titre'];
-Log::info('[Agent : '.$nomuser.' ] Annulation du document '.$docparent.' dans le dossier: '.$refdoss );
+  		
+$desc='Annulation du document '.$docparent.' dans le dossier: '.$refdoss ;
 
+		 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+            'user_id'=>$user->id,
+        ]);	$hist->save();
+		
 }
 //FIN LOG DOC
         // enregistrement de lattachement
