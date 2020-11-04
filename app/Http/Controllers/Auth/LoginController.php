@@ -46,11 +46,12 @@ class LoginController extends Controller
 
         $nomuser = $user->name . ' ' . $user->lastname;
  
-	 $ip = $_SERVER['REMOTE_ADDR'];
+	/* $ip = $_SERVER['REMOTE_ADDR'];
 	 $details = json_decode(file_get_contents("http://ipinfo.io/{$ip}/json"));
 		$adresse=$details->city .' '.$details->region.' '.$details->country;
-		$desc='Login de '.$adresse;
-		
+		*/
+		 $desc='Login ';
+
          $hist = new Historique([
               'description' => $desc,
             'user' => $nomuser,

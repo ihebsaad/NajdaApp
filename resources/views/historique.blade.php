@@ -28,27 +28,30 @@
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th style="width:10%">ID</th>
+				<th style="width:10%">Date</th>			
+               <!-- <th style="width:10%">ID</th>-->
                 <th style="width:10%">N° Agent</th>
-                <th style="width:20%">Agent</th>				
-                <th style="width:60%">Description</th>
+                <th style="width:15%">Agent</th>				
+                 <th style="width:50%">Description</th>
  
                </tr>
             <tr>
-                <th style="width:10%">ID</th>
+           <th style="width:10%">Date</th>
+ <!--   <th style="width:10%">ID</th>-->
 				 <th style="width:10%">N° Agent</th>
-				<th style="width:20%">Nom Agent</th>
-                <th style="width:60%">Description</th>
+				<th style="width:15%">Nom Agent</th>
+                <th style="width:50%">Description</th>
              </tr>
             </thead>
             <tbody>
             @foreach($historiques as $hist)
                 <?php
- 
+ $date=  date('d/m/Y H:i', strtotime($hist->created_at ));
                 ?>
 
                 <tr>
- 					<td><?php echo $hist->id ; ?></td>
+ 				 	<td><?php echo $date ?></td>
+					<!--<td><?php echo $hist->id ; ?></td>-->
 					<td><?php echo $hist->user_id ; ?></td>
 					<td><?php echo $hist->user ; ?></td>
 					<td><?php echo $hist->description ; ?></td>
