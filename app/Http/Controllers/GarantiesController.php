@@ -8,6 +8,8 @@ use App\Rubrique;
 use App\RubriqueInitial;
 use DB;
 use App\Historique;
+use App\Parametre;
+
 
 class GarantiesController extends Controller
 {
@@ -45,8 +47,8 @@ class GarantiesController extends Controller
             $garantie = new Garantie([
               'nom' => $request->get('nom'),
              'description' => $request->get('description'),
-'montant' => $request->get('montant'),
-              'devise' => $request->get('devise'),
+'montantgr' => $request->get('montant'),
+              'devisegr' => $request->get('devise'),
              ]);
             if ($garantie->save())
             { $id=$garantie->id;
@@ -64,7 +66,54 @@ class GarantiesController extends Controller
 	
 		    public function savingRB(Request $request)
     {
-        if( ($request->get('rubriqueinitial'))!=null) {
+
+                $paramdev=Parametre::select('euro_achat','dollar_achat')->first();
+		  $idgarantie =$request->get('garantie');
+$garantied=Garantie::where('id',$idgarantie)->first();
+$devisegar = $garantied->devisegr;
+ // CONVERSION MONTANT garantie
+                    if ( $devisegar === "EUR")
+                        $montantgar = $garantied->montantgr * floatval($paramdev['euro_achat']);
+                    if ( $devisegar === "USD")
+                        $montantgar = $garantied->montantgr * floatval($paramdev['dollar_achat']);
+                    if ( $devisegar === "TND")
+                        $montantgar = $garantied->montantgr;
+                    if (( $devisegar === "") || ( is_null($devisegar)))
+                        $montantgar = $garantied->montantgr;
+ if ( $request->get('devise') === "EUR")
+                        $montantrub = $request->get('montant') * floatval($paramdev['euro_achat']);
+                if ( $request->get('devise') === "USD")
+                        $montantrub = $request->get('montant') * floatval($paramdev['dollar_achat']);
+                if ( $request->get('devise') === "TND")
+                        $montantrub = $request->get('montant');
+                if (( $request->get('devise') === "") || ( is_null($request->get('devise'))))
+                        $montantrub = $request->get('montant');
+$rubriques=Rubrique::where("garantie",$idgarantie)->get();
+                    $smrubriques = $montantrub;
+                    foreach ($rubriques as $rub) {
+                        
+                       
+                                    // VERIFICATION DEVISE GOP
+                                        if ($rub['devise'] == "TND")
+                                            $Montantrubrique = $rub['montant'];
+                                        if ($rub['devise'] == "EUR")
+                                            $Montantrubrique = $rub['montant'] * floatval($paramdev['euro_achat']);
+                                        if ($rub['devise'] == "USD")
+                                            $Montantrubrique = $rub['montant'] * floatval($paramdev['dollar_achat']);
+                                    
+                                    
+                                    $smrubriques+= $Montantrubrique;
+                                 
+                                
+                            
+
+}
+
+ if ($smrubriques > $montantgar && $montantgar!==null)
+                    { $diffmnt = $smrubriques-$montantgar;
+                        return 'par: '.$diffmnt; }
+
+        if( ($request->get('rubriqueinitial'))!==0) {
 
 		  $garantie =$request->get('garantie');
 
@@ -160,12 +209,117 @@ DB::table('rubriques_assure')->insert(
 
         $id= $request->get('rubrique');
         $champ= strval($request->get('champ'));
-       $val= $request->get('val');
+ $val= $request->get('val');
+if($champ==="montant")
+{
+
+ $paramdev=Parametre::select('euro_achat','dollar_achat')->first();
+		 
+$rubriqued=Rubrique::where('id',$id)->first();
+$garantied=Garantie::where('id',$rubriqued->garantie)->first();
+$devisegar = $garantied->devisegr;
+ // CONVERSION MONTANT garantie
+                    if ( $devisegar === "EUR")
+                        $montantgar = $garantied->montantgr * floatval($paramdev['euro_achat']);
+                    if ( $devisegar === "USD")
+                        $montantgar = $garantied->montantgr * floatval($paramdev['dollar_achat']);
+                    if ( $devisegar === "TND")
+                        $montantgar = $garantied->montantgr;
+                    if (( $devisegar === "") || ( is_null($devisegar)))
+                        $montantgar = $garantied->montantgr;
+ if ( $rubriqued->devise === "EUR")
+                       $montantrub = $val * floatval($paramdev['euro_achat']);
+                if ( $rubriqued->devise === "USD")
+                        $montantrub = $val* floatval($paramdev['dollar_achat']);
+                if ( $rubriqued->devise === "TND")
+                        $montantrub = $val;
+                if (( $rubriqued->devise === "") || ( is_null($rubriqued->devise)))
+                        $montantrub = $val;
+$rubriques=Rubrique::where("garantie",$rubriqued->garantie)->where('id', '<>', $id)->get();
+                    $smrubriques = $montantrub;
+                    foreach ($rubriques as $rub) {
+                        
+                       
+                                    // VERIFICATION DEVISE GOP
+                                        if ($rub['devise'] == "TND")
+                                            $Montantrubrique = $rub['montant'];
+                                        if ($rub['devise'] == "EUR")
+                                            $Montantrubrique = $rub['montant'] * floatval($paramdev['euro_achat']);
+                                        if ($rub['devise'] == "USD")
+                                            $Montantrubrique = $rub['montant'] * floatval($paramdev['dollar_achat']);
+                                    
+                                    
+                                    $smrubriques+= $Montantrubrique;
+                                 
+                                
+                            
+
+}
+
+ if ($smrubriques > $montantgar && $montantgar!==null)
+                    { $diffmnt = $smrubriques-$montantgar;
+                        return 'par: '.$diffmnt; }
+
+
+}
+if($champ==="devise")
+{
+
+ $paramdev=Parametre::select('euro_achat','dollar_achat')->first();
+		 
+$rubriqued=Rubrique::where('id',$id)->first();
+$garantied=Garantie::where('id',$rubriqued->garantie)->first();
+$devisegar = $garantied->devisegr;
+ // CONVERSION MONTANT garantie
+                    if ( $devisegar === "EUR")
+                        $montantgar = $garantied->montantgr * floatval($paramdev['euro_achat']);
+                    if ( $devisegar === "USD")
+                        $montantgar = $garantied->montantgr * floatval($paramdev['dollar_achat']);
+                    if ( $devisegar === "TND")
+                        $montantgar = $garantied->montantgr;
+                    if (( $devisegar === "") || ( is_null($devisegar)))
+                        $montantgar = $garantied->montantgr;
+ if ( $val === "EUR")
+                       $montantrub = $rubriqued->montant * floatval($paramdev['euro_achat']);
+                if ( $val === "USD")
+                        $montantrub = $rubriqued->montant * floatval($paramdev['dollar_achat']);
+                if ( $val === "TND")
+                        $montantrub = $rubriqued->montant ;
+                if (( $val === "") || ( is_null($rubriqued->devise)))
+                        $montantrub = $rubriqued->montant ;
+$rubriques=Rubrique::where("garantie",$rubriqued->garantie)->where('id', '<>', $id)->get();
+                    $smrubriques = $montantrub;
+                    foreach ($rubriques as $rub) {
+                        
+                       
+                                    // VERIFICATION DEVISE GOP
+                                        if ($rub['devise'] == "TND")
+                                            $Montantrubrique = $rub['montant'];
+                                        if ($rub['devise'] == "EUR")
+                                            $Montantrubrique = $rub['montant'] * floatval($paramdev['euro_achat']);
+                                        if ($rub['devise'] == "USD")
+                                            $Montantrubrique = $rub['montant'] * floatval($paramdev['dollar_achat']);
+                                    
+                                    
+                                    $smrubriques+= $Montantrubrique;
+                                 
+                                
+                            
+
+}
+
+ if ($smrubriques > $montantgar && $montantgar!==null)
+                    { $diffmnt = $smrubriques-$montantgar;
+                        return 'par: '.$diffmnt; }
+
+
+}
+      
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
         Rubrique::where('id', $id)->update(array($champ => $val));
       
-if($champ="montant")
+if($champ==="montant")
 {
 $annee=date('Y');
  $rubriques=DB::table('rubriques_assure')->where('rubrique', $id)->get();
@@ -175,7 +329,7 @@ $montantg=$rubrique->montant;
 $montantr=$rubrique->mrestant;
 $mutilise = $montantg - $montantr;
 $montantval=$val-$mutilise;
-DB::table('rubriques_assure')->where('rubrique', $rubrique->rubrique)->where('id_assure', $rubrique->id_assure)->where('annee', $annee)->update(['mrestant'=>$montantval,'montant'=>$val]);
+DB::table('rubriques_assure')->where('rubrique', $rubrique->rubrique)->where('id_assure', $rubrique->id_assure)->where('annee', $annee)->update(['mrestant'=>$montantval,'montant'=>$val,'updated_at'=>NOW()]);
 }
 
 

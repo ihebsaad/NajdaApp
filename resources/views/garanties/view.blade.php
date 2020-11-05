@@ -5,7 +5,7 @@
 
 
 use App\RubriqueInitial ;
-
+use App\Rubrique ;
 ?>
     <div class="portlet box grey">
         <div class="modal-header"><h1>Garantie</h1></div>
@@ -27,14 +27,14 @@ use App\RubriqueInitial ;
                       </div>	
                             	 <div class="col-md-2">
                          <label for="inputError" class="control-label">Montant</label>
- 		               <input onchange="changing(this)" type="number" class="form-control input" name="montant" id="montant"  value="{{ $garantie->montant }}">
+ 		               <input onchange="changing(this)" type="number" class="form-control input" name="montantgr" id="montantgr"  value="{{ $garantie->montantgr }}">
                       </div>	
                                   <div class="col-md-2">
                          <label for="inputError" class="control-label">Devise</label>
- 		               <select class="form-control input" name="devise" id="devise"  onchange="changing(this)"  >
-								 <option value="TND" <?php if($garantie->devise=='TND'){echo 'selected="selected"';}  ?>  >TND</option>
-								 <option value="EUR" <?php if($garantie->devise=='EUR'){echo 'selected="selected"';}  ?> >EUR</option>
-								 <option value="USD" <?php if($garantie->devise=='USD'){echo 'selected="selected"';}  ?> >USD</option>
+ 		               <select class="form-control input" name="devise" id="devisegr"  onchange="changing(this)"  >
+								 <option value="TND" <?php if($garantie->devisegr=='TND'){echo 'selected="selected"';}  ?>  >TND</option>
+								 <option value="EUR" <?php if($garantie->devisegr=='EUR'){echo 'selected="selected"';}  ?> >EUR</option>
+								 <option value="USD" <?php if($garantie->devisegr=='USD'){echo 'selected="selected"';}  ?> >USD</option>
 								 </select>
                       </div>	
 	 
@@ -128,8 +128,11 @@ use App\RubriqueInitial ;
                                   <select class="form-control" style="width: 565px"  required id="rubriqueg" name="rubriqueg" >
                                         <option value="Select">Selectionner</option>
                                     <?php
-                                       
-                                        $rubriques = RubriqueInitial::orderBy('created_at','desc')->get();
+
+                                       $rubriquesutilises=Rubrique::where('garantie',$garantie->id)->pluck('rubriqueinitial');
+
+                                        $rubriques = RubriqueInitial::whereNotIn('id',$rubriquesutilises)->orderBy('created_at','desc')->get();
+
                                         
                                     ?>
   
@@ -232,6 +235,16 @@ use App\RubriqueInitial ;
             method: "POST",
             data: { rubrique :rubrique,champ:champ ,val:val, _token: _token},
             success: function (data) {
+if (data.indexOf("par: ") >= 0)
+                      {
+                        Swal.fire({
+                          type: 'error',
+                          title: 'le plafond de table de garantie est dépassé '+data+' TND',
+                          text: '',
+
+                        });
+                        return false;
+                      }
                 $(elm).animate({
                     opacity: '0.3',
                 });
@@ -251,8 +264,9 @@ use App\RubriqueInitial ;
                 var rubriqueinitial = $('#rubriqueg').val();
                 var montant = $('#montant').val();
                 var devise = $('#devise').val();
+//alert(rubriqueinitial);
 //alert(rubriqueinitial );
-                 if ((nom != '')  )
+                 if ((rubriqueinitial !== 'Select' )  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
@@ -260,6 +274,16 @@ use App\RubriqueInitial ;
                         method:"POST",
                         data:{garantie:garantie,rubriqueinitial:rubriqueinitial,montant:montant,devise:devise , _token:_token},
                         success:function(data){
+ if (data.indexOf("par: ") >= 0)
+                      {
+                        Swal.fire({
+                          type: 'error',
+                          title: 'le plafond de table de garantie est dépassé '+data+' TND',
+                          text: '',
+
+                        });
+                        return false;
+                      }
 
                             //   alert('Added successfully');
                          window.location =data;

@@ -53,7 +53,7 @@
                     <td  ><a href="{{action('GarantiesController@view', $garantie['id'])}}" ><?php echo sprintf("%04d",$garantie->id);?></a></td>
 					<td><?php echo $garantie->nom ; ?></td>
 					<td><?php echo $garantie->description ; ?></td>
-                                        <td><?php echo $garantie->montant.' '.$garantie->devise;?></td>
+                                        <td><?php echo $garantie->montantgr.' '.$garantie->devisegr;?></td>
                       <td    >
                           @can('isAdmin')
                               <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('GarantiesController@destroy', $garantie['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -247,8 +247,8 @@
                 var description = $('#description').val();
                 var montant = $('#montant').val();
                 var devise = $('#devise').val();
-alert(montant);
-alert(devise);
+//alert(montant);
+//alert(devise);
                  if ((nom != '')  )
                 {
                     var _token = $('input[name="_token"]').val();
