@@ -603,10 +603,47 @@ foreach ($array_spec as $spec) {
         <datalist id="CL_lieuprest_pc">
            <?php
             foreach ($array_prest as $prest) {
-                echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+$sqltel = "SELECT id,champ FROM adresses where nature='telinterv' and parent=".$prest['id'];
+	$resulttel = $conn->query($sqltel);
+	if ($resulttel->num_rows > 0) {
+	    // output data of each row
+	    $array_tel = array();
+	    while($rowtel = $resulttel->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_tel[] = array('id' => $rowtel["id"],'champ' => $rowtel["champ"]);
+	    }}
+//print_r($array_tel);
+if(empty($array_tel))
+{
+$tel='';
+
+}
+else
+{$tel=$array_tel[0]['champ'];
+$array_tel=[];}
+                echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
             }
+
            foreach ($array_prestgg as $prestg) {
-           echo "<option value='".$prestg['name']."' telprest='".$prestg['phone_home']."'>".$prestg['name']."</option>";
+$sqltelg = "SELECT id,champ FROM adresses where nature='telinterv' and parent=".$prestg['id'];
+	$resulttelg = $conn->query($sqltelg);
+	if ($resulttelg->num_rows > 0) {
+	    // output data of each row
+	    $array_telg = array();
+	    while($rowtelg = $resulttelg->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_telg[] = array('id' => $rowtelg["id"],'champ' => $rowtelg["champ"]);
+	    }}
+//print_r($array_tel);
+if(empty($array_telg))
+{
+$telg='';
+
+}
+else
+{$telg=$array_telg[0]['champ'];
+$array_telg=[];}
+           echo "<option value='".$prestg['name']."' telprest='".$telg."'>".$prestg['name']."</option>";
            }
             ?>
         </datalist>
@@ -624,10 +661,46 @@ foreach ($array_spec as $spec) {
         <datalist id="CL_lieudecharge_dec">
             <?php
             foreach ($array_prest as $prest) {
-                echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+$sqltel = "SELECT id,champ FROM adresses where nature='telinterv' and parent=".$prest['id'];
+	$resulttel = $conn->query($sqltel);
+	if ($resulttel->num_rows > 0) {
+	    // output data of each row
+	    $array_tel = array();
+	    while($rowtel = $resulttel->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_tel[] = array('id' => $rowtel["id"],'champ' => $rowtel["champ"]);
+	    }}
+//print_r($array_tel);
+if(empty($array_tel))
+{
+$tel='';
+
+}
+else
+{$tel=$array_tel[0]['champ'];
+$array_tel=[];}
+                echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
             }
             foreach ($array_prestgg as $prestg) {
-             echo "<option value='".$prestg['name']."' telprest='".$prestg['phone_home']."'>".$prestg['name']."</option>";
+$sqltelg = "SELECT id,champ FROM adresses where nature='telinterv' and parent=".$prestg['id'];
+	$resulttelg = $conn->query($sqltelg);
+	if ($resulttelg->num_rows > 0) {
+	    // output data of each row
+	    $array_telg = array();
+	    while($rowtelg = $resulttelg->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_telg[] = array('id' => $rowtelg["id"],'champ' => $rowtelg["champ"]);
+	    }}
+//print_r($array_tel);
+if(empty($array_telg))
+{
+$telg='';
+
+}
+else
+{$telg=$array_telg[0]['champ'];
+$array_telg=[];}
+             echo "<option value='".$prestg['name']."' telprest='".$telg."'>".$prestg['name']."</option>";
             }
             ?>
         </datalist>

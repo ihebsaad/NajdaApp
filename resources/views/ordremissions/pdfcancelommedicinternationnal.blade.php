@@ -631,7 +631,7 @@ span.rvts65
     </div>
     
 </div>
-<p style="margin-top:-40px!important;line-height:30%; margin-left:2.85pt; margin-bottom:5px; widows:0; orphans:0;  font-size:10pt;color:red;"><span style="font-family:'Times New Roman'; font-weight:bold">Ce document annule l'ordre de mission au-dessous de la date : <?php echo $omparent['created_at']; ?></span></p>
+<p style="margin-top:-40px!important;line-height:30%; margin-left:2.85pt; margin-bottom:5px; widows:0; orphans:0;  font-size:10pt;color:red;"><span style="font-family:'Times New Roman'; font-weight:bold">Ce document annule l'ordre de mission ci-dessous en date du : <?php echo $omparent['created_at']; ?></span></p>
 
 <p class=rvps1><span class=rvts11>Recommandations aux escortes </span><br><span class=rvts12>Connexion possible avec la puce FRANCAISE fournie SANS téléchargement de </span><span class=rvts13>gros fichiers</span><span class=rvts12> SVP</span></p>
 <p class=rvps1><span class=rvts14>Puce française utilisable dans toute la communauté européenne </span><span class=rvts15>SAUF Suisse</span></p>

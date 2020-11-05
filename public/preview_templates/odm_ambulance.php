@@ -718,7 +718,25 @@ if (isset($detailom))
 <datalist id="CL_lieuprest_pc">
 <?php
 foreach ($array_prest as $prest) {
-	echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+$sqltel = "SELECT id,champ FROM adresses where nature='telinterv' and parent=".$prest['id'];
+	$resulttel = $conn->query($sqltel);
+	if ($resulttel->num_rows > 0) {
+	    // output data of each row
+	    $array_tel = array();
+	    while($rowtel = $resulttel->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_tel[] = array('id' => $rowtel["id"],'champ' => $rowtel["champ"]);
+	    }}
+//print_r($array_tel);
+if(empty($array_tel))
+{
+$tel='';
+
+}
+else
+{$tel=$array_tel[0]['champ'];
+$array_tel=[];}
+	echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
 }
 ?>
 </datalist>
@@ -729,7 +747,25 @@ foreach ($array_prest as $prest) {
 <datalist id="CL_lieudecharge_dec">
 <?php
 foreach ($array_prest as $prest) {
-	echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+$sqltel = "SELECT id,champ FROM adresses where nature='telinterv' and parent=".$prest['id'];
+	$resulttel = $conn->query($sqltel);
+	if ($resulttel->num_rows > 0) {
+	    // output data of each row
+	    $array_tel = array();
+	    while($rowtel = $resulttel->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_tel[] = array('id' => $rowtel["id"],'champ' => $rowtel["champ"]);
+	    }}
+//print_r($array_tel);
+if(empty($array_tel))
+{
+$tel='';
+
+}
+else
+{$tel=$array_tel[0]['champ'];
+$array_tel=[];}
+	echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
 }
 ?>
 </datalist>

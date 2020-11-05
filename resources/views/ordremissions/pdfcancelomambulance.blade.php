@@ -107,7 +107,7 @@ if (isset($omparent['clientIMA'])) { ?>
 					</p>
 	</div>
 </div>
-<p style="margin-top:-40px!important;line-height:30%; margin-left:2.85pt; margin-bottom:5px; widows:0; orphans:0;  font-size:10pt;color:red;"><span style="font-family:'Times New Roman'; font-weight:bold">Ce document annule l'ordre de mission au-dessous de la date : <?php echo $omparent['created_at']; ?></span></p>
+<p style="margin-top:-40px!important;line-height:30%; margin-left:2.85pt; margin-bottom:5px; widows:0; orphans:0;  font-size:10pt;color:red;"><span style="font-family:'Times New Roman'; font-weight:bold">Ce document annule l'ordre de mission ci-dessous en date du : <?php echo $omparent['created_at']; ?></span></p>
 
 <div class="row" style=" margin-left: 0px;">
 	<p style="margin-top: -2pt;margin-bottom:0pt; widows:0; orphans:0; font-size:9pt">
