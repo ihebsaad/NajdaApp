@@ -220,7 +220,15 @@ $seance =  DB::table('seance')
                     <br>
                     Emails aux Agents
                 </a>
-            </div>			
+            </div>	
+
+             <div class="col-sm-2">
+            <a href="{{ route('mails.automatiques') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span class="   fas fa-mail-bulk"></span>
+                <br>
+                Emails automatiques
+            </a>
+        </div>		
 	    </div>
 	
 		

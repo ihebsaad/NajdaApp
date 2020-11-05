@@ -186,7 +186,15 @@
  $typeuser=$user->user_type;
 
  $debut=$seance->debut;
- $fin=$seance->fin;
+ if($seance->fin && $seance->fin!=' ' )
+ {
+     $fin=$seance->fin;
+ }
+ else
+ {
+   $fin=$seance->fin_seance1; 
+ }
+ 
 
  $month = date('m');
  $year = date('Y');
@@ -1110,30 +1118,78 @@ $heureActuelle=date('H');
 $dtc = (new \DateTime())->format('Y-m-d H:i:s');
 $dtc2= (new \DateTime())->format('Y-m-d');
 $format = "Y-m-d H:i:s";
-
+$pas_seance2=false;
 $dateSys = \DateTime::createFromFormat($format,$dtc);
+$deb_seance_11='';
+$fin_seance_11='';
+$deb_seance_22='';
+$fin_seance_22='';
+$deb_seance_33='';
+$fin_seance_33='';
 
+try {
 
-        $deb_seance_1=(new \DateTime())->format('Y-m-d 08:00:00');
-        $fin_seance_1=(new \DateTime())->format('Y-m-d 15:00:00');
+if($seance->debut && $seance->debut!=' ' && strpos($seance->debut, ':')!== false)
+{
+   $deb_seance_11 =$seance->debut;
+   $deb_seance_11 = str_replace(' ', '', $deb_seance_11);
+   $fin_seance_11 = $seance->fin_seance1;
+   $fin_seance_11 = str_replace(' ', '',  $fin_seance_11);
+   $deb_seance_22=$seance->fin_seance1;
+   $deb_seance_22 = str_replace(' ', '', $deb_seance_22);
+   $fin_seance_33=$seance->debut;
+   $fin_seance_33 = str_replace(' ', '', $fin_seance_33);
+   //dd($fin_seance_11);
 
-        $deb_seance_2=(new \DateTime())->format('Y-m-d 15:00:00');
-        $fin_seance_2=(new \DateTime())->format('Y-m-d 23:00:00');
+}
 
-        $deb_seance_3=(new \DateTime())->format('Y-m-d 23:00:00');
-        $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d 08:00:00');
+if($seance->fin && $seance->fin!=' '  && strpos($seance->fin, ':')!== false)
+ {
+     $fin_seance_22=$seance->fin;
+     $fin_seance_22 = str_replace(' ', '', $fin_seance_22);
+     $deb_seance_33=$seance->fin;
+     $deb_seance_33 = str_replace(' ', '',  $deb_seance_33);
+ }
+ else
+ {
+  $deb_seance_33=$seance->fin_seance1; 
+  $deb_seance_33 = str_replace(' ', '',  $deb_seance_33);
+  $pas_seance2=true;
+ }
+
+ //dd($pas_seance2);
+        $deb_seance_1=(new \DateTime())->format('Y-m-d '.$deb_seance_11.':00');
+        //
+        $fin_seance_1=(new \DateTime())->format('Y-m-d '.$fin_seance_11.':00');
+        
+        if(!$pas_seance2)
+        {
+        $deb_seance_2=(new \DateTime())->format('Y-m-d '.$deb_seance_22.':00');
+        $fin_seance_2=(new \DateTime())->format('Y-m-d '.$fin_seance_22.':00');
+        }
+
+        $deb_seance_3=(new \DateTime())->format('Y-m-d '.$deb_seance_33.':00');
+        $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d '.$fin_seance_33.':00');
 
          
       
         $format = "Y-m-d H:i:s";
         $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
+       // dd($deb_seance_1);
         $fin_seance_1 = \DateTime::createFromFormat($format, $fin_seance_1);
-        
+        //dd($fin_seance_1);
+        if(!$pas_seance2)
+        {
         $deb_seance_2 = \DateTime::createFromFormat($format, $deb_seance_2);
+       // dd($deb_seance_2);
         $fin_seance_2 = \DateTime::createFromFormat($format, $fin_seance_2);
+       // dd( $fin_seance_2);
+        }
 
         $deb_seance_3 = \DateTime::createFromFormat($format, $deb_seance_3);
+       //dd($deb_seance_3);
         $fin_seance_3 = \DateTime::createFromFormat($format, $fin_seance_3);
+        //dd($fin_seance_3);
 
         $datespe1 = \DateTime::createFromFormat($format,\App\Http\Controllers\DossiersController::get_date_seance1());
         $datespe2 = \DateTime::createFromFormat($format,\App\Http\Controllers\DossiersController::get_date_seance2());
@@ -1147,7 +1203,7 @@ $dateSys = \DateTime::createFromFormat($format,$dtc);
                 if(\App\Http\Controllers\DossiersController::get_calcul_doss_seance1()==0)
                 {
                   
-                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance1();
+                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance1($deb_seance_11,$fin_seance_11);
                    \App\Http\Controllers\DossiersController::set_calcul_doss_seance1(1);
                    \App\Http\Controllers\DossiersController::set_date_seance1($dtc);
                    // dd("calcul seance 1");
@@ -1168,6 +1224,8 @@ $dateSys = \DateTime::createFromFormat($format,$dtc);
            }     
 
         }
+ if(!$pas_seance2)
+        {
 
         if($dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2)
         {
@@ -1176,7 +1234,7 @@ $dateSys = \DateTime::createFromFormat($format,$dtc);
                 if(\App\Http\Controllers\DossiersController::get_calcul_doss_seance2()==0)
                 {
 
-                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance2();
+             app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance2($deb_seance_22,$fin_seance_22);
                    \App\Http\Controllers\DossiersController::set_calcul_doss_seance2(1);
                    \App\Http\Controllers\DossiersController::set_date_seance2($dtc);
                   // dd("calcul seance 2");
@@ -1197,6 +1255,8 @@ $dateSys = \DateTime::createFromFormat($format,$dtc);
            }        
         }
 
+    }
+
          if($dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3)
         {
               if($datespe3->format('Y-m-d')!=$dtc2)
@@ -1204,7 +1264,7 @@ $dateSys = \DateTime::createFromFormat($format,$dtc);
                 if(\App\Http\Controllers\DossiersController::get_calcul_doss_seance3()==0)
                 {
 
-                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance3();
+                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance3($deb_seance_33,$fin_seance_33);
                    \App\Http\Controllers\DossiersController::set_calcul_doss_seance3(1);
                    \App\Http\Controllers\DossiersController::set_date_seance3($dtc);
                     //dd("calcul seance 3");
@@ -1226,9 +1286,12 @@ $dateSys = \DateTime::createFromFormat($format,$dtc);
            } 
             
         }
-
-    
-// exécution calcul dossiers actifs , dormant et immobile 
+   //dd('ok');
+  }
+catch (Exception $e) {
+    echo 'Erreur lors de l exécution de précédure de calcul des dossiers actifs , dormants et immobiles  : ',  $e->getMessage(), "\n";
+}  
+// fin exécution calcul dossiers actifs , dormant et immobile 
 
 // seance 1
 

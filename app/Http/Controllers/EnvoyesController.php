@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Envoye ;
 use App\Dossier ;
+use App\EmailAuto;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use PDF;
@@ -315,5 +316,15 @@ class EnvoyesController extends Controller
         }else{return '';}
 
     }
+
+   public static function mailsAutomatiques()
+   {
+
+    $emailsauto = EmailAuto::orderBy('created_at', 'desc')->get();
+
+    return view('envoyes.emailauto',['emailsauto' => $emailsauto]);
+
+
+   }
 }
 

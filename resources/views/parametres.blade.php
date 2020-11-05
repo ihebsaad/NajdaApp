@@ -25,6 +25,7 @@
     $veilleur=$seance->veilleur ;
 
     $debut=$seance->debut ;
+    $fin_seance1=$seance->fin_seance1 ;
     $fin=$seance->fin ;
 
     $parametres =  DB::table('parametres')
@@ -126,13 +127,19 @@
                                 {{ csrf_field() }}
                                 <tbody>
                                 <tr>
-                                    <td  style="width:30%" class="text-primary">Début de la séance du jour</td>
+                                    <td  style="width:30%" class="text-primary">Début de la séance 1 du jour</td>
                                     <td  style="width:70%">
                                             <input id="debut" onchange="changingseance(this)" type="text" class="form-control" name="debut" value="<?php echo $debut; ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-primary">Fin de la séance du jour</td>
+                                    <td  style="width:30%" class="text-primary">Fin de la séance 1 du jour</td>
+                                    <td  style="width:70%">
+                                            <input id="fin_seance1" onchange="changingseance(this)" type="text" class="form-control" name="fin_seance1" value="<?php echo $fin_seance1; ?>">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-primary">Fin de la séance 2 du jour</td>
                                     <td>
                                         <input id="fin" onchange="changingseance(this)" type="text" class="form-control" name="fin" value="<?php echo $fin; ?>">
                                     </td>

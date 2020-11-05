@@ -104,6 +104,14 @@ $seance =  DB::table('seance')
   
 
     <div class="row">
+
+        <div class="col-sm-2">
+            <a href="{{ route('mails.automatiques') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span class="   fas fa-mail-bulk"></span>
+                <br>
+                Emails automatiques
+            </a>
+        </div>
 	
 	    <div class="col-sm-2">
             <a href="{{ route('prestataires.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
@@ -123,16 +131,7 @@ $seance =  DB::table('seance')
 	 
  
 
-        <div class="col-sm-2">
-            <a href="{{ route('inactifs') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-                <span class="fas fa-lg  fa-warning"></span>
-                <br><?php $count=  \App\Dossier::where('sub_status', 'immobile')
-                    ->where('current_status', 'inactif')
-                     ->count();
-                  ?>
-                Dossiers Immobiles <span   class="label label-warning" style="color:black"><?php echo $count  ;?></span>
-            </a>
-        </div>
+        
 		
     </div>
 
@@ -144,6 +143,16 @@ $seance =  DB::table('seance')
                 <span class="fa fa-lg fa-fw fa-inbox"></span>
                 <br>
                 Boite mail perso 
+            </a>
+        </div>
+        <div class="col-sm-2">
+            <a href="{{ route('inactifs') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+                <span class="fas fa-lg  fa-warning"></span>
+                <br><?php $count=  \App\Dossier::where('sub_status', 'immobile')
+                    ->where('current_status', 'inactif')
+                     ->count();
+                  ?>
+                Dossiers Immobiles <span   class="label label-warning" style="color:black"><?php echo $count  ;?></span>
             </a>
         </div>
 		  <?php if($user_type=='financier' || $user_type=='bureau'  )

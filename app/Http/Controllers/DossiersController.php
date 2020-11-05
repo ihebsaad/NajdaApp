@@ -3060,7 +3060,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
 
 
-    function RendreEtatDossiersActifsSeance1()
+    function RendreEtatDossiersActifsSeance1($deb_seance_11,$fin_seance_11)
     {
 
 
@@ -3068,7 +3068,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
           $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
 
-          $dossiersactifsparmissions=$this->DossiersActifsSeance1();
+          $dossiersactifsparmissions=$this->DossiersActifsSeance1($deb_seance_11,$fin_seance_11);
           $dossiersactifs =array_unique($dossiersactifsparmissions);
           //dd($dossiersactifs);
           foreach ($dossiersdb as $value) {
@@ -3099,7 +3099,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
 
     }
-     function RendreEtatDossiersActifsSeance2()
+     function RendreEtatDossiersActifsSeance2($deb_seance_22,$fin_seance_22)
     {
 
 
@@ -3107,7 +3107,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
           $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
 
-          $dossiersactifsparmissions=$this->DossiersActifsSeance2();
+          $dossiersactifsparmissions=$this->DossiersActifsSeance2($deb_seance_22,$fin_seance_22);
           $dossiersactifs =array_unique($dossiersactifsparmissions);
           //dd($dossiersactifs);
           foreach ($dossiersdb as $value) {
@@ -3138,7 +3138,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
 
     }
-     function RendreEtatDossiersActifsSeance3()
+     function RendreEtatDossiersActifsSeance3($deb_seance_33,$fin_seance_33)
     {
 
 
@@ -3146,7 +3146,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
           $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
 
-          $dossiersactifsparmissions=$this->DossiersActifsSeance3();
+          $dossiersactifsparmissions=$this->DossiersActifsSeance3($deb_seance_33,$fin_seance_33);
           $dossiersactifs =array_unique($dossiersactifsparmissions);
           //dd($dossiersactifs);
           foreach ($dossiersdb as $value) {
@@ -3255,26 +3255,26 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
     }
 
-    function Gerer_etat_dossiersSeance1 ()
+    function Gerer_etat_dossiersSeance1 ($deb_seance_11,$fin_seance_11)
     {
 
-        $this->RendreEtatDossiersActifsSeance1();
+        $this->RendreEtatDossiersActifsSeance1($deb_seance_11,$fin_seance_11);
         $this->RendreEtatDossiersDormants();
         $this->RendreEtatDossiersImmobiles();
 
     }
-     function Gerer_etat_dossiersSeance2 ()
+     function Gerer_etat_dossiersSeance2 ($deb_seance_22,$fin_seance_22)
     {
 
-        $this->RendreEtatDossiersActifsSeance2();
+        $this->RendreEtatDossiersActifsSeance2($deb_seance_22,$fin_seance_22);
         $this->RendreEtatDossiersDormants();
         $this->RendreEtatDossiersImmobiles();
 
     }
-     function Gerer_etat_dossiersSeance3 ()
+     function Gerer_etat_dossiersSeance3($deb_seance_33,$fin_seance_33)
     {
 
-        $this->RendreEtatDossiersActifsSeance3();
+        $this->RendreEtatDossiersActifsSeance3($deb_seance_33,$fin_seance_33);
         $this->RendreEtatDossiersDormants();
         $this->RendreEtatDossiersImmobiles();
 
@@ -3734,12 +3734,12 @@ array_multisort($columns, SORT_DESC, $listetags);
         return $listetags;
     }
 
- public static function DossiersActifsSeance1( )
+ public static function DossiersActifsSeance1($deb_seance_11,$fin_seance_11 )
     {
 
-        $deb_seance_1=(new \DateTime())->format('Y-m-d 08:00:00');
-        $fin_seance_1=(new \DateTime())->format('Y-m-d 15:00:00');
-             
+        $deb_seance_1=(new \DateTime())->format('Y-m-d '.$deb_seance_11.':00');
+        $fin_seance_1=(new \DateTime())->format('Y-m-d '.$fin_seance_11.':00');
+           // dd('DossiersActifsSeance1') ;
       
         $format = "Y-m-d H:i:s";
         $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
@@ -3990,12 +3990,12 @@ array_multisort($columns, SORT_DESC, $listetags);
     }
 
 
-     public static function DossiersActifsSeance2( )
+     public static function DossiersActifsSeance2($deb_seance_22,$fin_seance_22 )
     {
 
       
-        $deb_seance_2=(new \DateTime())->format('Y-m-d 15:00:00');
-        $fin_seance_2=(new \DateTime())->format('Y-m-d 23:00:00');
+        $deb_seance_2=(new \DateTime())->format('Y-m-d '.$deb_seance_22.':00');
+        $fin_seance_2=(new \DateTime())->format('Y-m-d '.$fin_seance_22.':00');
 
         $format = "Y-m-d H:i:s";
                
@@ -4245,13 +4245,13 @@ array_multisort($columns, SORT_DESC, $listetags);
 
     }
 
-     public static function DossiersActifsSeance3( )
+     public static function DossiersActifsSeance3($deb_seance_33,$fin_seance_33 )
     {
 
 
-        $deb_seance_3=(new \DateTime())->format('Y-m-d 23:00:00');
-        $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d 08:00:00');
-
+        $deb_seance_3=(new \DateTime())->format('Y-m-d '.$deb_seance_33.':00');
+        $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d '.$fin_seance_33.':00');
+      //dd($deb_seance_3);
        
       
         $format = "Y-m-d H:i:s";
