@@ -98,7 +98,7 @@
 if (isset($omparent['clientIMA'])) { ?>
 				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($omparent['clientIMA']); ?></span></p>
 <?php } ?>
-				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heuredateRDV'])) { echo $omparent['CL_heuredateRDV']; } ?></span>
+				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heuredateRDV'])) {echo date('d/m/Y H:i:s', strtotime($omparent['CL_heuredateRDV']));} ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold;">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:  </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_Dimanche'])) { echo $omparent['CL_Dimanche']; } else {echo "non";} ?></span>
 					<span style="width:18.05pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Férié</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.8pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_Ferie'])) { echo $omparent['CL_Ferie']; } else {echo "non";} ?></span>
 				
@@ -204,7 +204,7 @@ if (isset($omparent['clientIMA'])) { ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Heure </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_decatter'])) { echo $omparent['CL_decatter']; } ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_D_A'])) { echo $omparent['CL_heure_D_A']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_D_A'])) { echo date('d/m/Y H:i:s', strtotime($omparent['CL_heure_D_A'])); } ?></span>
 </span>			
 </p>
 <?php }} ?>
@@ -219,7 +219,7 @@ if (isset($omparent['clientIMA'])) { ?>
 <p id="preportaeroport2" style="margin-top:0.05pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:'Times New Roman'; font-weight:bold">Heure </span><span style="font-family:'Times New Roman'; font-weight:bold">souhaitée </span><span style="font-family:'Times New Roman'; font-weight:bold">arrivée aérop/port: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heurearr'])) { echo $omparent['CL_heurearr']; } ?></span>
 <?php if($omparent['CL_destorg'] === "Destination"){ ?>
-					<span style="font-family:'Times New Roman'"> Si vers aéroport, par défaut heure décollage – 2heures, si de </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">aéroport, par défaut heure atterrissage</span><span style="font-family:'Times New Roman'"> ou heure atterrissage-30min si choix «</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">avion sanitaire</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">». S</span><span style="font-family:'Times New Roman'">i vers Port par défaut heure départ -3 heures, si de Port heure arrivée </span>
+					<span style="font-family:'Times New Roman'"> (Si vers aéroport, par défaut heure décollage – 2heures, si de </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">aéroport, par défaut heure atterrissage</span><span style="font-family:'Times New Roman'"> ou heure atterrissage-30min si choix «</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">avion sanitaire</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">». S</span><span style="font-family:'Times New Roman'">i vers Port par défaut heure départ -3 heures, si de Port heure arrivée) </span>
 <?php } ?>
 </p>
 

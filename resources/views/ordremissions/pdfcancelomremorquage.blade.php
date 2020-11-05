@@ -114,7 +114,7 @@
 if (isset($omparent['clientIMA'])) { ?>
 				<p style="font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($omparent['clientIMA']); ?></span></p>
 <?php } ?>
-				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heuredateRDV'])) { echo $omparent['CL_heuredateRDV']; } ?></span>
+				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heuredateRDV'])) {echo date('d/m/Y H:i:s', strtotime($omparent['CL_heuredateRDV'])); } ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold;">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:  </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_Dimanche'])) { echo $omparent['CL_Dimanche']; } else {echo "non";} ?></span>
 					<span style="width:18.05pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Férié</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.8pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_Ferie'])) { echo $omparent['CL_Ferie']; } else {echo "non";} ?></span>
 				
@@ -201,7 +201,7 @@ if (isset($omparent['clientIMA'])) { ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Départ bateau </span>
 
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_D'])) { echo $omparent['CL_heure_D']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_D'])) { echo date('d/m/Y H:i:s', strtotime($omparent['CL_heure_D'])); } ?></span>
 </span>			
 </p>
 <?php }} ?>
@@ -222,7 +222,7 @@ if (isset($omparent['CB_prerades'])) {if ($omparent['CB_prerades'] === "oui"||($
 
 <p id="pregoulette" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Heure </span><span style="font-family:'Times New Roman'; font-weight:bold">souhaitée </span><span style="font-family:'Times New Roman'; font-weight:bold">arrivée aérop/port: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heurearr'])) { echo $omparent['CL_heurearr']; } ?></span>
-					<span style="font-family:'Times New Roman'"> Si vers Port de la Goulette par défaut heure départ -3 heures si vers </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">Port de Rades par défaut RDV au port à 8h. </span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span>
+					<span style="font-family:'Times New Roman'"> (Si vers Port de la Goulette par défaut heure départ -3 heures si vers </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">Port de Rades par défaut RDV au port à 8h.) </span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span>
 </p>
 
 <?php }} ?>

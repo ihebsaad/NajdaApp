@@ -122,7 +122,7 @@
 if (isset($_POST['clientIMA'])) { ?>
 				<p style="font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($_POST['clientIMA']); ?></span></p>
 <?php } ?>
-				<p style="margin-top: -17px;margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heuredateRDV'])) { $DHsansT =str_replace('T',' ',$_POST['CL_heuredateRDV']); echo $DHsansT; } ?></span>
+				<p style="margin-top: -17px;margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heuredateRDV'])) { $DHsansT =str_replace('T',' ',$_POST['CL_heuredateRDV']); echo date('d/m/Y H:i:s', strtotime($DHsansT)); } ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold;">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Dimanche'])) { echo $_POST['CL_Dimanche']; } else {echo "non";} ?></span> <span style="width:7.05pt; display:inline-block"></span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Férié</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.8pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Ferie'])) { echo $_POST['CL_Ferie']; } else {echo "non";} ?></span>    <span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Nuit</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.25pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Nuit'])) { echo $_POST['CL_Nuit']; } else {echo "non";} ?></span>
 				</p>
 	</div>
@@ -213,7 +213,7 @@ if (isset($_POST['clientIMA'])) { ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Départ bateau </span>
 
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heure_D'])) { $DHsansT =str_replace('T',' ',$_POST['CL_heure_D']); echo $DHsansT; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heure_D'])) { $DHsansT =str_replace('T',' ',$_POST['CL_heure_D']);  echo date('d/m/Y H:i:s', strtotime($DHsansT));; } ?></span>
 </span>			
 </p>
 <?php }} ?>
@@ -234,7 +234,7 @@ if (isset($_POST['CB_prerades'])) {if ($_POST['CB_prerades'] === "oui"||($_POST[
 
 <p id="pregoulette" style="margin-top:0.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:'Times New Roman'; font-weight:bold">Heure </span><span style="font-family:'Times New Roman'; font-weight:bold">souhaitée </span><span style="font-family:'Times New Roman'; font-weight:bold">arrivée aérop/port: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heurearr'])) { echo $_POST['CL_heurearr']; } ?></span>
-					<span style="font-family:'Times New Roman'"> Si vers Port de la Goulette par défaut heure départ -3 heures si vers </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">Port de Rades par défaut RDV au port à 8h. </span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span>
+					<span style="font-family:'Times New Roman'"> (Si vers Port de la Goulette par défaut heure départ -3 heures si vers </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">Port de Rades par défaut RDV au port à 8h.) </span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span>
 </p>
 <?php }} ?>
 

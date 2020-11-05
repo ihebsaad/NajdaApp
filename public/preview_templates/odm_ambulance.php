@@ -869,7 +869,7 @@ foreach ($array_prestap as $prestap) {
 <?php } ?>  
 </select>
 <span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input type="datetime-local" id="CL_heure_D_A" name="CL_heure_D_A" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D_A'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_heuredateRDV']))."'";}} ?> >	
+<input type="datetime-local" id="CL_heure_D_A" name="CL_heure_D_A" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D_A'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_heure_D_A']))."'";}} ?> >	
 		
 				</p>
 <?php if (isset($detailom['CB_preportaeroport']) && isset($detailom['CL_destorg'])) { if ((($detailom['CB_preportaeroport'] === "oui"||($detailom['CB_preportaeroport'] === "on"))) && ($detailom['CL_destorg'] === "Destination")) { ?>				
