@@ -134,7 +134,7 @@ if (isset($_POST['clientIMA'])) { ?>
 <div class="row" style=" margin-left: 0px;">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span>
-			<span style="font-family:'Times New Roman'; font-weight:bold ">&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['subscriber_name'])) { echo $_POST['subscriber_name']; } ?></span>
+			<span style="font-family:'Times New Roman'; font-weight:bold ">&#xa0;</span><span style="font-family:'Times New Roman';font-weight:bold"><?php if (isset($_POST['subscriber_name'])) { echo $_POST['subscriber_name']; } ?></span>
 			 <span style="font-family:'Times New Roman'; font-weight:bold"> <?php if (isset($_POST['subscriber_lastname'])) { echo $_POST['subscriber_lastname']; } ?></span>
 			<span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">N/Réf</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span>
 			<!-- verification en cas affectation au nouveau dossier - ref medic nouveau dossier -->

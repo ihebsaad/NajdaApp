@@ -499,7 +499,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 if(isset($idchauff2) && $idchauff2!="" )
 {
@@ -572,7 +580,15 @@ if ($omtaxi->save()) {
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
-Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$presttaxi.' dans le dossier: '.$omparent["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$presttaxi.' dans le dossier: '.$omparent["reference_medic"] );
+$desc='Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$presttaxi.' dans le dossier: '.$omparent["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 // début recherche note
    /*$notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
@@ -812,7 +828,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -834,7 +858,15 @@ if ($omtaxi->save()) {
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 // début recherche note
   /* $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
@@ -915,7 +947,16 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+
 // début recherche note
 
   /*if($omtaxi->dateheuredep)
@@ -1063,8 +1104,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
-
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 $idprestation=$prestation['id'];
@@ -1131,7 +1179,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idchauff2) && $idchauff2!="" )
 {
 $numm1= Personne::where('id', $idchauff2)->select('tel')->first();
@@ -1185,7 +1241,15 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc='Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -1211,12 +1275,28 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
-                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+                     // Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
                     }
 else
 {
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
    //return("hello");
@@ -1402,8 +1482,16 @@ if ($omtaxi2->save()) {
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.'Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] ); ] 
 
 // début recherche note
  /*  $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
@@ -1485,9 +1573,16 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
 
-
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 $idprestation=$prestation['id'];
 }
@@ -1553,7 +1648,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idchauff2) && $idchauff2!="" )
 {
 $numm1= Personne::where('id', $idchauff2)->select('tel')->first();
@@ -1607,9 +1710,16 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+       // Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
 
-
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -1633,12 +1743,28 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
-                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+                     // Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc=' Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
                     }
 else
 {
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc=' Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
    //return("hello");
@@ -2186,7 +2312,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 // début recherche note
  /*  $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
@@ -2650,7 +2784,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier12) && $idambulancier12!="" )
 {
 $numm1= Personne::where('id', $idambulancier12)->select('tel')->first();
@@ -2704,7 +2846,15 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -2765,7 +2915,15 @@ $dossier2= $dossiersms2['reference_medic'];
         $envoye2->save();
 
 
-        Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+        //Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+$desc=' Envoi de SMS à '.$num2 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser2,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier22) && $idambulancier22!="" )
 {
 $numm3= Personne::where('id', $idambulancier22)->select('tel')->first();
@@ -2819,9 +2977,16 @@ $dossier3= $dossiersms3['reference_medic'];
         $envoye3->save();
 
 
-        Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+       // Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
 
-
+$desc=' Envoi de SMS à '.$num3 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser3,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -2880,7 +3045,15 @@ $dossier4= $dossiersms4['reference_medic'];
         $envoye4->save();
 
 
-        Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+        //Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+$desc=' Envoi de SMS à '.$num4 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser4,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idparamed2) && $idparamed2!="" )
 {
 $numm5= Personne::where('id',$idparamed2 )->select('tel')->first();
@@ -2934,7 +3107,15 @@ $dossier5= $dossiersms5['reference_medic'];
         $envoye5->save();
 
 
-        Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+       // Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+$desc=' Envoi de SMS à '.$num5 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser5,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -2952,11 +3133,27 @@ $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first()
 $titreparent = $omparent['titre'];
 if($affectea=='externe')
 {
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 if($affectea=='mmentite')
 {
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 }
@@ -3075,7 +3272,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+       // Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier12) && $idambulancier12!="" )
 {
 $numm1= Personne::where('id', $idambulancier12)->select('tel')->first();
@@ -3129,9 +3334,16 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
 
-
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -3190,7 +3402,15 @@ $dossier2= $dossiersms2['reference_medic'];
         $envoye2->save();
 
 
-        Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+        //Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+$desc=' Envoi de SMS à '.$num2 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser2,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier22) && $idambulancier22!="" )
 {
 $numm3= Personne::where('id', $idambulancier22)->select('tel')->first();
@@ -3244,7 +3464,15 @@ $dossier3= $dossiersms3['reference_medic'];
         $envoye3->save();
 
 
-        Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+       // Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+$desc=' Envoi de SMS à '.$num3 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser3,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -3305,7 +3533,15 @@ $dossier4= $dossiersms4['reference_medic'];
         $envoye4->save();
 
 
-        Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+        //Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+$desc=' Envoi de SMS à '.$num4 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser4,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idparamed2) && $idparamed2!="" )
 {
 $numm5= Personne::where('id', $idparamed2)->select('tel')->first();
@@ -3359,7 +3595,15 @@ $dossier5= $dossiersms5['reference_medic'];
         $envoye5->save();
 
 
-        Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+       // Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+$desc=' Envoi de SMS à '.$num5 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser5,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -3371,7 +3615,15 @@ if ($omambulance->save()) {
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
-Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
+$desc=' Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
  }
         			//return 'complete action '.$result;
                   // mettre à jour kilométrage véhicule
@@ -3588,7 +3840,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 			        	// changer le var post
@@ -3609,7 +3869,15 @@ if ($omambulance->save()) {
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -3658,7 +3926,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 Prestation::where('id', $idprestation)->update(['oms_docs'=> $filename]);
@@ -3819,7 +4095,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 $idprestation=$prestation['id'];
@@ -3886,7 +4170,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier12) && $idambulancier12!="" )
 {
 $numm1= Personne::where('id', $idambulancier12)->select('tel')->first();
@@ -3940,9 +4232,16 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
 
-
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -4002,7 +4301,15 @@ $dossier2= $dossiersms2['reference_medic'];
         $envoye2->save();
 
 
-        Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+        //Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+$desc=' Envoi de SMS à '.$num2 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser2,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier22) && $idambulancier22!="" )
 {
 $numm3= Personne::where('id', $idambulancier22)->select('tel')->first();
@@ -4056,8 +4363,15 @@ $dossier3= $dossiersms3['reference_medic'];
         $envoye3->save();
 
 
-        Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
-
+       // Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+$desc=' Envoi de SMS à '.$num3 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser3,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -4117,7 +4431,15 @@ $dossier4= $dossiersms4['reference_medic'];
         $envoye4->save();
 
 
-        Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+        //Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+$desc=' Envoi de SMS à '.$num4 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser4,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idparamed2) && $idparamed2!="" )
 {
 $numm5= Personne::where('id', $idparamed2)->select('tel')->first();
@@ -4171,8 +4493,15 @@ $dossier5= $dossiersms5['reference_medic'];
         $envoye5->save();
 
 
-        Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
-
+       // Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+$desc=' Envoi de SMS à '.$num5 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser5,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -4196,12 +4525,28 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
-                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+                     // Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc=' Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
                     }
 else
 {
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -4350,7 +4695,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -4403,7 +4756,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 $idprestation=$prestation['id'];}
@@ -4470,7 +4831,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+       // Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier12) && $idambulancier12!="" )
 {
 $numm1= Personne::where('id', $idambulancier12)->select('tel')->first();
@@ -4524,9 +4893,16 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
 
-
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -4585,7 +4961,15 @@ $dossier2= $dossiersms2['reference_medic'];
         $envoye2->save();
 
 
-        Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+        //Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+$desc=' Envoi de SMS à '.$num2 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser2,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idambulancier22) && $idambulancier22!="" )
 {
 $numm3= Personne::where('id', $idambulancier22)->select('tel')->first();
@@ -4639,7 +5023,15 @@ $dossier3= $dossiersms3['reference_medic'];
         $envoye3->save();
 
 
-        Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+       // Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+$desc=' Envoi de SMS à '.$num3 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser3,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -4700,7 +5092,15 @@ $dossier4= $dossiersms4['reference_medic'];
         $envoye4->save();
 
 
-        Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+       // Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+$desc=' Envoi de SMS à '.$num4 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser4,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idparamed2) && $idparamed2!="" )
 {
 $numm5= Personne::where('id', $idparamed2)->select('tel')->first();
@@ -4754,7 +5154,15 @@ $dossier5= $dossiersms5['reference_medic'];
         $envoye5->save();
 
 
-        Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+       // Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+$desc=' Envoi de SMS à '.$num5 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser5,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -4779,12 +5187,28 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
-                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+                     // Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
                     }
 else
 {
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -5293,7 +5717,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -5651,7 +6083,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idchauff2) && $idchauff2!="" )
 {
 $numm1= Personne::where('id', $idchauff2)->select('tel')->first();
@@ -5705,8 +6145,15 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
-
+       // Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -5722,11 +6169,27 @@ $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first()
 $titreparent = $omparent['titre'];
 if($affectea=='externe')
 {
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 if($affectea=='mmentite')
 {
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 }
@@ -5851,7 +6314,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 if(isset($idchauff2) && $idchauff2!="" )
 {
@@ -5906,7 +6377,15 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -5916,7 +6395,15 @@ if ($omremorquage->save()) {
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
-Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
+$desc='Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
  }
                     //return 'complete action '.$result;
 	/*if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
@@ -6124,7 +6611,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 			        	// changer le var post
@@ -6145,7 +6640,15 @@ if ($omremorquage->save()) {
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -6197,7 +6700,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
                     // enregistrement de nouveau attachement
@@ -6309,7 +6820,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 $idprestation=$prestation['id'];
@@ -6376,7 +6895,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idchauff2) && $idchauff2!="" )
 {
 $numm1= Personne::where('id', $idchauff2)->select('tel')->first();
@@ -6431,7 +6958,15 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+       // Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -6457,12 +6992,28 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
-                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+                     // Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
                     }
 else
 {
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -6620,8 +7171,16 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
 
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
             }
@@ -6676,7 +7235,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+$desc='Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 $idprestation=$prestation['id'];
@@ -6743,7 +7310,15 @@ $dossier= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+       // Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 if(isset($idchauff2) && $idchauff2!="" )
 {
 $numm1= Personne::where('id', $idchauff2)->select('tel')->first();
@@ -6798,7 +7373,15 @@ $dossier1= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -6824,12 +7407,28 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
-                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+                      //Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
                     }
 else
 {
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 
@@ -7353,7 +7952,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }
 
@@ -7422,9 +8029,16 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 $titreparent = $omparent['titre'];
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
 
-
+$desc='Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
   
 
@@ -7569,7 +8183,15 @@ if (($ommedicinternationnal->save()) && ($_POST['templatedocument'] !== "remplac
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
-Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Generation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 $prestation = Prestation::where(['dossier_id' => $iddoss,'prestataire_id' => $_POST['id_prestataire'] ,'effectue' => 1])->orderBy('created_at', 'desc')->first();
               $prestation  ->update(['oms_docs' => $filename]);
 
@@ -8072,7 +8694,15 @@ $dossier1= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }}
@@ -8090,7 +8720,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+$desc=' Annulation de prestation pour le dossier: ' .$omparent["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 	 }       
 
 
@@ -8153,9 +8791,16 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+//Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
 	       
-
+$desc=' Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }
 
 }
@@ -8218,7 +8863,15 @@ $dossier1= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -8275,7 +8928,15 @@ $dossier2= $dossiersms1['reference_medic'];
         $envoye1->save();
 
 
-        Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+       // Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
         }
 if(isset($omparent1['idparamed']) && $omparent1['idparamed']!="")
@@ -8331,7 +8992,15 @@ $dossier3= $dossiersms2['reference_medic'];
         $envoye2->save();
 
 
-        Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+        //Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+$desc=' Envoi de SMS à '.$num2 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser2,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }}
 	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
 	        $omparent=OMAmbulance::where('id', $parent)->first();
@@ -8345,7 +9014,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+$desc='Annulation de prestation pour le dossier: ' .$omparent["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 	 }   
 	        $filename='ambulance_annulation-'.$parent;
 
@@ -8411,7 +9088,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+//Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+$desc='Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -8477,7 +9162,15 @@ $dossier1= $dossiersms['reference_medic'];
         $envoye->save();
 
 
-        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+       // Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }}
@@ -8494,7 +9187,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+$desc='Annulation de prestation pour le dossier: ' .$omparent["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 	 } 
 	        $filename='remorquage_annulation-'.$parent;
 
@@ -8559,7 +9260,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+//Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+$desc='Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 	       
 
 }
@@ -8576,7 +9285,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent1["reference_medic"]);
+//Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent1["reference_medic"]);
+$desc='Annulation de prestation pour le dossier: ' .$omparent1["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 	        $omparent=OMMedicInternational::where('id', $parent)->first();
 
 	        
@@ -8619,7 +9336,15 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 
-Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+//Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+$desc='Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 
 }
@@ -8695,8 +9420,15 @@ $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 
 
-Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
-
+//Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc=' Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 
 }               
                 	
@@ -8759,7 +9491,15 @@ $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 
 
-Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 } 
 
 
@@ -8822,7 +9562,15 @@ $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 
 
-Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
+//Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
+$desc='Validation Ordre de mission: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"];
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
 }  } }
 public function attachordremission(Request $request)
 {
