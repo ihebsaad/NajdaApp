@@ -42,7 +42,7 @@ use WordTemplate;
 use Mail;
 use App\Notification;
 use App\Notif ;
-
+use App\Historique ;
 use Swift_Mailer;
 
 ini_set('memory_limit','1024M');
@@ -803,7 +803,7 @@ $desc='Ajout de dossier: ' . $reference_medic;
             'user' => $nomuser,
             'user_id'=>$user->id,
         ]);	
-
+$hist->save();
             // dispatch Email au dossier
            $entreeid= $request->get('entree');
            if($entreeid >0)
@@ -1214,7 +1214,7 @@ $desc='Ajout de dossier: ' . $reference_medic;
             'user' => $nomuser,
             'user_id'=>$user->id,
         ]);	
-		
+		$hist->save();
  
         } catch (Exception $ex) {
             // Debug via $ex->getMessage();
@@ -1386,7 +1386,7 @@ $desc='Ajout de dossier: ' . $reference_medic;
             'user' => $nomuser,
             'user_id'=>$user->id,
         ]);	
-
+$hist->save();
           return back();
 
     }
@@ -1437,7 +1437,7 @@ $desc='Ajout de dossier: ' . $reference_medic;
             'user' => $nomuser,
             'user_id'=>$user->id,
         ]);	
-			   
+		$hist->save();	   
             }   //foreach
         }
         return 'true';
@@ -3453,7 +3453,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             'user' => $nomuser,
             'user_id'=>auth::user()->id,
         ]);	
-
+$hist->save();
                 }
             }else{
               Dossier::where('id',$iddossier)->update(array('current_status'=>'inactif','affecte'=>0 , 'sub_status'=>'immobile'));
@@ -3486,7 +3486,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             'user' => $nomuser,
             'user_id'=>$user->id,
         ]);	
-
+$hist->save();
             }
     }
 
@@ -5579,4 +5579,5 @@ array_multisort($columns, SORT_DESC, $listetags);
 	
 
 }
+
 
