@@ -8666,7 +8666,7 @@ $omvalid=DB::table('validation_omtaxi')->where('idom', $idom)->first();
 	        		$affectea = $omparent['affectea'];
 $datevalid=date('Y-m-d\TH:i',strtotime($omvalid->created_at));
 
-$superviseur=  $nom.' '.$prenom.' / '.str_replace('T',' ',$datevalid);
+$superviseur=  $nom.' '.$prenom.' / '.date('d/m/Y H:i', strtotime(str_replace('T',' ',$datevalid)));
 	        		 $pdf = PDF3::loadView('ordremissions.pdfvalideomtaxi', ['omparent' => $omparent,'superviseur'=> $superviseur])->setPaper('a4', '');
 
 	        $path= storage_path()."/OrdreMissions/";
@@ -8730,7 +8730,7 @@ $omvalid=DB::table('validation_omambulance')->where('idom', $idom)->first();
 	        		$affectea = $omparent['affectea'];
 $datevalid=date('Y-m-d\TH:i',strtotime($omvalid->created_at));
 
-$superviseur=  $nom.' '.$prenom.' / '.str_replace('T',' ',$datevalid);
+$superviseur=  $nom.' '.$prenom.' / '.date('d/m/Y H:i', strtotime(str_replace('T',' ',$datevalid)));
 	        		 $pdf = PDF3::loadView('ordremissions.pdfvalideomambulance', ['omparent' => $omparent,'superviseur'=> $superviseur])->setPaper('a4', '');
 
 	        $path= storage_path()."/OrdreMissions/";
@@ -8793,7 +8793,7 @@ $omvalid=DB::table('validation_omremorquage')->where('idom', $idom)->first();
 	        		$affectea = $omparent['affectea'];
 $datevalid=date('Y-m-d\TH:i',strtotime($omvalid->created_at));
 
-$superviseur=  $nom.' '.$prenom.' / '.str_replace('T',' ',$datevalid);
+$superviseur=  $nom.' '.$prenom.' / '.date('d/m/Y H:i', strtotime(str_replace('T',' ',$datevalid)));
 	        		 $pdf = PDF3::loadView('ordremissions.pdfvalideomremorquage', ['omparent' => $omparent,'superviseur'=> $superviseur])->setPaper('a4', '');
 
 	        $path= storage_path()."/OrdreMissions/";

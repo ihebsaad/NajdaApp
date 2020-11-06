@@ -114,7 +114,7 @@
 if (isset($omparent['clientIMA'])) { ?>
 				<p style="font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($omparent['clientIMA']); ?></span></p>
 <?php } ?>
-				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heuredateRDV'])) {echo date('d/m/Y H:i:s', strtotime($omparent['CL_heuredateRDV'])); } ?></span>
+				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span><span style="font-family:'Times New Roman'; font-weight:bold"><?php if (isset($omparent['CL_heuredateRDV'])) {echo date('d/m/Y H:i:s', strtotime($omparent['CL_heuredateRDV'])); } ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold;">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:  </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_Dimanche'])) { echo $omparent['CL_Dimanche']; } else {echo "non";} ?></span>
 					<span style="width:18.05pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Férié</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.8pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_Ferie'])) { echo $omparent['CL_Ferie']; } else {echo "non";} ?></span>
 				
@@ -126,8 +126,8 @@ if (isset($omparent['clientIMA'])) { ?>
 <div class="row" style=" margin-left: 0px;">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span>
-			<span style="font-family:'Times New Roman'; ">&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['subscriber_name'])) { echo $omparent['subscriber_name']; } ?></span>
-			 <span style="font-family:'Times New Roman'"> <?php if (isset($omparent['subscriber_lastname'])) { echo $omparent['subscriber_lastname']; } ?></span>
+			<span style="font-family:'Times New Roman'; ">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold"><?php if (isset($omparent['subscriber_name'])) { echo $omparent['subscriber_name']; } ?></span>
+			 <span style="font-family:'Times New Roman'; font-weight:bold"> <?php if (isset($omparent['subscriber_lastname'])) { echo $omparent['subscriber_lastname']; } ?></span>
 			<span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">N/Réf</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span>
 			<!-- verification en cas affectation au nouveau dossier - ref medic nouveau dossier -->
 			<span style="font-family:'Times New Roman'; font-weight:bold;"><span style="font-family:'Times New Roman'"><?php if (isset($reference_medic) ){ echo $reference_medic; }  if ((isset($omparent['reference_medic'])) && (! isset($reference_medic))) { echo $omparent['reference_medic']; if (isset( $omparent['idprestation'])) {echo " /".$omparent['idprestation'];}} ?></span></span>
@@ -158,17 +158,17 @@ if (isset($omparent['clientIMA'])) { ?>
 <?php }} ?>
 
 <div class="row" style=" margin-left: 0px; ">
-			<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV avec </span><span style="font-family:'Times New Roman'; font-weight:bold">le passager</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_RDV'])) { echo $omparent['CL_heure_RDV']; } ?></span>
+			<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV avec </span><span style="font-family:'Times New Roman'; font-weight:bold">le passager</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'; font-weight:bold"><?php if (isset($omparent['CL_heure_RDV'])) { echo $omparent['CL_heure_RDV']; } ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Contact téléphonique</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:   </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_contacttel'])) { echo $omparent['CL_contacttel']; } ?></span>
 				 </span><span style="font-family:'Times New Roman'; font-weight:bold">Qualité</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_qualite'])) { echo $omparent['CL_qualite']; } ?></span>
 				</p>
 </div>
 <p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_lieuprest_pc'])) { echo $omparent['CL_lieuprest_pc']; } ?></span>
+<span style="font-family:'Times New Roman'; font-weight:bold"><?php if (isset($omparent['CL_lieuprest_pc'])) { echo $omparent['CL_lieuprest_pc']; } ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_prestatairetel_pc'])) { echo $omparent['CL_prestatairetel_pc']; } ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_lieudecharge_dec'])) { echo $omparent['CL_lieudecharge_dec']; } ?></span>
+<span style="font-family:'Times New Roman'; font-weight:bold"><?php if (isset($omparent['CL_lieudecharge_dec'])) { echo $omparent['CL_lieudecharge_dec']; } ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_prestatairetel_dec'])) { echo $omparent['CL_prestatairetel_dec']; } ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">   </span></p>
@@ -201,7 +201,7 @@ if (isset($omparent['clientIMA'])) { ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Départ bateau </span>
 
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_D'])) { echo date('d/m/Y H:i:s', strtotime($omparent['CL_heure_D'])); } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_D'])) { if($omparent['CL_heure_D'] ==='') {echo '';} else {echo date('d/m/Y H:i:s', strtotime($omparent['CL_heure_D']));} } ?></span>
 </span>			
 </p>
 <?php }} ?>
@@ -234,7 +234,7 @@ if (isset($omparent['CB_prerades'])) {if ($omparent['CB_prerades'] === "oui"||($
 <div id="prestinterne" >
 					<p style="margin-top:-10pt; margin-bottom:0pt; widows:0; orphans:0; padding-bottom:1pt; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; ">&#xa0;</span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;border-top: 1.5pt solid #000000;padding-top:10px"><span style="font-family:'Times New Roman'; font-weight:bold">Origine de la demande: </span><span style="font-family:'Times New Roman'; font-weight:bold; ">
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['client_dossier'])) { echo $omparent['client_dossier']; } ?></span></span><span style="font-family:'Times New Roman'; font-weight:bold">   Date demande: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_datedemande'])) { echo $omparent['CL_datedemande']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_datedemande'])) {  if($omparent['CL_datedemande']==='') {echo '';} else {echo date('d/m/Y', strtotime($omparent['CL_datedemande'])) ; } } ?></span>
 						<span style="font-family:'Times New Roman'; font-weight:bold"> Heure: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heuredemande'])) { echo $omparent['CL_heuredemande']; } ?></span>
 						<span style="font-family:'Times New Roman'; font-weight:bold">  </span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; border-bottom:1.5pt solid #000000; padding-bottom:10px; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Notre réf.</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
@@ -265,12 +265,12 @@ if (isset($omparent['CB_prerades'])) {if ($omparent['CB_prerades'] === "oui"||($
 	</div>
 	<div id="modtransp" class="col-md-3" style="left:400px!important;width:40%;border-style: groove;">
 		<p style="margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold; text-decoration:underline">Modalités du transport</span></p><p style="margin-top:2.15pt; margin-left:3.9pt; margin-bottom:0pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure départ base:</span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dateheuredep'])) {$DHsansT =str_replace('T',' ',$omparent['dateheuredep']); echo $DHsansT; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dateheuredep'])) {$DHsansT =str_replace('T',' ',$omparent['dateheuredep']); echo date('d/m/Y H:i:s', strtotime($DHsansT)); } ?></span>
 		</p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Première </span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">étape (hôtel ?):</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold"> </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['prehotel'])) { echo $omparent['prehotel']; } ?></span>
 			<span style="font-family:&#39;Times New Roman&#39;; font-weight:bold"> </span></p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure dispo prévisible:</span>
-<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dateheuredispprev'])) {$DHsansT =str_replace('T',' ',$omparent['dateheuredispprev']); echo $DHsansT;} ?></span></p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span>
-<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dhretbaseprev'])) { $DHsansT =str_replace('T',' ',$omparent['dhretbaseprev']); echo $DHsansT; } ?></span></p>
+<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dateheuredispprev'])) {$DHsansT =str_replace('T',' ',$omparent['dateheuredispprev']); echo date('d/m/Y H:i:s', strtotime($DHsansT));} ?></span></p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span>
+<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dhretbaseprev'])) { $DHsansT =str_replace('T',' ',$omparent['dhretbaseprev']); echo date('d/m/Y H:i:s', strtotime($DHsansT)); } ?></span></p>
 			<p style="margin-top:0pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['lvehicule'])) { echo $omparent['lvehicule']; } ?></span>
 			</p>
@@ -287,16 +287,16 @@ if (isset($omparent['CB_prerades'])) {if ($omparent['CB_prerades'] === "oui"||($
 			</p></div>
 
 <div id="deroulmiss" class="deroulmiss col-md-3" style="margin-top:-150px;margin-left:20px;top: 124px!important;width:35%;padding-bottom:5px;border-style: groove;z-index:1000;font-size:9pt"><p style="margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold; text-decoration:underline">Déroulement mission</span></p><p style="margin-top:2.15pt; margin-left:3.9pt; margin-bottom:0pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Départ pour mission: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dhdepartmiss'])) { $DHsansT =str_replace('T',' ',$omparent['dhdepartmiss']); echo $DHsansT; } ?></span>
-		</p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée lieux: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['dharrivelieu'])) { $DHsansT =str_replace('T',' ',$omparent['dharrivelieu']); echo $DHsansT; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dhdepartmiss'])) { $DHsansT =str_replace('T',' ',$omparent['dhdepartmiss']); if($DHsansT ==='') {echo '';} else {echo date('d/m/Y H:i:s', strtotime($DHsansT));} } ?></span>
+		</p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée lieux: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['dharrivelieu'])) { $DHsansT =str_replace('T',' ',$omparent['dharrivelieu']); if($DHsansT ==='') {echo '';} else {echo date('d/m/Y H:i:s', strtotime($DHsansT));} } ?></span>
 			<span style="font-family:&#39;Times New Roman&#39;; font-weight:bold"> </span></p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Départ lieux:</span>
-<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dhdepartlieu'])) { $DHsansT =str_replace('T',' ',$omparent['dhdepartlieu']); echo $DHsansT; } ?></span></p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée à destination:</span>
-<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dharrivedest'])) { $DHsansT =str_replace('T',' ',$omparent['dharrivedest']); echo $DHsansT; } ?></span></p>
+<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dhdepartlieu'])) { $DHsansT =str_replace('T',' ',$omparent['dhdepartlieu']); if($DHsansT ==='') {echo '';} else {echo date('d/m/Y H:i:s', strtotime($DHsansT));}} ?></span></p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée à destination:</span>
+<span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dharrivedest'])) { $DHsansT =str_replace('T',' ',$omparent['dharrivedest']); if($DHsansT ==='') {echo '';} else {echo date('d/m/Y H:i:s', strtotime($DHsansT));} } ?></span></p>
 			<p style="margin-top:0pt; margin-left:3.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Départ vers base: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dhdepbase'])) { $DHsansT =str_replace('T',' ',$omparent['dhdepbase']); echo $DHsansT; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dhdepbase'])) { $DHsansT =str_replace('T',' ',$omparent['dhdepbase']); if($DHsansT ==='') {echo '';} else {echo date('d/m/Y H:i:s', strtotime($DHsansT));} } ?></span>
 			</p>
 <p style="margin-top:0pt; margin-left:3.9pt; margin-bottom:0pt;widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée base: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dharrbase'])) { $DHsansT =str_replace('T',' ',$omparent['dharrbase']); echo $DHsansT; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['dharrbase'])) { $DHsansT =str_replace('T',' ',$omparent['dharrbase']);if($DHsansT ==='') {echo '';} else {echo date('d/m/Y H:i:s', strtotime($DHsansT));} } ?></span>
 			</p>
 <p style="margin-top:0pt; margin-left:3.9pt; margin-bottom:0pt;widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Durée totale mission: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['duremiss'])) { echo $omparent['duremiss']; } ?></span>
