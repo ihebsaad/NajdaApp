@@ -487,7 +487,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 <label for="inputError" class="control-label">Hôtel </label>
 
                                                                 <div class="input-group-control">
-                                                                    <select onchange=" "   id="hotel" name="hotel" class="form-control"  >
+                                                                    <select onchange="modif_prest5(this);"   id="hotel" name="hotel" class="form-control"  >
 
                                                                         <option></option>
                                                                         <?php
@@ -498,6 +498,7 @@ use  \App\Http\Controllers\DocsController;
                                                                         }
                                                                         ?>
                                                                     </select>
+<input type="hidden" id="idpresthotel" name="idpresthotel" value="" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -550,7 +551,7 @@ use  \App\Http\Controllers\DocsController;
                                                             <label for="inputError" class="control-label">Hôspitalisé à </label>
 
                                                             <div class="input-group-control">
-                                                                <select style="width:100%"  id="hospital_address" name="hospital_address" class="form-control"   >
+                                                                <select onchange="modif_prest(this);"  id="hospital_address" name="hospital_address" class="form-control"   >
 
                                                                     <option></option>
                                                                     <?php
@@ -561,6 +562,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     }
                                                                     ?>
                                                                 </select>
+ <input type="hidden" id="idpresthos" name="idpresthos" value="" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -596,7 +598,7 @@ use  \App\Http\Controllers\DocsController;
 
 
                                                             <div class="input-group-control">
-                                                                <select style="width:100%" id="medecin_traitant" name="medecin_traitant" class="form-control"   >
+                                                                <select  onchange="modif_prest1(this);" id="medecin_traitant" name="medecin_traitant" class="form-control"   >
 
                                                                     <option></option>
                                                                     <?php
@@ -608,6 +610,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                                     ?>
                                                                 </select>
+<input type="hidden" id="idprestmed" name="idprestmed" value="" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -840,7 +843,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                         <div class="input-group-control">
 
-                                                            <select   type="text" id="empalcement3" name="empalcement3" class="form-control"   >
+                                                            <select   type="text" onchange="modif_prest4(this);" id="empalcement3" name="empalcement3" class="form-control"   >
 
                                                                 <option></option>
                                                                 <?php
@@ -851,6 +854,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 }
                                                                 ?>
                                                             </select>
+<input type="hidden" id="idprestemp3" name="idprestemp3" value="" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -883,7 +887,7 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="form-group">
                                                         <label for="inputError" class="control-label"><label id="derniere002">Dernière</label> adresse d'immobilisation </label>
 
-                                                        <select    type="text" id="empalcement2" name="empalcement2" class="form-control"   >
+                                                        <select    type="text" onchange="modif_prest3(this);" id="empalcement2" name="empalcement2" class="form-control"   >
 
                                                             <option></option>
                                                             <?php
@@ -894,6 +898,7 @@ use  \App\Http\Controllers\DocsController;
                                                             }
                                                             ?>
                                                         </select>
+<input type="hidden" id="idprestemp2" name="idprestemp2" value="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -927,7 +932,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                         <div class="input-group-control">
 
-                                                            <select    type="text" id="empalcement" name="empalcement" class="form-control"   >
+                                                            <select    type="text" onchange="modif_prest2(this);" id="empalcement" name="empalcement" class="form-control"   >
 
                                                                 <option></option>
                                                                 <?php
@@ -938,6 +943,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 }
                                                                 ?>
                                                             </select>
+<input type="hidden" id="idprestemp" name="idprestemp" value="" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1818,6 +1824,115 @@ use  \App\Http\Controllers\DocsController;
 
 
     }); // $ function
+ function modif_prest(elm) {
+
+        var prest = elm.id;
+       // alert(prest);
+        var prestataire = document.getElementById(prest) ;
+      //  alert(prestataire);
+
+        var title= parseInt(prestataire.options[prestataire.selectedIndex].title);
+
+
+$('#idpresthos').val(title);
+alert(title);
+
+
+
+        
+
+    }
+function modif_prest1(elm) {
+
+        var prest = elm.id;
+       // alert(prest);
+        var prestataire = document.getElementById(prest) ;
+      //  alert(prestataire);
+
+        var title= parseInt(prestataire.options[prestataire.selectedIndex].title);
+
+
+$('#idprestmed').val(title);
+alert(title);
+
+
+
+        
+
+    }
+function modif_prest2(elm) {
+
+        var prest = elm.id;
+       // alert(prest);
+        var prestataire = document.getElementById(prest) ;
+      //  alert(prestataire);
+
+        var title= parseInt(prestataire.options[prestataire.selectedIndex].title);
+
+
+$('#idprestemp').val(title);
+alert(title);
+
+
+
+        
+
+    }
+function modif_prest3(elm) {
+
+        var prest = elm.id;
+       // alert(prest);
+        var prestataire = document.getElementById(prest) ;
+      //  alert(prestataire);
+
+        var title= parseInt(prestataire.options[prestataire.selectedIndex].title);
+
+
+$('#idprestemp2').val(title);
+alert(title);
+
+
+
+        
+
+    }
+function modif_prest4(elm) {
+
+        var prest = elm.id;
+       // alert(prest);
+        var prestataire = document.getElementById(prest) ;
+      //  alert(prestataire);
+
+        var title= parseInt(prestataire.options[prestataire.selectedIndex].title);
+
+
+$('#idprestemp3').val(title);
+alert(title);
+
+
+
+        
+
+    }
+function modif_prest5(elm) {
+
+        var prest = elm.id;
+       // alert(prest);
+        var prestataire = document.getElementById(prest) ;
+      //  alert(prestataire);
+
+        var title= parseInt(prestataire.options[prestataire.selectedIndex].title);
+
+
+$('#idpresthotel').val(title);
+alert(title);
+
+
+
+        
+
+    }
+
 
 
 </script>

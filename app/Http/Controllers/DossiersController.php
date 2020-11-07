@@ -793,6 +793,150 @@ class DossiersController extends Controller
 
         if ($dossier->save()) {
             $iddoss = $dossier->id;
+if($request->get('idpresthos')!==null)
+{ 
+$prestataire=$request->get('idpresthos');
+$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
+
+        // vérifier prestataire n existe pas
+        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
+        if ($count == 0)
+        {
+            $intervenant = new Intervenant([
+                'prestataire_id' => $prestataire,
+                'dossier' => $iddoss,
+                'nom' => $nom,
+                'prenom' => $prenom,
+
+            ]);
+        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+
+      $intervenant->save();
+
+           
+    }
+}
+if($request->get('idprestmed')!==null )
+{ 
+$prestataire=$request->get('idprestmed');
+$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
+
+        // vérifier prestataire n existe pas
+        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
+        if ($count == 0)
+        {
+            $intervenant = new Intervenant([
+                'prestataire_id' => $prestataire,
+                'dossier' => $iddoss,
+                'nom' => $nom,
+                'prenom' => $prenom,
+
+            ]);
+        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+
+      $intervenant->save();
+
+           
+    }
+}
+if($request->get('idprestemp')!==null )
+{ 
+$prestataire=$request->get('idprestemp');
+$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
+
+        // vérifier prestataire n existe pas
+        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
+        if ($count == 0)
+        {
+            $intervenant = new Intervenant([
+                'prestataire_id' => $prestataire,
+                'dossier' => $iddoss,
+                'nom' => $nom,
+                'prenom' => $prenom,
+
+            ]);
+        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+
+      $intervenant->save();
+
+           
+    }
+}
+if($request->get('idprestemp2')!==null )
+{ 
+$prestataire=$request->get('idprestemp2');
+$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
+
+        // vérifier prestataire n existe pas
+        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
+        if ($count == 0)
+        {
+            $intervenant = new Intervenant([
+                'prestataire_id' => $prestataire,
+                'dossier' => $iddoss,
+                'nom' => $nom,
+                'prenom' => $prenom,
+
+            ]);
+        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+
+      $intervenant->save();
+
+           
+    }
+}
+if($request->get('idprestemp3')!==null )
+{ 
+$prestataire=$request->get('idprestemp3');
+$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
+
+        // vérifier prestataire n existe pas
+        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
+        if ($count == 0)
+        {
+            $intervenant = new Intervenant([
+                'prestataire_id' => $prestataire,
+                'dossier' => $iddoss,
+                'nom' => $nom,
+                'prenom' => $prenom,
+
+            ]);
+        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+
+      $intervenant->save();
+
+           
+    }
+}
+if($request->get('idpresthotel')!==null )
+{ 
+$prestataire=$request->get('idpresthotel');
+$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
+
+        // vérifier prestataire n existe pas
+        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
+        if ($count == 0)
+        {
+            $intervenant = new Intervenant([
+                'prestataire_id' => $prestataire,
+                'dossier' => $iddoss,
+                'nom' => $nom,
+                'prenom' => $prenom,
+
+            ]);
+        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+
+      $intervenant->save();
+
+           
+    }
+}
 
 
             $nomuser = $user->name . ' ' . $user->lastname;
