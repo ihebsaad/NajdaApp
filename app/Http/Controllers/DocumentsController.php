@@ -639,7 +639,7 @@ $nomuser = $user->name ." ".$user->lastname ;
 if(isset($_POST['modif']) && $_POST['modif']=='1')
 {
  
- 			$desc='modification du document '.$docparent.' dans le dossier: '.$refdoss ;
+ 			$desc='Modification du document '.$docparent.' dans le dossier: '.$refdoss ;
 
 		 $hist = new Historique([
               'description' => $desc,
@@ -651,7 +651,7 @@ if(isset($_POST['modif']) && $_POST['modif']=='1')
 else
 {
  
- 			$desc='remplacement du document '.$docparent.' dans le dossier: '.$refdoss ;
+ 			$desc='Remplacement du document '.$docparent.' dans le dossier: '.$refdoss ;
 
 		 $hist = new Historique([
               'description' => $desc,
@@ -1140,6 +1140,7 @@ foreach($rubriques_assure as $rubrique)
 
 
 $ltag= Rubrique::where("id",$rubrique->rubrique)->first();
+
 
 $ltaginitial= RubriqueInitial::where("id",$rubrique->rubriqueinitial)->first();
 $template=Template_doc::where("nom",$arrfile['nom'])->first();
