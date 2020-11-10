@@ -1148,6 +1148,9 @@ $modif='modif';
 $paramapp=Parametre::select('euro_achat','dollar_achat')->first();
 
 $garanties=DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)->get()->toArray();
+if($doc->idtaggop===null)
+{
+$Montanttag = $doc->montantgop;}
 
 if($dossier->type_affectation!=='Najda TPA' || empty($garanties) )
 {
