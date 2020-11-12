@@ -1394,7 +1394,7 @@ $null=null;
             <div class="modal-body">
                 <div class="card-body">
 
-                    <iframe id="dociframe" src="" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                    <iframe id="dociframe" src="" frameborder="0" style="width:100%;min-height:480px;"></iframe>
 
                 </div>
 
