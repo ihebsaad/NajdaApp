@@ -1045,6 +1045,78 @@ array_multisort($columns, SORT_DESC, $coltags);
                     $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
                 }
                 break;
+       case "Document_Generique":
+                $dossfranchise = false;
+                $dossgopmed = false;
+                $dossplafond = false;
+                $arr_gopmed = array();
+$coltags=array();
+               foreach ($entreesdos as $entr) {
+
+                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+
+                   
+ $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
+
+                    $coltags = array_merge($coltagsmails->toArray(), $coltags);
+                    $colattachs = Attachement::where("parent","=",$entr['id'])->get();
+                        if (!empty($colattachs))
+                        {
+                            foreach ($colattachs as $lattach) {
+ $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
+                               $coltags = array_merge( $coltagsattach->toArray(),$coltags);
+
+
+
+}}}
+ if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
+$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
+}
+ $columns = array_column($coltags, 'updated_at');
+array_multisort($columns, SORT_DESC, $coltags);
+  
+                    if (!empty($coltags))
+                    {
+
+                        foreach ($coltags as $ltag) {
+                           
+                             //if ($resp === "notallow") {$resp="allow";}
+                             if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE || strpos( $ltag['abbrev'],"GOPtn") !== FALSE )
+                             {
+                                $dossgopmed = true;
+                                // VERIFICATION DEVISE GOP
+                                    if ( $ltag['devise'] === "TND") 
+                                    {$Montanttag = $ltag['mrestant'];}
+                                    if ( $ltag['devise'] === "EUR")
+                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);}
+                                    if ( $ltag['devise'] === "USD")
+                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);}
+
+
+                                $arr_gopmed[]=$ltag['id']."_".$Montanttag."_".$ltag['contenu']."_".$ltag['updated_at'];
+
+                             }
+
+                             
+                             
+                            
+                        }
+                    }
+                //return $arrtags;
+                if ($dossgopmed === false)
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
+                else
+                {
+                    /* PASTGOP $resp = "allow_VERIFmontant(".$montantgop.")_GOPmed";*/
+                    $sgopmed =implode(',', $arr_gopmed);
+                    $resp = "allow_VERIFglist(".$sgopmed.")_GOPmed";
+                   
+                }
+                break;
 
                 
                 /*case "RM_anglais":
@@ -1188,7 +1260,79 @@ if($rub===0)
           
  else
                 {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
-                }}
+break;
+  case "Document_Generique":
+$annee=date('Y');
+ $rubriques_assure=DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 1)->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+if ($request->has('parent'))
+            {
+                $infoparent = Document::where('id', $request->get('parent'))->first();
+
+$coltagcurrent= DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->where('rubrique', $infoparent['idtaggop'])->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
+$rubriques_assure = array_merge( $coltagcurrent,$rubriques_assure);
+$columns = array_column($rubriques_assure, 'updated_at');
+array_multisort($columns, SORT_DESC, $rubriques_assure);
+
+}
+if(!empty($rubriques_assure))
+{
+$rub=0;
+
+foreach($rubriques_assure as $rubrique)
+{
+
+
+$ltag= Rubrique::where("id",$rubrique->rubrique)->first();
+
+
+$ltaginitial= RubriqueInitial::where("id",$rubrique->rubriqueinitial)->first();
+$template=Template_doc::where("nom",$arrfile['nom'])->first();
+if($ltaginitial->pec==0)
+{
+
+
+if ( $ltag['devise'] === "TND") 
+                                    {$Montanttag = $rubrique->mrestant;}
+                                    if ( $ltag['devise'] === "EUR")
+                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['euro_achat']);}
+                                    if ( $ltag['devise'] === "USD")
+                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['dollar_achat']);
+
+//dd($Montanttag);
+}
+
+$arr_gopmed[]=$rubrique->rubrique."_".$Montanttag."_".$ltaginitial['nom']."_".$rubrique->updated_at;
+
+
+$sgoptn =implode(',', $arr_gopmed);
+                        $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
+
+ $rub=$rub+1;
+} 
+
+
+}
+if($rub===0)
+
+ {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
+                
+
+
+
+}
+
+
+
+                        
+                    
+            
+
+
+          
+ else
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
+
+        break;        }}
 
 
 
