@@ -639,6 +639,11 @@ $user = auth()->user();
  if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
 	 $prestataire = Prestataire::find($id);
         $prestataire->delete();
+DB::table('adresses')
+            ->where([
+                ['parent', '=',$id],
+                ['nature', '=', 'telinterv'],
+            ])->delete();
 
         Evaluation::where('prestataire',$id)->delete();
         Facture::where('prestataire',$id)->update(array('prestataire' => null));
