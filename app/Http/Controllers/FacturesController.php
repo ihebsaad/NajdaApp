@@ -523,7 +523,7 @@ class FacturesController extends Controller
 
                       $presname='';
                       $prenom='';
-                      $presname=Prestataire::where('id',$p->prestataire_id)->first()
+                      $presname=Prestataire::where('id',$p->prestataire_id)->first();
                       if($presname)
                       {
                       $presname=Prestataire::where('id',$p->prestataire_id)->first()->name;
