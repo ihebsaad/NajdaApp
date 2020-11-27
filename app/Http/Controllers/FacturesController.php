@@ -13,6 +13,7 @@ use App\Prestation ;
 use App\Facture;
 use App\Adresse;
 use App\Client;
+use App\EmailAuto;
 
  use Illuminate\Support\Facades\Auth;
  use Swift_Mailer;
@@ -296,12 +297,16 @@ class FacturesController extends Controller
                     }
   
                   }
+                //nejib.karoui@gmail.com
+                  array_push($cc,'kbskhaledfb@gmail.com');
   
                }
                 else
                {
-               $to=$adresses ; // null;
-               $cc=null; 
+               $to=$adresses[0] ; // null;
+                //nejib.karoui@gmail.com
+                  array_push($cc,'kbskhaledfb@gmail.com');
+ 
                }
 
                 $swiftMailer = new Swift_Mailer($swiftTransport);
@@ -327,11 +332,14 @@ class FacturesController extends Controller
         $id_fact_test=array(22,23);
         $email_prestataires=array();
         $email_client=array();
+
+        $dtc = (new \DateTime())->format('2020-09-01 00:00:00');
+
          
-      $factures=Facture::where('honoraire',1)->whereIn('id',$id_fact_test)->whereNotNull('date_email')->get();
+      $factures=Facture::where('honoraire',1)->whereNotNull('date_email')->where('created_at','>=', $dtc)->get();
      // dd($factures);
      // $prestations=Prestation::whereNotNull('date_prestation')->where('parvenu','<>',1)->get();
-     $prestations=Prestation::where('parvenu','<>',1)->whereNotNull('date_prestation')->whereIn('prestataire_id',$id_prest_test)->get();
+     $prestations=Prestation::where('parvenu','<>',1)->whereNotNull('date_prestation')->whereNotNull('created_at')->where('created_at','>=', $dtc)->get();
       //dd($prestations);
       $format = "Y-m-d H:i:s";
       $dtc30=(new \DateTime())->modify('-30 days')->format($format);
@@ -345,18 +353,27 @@ class FacturesController extends Controller
       $swiftTransport2 =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
       $swiftTransport2->setUsername('24ops@najda-assistance.com');
       $swiftTransport2->setPassword($parametres->pass_N);
-      $fromname="Najda Assistance";
-      $from='24ops@najda-assistance.com';
+      $fromname2="Najda Assistance (test email auto)";
+      $from2='24ops@najda-assistance.com';
+      //$signatureNajda=$parametres->signature10;
 
       // instancier swift for fiances
 
       $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
       $swiftTransport->setUsername('finances@najda-assistance.com');
       $swiftTransport->setPassword($parametres->pass_Finances);
-      $fromname="Najda Assistance";
-      $from='24ops@najda-assistance.com';
+      $fromname="Najda Finances (test email auto)";
+      $from='finances@najda-assistance.com';
+      $signatureFinances=$parametres->signature10;
+     //dd($signatureFinances);
+      //$x=1/0;
 
-      $x=1/0;
+       /*$adr=Adresse::where('parent', 10000)->where('nature','emailinterv')->orderBy('id')->pluck('champ')->toArray();
+       $ccea=self::return_dest_cc($adr);       
+       $ccea = implode(";", $ccea);
+       dd($ccea);
+       $toea=self::return_dest_to($adr);
+       //dd($toea);*/
    
    if($prestations && $prestations->count()>0 )
    {
@@ -385,7 +402,7 @@ class FacturesController extends Controller
                     if($p->mail_30_env==0 && $dateSys45 < $dateCreation  )
                     {
                         //dd("ok");
-                     $contenu = "Bonjour de Najda,<br>
+                     $contenu = "Bonjour,<br>
                      Pour le dossier : ".$doss_ref.", votre facture n'est pas encore reçue depuis une période qui dépasse 30 jours<br>
                      (Signé): Mail généré automatiquement";
 
@@ -395,7 +412,7 @@ class FacturesController extends Controller
                     
                       if($p->mail_45_env==0 && $dateSys45 >= $dateCreation)
                         {
-                          $contenu = "Bonjour de Najda,<br>
+                          $contenu = "Bonjour,<br>
                          Pour le dossier : ".$doss_ref.", votre facture n'est pas encore reçue depuis une période qui dépasse 45 jours<br>
                         (Signé): Mail généré automatiquement";
                        }
@@ -405,7 +422,7 @@ class FacturesController extends Controller
 
                    $sujet = 'Facture Prestataire';
                  
-                  $contenu=$contenu.'<br><br>Cordialement <br> Najda <br><br><hr style="float:left;"><br><br>';
+                  $contenu=$contenu.'<br><br>Cordialement <br> '.$signatureFinances.'<br><br><hr style="float:left;"><br><br>';
 
                   if($adr && count($adr)>0)
                    {
@@ -415,16 +432,72 @@ class FacturesController extends Controller
                      if($dateSys30>= $dateCreation && $dateSys45 < $dateCreation && $p->mail_30_env==0 )
                             {
                               $email_prestataires[]=$adr[0];
-                              /*self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-                              Prestation::where('id', $p->id)->update(['mail_30_env'=>1]);*/
+                              self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                              Prestation::where('id', $p->id)->update(['mail_30_env'=>1]);
+                              $ccea=self::return_dest_cc($adr);
+                              $ccea = implode(";", $ccea);
+                              $toea=self::return_dest_to($adr);
+                              $presname='';
+                              $prenom='';
+                              $presname=Prestataire::where('id',$p->prestataire_id)->first();
+                              if($presname)
+                              {
+                              $presname=Prestataire::where('id',$p->prestataire_id)->first()->name;
+                              $prenom=Prestataire::where('id',$p->prestataire_id)->first()->prenom;
+                                if($prenom)
+                                {
+                                  $presname=$prenom.' '.$presname;
+                                }
+                              }
+
+                              $emaiauto=new EmailAuto ([ 
+                             'dossierid'=>$p->dossier_id,
+                             'dossier' =>$doss_ref,
+                             'prestataire' =>$presname,
+                             'destinataire' =>$toea,
+                             'emetteur'=>$from,
+                             'cc'=>$ccea,
+                             'sujet'=>$sujet, 
+                             'contenutxt' =>$contenu,
+                             'type'=>'facture_prestataire'                    
+
+                             ]);
+
+                            $emaiauto->save();
+
+
                             }
                             else
                             {
                                  if($dateSys45 >= $dateCreation && $p->mail_45_env==0)
                                  {
                                    $email_prestataires[]=$adr[0];
-                               /*self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-                                Prestation::where('id', $p->id)->update(['mail_45_env'=>1]);*/
+                               self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                                Prestation::where('id', $p->id)->update(['mail_45_env'=>1]);
+                                    $ccea=self::return_dest_cc($adr);
+                                      $ccea = implode(";", $ccea);
+                                      $toea=self::return_dest_to($adr);
+                                      $presname='';
+                                      if($presname=Prestataire::where('id',$p->prestataire_id)->first())
+                                      {
+                                      $presname=Prestataire::where('id',$p->prestataire_id)->first()->name;
+                                      }
+
+                                      $emaiauto=new EmailAuto ([ 
+                                     'dossierid'=>$p->dossier_id,
+                                     'dossier' =>$doss_ref,
+                                     'prestataire' =>$presname,
+                                     'destinataire' =>$toea,
+                                     'emetteur'=>$from,
+                                     'cc'=>$ccea,
+                                     'sujet'=>$sujet, 
+                                     'contenutxt' =>$contenu,
+                                     'type'=>'facture_prestataire'                    
+
+                                     ]);
+
+                                    $emaiauto->save();
+
                                  }
 
                             }
@@ -445,19 +518,52 @@ class FacturesController extends Controller
                 {
 
                     $sujet = 'Facture Prestataire';
-                    //$adr='finances@medicmultiservices.com';
-                    $adr='kbskhaled@gmail.com';
+                    $adr='finances@najda-assistance.com';
+                   // $adr='kbskhaled@gmail.com';
+
+                      $presname='';
+                      $prenom='';
+                      $presname=Prestataire::where('id',$p->prestataire_id)->first()
+                      if($presname)
+                      {
+                      $presname=Prestataire::where('id',$p->prestataire_id)->first()->name;
+                      $prenom=Prestataire::where('id',$p->prestataire_id)->first()->prenom;
+                        if($prenom)
+                        {
+                          $presname=$prenom.' '.$presname;
+                        }
+                      }
 
                     //dd("envoi alerte au financier cas prestataire");
                     $contenu = "Alerte pour le financier<br>
-                    la facture du prestataire pour la prestation concernant le dossier ".$doss_ref." n'est pas encore reçue depuis une période qui dépasse 60 jours<br>
+                    la facture du prestataire ". $presname." pour la prestation concernant le dossier ".$doss_ref." n'est pas encore reçue depuis une période qui dépasse 60 jours<br>
                     (Signé): Mail généré automatiquement";
                     
-                    $email_prestataires[]=$adr[0];
-                    /*self::envoi_mail($swiftTransport2,$adr,$sujet,$contenu,$from, $fromname);
-                    Prestation::where('id', $p->id)->update(['mail_60_env'=>1]);*/
+                    $email_prestataires[]=$adr;
+                    self::envoi_mail($swiftTransport2,$adr,$sujet,$contenu,$from2, $fromname2);
+                    Prestation::where('id', $p->id)->update(['mail_60_env'=>1]);
                     //adresse financier
                     //$adr= fianancier
+                              $ccea=self::return_dest_cc($adr);
+                              $ccea = implode(";", $ccea);
+                              $toea=self::return_dest_to($adr);
+                             
+
+                              $emaiauto=new EmailAuto ([ 
+                             'dossierid'=>$p->dossier_id,
+                             'dossier' =>$doss_ref,
+                             'prestataire' =>$presname,
+                             'destinataire' =>$toea,
+                             'emetteur'=>$from,
+                             'cc'=>$ccea,
+                             'sujet'=>$sujet, 
+                             'contenutxt' =>$contenu,
+                             'type'=>'Alerte_finanier_facture_prestataire'                    
+
+                             ]);
+
+                            $emaiauto->save();
+
 
                 }
 
@@ -466,8 +572,8 @@ class FacturesController extends Controller
 
         }
     }
-   // dd('fin envoi mail au prestataire');
-    $testadr=array(4364,4371);
+   //dd('fin envoi mail au prestataire');
+    //$testadr=array(4364,4371);
     if($factures && $factures->count()>0 )
         {
 
@@ -509,12 +615,13 @@ class FacturesController extends Controller
                 //$adr=Adresse::where('parent', $dossier->customer_id)->where('nature','gestion')->pluck('mail')->toArray();
                 //$cli=Client::where('id', $dossier->customer_id)->first();
                 
-                $adr=Adresse::where('parent',$dossier->customer_id)->where('nature','gestion')->whereIn('id', $testadr)->pluck('mail')->toArray();
+                $adr=Adresse::where('parent',$dossier->customer_id)->where('nature','gestion')->orderBy('id')->pluck('mail')->toArray();
                 //dd($adr);
                 $clilang=null;
                  if($adr && count($adr)>0)
                    {
-
+                     $sujet = '';
+                     $contenu ='';
                     if($cli->langue1=="francais" || stristr($cli->langue1, "fran"))
                         {
                             $clilang="Fr";
@@ -529,33 +636,53 @@ class FacturesController extends Controller
                     if($clilang=="Fr")
                     {
                     $sujet = 'Facture client';
-                     $contenu = "Bonjour de Najda,<br>
+                     $contenu = "Bonjour ,<br>
                     Pour le dossier ".$dossier->reference_medic.", votre facture n'est pas encore réglée<br>
                      (Signé): Mail généré automatiquement";
-                    $contenu=$contenu.'<br><br>Cordialement <br> Najda <br><br><hr style="float:left;"><br><br>';
+                    $contenu=$contenu.'<br><br>Cordialement <br>'.$signatureFinances.'<br><br><hr style="float:left;"><br><br>';
                     $email_client[]=$adr[0];
-                  /* self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-                    Facture::where('id', $f->id)->update(['mail_30_env'=>1]);*/
+                   self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                    Facture::where('id', $f->id)->update(['mail_30_env'=>1]);
                     //dd('ok envoi au gestionnaire client');
                     }
                     else
                     {
                          $sujet = 'Customer invoice';
-                     $contenu = "Hello from Najda, <br>
+                     $contenu = "Hello , <br>
                      For the File ".$dossier->reference_medic.", your bill has not been paid yet<br>
                       (Signed): Mail generated automatically ";
-                    $contenu=$contenu.'<br><br>cordially <br> Najda <br><br><hr style="float:left;"><br><br>';
+                    $contenu=$contenu.'<br><br>cordially <br>'.$signatureFinances.'<br><br><hr style="float:left;"><br><br>';
                     $email_client[]=$adr[0];
-                   /*self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-                    Facture::where('id', $f->id)->update(['mail_30_env'=>1]);*/
+                  self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                    Facture::where('id', $f->id)->update(['mail_30_env'=>1]);
                    //dd('ok send to the manager of customer');
 
 
 
                     }
+
+                            $ccea=self::return_dest_cc($adr);
+                              $ccea = implode(";", $ccea);
+                              $toea=self::return_dest_to($adr);
+                             
+
+                              $emaiauto=new EmailAuto ([ 
+                             'dossierid'=>$dossier->id,
+                             'dossier' =>$dossier->reference_medic,
+                             'client' =>$cli->name,
+                             'destinataire' =>$toea,
+                             'emetteur'=>$from,
+                             'cc'=>$ccea,
+                             'sujet'=>$sujet, 
+                             'contenutxt' =>$contenu,
+                             'type'=>'facture_client'                    
+
+                             ]);
+
+                            $emaiauto->save();
                    }
 
-               
+                     
                  }
 
                 }
@@ -568,16 +695,36 @@ class FacturesController extends Controller
                     //adresse financier
                     //$adr= fianancier
                      $sujet = 'Facture Client';
-                    $adr='finances@medicmultiservices.com';
+                    $adr='finances@najda-assistance.com';
 
                      $contenu = "Alerte pour le financier<br>
                     la facture du client ".$cli->name." pour le dossier ".$dossier->reference_medic." n'est pas encore réglée  depuis une période qui dépasse 45 jours<br>
                     (Signé): Mail généré automatiquement";
 
                  // dd("envoi alerte au financier cas client");
-                        $email_client[]=$adr[0];
-                       // self::envoi_mail($swiftTransport2,$adr,$sujet,$contenu,$from, $fromname);
-                           // Facture::where('id', $f->id)->update(['mail_45_env'=>1]);
+                        $email_client[]=$adr;
+                        self::envoi_mail($swiftTransport2,$adr,$sujet,$contenu,$from2, $fromname2);
+                         Facture::where('id', $f->id)->update(['mail_45_env'=>1]);
+
+                         $ccea=self::return_dest_cc($adr);
+                              $ccea = implode(";", $ccea);
+                              $toea=self::return_dest_to($adr);
+                             
+
+                              $emaiauto=new EmailAuto ([ 
+                             'dossierid'=>$dossier->id,
+                             'dossier' =>$dossier->reference_medic,
+                             'client' =>$cli->name,
+                             'destinataire' =>$toea,
+                             'emetteur'=>$from,
+                             'cc'=>$ccea,
+                             'sujet'=>$sujet, 
+                             'contenutxt' =>$contenu,
+                             'type'=>'Alerte_financier_facture_client'                    
+
+                             ]);
+
+                            $emaiauto->save();
                       
 
 
@@ -599,8 +746,112 @@ class FacturesController extends Controller
 
     }//fin fonction
 
- 
+    public static function return_dest_to ($adresses)
+    {
+
+            $cc=array();
+            $dests = null;
+            $to=null;
+      
+      if(is_array($adresses))
+             {
+                $dests=$adresses;
+             }
+             else
+             {
+                $dests=array($adresses);
+             }
+             
+            // dd($dests);
+             if(count($dests)>0 && $dests[0])
+             {
+
+              $to=$dests[0];
+              
+               if(count($dests)>1)
+               {
+                 // $cc='';
+                  for($i=1 ;$i<count($dests) ; $i++)
+                  {
+                    if($dests[$i])
+                    {
+                      //$cc=$cc.$dests[$i].',';
+                      array_push($cc,$dests[$i]);
+                    }
+  
+                  }
+                  //nejib.karoui@gmail.com
+                  array_push($cc,'nejib.karoui@gmail.com');
+                  array_push($cc,'kbskhaled@gmail.com');
+  
+               }
+                else
+               {
+               $to=$dests[0] ; // null;
+               //nejib.karoui@gmail.com
+                array_push($cc,'nejib.karoui@gmail.com');
+                array_push($cc,'kbskhaled@gmail.com');
+               }
+    
+             }
+
+             return $to;
+
+    }
 
 
-}
+    public static function return_dest_cc ($adresses)
+    {
+
+            $cc=array();
+            $dests = null;
+            $to=null;
+      
+      if(is_array($adresses))
+             {
+                $dests=$adresses;
+             }
+             else
+             {
+                $dests=array($adresses);
+             }
+             
+            // dd($dests);
+             if(count($dests)>0 && $dests[0])
+             {
+
+              $to=$dests[0];
+              
+               if(count($dests)>1)
+               {
+                 // $cc='';
+                  for($i=1 ;$i<count($dests) ; $i++)
+                  {
+                    if($dests[$i])
+                    {
+                      //$cc=$cc.$dests[$i].',';
+                      array_push($cc,$dests[$i]);
+                    }
+  
+                  }
+                  //nejib.karoui@gmail.com
+                  array_push($cc,'nejib.karoui@gmail.com');
+                  array_push($cc,'kbskhaled@gmail.com');
+  
+               }
+                else
+               {
+               $to=$dests[0] ; // null;
+               //nejib.karoui@gmail.com
+                 array_push($cc,'nejib.karoui@gmail.com');
+                 array_push($cc,'kbskhaled@gmail.com');
+               }
+    
+             }
+
+             return $cc;
+
+    }
+
+} // fin controlleur
 

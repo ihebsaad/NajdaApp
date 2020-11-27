@@ -8,7 +8,7 @@ use App\DossierImmobile;
 use App\Client;
 use App\Adresse;
 use App\Envoye;
-
+use App\EmailAuto;
 use Swift_Mailer;
 use DB;
 use Mail;
@@ -95,8 +95,12 @@ class DossierImmobileController extends Controller
         // la mise à jour des liste des dossiers immobile se fait dans la page role.blade à la fin de la page
 
         // lire la liste de dossiers immobiles depuis DossierController
+        $dtc = (new \DateTime())->format('2020-05-01 00:00:00');
         $dossiers = Dossier::where('sub_status', 'immobile')
-            ->where('current_status', 'inactif')
+            ->where('current_status','!=','Cloture')
+            ->whereNotNull('updatedmiss_at')
+            ->whereNotNull('created_at')
+            ->where('created_at','>=', $dtc)
             ->get();
 
         // dossier immobile depuis 3 jours 
@@ -214,42 +218,11 @@ class DossierImmobileController extends Controller
                            $climail= null;
                         }
 
-                       /* if($cli->mail != null && $cli->mail != '')
-                        {
-                            $climail=$cli->mail;
-                        }
-                       if(!$climail)
-                        {
-                           if($cli->mail2 != null && $cli->mail2 != '')
-                           {
-                            $climail=$cli->mail2;
-                           }
-
-                        }
-
-                         if(!$climail)
-                        {
-                           if($cli->mail3 != null && $cli->mail3 != '')
-                           {
-                            $climail=$cli->mail3;
-                           }
-
-                        }
-
-                        if($climail)
-                        {
-                           if(!stristr($climail, "@"))
-                           {
-                            $climail=null;
-                           }
-
-                        }*/
-
-
+                       
                     }
 
 
-                    /*$nouv= new DossierImmobile ([
+                    $nouv= new DossierImmobile ([
                       'dossier_id'=>$dossier->id,
                       'reference_doss' =>$dossier->reference_medic,
                       'client_id' =>$dossier->customer_id,
@@ -263,7 +236,7 @@ class DossierImmobileController extends Controller
 
                     ]);
 
-                    $nouv->save();*/
+                    $nouv->save();
 
                  }
 
@@ -277,11 +250,17 @@ class DossierImmobileController extends Controller
         $dossim=DossierImmobile::get();
        // dd($dossim);
         $parametres = DB::table('parametres')->where('id','=', 1 )->first();
+       // $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
         $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        
         $swiftTransport->setUsername('24ops@najda-assistance.com');
+       // $swiftTransport->setUsername('test@najda-assistance.com');
         $swiftTransport->setPassword($parametres->pass_N);
-        $fromname="Najda Assistance";
-        $from='24ops@najda-assistance.com';
+        //$swiftTransport->setPassword('esol@2109');
+        $fromname="Najda Assistance (test email auto. doss. immobiles)";
+       $from='24ops@najda-assistance.com';
+        //$from='test@najda-assistance.com';
+        
 
        $format = "Y-m-d H:i:s";
      //   $dtc = (new \DateTime())->format('Y-m-d H:i:s');
@@ -307,7 +286,7 @@ class DossierImmobileController extends Controller
                 $contenu = "Bonjour de Najda,<br>
                 Le dossier ".$dm->reference_doss." n'a vu aucune action ni instruction de votre part depuis 72 heures. Merci de nous indiquer si nous devons le clôturer, ou si vous avez de nouvelles instructions le concernant?<br>
                 (Signé): Mail généré automatiquement";
-            $contenu=$contenu.'<br><br>Cordialement <br> Najda <br><br><hr style="float:left;"><br><br>';
+            $contenu=$contenu.'<br><br>Cordialement <br> Najda Assistance<br><br><hr style="float:left;"><br><br>';
 
 
             }
@@ -318,7 +297,7 @@ class DossierImmobileController extends Controller
              $contenu = "Hello from Najda,<br>
               The file ".$dm->reference_doss." has seen no action or instruction from you for 72 hours. Please let us know if we need to close it, or if you have any new instructions concerning it?<br>
           (Signed): Mail generated automatically";
-            $contenu=$contenu.'<br><br>Best regards <br> Najda <br><br><hr style="float:left;"><br><br>';
+            $contenu=$contenu.'<br><br>Best regards <br> Najda Assistance <br><br><hr style="float:left;"><br><br>';
 
 
             }
@@ -358,6 +337,9 @@ class DossierImmobileController extends Controller
                     }
   
                   }
+                    // cc nejib karoui; 
+                   array_push($cc,'nejib.karoui@gmail.com');
+                   array_push($cc,'kbskhaled@gmail.com');
   
                }
   
@@ -365,7 +347,11 @@ class DossierImmobileController extends Controller
              else
              {
                $to=$dm->client_adresse ; // null;
-               $cc=null; 
+                // cc nejib karoui; 
+                  array_push($cc,'nejib.karoui@gmail.com');
+                  array_push($cc,'kbskhaled@gmail.com');
+  
+               //$cc=null; 
              }
 
            $swiftMailer = new Swift_Mailer($swiftTransport);
@@ -383,10 +369,32 @@ class DossierImmobileController extends Controller
              $dm->update([
 
                 'mail_auto_envoye'=> 'Oui',
-                'date_envoi_mail' =>$dateSys  ,
+                'date_envoi_mail' =>$dateSys ,
                 'reponse_client'  =>null
              
-             ]);  
+             ]); 
+
+            $emaiautodestcc = implode(";", $cc);
+
+             // sauvgarder dans la table d'envoi mail auto 
+
+            
+                $emaiauto=new EmailAuto ([
+                      'dossierid'=>$dm->dossier_id,
+                      'dossier' =>$dm->reference_doss,
+                      'client' =>$dm->client_name,
+                      'destinataire' =>$dm->client_adresse,
+                      'emetteur'=>$from,
+                      'cc'=>$emaiautodestcc,
+                      'sujet'=>$sujet, 
+                      'contenutxt' =>$contenu,
+                      'type'=>'dossier_immobile'                    
+
+                    ]);
+
+              $emaiauto->save();
+
+
             }
 
 
@@ -398,7 +406,7 @@ class DossierImmobileController extends Controller
               $dm->update([
                 'mail_auto_envoye'=> 'Non',
                 'date_envoi_mail' =>$dateSys  ,
-                'remarques' => 'dossier immobile plus que 4 jours mais le mail n\'est pas envoyé car l\'adresse mail est inexistante'             
+                'remarques' => 'dossier immobile plus que 4 jours mais le mail n\'est pas encore envoyé car l\'adresse mail destinataire est inexistante'             
              ]);
 
 
