@@ -156,7 +156,7 @@ if (isset($_POST['clientIMA'])) { ?>
 					
 <span id="transfertpers">
 
-<span style="font-family:'Times New Roman'; font-weight:bold">Nbre.</span><span style="font-family:'Times New Roman'; font-weight:bold">passagers : </span>
+<span style="font-family:'Times New Roman'; font-weight:bold">Transfert des personnes: Nbre.</span><span style="font-family:'Times New Roman'; font-weight:bold">passagers : </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_nombrepassag'])) { echo $_POST['CL_nombrepassag']; } ?></span>
 </span>
 </p>

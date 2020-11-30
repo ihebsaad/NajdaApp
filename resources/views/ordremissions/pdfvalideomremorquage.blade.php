@@ -148,7 +148,7 @@ if (isset($omparent['clientIMA'])) { ?>
 					
 <span id="transfertpers">
 
-<span style="font-family:'Times New Roman'; font-weight:bold">Nbre.</span><span style="font-family:'Times New Roman'; font-weight:bold">passagers : </span>
+<span style="font-family:'Times New Roman'; font-weight:bold">Transfert des personnes: Nbre.</span><span style="font-family:'Times New Roman'; font-weight:bold">passagers : </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_nombrepassag'])) { echo $omparent['CL_nombrepassag']; } ?></span>
 </span>
 </p>
