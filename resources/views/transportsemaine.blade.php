@@ -54,23 +54,21 @@
     $today= date('Y-m-d');
 
     // OM TAXIs
-    $ordres_taxi =\App\OMTaxi::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV', '>', Carbon::now()->toDateString())
-      ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)
-        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','prestataire_taxi','dateheuredep','dateheuredispprev')
+    $ordres_taxi =\App\OMTaxi::where('affectea' , 'externe')->where('CL_heuredateRDV', '>', Carbon::now()->toDateString())
+      ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)->where('statut','Validé')->orWhere('affectea','mmentite')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)->where('statut','Validé')->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','prestataire_taxi','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
         ->get();
 
     //OM Ambul
 
-    $ordres_ambul =  \App\OMAmbulance::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
-        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)
-            ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1','prestataire_ambulance','dateheuredep','dateheuredispprev')
+    $ordres_ambul =  \App\OMAmbulance::where('affectea' , 'externe')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
+        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)->where('statut','Validé')->orWhere('affectea','mmentite')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)->where('statut','Validé')->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1','prestataire_ambulance','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
          ->get();
     // OM Remorq
 
-    $ordres_rem = \App\OMRemorquage::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
-        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)
+    $ordres_rem = \App\OMRemorquage::where('affectea' , 'externe')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
+        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)->where('statut','Validé')->orWhere('affectea','mmentite')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)->where('statut','Validé')
             ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','prestataire_remorquage','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
          ->get();
