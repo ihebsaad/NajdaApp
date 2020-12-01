@@ -73,14 +73,15 @@ $sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestat
         while($rowvha = $resultvha->fetch_assoc()) {
             $array_presta[] = array('id' => $rowvha["id"],"name" => $rowvha["name"] ,"prenom" => $rowvha["prenom"],"civilite" => $rowvha["civilite"]);
         } }
-$sqlvh = "SELECT id,name,phone_home,ville,prenom,civilite,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1 ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+$sqlvh = "SELECT prestataire_id,id,nom,prenom FROM intervenants WHERE dossier=".$iddossier." AND prestataire_id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
 
         $array_prest = array();
         while($rowvh = $resultvh->fetch_assoc()) {
-            $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"] ,"prenom" => $rowvh["prenom"],"civilite" => $rowvh["civilite"]  );
-        } 
+             $array_prest[] = array('id' => $rowvh["prestataire_id"],"nom" => $rowvh["nom"] ,"prenom" => $rowvh["prenom"]  );
+        }  
 $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AND nature ='teldoss'";
     $resulttel = $conn->query($sqltel);
     if ($resulttel->num_rows > 0) {
@@ -332,10 +333,10 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
-      echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+      echo '<option value="'.$prest["nom"].''.$prest["prenom"].'" id="'.$prest["id"].'" selected >'.$prest["nom"].''.$prest["prenom"].'</option>';}
 else {
     
-    echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+    echo '<option value="'.$prest["nom"].''.$prest["prenom"].'" id="'.$prest["id"].'" >'.$prest["nom"].''.$prest["prenom"].'</option>';}
 }
 ?>
 </select>

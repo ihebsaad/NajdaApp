@@ -663,12 +663,15 @@ else
 if(!empty($_POST['id__prestataire']))
 {
 $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['oms_docs'=>$titref]);
+         if(!empty($prestation))    
+ {$prestation  ->update(['oms_docs'=>$titref]);}
 }
 if(!empty($_POST['id__prestataire1']))
 {
 $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire1'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['oms_docs'=>$titref]);
+        if(!empty($prestation))    
+ {$prestation  ->update(['oms_docs'=>$titref]);}     
+  
 }
 }
 else 
@@ -684,12 +687,16 @@ else
 if(!empty($_POST['id__prestataire']))
 {
 $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['oms_docs'=>$titref]);
+           if(!empty($prestation))    
+ {$prestation  ->update(['oms_docs'=>$titref]);}    
+
 }
 if(!empty($_POST['id__prestataire1']))
 {
 $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire1'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['oms_docs'=>$titref]);
+              if(!empty($prestation))    
+ {$prestation  ->update(['oms_docs'=>$titref]);}
+
 }
 }
 }
@@ -2051,7 +2058,9 @@ if($champtemp ==='[ID__PRESTATAIRE]')
 {
 if(!empty($valchamp))
 {$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation","oms_docs"=>$titref]);
+     if(!empty($prestation))    
+ { $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation","oms_docs"=>$titref]);        
+
 
 $par=Auth::id();
 $user = User::find($par);
@@ -2066,12 +2075,13 @@ $nomuser = $user->name ." ".$user->lastname ;
             'user_id'=>$user->id,
         ]);	$hist->save();
 		
-	 }}  
+	}  }}  
 if($champtemp ==='[ID__PRESTATAIRE1]')
 {
 if(!empty($valchamp))
 {$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation","oms_docs"=>$titref]);
+             if(!empty($prestation))    
+ { $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation","oms_docs"=>$titref]);
 
 $par=Auth::id();
 $user = User::find($par);
@@ -2086,7 +2096,7 @@ $desc='Annulation de prestation pour le dossier: ' .$refdoss;
             'user_id'=>$user->id,
         ]);	$hist->save();
 		
-	 }}  
+	 } }}  
                 }
                 elseif($champtemp ==='[DATE_HEURE]')
                 {
