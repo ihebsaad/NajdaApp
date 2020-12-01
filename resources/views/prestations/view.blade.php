@@ -111,11 +111,36 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                  </div>
 
                  <div class="form-group">
+<div class="row">
+<div class="col-md-3">
                   <text id="textregle" style="font-weight: bold;font-size: large; float: left;">Parvenu  : &nbsp;</text>
                  <input onchange="changingParvenu(this);" type="checkbox" name="parvenu" id="parvenu" value="" style="font-weight: bold;font-size: medium; float: left;" <?php if($prestation->parvenu==1) {echo "checked" ; }?> > &nbsp;&nbsp;      
-                  <br>
-                 </div>
+              
 
+                      </div>     
+                                <div class="col-md-3">
+                                    <label style="padding-top:10px">Effectuée:</label>
+                                </div>
+                                <div class="radio-list">
+                                    <div class="col-md-3">
+                                    <div class="radio" id="uniform-actif"> 
+									<label for="effectue" class="">
+									<input  onclick="changing(this)" type="radio" name="effectue" id="effectue" value="1"   <?php if ($prestation->effectue ==1){echo 'checked';} ?>>Oui   
+                                    </label>
+                                    </div>
+									</div>
+									
+                                    <div class="col-md-3">
+                                    <div class="radio" id="uniform-nonactif"> 
+                                      <label for="nonactif" class="">
+										<input onclick="disabling('effectue')" type="radio" name="effectue" id="nonactif" value="0"  <?php if ($prestation->effectue ==0){echo 'checked';} ?>>Non  
+                                        </label>
+									 </div>
+                                    </div>
+                               
+                 </div>
+</div>
+ </div>
                  <div class="form-group">
                      <B>Facture :  </B>
                         <?php $facture= \App\Facture::where('prestation',$prestation->id )->first();  ?>
@@ -420,7 +445,34 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
         // }
     }
+function disabling(elm) {
+        var champ=elm;
 
+        var val =0;
+         var prestation = $('#idprestation').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestations.updating') }}",
+            method: "POST",
+            data: {prestation: prestation , champ:champ ,val:val, _token: _token},
+            success: function (data) {
+                if (elm=='annule'){
+                $('#nonactif').animate({
+                    opacity: '0.3',
+                });
+                $('#nonactif').animate({
+                    opacity: '1',
+                });
+                }
+
+
+            }
+        });
+        // } else {
+
+        // }
+    }
 function showing() {
 	$('#divraison').fadeIn('slow') ;
 }
