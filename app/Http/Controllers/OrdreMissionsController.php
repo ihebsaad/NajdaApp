@@ -9610,7 +9610,7 @@ if($xp==='1')
 }
 else
 {
-$dossiers=Dossier::where('reference_customer',$refclient)->orderBy('created_at', 'desc')->select('reference_medic','id')->get();
+$dossiers=Dossier::where('reference_customer',$refclient)->orderBy('created_at', 'desc')->where('type_affectation','<>','X-Press')->select('reference_medic','id')->get();
 }
  
  

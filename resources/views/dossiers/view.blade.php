@@ -4218,18 +4218,21 @@ function keyUpHandler(){
              $("#type_affectation option[value='Transport VAT']").hide();
              $("#type_affectation option[value='Transport MEDIC']").hide();
              $("#type_affectation option[value='Transport Najda']").hide();
+ $("#type_affectation option[value='X-Press']").show();
         }
  if (tempom==="Taxi")
         {
              $("#type_affectation option[value='Transport VAT']").show();
              $("#type_affectation option[value='Transport MEDIC']").show();
              $("#type_affectation option[value='Transport Najda']").show();
+ $("#type_affectation option[value='X-Press']").hide();
         }
 if (tempom==="Ambulance")
         {
              $("#type_affectation option[value='Transport VAT']").show();
              $("#type_affectation option[value='Transport MEDIC']").show();
              $("#type_affectation option[value='Transport Najda']").show();
+$("#type_affectation option[value='X-Press']").hide();
         }
         /*var emispar = $("#emispar").val();
         if (emispar==="Select")
