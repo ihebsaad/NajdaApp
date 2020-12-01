@@ -1,11 +1,16 @@
 @extends('layouts.mainlayout')
+<?php
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
+?>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
-    <h2> Créer une nouvel Intervenant </h2>
+ <h2> Créer une nouvel Intervenant </h2>
                 <form id="updateform"   method="post"   action="{{route('prestataires.saving')}}" >
                     {{ csrf_field() }}
                     <input type="hidden" id="dossier" name="dossier" value="<?php echo $folder;?>"/>
@@ -143,8 +148,19 @@
             method: "POST",
             data: {   val:val, _token: _token},
             success: function (data) {
-                if(data>0){
-                    alert('Ce nom existe !');
+                if(data!==""){
+ parsed = JSON.parse(data);
+                    string='Existe deja ! ';
+                    if(parsed['name']!=null){string+='Nom : '+parsed['name']+ ' - '; }
+ if(parsed['prenom']!=null){string+='Prénom : '+parsed['prenom']+ ' - '; }
+                    string+='<br>   lien : <a href="<?php echo $urlapp.'/prestataires/view/'; ?>'+parsed['id']+'" target="_blank" >Ouvrir Fiche Prestataire</a>';
+ 
+
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Existant...',
+                        html: string
+                    });
                     document.getElementById('name').style.background='#FD9883';
                     document.getElementById('name').style.color='white';
                 } else{

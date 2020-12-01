@@ -961,8 +961,9 @@ DB::table('adresses')
         $val =  trim($request->get('val'));
          $count =  Prestataire::where('name', $val)
               ->count();
-
-        return $count;
+$rech=   Prestataire::where('name', $val)->first();
+     return json_encode($rech) ;
+      
 
     }
 
