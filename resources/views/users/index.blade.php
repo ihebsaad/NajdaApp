@@ -10,6 +10,7 @@
         .uper {
             margin-top: 40px;
         }
+  .no-sort input{display:none;}
     </style>
          <div class="row">
             <div class="col-md-8"><H2> Liste des utilisateurs</H2></div><div class="col-md-3"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('UsersController@create')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Ajouter un utilisateur"  class="fa fa-fw fa-plus fa-2x"></span></a><br></div>
@@ -22,7 +23,7 @@
             <th>Qualification</th>
             <th class="no-sort">Statistiques</th>
             <th >Statut</th>
-           <!-- <th class="no-sort">Actions</th>-->
+         <th class="no-sort">Actions</th>
         </tr>
             <tr>
                 <th>ID</th>
@@ -30,7 +31,7 @@
                 <th>Qualification</th>
                 <th class="no-sort">Statistiques</th>
                 <th>Statut</th>
-              <!--  <th> </th>-->
+         <th class="no-sort"> </th>
               </tr>
             </thead>
             <tbody>
@@ -41,11 +42,11 @@
                     <td><?php echo $qual;?></td>
 				 <td><a href="{{action('UsersController@stats', $user['id'])}}" >Statistiques</a></td>
                     <td><?php if ($user->isOnline() && $user->statut!= -1 ){  if(  $user->statut == 1) {echo '<span class="label label-success">Connecté</span> ';} else{ if ($user->statut==2){echo '<span class="label label-warning">En Pause</span> ';  }  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
-               <!--    <td>  @can('isAdmin')
+             <td>  @can('isAdmin')
                        <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                             <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                         </a> 
-                      @endcan</td>-->
+                      @endcan</td>
                 </tr>
             @endforeach
             </tbody>
