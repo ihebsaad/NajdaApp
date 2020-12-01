@@ -7422,7 +7422,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $contenu= str_replace ( '&' ,'' ,$contenu);
         $contenu= str_replace ( '<' ,'' ,$contenu);
         $contenu= str_replace ( '>' ,'' ,$contenu);
-
+if($request->get('smsper')!==null)
+{
+$smsper= trim( $request->get('smsper'));}
+else
+{$smsper= null;}
         $description = trim( $request->get('description'));
         $doss = trim( $request->get('dossier'));
         $dossier= $this->RefDossierById($doss);////;
@@ -7473,9 +7477,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         ]);	$hist->save();
 		
 		
-        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-
-        $urlsending=$urlapp.'/envoyes';
+        $urlapp="http://$_SERVER[HTTP_HOST]/najdatest";
+if($smsper!==null)
+                {$urlsending=$urlapp.'/personnes/view/'.$smsper;}
+else{
+$urlsending=$urlapp.'/envoyes';
+}
+       
         //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
         return redirect($urlsending)->with('success', '  Envoyé ! ');
 
@@ -7495,6 +7503,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
         $num = trim($request->get('destinataire'));
+
+if($request->get('smsper')!==null)
+{
+$smsper= trim( $request->get('smsper'));}
+else
+{$smsper= null;}
         $contenu = trim( $request->get('message'));
         $description = trim( $request->get('description'));
         $doss = trim( $request->get('dossier'));
@@ -7522,7 +7536,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
         try{
-            Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from,$mpass) {
+            Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from,$mpass,$smsper) {
                 $message
                      ->to('ihebsaad@gmail.com')
                   //   ->to('ecom_plus@hotmail.com')
@@ -7558,9 +7572,17 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
-                $urlsending=$urlapp.'/envoyes';
-                 echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
-                return redirect($urlsending)->with('success', '  Envoyé ! ');
+if($smsper!==null)
+                {$urlsending=$urlapp.'/personnes/view/'.$smsper;}
+else{
+$urlsending=$urlapp.'/envoyes';
+}
+echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
+ 
+               
+
+return redirect($urlsending1)->with('success', '  Envoyé ! ');
+
 
             });
 

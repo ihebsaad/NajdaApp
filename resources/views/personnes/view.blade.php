@@ -144,8 +144,8 @@ if ($personne->tel!=''){
                 <h5 class="modal-title" id="exampleModal7">Envoyer un SMS </h5>
 
             </div>
-            <form method="post" action="{{action('EmailController@sendsms')}}" >
-
+            <form method="post" action="{{action('EmailController@sendsmsxml')}}" >
+<input type="hidden"  name="smsper" id="smsper" class="form-control"  value="{{ $personne->id }}">
             <div class="modal-body">
                 <div class="card-body">
 
@@ -170,6 +170,7 @@ if ($personne->tel!=''){
 
                         <div class="form-group">
                             {{ csrf_field() }}
+
                             <label for="description">Description:</label>
                             <input id="description" type="text" class="form-control" name="description"     />
                         </div>
@@ -311,13 +312,13 @@ if ($personne->tel!=''){
         var champ=elm;
 
         var val =1;
-         var citie = $('#id').val();
+         var personne = $('#id').val();
         //if ( (val != '')) {
         var _token = $('input[name="_token"]').val();
         $.ajax({
             url: "{{ route('personnes.updating') }}",
             method: "POST",
-            data: {citie: citie , champ:champ ,val:val, _token: _token},
+            data: {personne: personne , champ:champ ,val:val, _token: _token},
             success: function (data) {
                 if (elm=='annule'){
                 $('#nonactif').animate({
