@@ -793,6 +793,14 @@ class ActionController extends Controller
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
                            // dd( $datespe );
+                           if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                          
                                       $action25=ActionEC::where('mission_id',$miss->id)
                                                           ->where('statut','!=','rfaite')
@@ -843,6 +851,14 @@ class ActionController extends Controller
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                            // dd( $datespe );
+                               if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                                      
                                        $action27=ActionEC::where('mission_id',$miss->id)
                                                           ->where('statut','!=','rfaite')
@@ -897,7 +913,14 @@ class ActionController extends Controller
                 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                     
-
+                                   if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
                                     if($datespe <= $dateSys )
@@ -946,7 +969,14 @@ class ActionController extends Controller
 
                    
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
-                        
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
@@ -1000,6 +1030,14 @@ class ActionController extends Controller
                    
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
                            // dd( $datespe );
+                                 if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                          
                                   $action4=ActionEC::where('mission_id',$miss->id)
                                                           ->where('statut','!=','rfaite')
@@ -1061,6 +1099,14 @@ class ActionController extends Controller
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
                                  //Si_heure_systeme>heure_RDV+2h 
+                                 if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                     if($datespe->modify('+1 minute') <= $dateSys )
                                     {
@@ -1106,6 +1152,14 @@ class ActionController extends Controller
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                            // dd( $datespe );
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                          
                                    $action8=ActionEC::where('mission_id',$miss->id)
                                                           ->where('statut','!=','rfaite')
@@ -1158,7 +1212,15 @@ class ActionController extends Controller
 
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
-                           
+                                  
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                  //Si_heure_systeme>heure prévue_d’arrivee+3 heures
 
@@ -1205,7 +1267,14 @@ class ActionController extends Controller
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
                        
                                    //Si_heure_systeme>heure_arrivee_prevue
-
+                                    if($miss->om_in_ex==0)
+                                     {
+                                    $datespe->modify('-1 hour');
+                                     }
+                                    else
+                                     {
+                                    $datespe->modify('-30 minutes');
+                                      }
 
                                     if($datespe <= $dateSys)
                                     {
@@ -1256,6 +1325,15 @@ class ActionController extends Controller
 
                    
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_av_ou_bat));
+
+                                   if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                       
                                    //Si_appui_fait_action2 & si_heure_systeme=heure_arrivée_vol-30min
 
@@ -1308,6 +1386,15 @@ class ActionController extends Controller
 
                      
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_sejour));
+
+                             if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                          
                                    // Si_date_systeme>date_fin_sejour+24h  (date_check_out_+24h)
 
@@ -1353,8 +1440,15 @@ class ActionController extends Controller
                          {
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_sejour));
-                     
-                                      // Si_date_systeme>date_fin_sejour
+                                      if($miss->om_in_ex==0)
+                                        {
+                                          $datespe->modify('-1 hour');
+                                        }
+                                        else
+                                        {
+                                          $datespe->modify('-30 minutes');
+                                        }
+                                            // Si_date_systeme>date_fin_sejour
                                     if($datespe<= $dateSys )
                                     {
 
@@ -1403,7 +1497,14 @@ class ActionController extends Controller
                     
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
                           
-                                  
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                                    // Si_heure_systeme>heure_RDV+30’
 
                                     if($datespe->modify('+3 minutes') <= $dateSys  )
@@ -1454,6 +1555,14 @@ class ActionController extends Controller
                       
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
                            // dd( $datespe );
+                                 if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                             
 
                                    $action5=ActionEC::where('mission_id',$miss->id)
@@ -1509,7 +1618,14 @@ class ActionController extends Controller
                      
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                          
-
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
                                     if($datespe <= $dateSys )
@@ -1567,7 +1683,14 @@ class ActionController extends Controller
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                            // dd( $datespe );
                          
-                                  
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
 
                                    // $datespe <= $dateSys && $action25->statut=="faite"
@@ -1631,7 +1754,14 @@ class ActionController extends Controller
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                            // dd( $datespe );
                          
-                                  
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                 
                                     if($datespe <= $dateSys )
@@ -1682,6 +1812,14 @@ class ActionController extends Controller
                       
                                     /* Si_appui_fait_action7 & si_heure_systeme> heure H+2 prévue pour passage assuré (heure RDV)  OU si_appui_ignorer_action7 & si_heure_systeme> heure H+2 prévue pour passage assuré (heure RDV)
                                       */
+                                      if($miss->om_in_ex==0)
+                                      {
+                                        $datespe->modify('-1 hour');
+                                      }
+                                      else
+                                      {
+                                        $datespe->modify('-30 minutes');
+                                      }
 
                                       $action7=ActionEC::where('mission_id',$miss->id)
                                                           ->where('statut','!=','rfaite')
@@ -1738,7 +1876,14 @@ class ActionController extends Controller
                       
                            $datespe = \DateTime::createFromFormat($format,($miss->h_dep_pour_miss));
                            // dd( $datespe );
-                                                     
+                                   if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }      
 
                                     if($datespe <= $dateSys)
                                     {
@@ -1779,6 +1924,14 @@ class ActionController extends Controller
                                $datespe = \DateTime::createFromFormat($format,($miss->h_retour_base));
                            
                                       // Si_heure_systeme>heure_fin_mission+30min
+                                   if($miss->om_in_ex==0)
+                                      {
+                                        $datespe->modify('-1 hour');
+                                      }
+                                      else
+                                      {
+                                        $datespe->modify('-30 minutes');
+                                      }
 
                                     if($datespe->modify('+3 minutes') <= $dateSys )
                                     {
@@ -1828,6 +1981,14 @@ class ActionController extends Controller
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
                         
                                    // si_date_système<date_fin_location-24h (de midi à midi)
+                                   if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                     if($datespe->modify('-2 minutes') <= $dateSys )
                                       
@@ -1871,7 +2032,14 @@ class ActionController extends Controller
                     
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
                    
-
+                               if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
 
                                $action6=ActionEC::where('mission_id',$miss->id)
                                                           ->where('statut','!=','rfaite')
@@ -1931,7 +2099,16 @@ class ActionController extends Controller
                          {
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
-                             
+                                  
+                                  if($miss->om_in_ex==0)
+                                  {
+                                    $datespe->modify('-1 hour');
+                                  }
+                                  else
+                                  {
+                                    $datespe->modify('-30 minutes');
+                                  }
+
                                     if($datespe <= $dateSys  )
                                     {
 

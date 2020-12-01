@@ -11,7 +11,7 @@
 
 
 @section('content')
-    <?php use \App\Http\Controllers\ClientsController;     ?>
+    <?php use \App\Http\Controllers\DossiersController;     ?>
     <style>
         .uper {
             margin-top: 10px;
@@ -69,9 +69,16 @@
                     <td style="width:10%">{{$ema->destinataire}}</td>
                     <td style="width:10%">{{$ema->cc}} </td>
                     <td style="width:10%">{{$ema->sujet}}</td>
-                    <td style="width:10%">{{$ema->contenutxt}}</td>
+                    <td>
+  <a href="#" class="btn btn-link too-long" title="Contenu de l'email envoyé" 
+  data-content='{{$ema->contenutxt}}' 
+  data-placement="bottom">Cliquez pour voir le contenu <br>
+  (et recliquez pour le cacher)
+  </a>
+</td>
+                   
                     <td style="width:10%">{{$ema->created_at}}</td>
-                    <td style="width:10%">{{$ema->dossier}}</td>
+                    <td style="width:10%"><a href="{{action('DossiersController@view', $ema->dossierid )}}" >{{$ema->dossier}}</a></td>
                     <td style="width:10%">{{$ema->facture_ref}}</td>
                     <td style="width:10%">{{$ema->client}}</td>
                     <td style="width:10%">{{$ema->prestataire}}</td>
@@ -123,6 +130,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            $('.too-long').popover();
 
 
             $('#mytable thead tr:eq(1) th').each( function () {
@@ -315,5 +323,7 @@
 
 
         }
-    </script>
+
+
+     </script>
 @stop

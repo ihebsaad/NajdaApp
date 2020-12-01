@@ -1297,17 +1297,17 @@ catch (Exception $e) {
 
 //dd("fin gestion dossiers par séances");
 
-try {
+/*try {
 \App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
 }
 catch (Exception $e) {
     echo 'Erreur lors de l envoi des emails automatique de factures : ',  $e->getMessage(), "\n";
-}
-        //dd("");
-dd("envoi alertes factures exécuté");
+}*/
+//dd(' ');
+//dd("envoi alertes factures exécuté");
 
 
-
+try {
 
 $datespe = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierImmobileController::getDatecalcul());
 
@@ -1317,6 +1317,7 @@ if($datespe->format('Y-m-d')!=$dtc2)
     {
        // dd("faire le calcul");
         //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+        \App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
         \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile();
         \App\Http\Controllers\DossierImmobileController::setCalculDossImm(false);
         \App\Http\Controllers\DossierImmobileController::setDatecalcul($dtc);
@@ -1333,7 +1334,14 @@ else
      \App\Http\Controllers\DossierImmobileController::setCalculDossImm(true);
     }
 }
-dd("done");
+
+}
+catch (Exception $e) {
+echo 'Erreur lors de l envoi des emails automatiques de dossiers immobiles / Factures Prestataires / Factures clients: ',  $e->getMessage(), "\n";
+}
+
+
+//dd("done");
 //\App\Http\Controllers\DossierImmobileController::setDatecalcul($dtc);
 //dd(\App\Http\Controllers\DossierImmobileController::getDatecalcul());
 //\App\Http\Controllers\DossierImmobileController::setCalculDossImm(true);
