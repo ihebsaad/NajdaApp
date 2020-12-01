@@ -48,9 +48,7 @@
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
 		<span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 00</span>
-				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 01</span>
+		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">Tel:(+216) 73 36 90 00-Fax:(+216) 73 36 90 01</span>
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
 		<span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">ambulance.transp@medicmultiservices.com</span>
 		<?php } ?>
@@ -66,9 +64,7 @@
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
 		<span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 00</span>
-				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 01</span>
+		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">Tel:(+216) 73 36 90 00-Fax:(+216) 73 36 90 01</span>
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
 		<span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">ambulance.transp@medicmultiservices.com</span>
 		<?php } ?>
@@ -82,9 +78,7 @@
     </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
         <span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
     </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 36 003 610</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">FAX (+216) 73 820 333</span>
+        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">Tel:(+216) 36 003 610-Fax:(+216) 73 820 333</span>
     </p>
     <?php } ?>
 
@@ -121,7 +115,7 @@ if (isset($omparent['clientIMA'])) { ?>
 				<span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Nuit</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.25pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_Nuit'])) { echo $omparent['CL_Nuit']; } else {echo "non";} ?></span>
 				</p>
 	</div>
-</div><p style="margin-top:-150px!important;line-height:30%; margin-left:2.85pt; margin-bottom:5px; widows:0; orphans:0;  font-size:14pt;color:red;"><span style="font-family:'Times New Roman'; font-weight:bold">Ce document annule l'ordre de mission ci-dessous en date du : <?php echo $omparent['created_at']; ?></span></p>
+</div><p style="margin-top:-140px!important;line-height:30%; margin-left:2.85pt; margin-bottom:5px; widows:0; orphans:0;  font-size:14pt;color:red;"><span style="font-family:'Times New Roman'; font-weight:bold">Ce document annule l'ordre de mission ci-dessous en date du : <?php echo $omparent['created_at']; ?></span></p>
 
 <div class="row" style=" margin-left: 0px;">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
