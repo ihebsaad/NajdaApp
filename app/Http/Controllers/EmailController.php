@@ -6549,6 +6549,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
         $envoyeid = $request->get('envoye');
         $to = $request->get('destinataire');
+$toreturn =$to;
         $liste = $request->get('liste');
         $cc = $request->get('cc');
         $sujet = $request->get('sujet');
@@ -6815,8 +6816,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
  
         }
-
-        return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
+ if (trim($toreturn) == 'users') {
+        return redirect($urlapp.'/users/mails')->with('success', '  Envoyé ! ');}
+if (trim($toreturn) == 'personnes') {
+        return redirect($urlapp.'/personnes/mailspersonnes')->with('success', '  Envoyé ! ');}
+if (trim($toreturn) == 'clients') {
+        return redirect($urlapp.'/clients/mailsclients')->with('success', '  Envoyé ! ');}
+if (trim($toreturn) == 'prestataires') {
+        return redirect($urlapp.'/prestataires/mails')->with('success', '  Envoyé ! ');}
+ 
+return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
 
     }// end send
 
