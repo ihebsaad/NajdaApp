@@ -1767,13 +1767,14 @@ else{
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('emails.sendsms') }}",
+                    url:"{{ route('emails.sendsmsxml') }}",
                     method:"POST",
                     data:{description:description,destinataire:destinataire,message:message,dossier:dossier, _token:_token},
                     success:function(data){
 
                         alert('SMS Envoyé !');
-                        // window.location =data;
+                         //window.location =data;
+ location.reload();
                         $("#sendsms").modal('hide');
 
                     }
