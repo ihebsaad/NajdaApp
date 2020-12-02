@@ -2061,6 +2061,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
@@ -2127,7 +2128,9 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
+
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2161,7 +2164,9 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
+
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2238,7 +2243,9 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
+
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2393,6 +2400,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2472,6 +2480,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2514,6 +2523,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2580,6 +2590,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
+->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
