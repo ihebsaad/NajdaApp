@@ -216,13 +216,11 @@ $user = auth()->user();
                     <td style="font-size:13px;width:10%">
                         @can('isAdmin')
   	<?php 
- /*	$count1= \App\Facture::where('prestataire',$prestataire['id'])->count();
- 	$count2= \App\Intervenant::where('prestataire_id',$prestataire['id'])->count();
- 	$count3= \App\Prestation::where('prestataire_id',$prestataire['id'])->count();
- 	$count4= \App\Evaluation::where('prestataire',$prestataire['id'])->count();
-	$count= $count1+$count2+$count3+$count4;*/
-	 	$count = \App\Prestation::where('prestataire_id',$prestataire['id'])->where('effectue',1)->count();
-
+ 	$count1= \App\Facture::where('prestataire',$prestataire['id'])->count();
+ 	//$count2= \App\Intervenant::where('prestataire_id',$prestataire['id'])->count();
+ 	$count3= \App\Prestation::where('prestataire_id',$prestataire['id'])->where('effectue',1)->count();
+ 	//$count4= \App\Evaluation::where('prestataire',$prestataire['id'])->count();
+	$count= $count1+$count3;
 	if ($count>0){
 		echo 'Suppression interdite'; 
 	}else{ ?>                         
