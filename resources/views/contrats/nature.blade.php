@@ -10,22 +10,22 @@
     <form id="updateform">
 
                     <div class="row">
-				    <div class="col-md-4">
+				    <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom</label>
                                 <input onchange="changing(this)" type="text" class="form-control input" name="nom" id="nom"  value="{{ $nature->nom }}">
                             </div>
                         </div>
 						
-                        <div class="col-md-4">
+                       <!-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Contrat</label>
 								<?php $contrat=\App\Contrat::where('id',$nature->contrat)->first();?>
                                 <input readonly type="text" class="form-control input"  value="<?php echo $contrat->nom; ?>" />
                             </div>
-                        </div>
+                        </div> !-->
   
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Type de dossier</label>
                                 <input onchange="changing(this)" type="text" class="form-control input" name="type_dossier" id="type_dossier"  value="{{ $nature->type_dossier }}">
