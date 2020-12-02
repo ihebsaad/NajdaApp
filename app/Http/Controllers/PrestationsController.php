@@ -570,6 +570,10 @@ class PrestationsController extends Controller
 
     public static function updatepriorite(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
+
         $eval = $request->get('eval');
         $priorite = $request->get('priorite');
         $evaluation=Evaluation::where('id',$eval)->first();
@@ -638,8 +642,13 @@ class PrestationsController extends Controller
              'user_id'=>auth::user()->id,
         ]);	 $hist->save();
 		
-		
-         }
+	}
+else
+{
+return ('modification interdite');
+}	
+         
+}
 
 
 
@@ -647,6 +656,10 @@ class PrestationsController extends Controller
 
     public static function updateevaluation(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
+
         $eval = $request->get('eval');
         $note = $request->get('evaluation');
         $evaluation=Evaluation::where('id',$eval)->first();
@@ -677,6 +690,11 @@ class PrestationsController extends Controller
             'user' => $nomuser,
              'user_id'=>auth::user()->id,
         ]);	 $hist->save();
+}
+else
+{
+return ('modification interdite');
+}	
 		
     }
 }

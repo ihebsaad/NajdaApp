@@ -76,7 +76,10 @@ class PrestatairesController extends Controller
 
     public function addeval(Request $request)
     {
-      $prest  =  $request->get('prestataire');
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
+     $prest  =  $request->get('prestataire');
     if($request->get('ville')==''){
     $ville='toutes';$postal=1;}
     else{$ville=$request->get('ville'); $postal=$request->get('postal');}
@@ -114,7 +117,7 @@ class PrestatairesController extends Controller
 
            //  return url('/prestataires/view/'.$prest.'#tab03') ;
         return url('/prestataires/view/'.$prest ) ;
-       }
+       } }
     }
 
 public function addrating(Request $request)
@@ -390,6 +393,11 @@ $user = auth()->user();
        // $dossier->$champ =   $val;
         Prestataire::where('id', $id)->update(array($champ => $val));
  }
+else
+{
+return ('modification interdite');
+}
+
       //  $dossier->save();
 
      ///   return redirect('/dossiers')->with('success', 'Entry has been added');
@@ -560,6 +568,9 @@ $user = auth()->user();
 
     public function addressadd(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
         if( ($request->get('champ'))!=null) {
 
             $parent=$request->get('parent');
@@ -585,7 +596,7 @@ $user = auth()->user();
             else {
                 return url('/prestataires');
             }
-        }
+        } }
 
         // return redirect('/clients')->with('success', 'ajouté avec succès');
 
@@ -719,6 +730,9 @@ DB::table('adresses')
 
     public  function removespec(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $specialite= $request->get('specialite');
 
@@ -730,11 +744,14 @@ DB::table('adresses')
             ])->delete();
 
 
-
+}
     }
 
     public  function createspec(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $specialite= $request->get('specialite');
 
@@ -745,13 +762,16 @@ DB::table('adresses')
         );
 
 
-
+  }
     }
 
 
 
     public  function removetypeprest(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= trim($request->get('prestataire'));
         $typeprest= trim($request->get('typeprest'));
 
@@ -763,11 +783,14 @@ DB::table('adresses')
             ])->delete();
 
 
-
+ }
     }
 
     public  function createtypeprest(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $typeprest= $request->get('typeprest');
 
@@ -782,7 +805,7 @@ DB::table('adresses')
             );
             return 1;
         } else{ return 0;}
-
+}
 
 
     }
@@ -790,6 +813,9 @@ DB::table('adresses')
 
     public  function removecitieprest(Request $request)
     {
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $citie= $request->get('citie');
 
@@ -801,11 +827,14 @@ DB::table('adresses')
             ])->delete();
 
 
-
+ }
     }
 
     public  function createcitieprest(Request $request)
     {
+ $user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $citie= $request->get('citie');
 
@@ -816,7 +845,7 @@ DB::table('adresses')
         );
 
 
-
+ }
     }
 
 

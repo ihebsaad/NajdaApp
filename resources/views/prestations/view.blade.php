@@ -36,6 +36,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 					 Évaluation : <a href="{{action('PrestatairesController@view_rating', $rating->id)}}" ><?php echo sprintf("%05d",$rating->id);?></a>
    
 				 <?php  }else{ ?>
+
 					  <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Évaluation</b></button>
    
 				 <?php   }

@@ -347,7 +347,9 @@ $user = auth()->user();
                             <h4><i class="fa fa-lg fa-phone"></i>  Numéros de Téléphones</h4>
                         </div>
                         <div class="col-md-4">
+ <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>
                             <button style="float:right" id="add1" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding1"><b><i class="fa fa-phone"></i> Ajouter un numéro Tel</b></button>
+ <?php   } ?>
                         </div>
 
                     </div>
@@ -370,11 +372,18 @@ $user = auth()->user();
                                 <td style="width:20%;"><input type="text" pattern="[0-9]" id='tel-champ-<?php echo $tel->id;?>'  style="width:100%;font-size:13px" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
                                 <td style="width:20%;"><input   id='tel-rem-<?php echo $tel->id;?>'   style="width:100%;font-size:13px" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
                                 <td style="width:20%;text-align:center;"><select  id='tel-typetel-<?php echo $tel->id;?>'   style="width:100%;font-size:13px"  onchange="changingAddress('<?php echo $tel->id; ?>','typetel',this)" ><option <?php  if($tel->typetel=='Fixe'){echo 'selected="selected"';} ?> value="Fixe">Fixe</option><option <?php  if($tel->typetel=='Mobile'){echo 'selected="selected"';} ?> value="Mobile">Mobile</option></select> <?php if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" href="#" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> SMS </a><?php } ?>
+ <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>  
                                 <td style="width:5%;">
                                     <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
                                     </a>
                                 </td>
+<?php   } else {?>  
+      
+
+ <td style="width:10%;" >supression interdite
+                        </td>
+ <?php   }?>  
                             </tr>
                         @endforeach
 
@@ -387,7 +396,9 @@ $user = auth()->user();
                             <h4><i class="fa fa-lg fa-envelope"></i>  Adresses Emails </h4>
                         </div>
                         <div class="col-md-4">
+ <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>
                             <button style="float:right" id="add2" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding2"><b><i class="fa fa-envelope"></i> Ajouter une adresse email</b></button>
+ <?php  } ?>
                         </div>
 
                     </div>
@@ -409,11 +420,18 @@ $user = auth()->user();
                                 <td style="width:35%;"><input type="email"  id='email-champ-<?php echo $email->id;?>'   style="width:100%;font-size:13px" value="<?php echo $email->champ; ?>" onchange="changingAddress('<?php echo $email->id; ?>','champ',this)" /></td>
                                  <td style="width:30%;"><input   id='email-rem-<?php echo $email->id;?>'   style="width:100%;font-size:13px" value="<?php echo $email->remarque; ?>" onchange="changingAddress('<?php echo $email->id; ?>','remarque',this)" /></td>
                                 <td style="width:5%;text-align:center"><a  href="#" data-toggle="modal" data-target="#sendmail" onclick="setmail('<?php echo $email->champ; ?>')"><i class="fa fa-envelope"></i> Email</a></td>
+<?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>  
                                 <td style="width:5%;">
                                     <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
                                     </a>
                                 </td>
+<?php   } else {?>  
+      
+
+ <td style="width:10%;" >supression interdite
+                        </td>
+ <?php   }?>  
                             </tr>
                         @endforeach
 
@@ -425,7 +443,9 @@ $user = auth()->user();
                             <h4><i class="fa fa-lg fa-fax"></i>  Numéros de Fax </h4>
                         </div>
                         <div class="col-md-4">
+ <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>
                             <button style="float:right" id="add3" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding3"><b><i class="fa fa-fax"></i> Ajouter un numéro de fax</b></button>
+ <?php   } ?>
                         </div>
 
                     </div>
@@ -448,11 +468,18 @@ $user = auth()->user();
                                 <td style="width:30%;"><input type="text" pattern="[0-9]" id='fax-champ-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
                                  <td style="width:30%;"><input   id='fax-rem-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
                                 <td style="width:5%;"><i class="fa fa-fax"></i></td>
+<?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>  
                                 <td style="width:5%;">
                                     <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
                                     </a>
                                 </td>
+<?php   } else {?>  
+      
+
+ <td style="width:10%;" >supression interdite
+                        </td>
+ <?php   }?> 
                             </tr>
                         @endforeach
 
@@ -536,9 +563,11 @@ $user = auth()->user();
 
 
             <div id="tab03" class="tab-pane fade    " style="padding-top:30px">
+  <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>      
 
 
                 <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Priorité</b></button>
+ <?php   }?>  
 
                 <table class="table table-striped" id="mytable2" style="width:100%">
                     <thead>
@@ -563,10 +592,18 @@ $user = auth()->user();
 
                         <td style="text-align: center;width:10%;"><input style="text-align:center" id="eval-<?php echo $eval['id']; ?>" onchange="updatePriorite(this,'<?php echo $eval['id']; ?>')" type="number" max="5" min="1" step="1" value="<?php echo $eval['priorite'] ;?>"></td>
                         <td style="text-align: center;width:10%;"><input style="text-align:center" id="evalu-<?php echo $eval['id']; ?>" onchange="updateEvaluation(this,'<?php echo $eval['id']; ?>')" type="number" max="5" min="1" step="1" value="<?php echo $eval['evaluation'] ;?>"></td>
-                        <td><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@deleteeval', $eval['id']) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                   <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>      
+
+ <td><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@deleteeval', $eval['id']) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span>
                             </a>
                         </td>
+ <?php   } else {?>  
+      
+
+ <td style="width:10%;" >supression interdite
+                        </td>
+ <?php   }?>  
                     </tr>
                     @endforeach
                     </tbody>
@@ -1425,13 +1462,27 @@ echo "['Non ',    ".$count_retour_non."] ";
             method: "POST",
             data: {   eval:eval,priorite:priorite, _token: _token},
             success: function (data) {
+if(data!=='')
+{string=data;
+Swal.fire({
+                        type: 'error',
+                        title: 'Interdit...',
+                        html: string}).then((result) => {
+   if(result){
+    
+     location.reload();
+   }else{
 
-                $('#'+id).animate({
+   }
+});
+}
+else
+             {   $('#'+id).animate({
                     opacity: '0.3',
                 });
                 $('#'+id).animate({
                     opacity: '1',
-                });
+                });}
 
             }
         });
@@ -1447,13 +1498,28 @@ echo "['Non ',    ".$count_retour_non."] ";
             method: "POST",
             data: {   eval:eval,evaluation:evaluation, _token: _token},
             success: function (data) {
+if(data!=='')
+{string=data;
+Swal.fire({
+                        type: 'error',
+                        title: 'Interdit...',
+                        html: string}).then((result) => {
+   if(result){
+    
+     location.reload();
+   }else{
 
-                $('#'+id).animate({
+   }
+});
+}
+else
+
+          {      $('#'+id).animate({
                     opacity: '0.3',
                 });
                 $('#'+id).animate({
                     opacity: '1',
-                });
+                });}
 
             }
         });
@@ -1531,12 +1597,28 @@ echo "['Non ',    ".$count_retour_non."] ";
             method: "POST",
             data: {prestataire: prestataire , champ:champ ,val:val, _token: _token},
             success: function (data) {
+if(data!=='')
+{string=data;
+Swal.fire({
+                        type: 'error',
+                        title: 'Interdit...',
+                        html: string}).then((result) => {
+   if(result){
+    
+     location.reload();
+   }else{
+
+   }
+});
+}
+else
+{
                 $('#'+champ).animate({
                     opacity: '0.3',
                 });
                 $('#'+champ).animate({
                     opacity: '1',
-                });
+                });}
 
             }
         });
@@ -1558,12 +1640,28 @@ echo "['Non ',    ".$count_retour_non."] ";
             method: "POST",
             data: {prestataire: prestataire , champ:champ ,val:val, _token: _token},
             success: function (data) {
+if(data!=='')
+{string=data;
+Swal.fire({
+                        type: 'error',
+                        title: 'Interdit...',
+                        html: string}).then((result) => {
+   if(result){
+    
+     location.reload();
+   }else{
+
+   }
+});
+}
+else
+{
                 $('#'+champ).animate({
                     opacity: '0.3',
                 });
                 $('#'+champ).animate({
                     opacity: '1',
-                });
+                });}
 
             }
         });
@@ -1583,12 +1681,28 @@ echo "['Non ',    ".$count_retour_non."] ";
             method: "POST",
             data: {id: id , champ:champ ,val:val,  _token: _token},
             success: function (data) {
+if(data!=='')
+{string=data;
+Swal.fire({
+                        type: 'error',
+                        title: 'Interdit...',
+                        html: string}).then((result) => {
+   if(result){
+    
+     location.reload();
+   }else{
+
+   }
+});
+}
+else
+{
                 $('#'+champid).animate({
                     opacity: '0.3',
                 });
                 $('#'+champid).animate({
                     opacity: '1',
-                });            }
+                });            }}
         });
 
     }
@@ -1606,6 +1720,21 @@ echo "['Non ',    ".$count_retour_non."] ";
             method: "POST",
             data: {prestataire: prestataire , champ:champ ,val:val, _token: _token},
             success: function (data) {
+if(data!=='')
+{string=data;
+Swal.fire({
+                        type: 'error',
+                        title: 'Interdit...',
+                        html: string}).then((result) => {
+   if(result){
+    
+     location.reload();
+   }else{
+
+   }
+});
+}
+else{
                 if (elm=='annule'){
                 $('#nonactif').animate({
                     opacity: '0.3',
@@ -1613,7 +1742,7 @@ echo "['Non ',    ".$count_retour_non."] ";
                 $('#nonactif').animate({
                     opacity: '1',
                 });
-                }
+                }}
 
 
             }
@@ -1724,6 +1853,7 @@ echo "['Non ',    ".$count_retour_non."] ";
                             $('.select2-selection').animate({
                                 opacity: '1',
                             });
+ location.reload();
 
                         }
                     });
@@ -1745,6 +1875,7 @@ echo "['Non ',    ".$count_retour_non."] ";
                             $( ".select2-selection--multiple" ).show( "slow", function() {
                                 // Animation complete.
                             });
+ location.reload();
                         }
                     });
 

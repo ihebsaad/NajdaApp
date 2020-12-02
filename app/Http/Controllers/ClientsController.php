@@ -6,7 +6,7 @@ use App\ClientGroupe;
 use App\Doc;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
@@ -527,12 +527,21 @@ class ClientsController extends Controller
     public function updateaddress(Request $request)
     {
 
+ $user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
         $id= $request->get('id');
         $champ= trim($request->get('champ'));
         $val=trim($request->get('val'));
          //  $dossier = Dossier::find($id);
         // $dossier->$champ =   $val;
-        Adresse::where('id', $id)->update(array($champ => $val));
+        Adresse::where('id', $id)->update(array($champ => $val));}
+
+else
+{
+return ('modification interdite');
+}	
+   
 
     }
 
