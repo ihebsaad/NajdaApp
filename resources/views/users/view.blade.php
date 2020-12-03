@@ -54,7 +54,9 @@
         </tr>
             <tr>
                 <td class="text-primary">Tel</td>
-                <td>    <input id="tel" onchange="changing(this);"  type="text" class="form-control" name="tel"  id="tel" value="{{ $user->phone }}" />
+                <td>    <input id="phone" onchange="changing(this);"  type="text" class="form-control" name="phone"  id="phone" value="{{ $user->phone }}" />
+<a style="margin-left:30px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas    fa-sms"></i>  Envoyer un SMS </a>
+ <a  style="margin-left:30px;cursor:pointer"  data-toggle="modal"  data-target="#listesms" ><i class="fa fa-list"></i>  Liste des SMS </a>
                 </td>
             </tr>
         <tr>
@@ -132,7 +134,142 @@
         </div>-->
     </form>
 
+<?php
+use App\Dossier ;
+use App\Envoye ;
+$dossiers = Dossier::get();
+if ($user->phone!=''){
+    $envoyes = Envoye::orderBy('id', 'desc')->where('type','sms' )->where('destinataire', $user->phone)->paginate(5);
+}else{
 
+}
+
+?>
+
+
+<!-- Modal SMS -->
+<div class="modal fade" id="sendsms" tabindex="-1" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal7">Envoyer un SMS </h5>
+
+            </div>
+            <form method="post" action="{{action('EmailController@sendsmsxml')}}" >
+<input type="hidden"  name="smsuser" id="smsuser" class="form-control"  value="{{ $user->id }}">
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+                            <label for="description">Dossier:</label>
+
+                            <div class="form-group">
+                                 <select id ="dossier"  class="form-control " style="width: 120px">
+                                    <option></option>
+                                    <?php foreach($dossiers as $ds)
+
+                                    {
+                                        echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                                </select>
+                             </div>
+
+
+                        </div>
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <label for="description">Description:</label>
+                            <input id="description" type="text" class="form-control" name="description"     />
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="destinataire">Destinataire:</label>
+                            <input id="destinataire" type="number" class="form-control" name="destinataire"   value="{{ $user->phone }}"   />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenu">Message:</label>
+                            <textarea  type="text" class="form-control" name="message"></textarea>
+                        </div>
+                        {{--  {!! NoCaptcha::renderJs() !!}     --}}
+                      <!--  <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
+
+
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- Modal Liste sms -->
+<div class="modal fade" id="listesms" tabindex="-1" role="dialog" aria-labelledby="liste" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal7">SMS Envoyés </h5>
+
+            </div>
+
+                <div class="modal-body">
+                    <div class="card-body" style="min-height: 100px">
+
+
+    <div class="uper">
+    <?php if (isset($envoyes)) { ?>
+        @foreach($envoyes as $envoye)
+            <div class="email">
+                <div class="fav-box">
+                   <!-- <a href="{{action('EnvoyesController@destroy', $envoye['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
+                        <i class="fa fa-lg fa-fw fa-trash-alt"></i>
+
+                    </a>-->
+                </div>
+                <div class="media-body pl-3">
+                    <div class="subject">
+                         <i class="fa fa-lg fa-sms"></i>
+                        <?php echo $envoye->description; ?>
+                    </div>
+
+                <div class="stats">
+                        <div class="row" style="margin-left:15px;margin-bottom:20px;margin-right:15px ;">
+                            <p><?php echo $envoye->contenu; ?></p>
+                             </div>
+
+                    <div class="row">
+                        <span><i class="fa fa-fw fa-clock-o"></i><?php echo  date('d/m/Y H:i', strtotime($envoye->created_at)) ; ?></span>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+    @endforeach
+
+
+    <?php  $envoyes->links(); } ?>
+
+             </div>
+
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+             </div>
+
+        </div>
+    </div>
 </div>
 	<style>
         #tabstats {font-size: 15px;padding:30px 30px 30px 30px;}

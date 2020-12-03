@@ -7436,6 +7436,13 @@ if($request->get('smsper')!==null)
 $smsper= trim( $request->get('smsper'));}
 else
 {$smsper= null;}
+if($request->get('smsuser')!==null)
+{
+
+$smsuser= trim( $request->get('smsuser'));
+}
+else
+{$smsuser= null;}
         $description = trim( $request->get('description'));
         $doss = trim( $request->get('dossier'));
         $dossier= $this->RefDossierById($doss);////;
@@ -7487,10 +7494,12 @@ else
 		
 		
         $urlapp="http://$_SERVER[HTTP_HOST]/najdatest";
+$urlsending=$urlapp.'/envoyes';
 if($smsper!==null)
                 {$urlsending=$urlapp.'/personnes/view/'.$smsper;}
-else{
-$urlsending=$urlapp.'/envoyes';
+ if($smsuser!==null)
+                {$urlsending=$urlapp.'/users/view/'.$smsuser;
+
 }
        
         //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
@@ -7545,7 +7554,7 @@ else
 
 
         try{
-            Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from,$mpass,$smsper) {
+            Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from,$mpass,$smsper,$smsuser) {
                 $message
                      ->to('ihebsaad@gmail.com')
                   //   ->to('ecom_plus@hotmail.com')
@@ -7581,16 +7590,20 @@ else
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
+$urlsending=$urlapp.'/envoyes';
 if($smsper!==null)
                 {$urlsending=$urlapp.'/personnes/view/'.$smsper;}
-else{
-$urlsending=$urlapp.'/envoyes';
+ if($smsuser!==null)
+                {$urlsending=$urlapp.'/users/view/'.$smsuser;
+
 }
+
+
 echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
  
                
 
-return redirect($urlsending1)->with('success', '  Envoyé ! ');
+return redirect($urlsending)->with('success', '  Envoyé ! ');
 
 
             });
