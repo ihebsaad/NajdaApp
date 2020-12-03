@@ -382,8 +382,8 @@ class PrestationsController extends Controller
 
         // Mail au SMQ Najda
 
-         $cc2=array( 'saadiheb@gmail.com');
-       //  $cc2=array( 'nejib.karoui@medicmultiservices.com');
+         //$cc2=array( 'saadiheb@gmail.com');
+       $cc2=array( 'nejib.karoui@medicmultiservices.com');
         Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
             $message
                //  ->to('ihebsaad@gmail.com')

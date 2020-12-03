@@ -447,8 +447,8 @@ return ('modification interdite');
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
-       // $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
-          $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+         // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
         $sujet= 'Modification du statut d\'un prestataire';
         $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a changé le statut du prestataire <b>'.$nomprest.'</b> en <b>'.$statut.'</b>
              ';
