@@ -80,8 +80,24 @@
 
         <tr>
             <td class="text-primary">Signature</td>
-            <td>    <textarea style="height:60px" id="signature" onchange="changing(this);"  type="text" class="form-control" name="observation"  id="observation"  ><?php echo  $user->signature ; ?></textarea>
+            <td>    <textarea style="height:60px" id="signature" onchange="changing(this);"  type="text" class="form-control" name="signature"  ><?php echo  $user->signature ; ?></textarea>
             </td>
+
+        </tr>
+ <tr>
+            <td class="text-primary"> <label style="padding-top:10px">Actif</label></td>
+            <td>   
+ <label for="actif" style="margin-left:15px;" class="">
+                                            <div class="radio" id="uniform-actif"><span class="checked">
+                                                <input  onclick="changing(this)" type="radio" name="actif" id="actif" value="1"   <?php if ($user->actif ==1){echo 'checked';} ?>></span></div> Oui
+                                        </label>
+            
+
+   <label for="nonactif" class="" style="margin-left:100px;">
+                                            <div class="radio" id="uniform-nonactif"><span>
+                                                <input onclick="disabling('actif')" type="radio" name="actif" id="nonactif" value="0"  <?php if ($user->actif==0){echo 'checked';} ?>></span></div> Non
+                                        </label> </td>
+
         </tr>
 
         </tbody>
@@ -168,6 +184,34 @@ return 'Pas de résultats';
                 $('#' + champ).animate({
                     opacity: '1',
                 });
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+ function disabling(elm) {
+        var champ=elm;
+
+        var val =0;
+        var user = $('#iduser').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('users.updating') }}",
+            method: "POST",
+            data: {user: user , champ:champ ,val:val, _token: _token},
+            success: function (data) {
+                if (elm=='actif'){
+                $('#nonactif').animate({
+                    opacity: '0.3',
+                });
+                $('#nonactif').animate({
+                    opacity: '1',
+                });
+                }
+
 
             }
         });

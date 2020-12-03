@@ -43,6 +43,8 @@ class LoginController extends Controller
         $user = auth()->user();
         $iduser = $user->id;
         $type = $user->user_type;
+if($user->actif==0){
+		  $this->guard()->logout(); return redirect()->route('login');		}
 
         $nomuser = $user->name . ' ' . $user->lastname;
  
