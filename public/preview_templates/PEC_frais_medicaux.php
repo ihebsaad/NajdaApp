@@ -171,7 +171,7 @@ $sqlsig = "SELECT id,nom FROM docs WHERE id IN (SELECT doc FROM dossiers_docs WH
         while($rowsig = $resultsig->fetch_assoc()) {
             $array_sig[] = array('id' => $rowsig["id"],'nom' => $rowsig["nom"]  );
         }}
- $sqldos = "SELECT id,documents,franchise,montant_franchise FROM dossiers WHERE id=".$iddossier."";
+ $sqldos = "SELECT id,documents,franchise,devise_franchise,montant_franchise FROM dossiers WHERE id=".$iddossier."";
 		$resultdos = $conn->query($sqldos);
 		if ($resultdos->num_rows > 0) {
 	    // output data of each row
@@ -180,6 +180,15 @@ $sqlsig = "SELECT id,nom FROM docs WHERE id IN (SELECT doc FROM dossiers_docs WH
 		} else {
 	    echo "0 results agent";
 		}
+$sqladr = "SELECT euro_achat,dollar_achat FROM parametres";
+	$resultadr = $conn->query($sqladr);
+	if ($resultadr->num_rows > 0) {
+	    // output data of each row
+	    $array_adr = array();
+	    while($rowadr = $resultadr->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_adr[] = array('euro_achat' => $rowadr["euro_achat"],'dollar_achat' => $rowadr["dollar_achat"]);
+	    } }an
 
 ?>
 
@@ -579,9 +588,17 @@ else {
 <p class=rvps6><span class=rvts6>Franchise: <input name="franchise" placeholder="franchise"  value="<?php if($detaildos['franchise']==="1" )echo "oui"; else echo "non" ?>"></input> </span><span class=rvts7></span></p>
 <?php
 {
-	if ($detaildos['franchise'] === "1") { ?>
-<input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "Montant de la franchise:" ;}?>"></input>
-<p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise"  value="<?php if(isset ($detaildos['montant_franchise'])) echo $detaildos['montant_franchise']; ?>"></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span></p>
+	if ($detaildos['franchise'] === "1") { 
+
+  if ( $detaildos['devise_franchise'] === "TND") 
+                                    {$Montantfranchise = $detaildos['montant_franchise'];}
+                                    if ( $detaildos['devise_franchise']=== "EUR")
+                                       { $Montantfranchise = intval($detaildos['montant_franchise']) * floatval($array_adr[0]['euro_achat']);}
+                                    if ( $detaildos['devise_franchise'] === "USD")
+                                       { $Montantfranchise = intval($detaildos['montant_franchise']) * floatval($array_adr[0]['dollar_achat']);}?>
+
+<input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "Montant de la franchise(TND):" ;}?>"></input>
+<p class=rvps7><span class=rvts6>Montant de la franchise(TND): </span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise"  value="<?php if(isset ($detaildos['montant_franchise'])) echo $Montantfranchise; ?>"></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span></p>
 <?php
 
 	}else { ?>
