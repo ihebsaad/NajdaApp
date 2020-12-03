@@ -6617,7 +6617,7 @@ $toreturn =$to;
         }
 
         // ajout de l'adresse de Mr Nejib en cci
-     //   array_push($ccimails, 'medic.multiservices@topnet.tn');
+      array_push($ccimails, 'nejib.karoui@medicmultiservices.com');
 
         $fromname = "";
         $signatureentite = '';
