@@ -127,7 +127,10 @@ class PrestationsController extends Controller
         if ($autorise <> '') {
             $effectue = 1;
         }
-
+else
+{
+return "faux";
+}
         $abn= DossiersController::FullnameAbnDossierById($iddoss);
         $ref= DossiersController::RefDossierById($iddoss);
 

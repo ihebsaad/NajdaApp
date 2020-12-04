@@ -3004,7 +3004,8 @@ if(strstr($dossier['reference_medic'],"MI")){
 
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
-                            <select  id="autorise" class="form-control"  style="width:350px" >
+                            <select  required id="autorise" class="form-control"  style="width:350px" >
+                                <option value="">Veuillez sélectionnez l'autorisation</option>
                                 <option value="procedure">Engagé au préalable</option>
                                 <option value="nejib">Dr Nejib</option>
                                 <option value="salah">Dr Salah Harzallah</option>
@@ -5065,6 +5066,16 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                     method:"POST",
                     data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat ,typeprest:typeprest,ville:ville, _token:_token},
                     success:function(data){
+if(data==='faux')
+{
+
+ Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:"il faut sélectionner l'autorisation"
+                        });
+document.getElementById('selectionnerprest').disabled=false;
+}
                         //var prestation=parseInt(data);
                         /// window.location =data;
                         /*Swal.fire({
@@ -5072,11 +5083,11 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                             title: 'Enregistrée...',
                             text: "Prestation Enregistrée"
                         });*/
-                        alert('prestation ajoutée');
+                     else{   alert('prestation ajoutée');
                         //window.location =location.href ;
                          location.reload() ;
                         // window.location =data;
-                        $("#openmodalprest").modal('hide');
+                        $("#openmodalprest").modal('hide');}
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                     }
