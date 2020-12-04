@@ -85,7 +85,7 @@
                  <select   id="numero"  class="form-control" required name="numero" >
                 @foreach($faxs as $fax)
 
-                    <option   value="<?php echo $fax->champ; ?>"> <?php   echo  $fax->champ ;?> (<?php   echo  $fax->type ;?> , <?php   echo  $fax->remarque ;?>)</option>
+                    <option   value="<?php echo $fax['champ']; ?>"> <?php   echo  $fax['champ'] ;?> (<?php   echo  $fax['type'] ;?> , <?php   echo  $fax['remarque'] ;?>)</option>
                 @endforeach
                  </select>
                 <?php } ?>

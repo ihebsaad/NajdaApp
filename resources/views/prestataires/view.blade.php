@@ -456,7 +456,7 @@ $user = auth()->user();
                             <th style="width:25%">Nom</th>
                             <th style="width:30%">Fax</th>
                              <th style="width:30%">Remarque</th>
-                            <th style="width:5%">Contact</th>
+                            <!--<th style="width:5%">Contact</th>!-->
                             <th style="width:5%">Supp</th>
                         </tr>
 
@@ -467,7 +467,7 @@ $user = auth()->user();
                                 <td style="width:25%;"><input id='fax-nom-<?php echo $fax->id;?>'  style="width:100%;font-size:13px" value="<?php echo $fax->nom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','nom',this)" /><br><input  id='fax-prenom-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->prenom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','prenom',this)" /></td>
                                 <td style="width:30%;"><input type="text" pattern="[0-9]" id='fax-champ-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
                                  <td style="width:30%;"><input   id='fax-rem-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
-                                <td style="width:5%;"><i class="fa fa-fax"></i></td>
+                              <!--  <td style="width:5%;"><i class="fa fa-fax"></i></td>!-->
 <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>  
                                 <td style="width:5%;">
                                     <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

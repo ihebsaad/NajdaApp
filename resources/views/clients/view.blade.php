@@ -526,7 +526,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                     <th style="width:20%">Tel</th>
                                     <th style="width:10%">Type</th>
                                     <th style="width:50%">Remarque</th>
-                                    <th style="width:10%">Contacter</th>
+                                   <!-- <th style="width:10%">Contacter</th>!-->
                                     <th style="width:4%">Supp</th>
                                 </tr>
 
@@ -539,7 +539,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                                 <option <?php if($fax->type=='technique'){echo 'selected="selected"';} ?> value="technique">Technique</option>
                                                 <option <?php if($fax->type=='commun'){echo 'selected="selected"';} ?>value="commun">Commun</option></select></td>
                                         <td style="width:50%;"><input  id='fax-rem-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
-                                        <td style="width:10%;"><i class="fa fa-fax"></i></td>
+                                        <!--<td style="width:10%;"><i class="fa fa-fax"></i></td>!-->
                                         <td style="width:10%;">
                                             <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                 <span class="fa fa-fw fa-trash-alt"></span>

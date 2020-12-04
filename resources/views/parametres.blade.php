@@ -372,7 +372,7 @@
                                      </td>
                                  </tr>
                                  <tr>
-                                     <td class="text-primary">Mot de Passe boite Fax <small>najdassist@gmail.com</small></td>
+                                     <td class="text-primary">Mot de Passe boite Fax <small>faxnajdassist@gmail.com</small></td>
                                      <td>
                                          <input  type="text" class="form-control" onchange="changing(this)" id="pass_Fax" style="width:300px" value="<?php echo $pass_Fax; ?>"  />
                                      </td>

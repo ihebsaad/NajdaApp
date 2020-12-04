@@ -5844,9 +5844,9 @@ $id=0;
 
                    $faxs =   Adresse::where('nature', 'faxinterv')
                        ->where('parent',$prest)
-                       ->pluck('champ');
+                       ->get();
 
-                   $faxs =  $faxs->unique();
+                  $faxs =  $faxs->unique();
                }
 
 
@@ -5953,11 +5953,11 @@ if ($from=='finances@najda-assistance.com')
 }
 
 
-if ($from=='najdassist@gmail.com')
+if ($from=='faxnajdassist@gmail.com')
 {
     $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
-    $swiftTransport->setUsername('najdassist@gmail.com');
-    $swiftTransport->setPassword('nejibgyh9kkq');
+    $swiftTransport->setUsername('faxnajdassist@gmail.com');
+    $swiftTransport->setPassword('Naj@gyh+9kkW');
 
 }
         if ($from=='faxnajdassist@najda-assistance.com')
@@ -6846,6 +6846,7 @@ return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
         $nom = $request->get('nom');
         $nom= substr ( $nom,0 ,15);
         $description = $request->get('description');
+$commentaire = $request->get('commentaire');
         $numero = $request->get('numero');
         //  $contenu = $request->get('contenu');
         $attachs = $request->get('attachs');
@@ -6862,14 +6863,14 @@ return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
 
 
         $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
-        $swiftTransport->setUsername('najdassist@gmail.com');
+        $swiftTransport->setUsername('faxnajdassist@gmail.com');
         $swiftTransport->setPassword($pass_Fax);
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
          Mail::setSwiftMailer($swiftMailer);
 
 
-             Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description,$nom,$dossier) {
+             Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description,$nom,$dossier,$commentaire) {
                 $message
                     ->to($to)
                     //   ->cc($cc  ?: [])
@@ -6885,7 +6886,7 @@ return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
 
                 $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
 
-               $this->garde_pdf($description,$numero,$date,$nom);
+               $this->garde_pdf($description,$numero,$date,$nom,$commentaire);
                 $fullpath=storage_path().'/Covers/'.$name.'.pdf';
 
                 $name=basename($fullpath);
@@ -6952,7 +6953,7 @@ return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
 
         $par=Auth::id();
         $envoye = new Envoye([
-            'emetteur' => 'najdassist@gmail.com', //env('emailenvoi')
+            'emetteur' => 'faxnajdassist@gmail.com', //env('emailenvoi')
             'destinataire' => $nom .'-'.$numero,
             'par'=> $par,
             'sujet'=> 'Fax - '.$sujet,
@@ -6974,7 +6975,8 @@ return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
         $id=$envoye->id;
 
         // enregistrement attachs
-
+if($attachs)
+        {
         foreach($attachs as $attach) {
             $path=$this->PathattachById($attach);
             $fullpath=storage_path().$path;
@@ -6990,7 +6992,7 @@ return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
             $attachement->save();
 
 
-        }
+        }}
 
 
 
@@ -7369,11 +7371,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
 
-    public function garde_pdf($sujet,$fax,$date,$nom)
+    public function garde_pdf($sujet,$fax,$date,$nom,$commentaire)
     {
         // Fetch all customers from database
         // Send data to the view using loadView function of PDF facade
-        $pdf = PDF2::loadView('envoyes.garde', ['date' => $date,'sujet'=>$sujet,'fax'=>$fax,'nom'=>$nom  ])->setPaper('a4', '');
+        $pdf = PDF2::loadView('envoyes.garde', ['date' => $date,'sujet'=>$sujet,'fax'=>$fax,'nom'=>$nom,'commentaire'=>$commentaire  ])->setPaper('a4', '');
 
         $path= storage_path()."/Covers/";
 
@@ -7530,7 +7532,7 @@ else
         $dossier= $this->RefDossierById($doss);////;
 
         $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
-        $swiftTransport->setUsername('najdassist@gmail.com');
+        $swiftTransport->setUsername('faxnajdassist@gmail.com');
         $swiftTransport->setPassword($pass_Fax);
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
