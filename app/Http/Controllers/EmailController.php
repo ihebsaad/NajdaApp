@@ -6066,7 +6066,7 @@ if ($from=='najdassist@gmail.com')
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
 
-        $contenu=$contenu.'Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;"><br><br>'.$signatureentite;
+        $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;"><br><br>'.$signatureentite;
 
 
          //dd('pk');
@@ -6365,7 +6365,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
-        $contenu = $contenu . 'Cordialement / Best regards<br>' . $nomuser . ' ' . $signatureagent . '<br><br><hr style="float:left;"><br><br>' . $signatureentite;
+        $contenu = $contenu . '<br><br>Cordialement / Best regards<br>' . $nomuser . ' ' . $signatureagent . '<br><br><hr style="float:left;"><br><br>' . $signatureentite;
 
 
         //dd('pk');
@@ -6641,7 +6641,7 @@ $toreturn =$to;
         $nomuser = $user->name . ' ' . $user->lastname;
 
 		
-        $contenu = $contenu . 'Cordialement / Best regards<br>' . $nomuser . ' ' . $signatureagent . '<br><br><hr style="float:left;"><br><br>' . $signatureentite;
+        $contenu = $contenu . '<br><br>Cordialement / Best regards<br>' . $nomuser . ' ' . $signatureagent . '<br><br><hr style="float:left;"><br><br>' . $signatureentite;
 			  
 		 
 		

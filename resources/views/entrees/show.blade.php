@@ -14,12 +14,13 @@ use App\Http\Controllers\AttachementsController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\TagsController;
 Use App\Common;
-
+Use App\Adresse;
 ?>
 {{-- page level styles --}}
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/layout_responsive.css') }}">
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
+<script src="{{ URL::asset('public/js/upload_files/vpb_uploader.js') }}"> </script>
 
 @stop
 @section('content')
@@ -471,6 +472,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 		if($iddossier>0){
 			$clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
         $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
+$adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
+
 		}
 
         ?>
@@ -482,7 +485,14 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
             <label for="destinataire">Adresse:</label>
             <div class="row">
                 <div class="col-md-10">
-                    <input type="email" id="libre" required  class="form-control" name="libre"  value="<?php echo $entree['emetteur'];?>" /> 
+                    
+ <select id="libre" style="width:100%" required  class="itemName form-control" name="libre"   >
+                            
+                            <option value="<?php echo $entree['emetteur'] ;?>"><?php echo $entree['emetteur'] ;?></option>
+                             @foreach($adresses as $adrs)
+                                <option value="<?php echo $adrs['champ'] ;?>"><?php echo $adrs['champ'] ;?></option>
+                            @endforeach
+                        </select>
 
                 </div>
                 <div class="col-md-2">
@@ -574,7 +584,17 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 				echo  '<li><b>' .$miss->nom_type_miss.'</b></li>' ;
 			}
 		  echo '</ul>' ;
+ if ($langue=='francais'){  ?>
+				
+				Nous reviendrons vers vous au fur et à mesure que le(s) service(s) demandé(s) sera (seront) organisé(s).
 
+			<?php	
+			
+			}else{ ?>
+				
+				We will get back to you once the requested service (s) is (are) organized.
+					
+			<?php	}
 			?>
 				
 				</textarea>
@@ -1153,6 +1173,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
          }
 
     });
+
+
 
 
 </script>
