@@ -227,11 +227,16 @@
 <div class="col-md-6" style="padding:80px 50px 80px 50px">
     <h1>Bienvenue <B style="color:#5D9CEC"><?php echo  $name .' '. $lastname; ?></B></h1>
 	
+<?php
+if($typeuser!=="financier" && $typeuser!=="bureau" )
 
+{
+?>
 <h5>Sélectionnez votre/vos rôle(s) pendant cette séance :</h5>
     <small> (Cliquez sur un rôle attribué pour le demander)</small><br><br><br>
     <input type="hidden" id="par" value="<?php echo $iduser; ?>" >
 {{ csrf_field() }}
+
 
 
 <!--<label class="radio">Agent
@@ -627,10 +632,19 @@
 
 
     {{ csrf_field() }}
+
 <br>
     <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
     <button onclick="location.reload()" class="btn cust-btn btn-success " type="button" id="btn-primary" style="margin-left:50px;margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px"><i class="fas fa-sync"></i> Refraichir</button>
+
 </div>
+<?php } else { ?>
+<br>
+    <button onclick="redirect1()" class="btn cust-btn " type="button" id="btn-primary" style="margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
+    <button onclick="location.reload()" class="btn cust-btn btn-success " type="button" id="btn-primary" style="margin-left:50px;margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px"><i class="fas fa-sync"></i> Refraichir</button>
+</div>
+<?php }  ?>
+
 
 <div class="col-md-4">
     <?php if (
@@ -787,7 +801,10 @@
                 }
             });
      }
-
+ function redirect1()
+     {
+window.location = '{{route('home')}}';
+}
 
  function demande(role,vers) {
 
