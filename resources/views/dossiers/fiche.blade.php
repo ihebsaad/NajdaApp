@@ -2548,8 +2548,7 @@ if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::Ch
                     <label for="destinataire">Destinataire:</label>
 
                     <select id="emaildestinataire"    required  class="form-control" name="destinataire[]" style="width:100%" multiple >
-                        <option>ihebsaad@gmail.com</option>
-                        <option>saadiheb@gmail.com</option>
+                       
                        <?php foreach($listeemails as  $mail)
                            { ?>
                             <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:12px">(<?php echo PrestatairesController::NomByEmail( $mail) .' '.PrestatairesController::PrenomByEmail( $mail)  ;?>)  "</small> </option>
