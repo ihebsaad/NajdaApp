@@ -6640,13 +6640,10 @@ $toreturn =$to;
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
-		  if (trim($to) == 'users' || trim($to) == 'personnels') {
-        $contenu = $contenu . '<br><br>Cordialement / Best regards <br><br><hr style="float:left;"><br><br>';
-
-		  }else {
+		
         $contenu = $contenu . '<br><br>Cordialement / Best regards<br>' . $nomuser . ' ' . $signatureagent . '<br><br><hr style="float:left;"><br><br>' . $signatureentite;
 			  
-		  }
+		 
 		
 
 
