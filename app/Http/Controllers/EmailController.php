@@ -500,7 +500,7 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
              $contenu= ($oMessage->getHTMLBody(true));
-            $contenubrut= DB::connection()->getPdo()->quote(utf8_encode(($oMessage->getTextBody())));
+            $contenubrut= DB::connection()->getPdo()->quote(($oMessage->getTextBody()));
           //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -804,7 +804,7 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= ($oMessage->getHTMLBody(true));
-            $contenubrut= DB::connection()->getPdo()->quote(utf8_encode(($oMessage->getTextBody())));
+            $contenubrut= DB::connection()->getPdo()->quote(($oMessage->getTextBody()));
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
