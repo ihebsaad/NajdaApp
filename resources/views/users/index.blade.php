@@ -23,6 +23,7 @@
             <th>Qualification</th>
             <th class="no-sort">Statistiques</th>
             <th >Statut</th>
+ <th >Actif/NON</th>
          <th class="no-sort">Actions</th>
         </tr>
             <tr>
@@ -31,6 +32,7 @@
                 <th>Qualification</th>
                 <th class="no-sort">Statistiques</th>
                 <th>Statut</th>
+ <th >Actif/NON</th>
          <th class="no-sort"> </th>
               </tr>
             </thead>
@@ -42,6 +44,8 @@
                     <td><?php echo $qual;?></td>
 				 <td><a href="{{action('UsersController@stats', $user['id'])}}" >Statistiques</a></td>
                     <td><?php if ($user->isOnline() && $user->statut!= -1 ){  if(  $user->statut == 1) {echo '<span class="label label-success">Connecté</span> ';} else{ if ($user->statut==2){echo '<span class="label label-warning">En Pause</span> ';  }  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
+ <td  ><?php if ($user->actif==1){echo 'Actif';}else{echo 'Désactivé';} ?></td>
+					
              <td>  @can('isAdmin')
                        <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                             <span class="fa fa-fw fa-trash-alt"></span> Supprimer

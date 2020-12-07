@@ -33,6 +33,7 @@
                 <th style="width:30%">Nom</th>
                 <th style="width:30%">Référence</th>
                 <th style="width:20%">Numéro</th>
+<th style="width:20%">Statut</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
@@ -40,6 +41,7 @@
                 <th style="width:30%">Nom</th>
                 <th style="width:30%">Référence</th>
                 <th style="width:20%">Numéro</th>
+<th style="width:20%">Statut</th>
                  <th class="no-sort" style="width:10%"> </th>
             </tr>
             </thead>
@@ -52,6 +54,7 @@
                     <td  ><a href="{{action('EquipementsController@view', $equipement['id'])}}" >{{$equipement->nom}}</a></td>
 					<td    > {{$equipement->reference}}</td>
 					<td    > {{$equipement->numero}}</td>
+<td  ><?php if ($equipement->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
 
                    <td> @can('isAdmin')
                       <!--  <a  href="{{action('EquipementsController@destroy', $equipement['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

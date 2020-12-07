@@ -51,7 +51,7 @@
                     <td  >{{$personne->id}}</td>
                     <td  ><a href="{{action('PersonnesController@view', $personne['id'])}}" >{{$personne->name}}</a></td>
                     <td  >{{$personne->type}}</td>
-                    <td  ><?php if ($personne->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
+                    <td  ><?php if ($personne->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
 					<td    >
                   <!--    
 				  @can('isAdmin')

@@ -30,12 +30,14 @@
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
                 <th style="width:25%">Type</th>
+<th style="width:25%">Statut</th>
                 <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
                 <th style="width:25%">Type</th>
+<th style="width:25%">Statut</th>
                 <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
@@ -53,6 +55,7 @@
                     <td  >{{$typeprestation->id}}</td>
                     <td  ><a href="{{action('TypePrestationsController@view', $typeprestation['id'])}}" >{{$typeprestation->name}}</a></td>
                     <td  ><?php echo $type;?></td>
+ <td  ><?php if ($typeprestation->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
                      <td    >
                          @can('isAdmin')
                              <a  onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('TypePrestationsController@destroy', $typeprestation['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

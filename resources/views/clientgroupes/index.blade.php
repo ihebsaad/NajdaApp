@@ -30,11 +30,13 @@
             <tr id="headtable">
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
+ <th style="width:10%">Statut</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
+ <th style="width:10%">Statut</th>
                  <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
@@ -45,6 +47,7 @@
                 <tr>
                     <td  >{{$clientgroupe->id}}</td>
                     <td  ><a href="{{action('ClientGroupesController@view', $clientgroupe['id'])}}" >{{$clientgroupe->label}}</a></td>
+<td  ><?php if ($clientgroupe->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
 					<td    >
                         @can('isAdmin')
                             <a  onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('ClientGroupesController@destroy', $clientgroupe['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

@@ -75,7 +75,7 @@
 
       ?>
                     </td>
-                    <td style="width:10%"><?php if ($client->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
+                    <td style="width:10%"><?php if ($client->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
                     <td style="width:10%"><small>{{$client->langue1}}</small></td>
                     <td style="width:10%"><small>{{$client->langue2}}</small></td>
                     <td style="width:5%"><a href="{{action('ClientsController@dossiers', $client['id'])}}" ><?php echo ClientsController::CountDossCL( $client['id']); ?></a> </td>
@@ -191,8 +191,6 @@
             } );
 
             var table = $('#mytable').DataTable({
-                /* Disable initial sort */
-                "aaSorting": [] ,
                 orderCellsTop: true,
 				order:[],
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',

@@ -31,11 +31,13 @@
             <tr id="headtable">
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
+<th style="width:25%">Statut</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
+<th style="width:25%">Statut</th>
                  <th class="no-sort" style="width:10%"></th>
             </tr>
             </thead>
@@ -45,7 +47,9 @@
                 <tr>
                     <td  >{{$voiture->id}}</td>
                     <td  ><a href="{{action('VoituresController@view', $voiture['id'])}}" >{{$voiture->name}}</a></td>
+ <td  ><?php if ($voiture->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
 					<td    >
+
                         @can('isAdmin')
                          <!--   <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('VoituresController@destroy', $voiture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span> Supprimer
