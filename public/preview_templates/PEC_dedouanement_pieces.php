@@ -341,7 +341,10 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
     <p class=rvps1><span class=rvts2>
 <select id="prest__transit" name="prest__transit" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -349,7 +352,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
-}
+}}
 ?>
 </select>
 </span></p>

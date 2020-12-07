@@ -249,7 +249,10 @@ foreach ($array_client as $client) {
 attestons par la présente que la société </span><span class=rvts7>
 <select id="prest__dossier" name="prest__dossier" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -257,7 +260,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
-}
+}}
 ?>
 </select>
 </span><span class=rvts2> <input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input>représentée par son gérant Mr <input name="CL_name_gerant" placeholder="Name GERANT" value="<?php if(isset ($CL_name_gerant)) echo $CL_name_gerant; ?>"></input> titulaire de la CIN N° <input name="CL_cin_gerant" placeholder="Cin GERANT" value="<?php if(isset ($CL_cin_gerant)) echo $CL_cin_gerant; ?>"></input>  est chargée par nos soins de procéder auprès des services concernés à la récupération des documents originaux et le retrait des marchandises objet de la LTA N° <input name="CL_nlta" placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>"></input>  relatif au véhicule <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> pour le compte de son propriétaire Mr <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  .</span></p>

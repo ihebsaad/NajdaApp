@@ -295,7 +295,10 @@ $sqlvh = "SELECT id,name,prenom,phone_home,ville,ville_id FROM prestataires WHER
 
 <select id="prest__hotel" name="prest__hotel" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -303,7 +306,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["name"].''.$prest["prenom"].'" id="'.$prest["id"].'" >'.$prest["name"].''.$prest["prenom"].'</option>';}
-}
+}}
 ?>
 </select>
 

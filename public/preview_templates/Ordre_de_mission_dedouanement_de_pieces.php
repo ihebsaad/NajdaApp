@@ -278,15 +278,20 @@ foreach ($array_client as $client) {
 attestons par la présente que la société </span><span class=rvts8>
 <select id="prest__transitaire" name="prest__transitaire" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{
+$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
+
 if(($prest['id'] === $id__prestataire)) {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
 else {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'">'.$prest["name"].'</option>';}
-}
+}}
 ?>
 </select>
 </span><span class=rvts2><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input>&nbsp; représentée par son gérant Mr <input name="CL_name"  placeholder="name" value="<?php if(isset ($CL_name)) echo $CL_name; ?>" /> est chargée par nos soins de procéder au dédouanement de pièces sous le numéro de LTA  <input name="CL_nlta"  placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>" /> et qui arrivera le <input name="CL_date_heure_ariv" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_ariv)) echo $CL_date_heure_ariv; ?>"></input> sur le vol <input name="CL_cordonnes_vol" placeholder="Cordonnes Vol" value="<?php if(isset ($CL_cordonnes_vol)) echo $CL_cordonnes_vol; ?>"></input> au nom de notre client(e) </span><span class=rvts9><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span><span class=rvts2> </span><br><span class=rvts2>A noter que la pièce de rechange en question sera montée sur le véhicule de notre client(e) de marque  <input name="vehicule_marque" placeholder="marque du véhicule
@@ -294,8 +299,12 @@ else {
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>  immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> en circulation temporaire en Tunisie et nécessitant la réparation avant son retour vers l</span><span class=rvts7>’</span><span class=rvts2>étranger. Le véhicule sera réparé au garage </span><span class=rvts8>
 <select id="inter__garage" name="inter__garage" autocomplete="off" onchange="intgaragechange();" >
 <?php
-
+if(!empty($array_presta))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_presta as $presta) {
+
 if(($presta['id'] === $id__prestataire1)) {
     
   echo '<option value="'.$presta["name"].'" id="'.$presta["id"].'" selected >'.$presta["name"].'</option>';}
@@ -303,7 +312,7 @@ else {
     
      echo '<option value="'.$presta["name"].'" id="'.$presta["id"].'">'.$presta["name"].'</option>';}
 }
-    
+    }
    
 ?>
 </select>

@@ -370,7 +370,10 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
             
 <select id="prest__transitaire" name="prest__transitaire" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -378,7 +381,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'">'.$prest["name"].'</option>';}
-}
+}}
 ?>
 </select>
 </span></p>
@@ -439,7 +442,10 @@ foreach ($array_tel as $tel) {
 ?>
 <select id="inter__remor" name="inter__remor" autocomplete="off" onchange="intremorqchange();" >
 <?php
-
+if(!empty($array_presta))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_presta as $presta) {
 if(($presta['id'] === $id__prestataire1)) {
     
@@ -447,7 +453,7 @@ if(($presta['id'] === $id__prestataire1)) {
 else {
     
      echo '<option value="'.$presta["civilte"].''.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["name"].'</option>';}
-}
+}}
     
    
 ?>

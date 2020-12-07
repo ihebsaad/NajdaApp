@@ -4333,7 +4333,20 @@ var modif = $("#modif").val()
                 //'&_token='+_token
                 data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&modif='+modif+'&comdoc='+comdoc+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
-                   // alert(data);
+//alert(data);
+if(data==="false")
+{
+
+
+ Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez sélectionner le prestataire"
+            });
+$("#gendochtml").prop("disabled",false);
+
+}
+           else{        // alert(data);
                      console.log(data);
                    var doc = JSON.parse(data);
 emplacement=doc['emplacement'];
@@ -4347,7 +4360,7 @@ modalodoc(doc['titre'],urlf+"/"+doc['emplacement'],'doc',null,doc['comment'],doc
 $('#fermedoc').click(function(){
  
                             window.location.reload();
-});
+});}
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                       Swal.fire({

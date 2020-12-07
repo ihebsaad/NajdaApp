@@ -325,7 +325,10 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts2>  <!--<input name="prest__garage" style="width:300px" placeholder="Prestataire Garage" value="<?php if(isset ($prest__garage)) echo $prest__garage; ?>"></input>-->
 <select id="prest__garage" name="prest__garage" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -333,7 +336,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
-}
+}}
 ?>
 </select>
 </span></p>

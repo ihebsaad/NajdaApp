@@ -273,7 +273,10 @@ foreach ($array_client as $client) {
 <p class=rvps1><span class=rvts2> <!--<input name="prest__pharm" style="width:300px" placeholder="Prestataire pharmacie" value="<?php if(isset ($prest__pharm)) echo $prest__pharm; ?>"></input>--> 
 <select id="prest__pharm" name="prest__pharm" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -281,7 +284,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
-}
+}}
 ?>
 </select>
 </span></p>

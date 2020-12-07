@@ -91,14 +91,26 @@ $file=public_path($arrfile['template_modif']);}}
             foreach ($champsArray as $champtemp) {
                 //verifier quil nest pas un champs libre
                 if (stristr($champtemp,'[CL_')=== FALSE && ($champtemp !=='[MONTANT_FRANCHISE]') ) 
-                { //$array += [ $champtemp => 'ti' ];
+                {
+
+
+
+
+ //$array += [ $champtemp => 'ti' ];
                     $champform = str_replace('[', '', $champtemp);
                     $champform = str_replace(']', '', $champform);
                     $champform = strtolower($champform);
-                    $valchamp = $_POST[$champform];
+if( ($_POST[$champform]==="prestselectfaux") )
+{
+
+return 'false';
+
+}
+else
+                    {$valchamp = $_POST[$champform];
                     
 
-                    $array += [ $champtemp => $valchamp];
+                    $array += [ $champtemp => $valchamp];}
 
                 }
                     elseif($champtemp ==='[MONTANT_FRANCHISE]')

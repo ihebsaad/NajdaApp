@@ -317,7 +317,10 @@ foreach ($array_client as $client) {
 <!--<input name="prest__imag" style="width:300px" placeholder="Prestataire centre imagerie" value="<?php // if(isset ($prest__imag)) echo $prest__imag; ?>"></input>-->
 <select id="prest__imag" name="prest__imag" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_imag))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_imag as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -325,7 +328,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
-}
+}}
 ?>
 </select>
 </span></p>

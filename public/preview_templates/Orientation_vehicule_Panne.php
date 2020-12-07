@@ -319,7 +319,10 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts2>
 <select id="inter__garage" name="inter__garage" autocomplete="off" onchange="prestchange();" >
 <?php
-
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
@@ -327,7 +330,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["nom"].''.$prest["premom"].'" id="'.$prest["id"].'" >'.$prest["nom"].''.$prest["prenom"].'</option>';}
-}
+}}
 ?>
 </select>
 </span></p>

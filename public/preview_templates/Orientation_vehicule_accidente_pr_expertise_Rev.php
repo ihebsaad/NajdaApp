@@ -329,6 +329,10 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 <p class=rvps1><span class=rvts2>
 <select id="inter__garage" name="inter__garage" autocomplete="off" onchange="prestchange();" >
 <?php
+if(!empty($array_prest))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
@@ -337,7 +341,7 @@ if(($prest['id'] === $id__prestataire)) {
 else {
     
     echo '<option value="'.$prest["nom"].''.$prest["prenom"].'" id="'.$prest["id"].'" >'.$prest["nom"].''.$prest["prenom"].'</option>';}
-}
+}}
 ?>
 </select>
 
@@ -368,6 +372,10 @@ foreach ($array_tel as $tel) {
     <li style="margin-left: 0px" class=rvps6><span class=rvts7>Notre expert Mr </span><span class=rvts9>
 <select id="inter__expert" name="inter__expert" autocomplete="off" onchange="intexpertchange();" >
 <?php
+if(!empty($array_presta))
+{$prest="prestselectfaux";
+$prestid=0;
+ echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 
 foreach ($array_presta as $presta) {
 if(($presta['id'] === $id__prestataire1)) {
@@ -376,7 +384,7 @@ if(($presta['id'] === $id__prestataire1)) {
 else {
     
       echo '<option value="'.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["prenom"].''.$presta["name"].'</option>';}
-}
+}}
     
    
 ?>
