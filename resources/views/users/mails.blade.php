@@ -37,12 +37,14 @@
             <th>Nom</th>
             <th>Qualification</th>
             <th>Statut</th>
+<th>Actif/Non</th>
 			</tr>
             <tr>
             <th></th>
             <th>Nom</th>
             <th>Qualification</th>
             <th>Statut</th>
+<th>Actif/Non</th>
             </tr>
             </thead>
             <tbody>
@@ -55,6 +57,8 @@
                     <td><a href="{{action('UsersController@view', $user['id'])}}" >{{$user->name .' '.$user->lastname }}</a></td>
                     <td><?php echo $qual;?></td>
                     <td><?php if ($user->isOnline() && $user->statut!= -1 ){  if(  $user->statut == 1) {echo '<span class="label label-success">Connecté</span> ';} else{ if ($user->statut==2){echo '<span class="label label-warning">En Pause</span> ';  }  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
+<td  ><?php if ($user->actif ==1){echo 'Actif';}else{echo 'Désactivé';} ?></td>
+
             
                 </tr>
  
@@ -290,7 +294,8 @@
                             "sortAscending":  ": activer pour un tri ascendant",
                             "sortDescending": ": activer pour un tri descendant"
                         }
-                    }
+                    },
+'paging':false,
 
             });
 
@@ -392,7 +397,10 @@
             return(dossid);
         }
 
+
  
+		
+		
 		
         });
     </script>

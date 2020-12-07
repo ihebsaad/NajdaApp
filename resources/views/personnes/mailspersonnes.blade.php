@@ -54,7 +54,7 @@
                     <td  ><label class="check " style="cursor:pointer">  <input   class="checkbox" type="checkbox" id="cl-<?php echo $personne->id;   ?>" name="casedossier" value=" "> <span class="checkmark"></span> <?php echo $personne['name'];?> </label></td>
                     <td  ><a href="{{action('PersonnesController@view', $personne['id'])}}" >{{$personne->name}}</a></td>
                     <td  >{{$personne->type}}</td>
-                    <td  ><?php if ($personne->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
+                    <td  ><?php if ($personne->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
 	 
  
                 </tr>
@@ -269,7 +269,8 @@
                             "sortAscending":  ": activer pour un tri ascendant",
                             "sortDescending": ": activer pour un tri descendant"
                         }
-                    }
+                    },
+'paging':false,
 
             });
 

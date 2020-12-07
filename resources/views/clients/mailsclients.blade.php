@@ -80,7 +80,7 @@
 
       ?>
                     </td>
-                    <td style="width:10%"><?php if ($client->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
+                    <td style="width:10%"><?php if ($client->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
                     <td style="width:10%"><small>{{$client->langue1}}</small></td>
                     <td style="width:10%"><small>{{$client->langue2}}</small></td>
 
@@ -343,7 +343,8 @@
                             "sortAscending":  ": activer pour un tri ascendant",
                             "sortDescending": ": activer pour un tri descendant"
                         }
-                    }
+                    },
+'paging':false,
 
             });
 

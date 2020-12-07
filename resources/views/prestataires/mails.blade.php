@@ -50,6 +50,7 @@
                 <th style="width:10%">Gouvernorats</th>
                 <th style="width:10%">Ville</th>
                <th style="width:20%">Spécialités</th>
+<th style="width:20%">Statut</th>
              </tr>
             <tr style="font-size:14px;">
                 <th style="width:15%" class="no-sort" ></th>
@@ -58,6 +59,7 @@
                 <th style="width:10%">Gouvernorats</th>
                 <th style="width:10%">Ville</th>
                <th style="width:20%">Spécialités</th>
+<th style="width:20%">Statut</th>
 
             </tr>
             </thead>
@@ -84,6 +86,7 @@
                     <td style="font-size:12px;width:10%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                     <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
                     <td style="font-size:12px;width:15%"><?php foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+<td  ><?php if ($prestataire->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
 
                 </tr>
             @endforeach
@@ -289,7 +292,8 @@
                             "sortAscending":  ": activer pour un tri ascendant",
                             "sortDescending": ": activer pour un tri descendant"
                         }
-                    }
+                    },
+'paging':false,
 
             });
 
