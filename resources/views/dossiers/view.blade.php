@@ -5070,6 +5070,8 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
             var autorise = $('#autorise').val();
             var details = $('#details').val();
             var ville = $('#villepr3').val();
+var manuel ="manuel";
+
             //   gouvcouv
             if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0) )
             {
@@ -5077,7 +5079,7 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                 $.ajax({
                     url:"{{ route('prestations.saving') }}",
                     method:"POST",
-                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat ,typeprest:typeprest,ville:ville, _token:_token},
+                    data:{manuel:manuel, autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat ,typeprest:typeprest,ville:ville, _token:_token},
                     success:function(data){
 if(data==='faux')
 {

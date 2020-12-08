@@ -124,10 +124,14 @@ class PrestationsController extends Controller
         $details = $request->get('details');
         $autorise = $request->get('autorise');
         $effectue = null;
+if($request->get('manuel')!==''){$manuel=$request->get('manuel');
+
+//dd($autorise);
+}
         if ($autorise <> '') {
             $effectue = 1;
         }
-else
+if($autorise ===null && $manuel ==="manuel")
 {
 return "faux";
 }
