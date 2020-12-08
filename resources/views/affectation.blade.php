@@ -55,11 +55,11 @@
                             <i class="fas fa-lg  fa-user-cog"></i>  Calendrier Missions
                            </a>
                      </li>
-                       <li class="nav-item">
-                    <a class="nav-link" href="{{ route('actionsactives30min') }}"  >
-                        <i class="fas fa-lg  fa-user-cog"></i> Actions actives depuis 30 minutes
-                    </a>
-                    </li>
+<li class="nav-item">
+	                    <a class="nav-link" href="{{ route('actionsactives30min') }}"  >
+	                        <i class="fas fa-lg  fa-user-cog"></i> Actions actives depuis 30 minutes
+	                    </a>
+	                    </li>
 
                     <li class="nav-item ">
                         <a class="nav-link " href="{{ route('notifs') }}"  >
@@ -89,8 +89,9 @@
                 $veilleur=$seance->veilleur ;
 
                 $date_actu =date("H:i");
-                $debut=$seance->debut;
-                $fin=$seance->fin;
+                $debut=strtotime($seance->debut);
+                $fin=strtotime($seance->fin);
+
                 function custom_echo($x, $length)
                 {
                     if(strlen($x)<=$length)
@@ -395,8 +396,9 @@
                         <i class="fa-lg fas fa-folder"></i>  Dispat  (<?php echo  $CdossiersDisp ;?>)
                     </a>
                 </li>
-                <?php if ( $date_actu < $debut || ($date_actu > $fin) )
+                <?php if ( (strtotime($date_actu) < $debut) || (strtotime($date_actu) > $fin) )
                 {
+
                 // veilleur
                 $dossiersV=     Dossier::where('statut','<>',5)
                     ->where('affecte',$veilleur)
@@ -629,7 +631,7 @@
             </div><!--- Panel disp --->
 
 
-           <?php     if ( $date_actu < $debut || ($date_actu > $fin) )
+           <?php     if ( strtotime($date_actu) < $debut || (strtotime($date_actu) > $fin) )
                 { ?>
                 <div id="panelv"  class="tab-pane fade  pannel" >
 
@@ -1622,7 +1624,7 @@
   document.getElementById('drag-elements4'),
   document.getElementById('drag-elements5')
 <?php
-  if ( $date_actu < $debut || ($date_actu > $fin) )
+  if ( strtotime($date_actu) < $debut || (strtotime($date_actu) > $fin) )
         {
        ?>
          ,document.getElementById('drag-elements6')
