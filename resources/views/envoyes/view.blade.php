@@ -6,9 +6,9 @@
 
         <div class="col-lg-12 ">
          <?php if(isset($envoye['dossier'])){
-           // $dossierid=App\Http\Controllers\DossiersController::IdDossierByRef(trim($envoye['dossier']));
-            $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
-            $dossierid= $dosss['id'];
+            $dossierid=App\Http\Controllers\DossiersController::IdDossierByRef(trim($envoye['dossier']));
+           /* $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
+            $dossierid= $dosss['id'];*/
 
              ?>   <span style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossierid)}}" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></span>
 

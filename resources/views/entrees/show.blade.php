@@ -90,7 +90,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                     </a>
                                 <?php } ?>
 								 <?php if ($entree['accuse']!=1 ) { ?>
-                                    <a    class="btn btn-info btn-sm btn-responsive " role="button"  data-toggle="modal" data-target="#sendmail" >
+                                    <a  onclick="accuse();" class="btn btn-info btn-sm btn-responsive " >
                                         <span class="fa fa-fw fa-envelope"></span> Accusé
                                     </a>
                                 <?php } ?>
@@ -444,9 +444,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 </style>
 
 
-
     <!-- Modal Envoi Mail -->
-    <div class="modal fade" id="sendmail"   role="dialog" aria-labelledby="exampleModal8" aria-hidden="true">
+    <div class="modal  " id="sendmail" >
         <div class="modal-dialog" role="document">
         <div class="modal-content">
                 <div class="modal-header">
@@ -618,7 +617,7 @@ $adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button onclick="ferme();"type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                         <button onclick=" resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
                     </div>
                 </div>
@@ -628,6 +627,21 @@ $adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
    </div>
 
 
+
+<?php
+if(isset($_GET['openmodal']) )
+{
+  if($_GET['openmodal'] == 1){ ?>
+        <script type="text/javascript">
+
+                  $(document).ready(function(){
+                     $('#sendmail').modal({show:true});
+
+                 });
+        </script>
+<?php         
+    }}
+?>
 
 
 
@@ -1204,7 +1218,27 @@ padding: 5px;
            location.href="{{action('EntreesController@traiter', $entree['id'])}}";
         }
     }
+ 
+function accuse()
+    {
+var queryParams = new URLSearchParams(window.location.search);
 
+if(queryParams.has('openmodal'))
+{queryParams.set("openmodal", '1');
+history.replaceState(null, null, "?"+queryParams.toString());
+window.location = window.location.href ;}
+else
+{  window.location = window.location.href + "?openmodal=1";}
+    }
+function ferme()
+    {
+
+
+     var queryParams = new URLSearchParams(window.location.search);
+alert(queryParams);
+queryParams.set("openmodal", '0');
+history.replaceState(null, null, "?"+queryParams.toString());
+    }
 
 </script>
  
