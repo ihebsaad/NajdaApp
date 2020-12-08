@@ -306,13 +306,15 @@ return "faux";
         $dossierid=$prestation->dossier_id;
         $typep=$prestation->type_prestations_id;
         $specialite=$prestation->specialite;
+        $gouv=$prestation->gouvernorat ;
 
         $abn= DossiersController::FullnameAbnDossierById($dossierid);
         $ref= DossiersController::RefDossierById($dossierid);
+       
 
          $Specialite=   PrestatairesController::SpecialiteByid($specialite);
         $TypePrest=  PrestatairesController::TypeprestationByid($typep);
-
+$gouvprest=  PrestatairesController::GouvByid($gouv);
 
         if ($details != '') {
             Prestation::where('id', $id)->update(array('details' => $details));
@@ -333,11 +335,20 @@ return "faux";
         }
         $now=date('d/m/Y H:i');
          $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $contenu = 'Bonjour ' . $nomprest . ',<br>
-        Najda vous informe que vous avez été choisi le '.$now.' pour mission le '.$datep.' mais vous étiez '.$raison.'<br>
-		Prestation : '.$TypePrest.', '.$Specialite.'<br>
-		Dossier : '.$ref.'
-		';
+        $contenu = 'Bonjour ' . $nomprest .' de Najda Assistance'.',<br>
+        Nous avons essayé de vous missionner  le '.$now.' pour la prestation '.$TypePrest.', '.$Specialite.' qui doit avoir lieu le '.$datep.' à  '.$gouvprest.' dans le cadre du dossier  '.$ref.' mais votre tour a été sauté pour la raison suivante : <br>'.$raison.'<br> Si toutefois vous avez une remarque ou commentaire à ce sujet, veuillez SVP nous le signaler par mail à l’adresse smq@medicmultiservices.com  ou par téléphone au 36 00 36 30 et demander à parler à la responsable qualité.<br>
+Avec tous nos remerciements pour votre collaboration.'.'<br><br><hr style="float:left;"><br><br>'."<b>Najda Assistance</b><br>
+www.najda-assistance.com<br>
+Centrale d'alarme/Operations<br>
+24/7 contacts:<br>
+Tel: +216 3600 3600<br>
+Alternative phone #: +33 972441777<br>
+Dernier recours: +216 73 820 000<br>
+Fax: +216 73 820 333<br>
+Email: 24ops@najda-assistance.com<br>
+Skype :'najdassist'<br>
+WhatsApp/SMS: +21628784143<br>
+DD-(FP-03/04)-07/01<br>";
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
@@ -362,6 +373,8 @@ return "faux";
         $swiftTransport->setPassword($parametres->pass_N);
         $fromname="Najda Assistance";
         $from='24ops@najda-assistance.com';
+
+            
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
