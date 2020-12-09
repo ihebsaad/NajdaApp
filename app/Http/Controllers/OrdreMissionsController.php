@@ -2583,9 +2583,9 @@ return json_encode($omarray);
   if (isset($_POST['parent']) && ! empty($_POST['parent']))
 			{$parent = $_POST['parent'];
                               $omparent2=OMAmbulance::where('id', $parent)->first();
-                                $idparamed2=$omparent2['idparamed'];
+                              /*  $idparamed2=$omparent2['idparamed'];
 $idambulancier12=$omparent2['idambulancier1'];
-$idambulancier22=$omparent2['idambulancier2'];
+$idambulancier22=$omparent2['idambulancier2'];*/
 			}
         if (isset($_POST['parent']) && (! empty($_POST['parent'])))
         {
@@ -2728,7 +2728,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['v
 	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
 	                $omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
 	                $result = $omambulance->update($request->all());
-if($affectea!="externe")
+/*if($affectea!="externe")
 {
 $lambulancier1=$omparent['lambulancier1'];
 if(isset($_POST['idambulancier1']) && $_POST['idambulancier1']!="" && $_POST['lambulancier1']!=$lambulancier1)
@@ -3122,7 +3122,7 @@ $desc=' Envoi de SMS à '.$num5 ;
 
 
 }
-}
+}*/
                 // end bloc test
 if ($omambulance->save()) {
 
@@ -3218,7 +3218,7 @@ return json_encode($omarray);
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance,'idprestation'=>$omparent['idprestation']]);
         			$result = $omambulance->update($request->all());
 Prestation::where('id', $omparent['idprestation'])->update(['oms_docs'=> $filename]);
-$lambulancier1=$omparent['lambulancier1'];
+/*$lambulancier1=$omparent['lambulancier1'];
 if(isset($_POST['idambulancier1']) && $_POST['idambulancier1']!="" && $_POST['lambulancier1']!=$lambulancier1)
 {
 $numm= Personne::where('id', $_POST['idambulancier1'])->select('tel')->first();
@@ -3609,7 +3609,7 @@ $desc=' Envoi de SMS à '.$num5 ;
 }
 
 
-}
+}*/
 if ($omambulance->save()) {
 
 $par=Auth::id();
@@ -4113,7 +4113,7 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
                         $prestomamb = $omparent['prestataire_ambulance'];
                         $idprestation = $omparent['idprestation'];
-if (isset($_POST['complete']) && ! empty($_POST['complete']))
+/*if (isset($_POST['complete']) && ! empty($_POST['complete']))
 {
 $lambulancier1=$omparent['lambulancier1'];
 if(isset($_POST['idambulancier1']) && $_POST['idambulancier1']!="" && $_POST['lambulancier1']!=$lambulancier1)
@@ -4507,7 +4507,7 @@ $desc=' Envoi de SMS à '.$num5 ;
 
 
 }
-}
+}*/
 
                     }
 $nameom=$name;
@@ -4774,7 +4774,7 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
                         $prestomamb = $omparent['prestataire_ambulance'];
                         $idprestation = $omparent['idprestation'];
-if (isset($_POST['complete']) && ! empty($_POST['complete']))
+/*if (isset($_POST['complete']) && ! empty($_POST['complete']))
 {
 $lambulancier1=$omparent['lambulancier1'];
 if(isset($_POST['idambulancier1']) && $_POST['idambulancier1']!="" && $_POST['lambulancier1']!=$lambulancier1)
@@ -5169,7 +5169,7 @@ $desc=' Envoi de SMS à '.$num5 ;
 
 
 }
-}
+}*/
 
                     }
 $nameom=$name;
@@ -5767,7 +5767,7 @@ public function pdfvalideomambulance()
 					{
 						$parent = $_POST['parent'];
 $omparent2=OMRemorquage::where('id', $parent)->first();
-                                $idchauff2=$omparent2['idchauff'];
+                                //$idchauff2=$omparent2['idchauff'];
 						OMRemorquage::where('id', $parent)->update(['idvehic' => "",'idchauff' => ""]);
 					}
                 // MAJ disponibilite vehicule
@@ -6025,7 +6025,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 		                $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
 		                $result = $omremorquage->update($request->all());
 	                // end bloc test
-if($affectea!="externe")
+/*if($affectea!="externe")
 {
 $lchauff=$omparent['lchauff'];
 if(isset($_POST['idchauff']) && $_POST['idchauff']!="" && $_POST['lchauff']!=$lchauff)
@@ -6159,7 +6159,7 @@ $desc=' Envoi de SMS à '.$num1 ;
 
 
 }
-}
+}*/
 if ($omremorquage->save()) {
 
 $par=Auth::id();
@@ -6260,7 +6260,7 @@ return json_encode($omarray);
                     $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_remorquage' => $prestambulance,'idprestation'=>$omparent['idprestation']]);
                     $result = $omremorquage->update($request->all());
 Prestation::where('id', $omparent['idprestation'])->update(['oms_docs'=> $filename]);
-$lchauff=$omparent['lchauff'];
+/*$lchauff=$omparent['lchauff'];
 if(isset($_POST['idchauff']) && $_POST['idchauff']!="" && $_POST['lchauff']!=$lchauff)
 {
 $numm= Personne::where('id', $_POST['idchauff'])->select('tel')->first();
@@ -6389,7 +6389,7 @@ $desc=' Envoi de SMS à '.$num1 ;
 
 
 }
-}
+}*/
 if ($omremorquage->save()) {
 
 $par=Auth::id();
@@ -6839,7 +6839,7 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
                        $prestomrem= $omparent['prestataire_remorquage'];
                        $idprestation = $omparent['idprestation'];
-if (isset($_POST['complete']) && ! empty($_POST['complete']))
+/*if (isset($_POST['complete']) && ! empty($_POST['complete']))
 {
 $lchauff=$omparent['lchauff'];
 if(isset($_POST['idchauff']) && $_POST['idchauff']!="" && $_POST['lchauff']!=$lchauff)
@@ -6974,7 +6974,7 @@ $desc=' Envoi de SMS à '.$num1 ;
 
 }
 
-}
+}*/
                     }
                     
 $pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',['idprestation' => $idprestation,'prestataire_remorquage'=>$prestomrem])->setPaper('a4', '');
@@ -7254,7 +7254,7 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
                        $prestomrem= $omparent['prestataire_remorquage'];
                        $idprestation = $omparent['idprestation'];
-if (isset($_POST['complete']) && ! empty($_POST['complete']))
+/*if (isset($_POST['complete']) && ! empty($_POST['complete']))
 {
 $lchauff=$omparent['lchauff'];
 if(isset($_POST['idchauff']) && $_POST['idchauff']!="" && $_POST['lchauff']!=$lchauff)
@@ -7389,7 +7389,7 @@ $desc=' Envoi de SMS à '.$num1 ;
 
 }
 
-}
+}*/
                     }
                     
 $pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',['idprestation' => $idprestation])->setPaper('a4', '');
@@ -8816,14 +8816,14 @@ $numm= Personne::where('id', $omparent1['idambulancier1'])->select('tel')->first
 $num=$numm['tel'];
 $description="Annulation de l'ordre de mission";
 $dossiersms = Dossier::find($omparent1['dossier']);
-$dateheure = str_replace('T', ' ',$omparent1['CL_heuredateRDV']);
+$dateheure = str_replace('T', ' ',$omparent1['dateheuredep']);
 $dateheures=date('d/m/Y H:i',strtotime($dateheure));
-$contenu="Bonjour,
-Nous vous informons que la mission que se déroule de ".$omparent1['CL_lieuprest_pc']." à ".$omparent1['CL_lieudecharge_dec']." le ".$dateheures." a été annulée";
+$dossier1= $dossiersms['reference_medic'];
+$contenu="Annulation mission (Ambulance) ref ".$dossier1. " du ".$dateheures;
   $contenu= str_replace ( '&' ,'' ,$contenu);
         $contenu= str_replace ( '<' ,'' ,$contenu);
         $contenu= str_replace ( '>' ,'' ,$contenu);
-$dossier1= $dossiersms['reference_medic'];
+
 
         $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
         <sms>
@@ -8881,14 +8881,14 @@ $numm1= Personne::where('id', $omparent1['idambulancier2'])->select('tel')->firs
 $num1=$numm1['tel'];
 $description1="Annulation de l'ordre de mission";
 $dossiersms1 = Dossier::find($omparent1['dossier']);
-$dateheure1 = str_replace('T', ' ',$omparent1['CL_heuredateRDV']);
+$dateheure1 = str_replace('T', ' ',$omparent1['dateheuredep']);
 $dateheures1=date('d/m/Y H:i',strtotime($dateheure1));
-$contenu1="Bonjour,
-Nous vous informons que la mission que se déroule de ".$omparent1['CL_lieuprest_pc']." à ".$omparent1['CL_lieudecharge_dec']." le ".$dateheures1." a été annulée";
+$dossier2= $dossiersms1['reference_medic'];
+$contenu1="Annulation mission (Ambulance) ref ".$dossier2. " du ".$dateheures1;
   $contenu1= str_replace ( '&' ,'' ,$contenu1);
         $contenu1= str_replace ( '<' ,'' ,$contenu1);
         $contenu1= str_replace ( '>' ,'' ,$contenu1);
-$dossier2= $dossiersms1['reference_medic'];
+
 
         $xmlString1 = '<?xml version="1.0" encoding="UTF-8" ?>
         <sms>
@@ -8945,14 +8945,14 @@ $numm2= Personne::where('id', $omparent1['idparamed'])->select('tel')->first();
 $num2=$numm2['tel'];
 $description2="Annulation de l'ordre de mission";
 $dossiersms2 = Dossier::find($omparent1['dossier']);
-$dateheure2 = str_replace('T', ' ',$omparent1['CL_heuredateRDV']);
+$dateheure2 = str_replace('T', ' ',$omparent1['dateheuredep']);
 $dateheures2=date('d/m/Y H:i',strtotime($dateheure2));
-$contenu2="Bonjour,
-Nous vous informons que la mission que se déroule de ".$omparent1['CL_lieuprest_pc']." à ".$omparent1['CL_lieudecharge_dec']." le ".$dateheures2." a été annulée";
+$dossier3= $dossiersms2['reference_medic'];
+$contenu2="Annulation mission (Ambulance) ref ".$dossier3. " du ".$dateheures2;
   $contenu2= str_replace ( '&' ,'' ,$contenu2);
         $contenu2= str_replace ( '<' ,'' ,$contenu2);
         $contenu2= str_replace ( '>' ,'' ,$contenu2);
-$dossier3= $dossiersms2['reference_medic'];
+
 
         $xmlString2 = '<?xml version="1.0" encoding="UTF-8" ?>
         <sms>
@@ -9115,14 +9115,14 @@ $numm= Personne::where('id', $omparent1['idchauff'])->select('tel')->first();
 $num=$numm['tel'];
 $description="Annulation de l'ordre de mission";
 $dossiersms = Dossier::find($omparent1['dossier']);
-$dateheure = str_replace('T', ' ',$omparent1['CL_heuredateRDV']);
+$dateheure = str_replace('T', ' ',$omparent1['dateheuredep']);
 $dateheures=date('d/m/Y H:i',strtotime($dateheure));
-$contenu="Bonjour,
-Nous vous informons que la mission que se déroule de ".$omparent1['CL_lieuprest_pc']." à ".$omparent1['CL_lieudecharge_dec']." le ".$dateheures." a été annulée";
+$dossier1= $dossiersms['reference_medic'];
+$contenu="Annulation mission (Remorquage) ref ".$dossier1. " du ".$dateheures;
   $contenu= str_replace ( '&' ,'' ,$contenu);
         $contenu= str_replace ( '<' ,'' ,$contenu);
         $contenu= str_replace ( '>' ,'' ,$contenu);
-$dossier1= $dossiersms['reference_medic'];
+
 
         $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
         <sms>
@@ -9675,6 +9675,413 @@ if( isset($omparent['km_arrive']) && !empty($omparent['km_arrive']) && isset($om
 	                     $voiture->update(['km'=>$omparent['km_arrive']]);
 
 	                	}
+$parent = $omparent['parent'];
+				$omparent2=OMAmbulance::where('id', $parent)->first();
+$ambulancier12=Personne::where('name', $omparent2['lambulancier1'])->select('id')->first();
+
+   $idambulancier12 =$ambulancier12['id']  ;
+$ambulancier22=Personne::where('name', $omparent2['lambulancier2'])->select('id')->first();
+
+   $idambulancier22 =$ambulancier22['id']  ;
+$paramed2=Personne::where('name', $omparent2['lparamed'])->select('id')->first();
+$idparamed2 =$paramed2['id']  ;
+if (isset($omparent['complete']) && ! empty($omparent['complete']))
+{
+$lambulancier1=$omparent2['lambulancier1'];
+if(isset($omparent['idambulancier1']) && $omparent['idambulancier1']!="" && $omparent['lambulancier1']!=$lambulancier1)
+{
+$numm= Personne::where('id', $omparent['idambulancier1'])->select('tel')->first();
+$num=$numm['tel'];
+$description='Ordre de mission';
+$dossiersms = Dossier::find($iddoss);
+$dateheure = str_replace('T', ' ', $omparent['dateheuredep']);
+$dossier= $dossiersms['reference_medic'];
+$dateheures=date('d/m/Y H:i',strtotime($dateheure));
+
+$contenu=$dossier." : Départ base le ".$dateheures." mission (Ambulance) sur ".$omparent['lvehicule'] ." à destination de ".$omparent['CL_lieuprest_pc'].". Confirmer réception avec ref";
+  $contenu= str_replace ( '&' ,'' ,$contenu);
+        $contenu= str_replace ( '<' ,'' ,$contenu);
+        $contenu= str_replace ( '>' ,'' ,$contenu);
+
+
+        $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num.'</gsm>
+            <texte>'.$contenu.'</texte>
+        </sms>';
+
+        $date=date('dmYHis');
+        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath,$xmlString,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+        $from='sms najda '.$nomuser;
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => $from,
+            'destinataire' => $num,
+            'sujet' => $description,
+            'description' => $description,
+            'contenu'=> $contenu,
+            'statut'=> 1,
+            'par'=> $par,
+            'dossier'=>$dossier,
+            'type'=>'sms'
+        ]);
+
+        $envoye->save();
+
+
+        //Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+$desc=' Envoi de SMS à '.$num ;
+ $hist = new Historique([
+              'description' => $desc,
+
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+if(isset($idambulancier12) && $idambulancier12!="" )
+{
+$numm1= Personne::where('id', $idambulancier12)->select('tel')->first();
+$num1=$numm1['tel'];
+$description1="Annulation de l'ordre de mission";
+$dossiersms1 = Dossier::find($iddoss);
+$dateheure1 = str_replace('T', ' ', $omparent['dateheuredep']);
+$dateheures1=date('d/m/Y H:i',strtotime($dateheure1));
+$dossier1= $dossiersms1['reference_medic'];
+$contenu1="Annulation mission (Ambulance) ref ".$dossier1. " du ".$dateheures1 ;
+  $contenu1= str_replace ( '&' ,'' ,$contenu1);
+        $contenu1= str_replace ( '<' ,'' ,$contenu1);
+        $contenu1= str_replace ( '>' ,'' ,$contenu1);
+
+
+        $xmlString1 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num1.'</gsm>
+            <texte>'.$contenu1.'</texte>
+        </sms>';
+
+        $date1=date('dmYHis');
+        $filepath1 = storage_path() . '/SENDSMS/sms_'.$num1.'_'.$date1.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath1,$xmlString1,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user1 = auth()->user();
+        $nomuser1=$user1->name.' '.$user1->lastname;
+        $from1='sms najda '.$nomuser1;
+        $par1=Auth::id();
+
+        $envoye1 = new Envoye([
+            'emetteur' => $from1,
+            'destinataire' => $num1,
+            'sujet' => $description1,
+            'description' => $description1,
+            'contenu'=> $contenu1,
+            'statut'=> 1,
+            'par'=> $par1,
+            'dossier'=>$dossier1,
+            'type'=>'sms'
+        ]);
+
+        $envoye1->save();
+
+
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+}
+
+
+}
+$lambulancier2=$omparent2['lambulancier2'];
+if(isset($omparent['idambulancier2']) && $omparent['idambulancier2']!="" && $omparent['lambulancier2']!=$lambulancier2)
+{
+$numm2= Personne::where('id', $omparent['idambulancier2'])->select('tel')->first();
+$num2=$numm2['tel'];
+$description2='Ordre de mission';
+$dossiersms2 = Dossier::find($iddoss);
+$dateheure2 = str_replace('T', ' ', $omparent['dateheuredep']);
+$dateheures2=date('d/m/Y H:i',strtotime($dateheure2));
+$dossier2= $dossiersms2['reference_medic'];
+$contenu2=$dossier2." : Départ base le ".$dateheures2." mission (Ambulance) sur ".$omparent['lvehicule'] ." à destination de ".$omparent['CL_lieuprest_pc'].". Confirmer réception avec ref";
+  $contenu2= str_replace ( '&' ,'' ,$contenu2);
+        $contenu2= str_replace ( '<' ,'' ,$contenu2);
+        $contenu2= str_replace ( '>' ,'' ,$contenu2);
+
+
+        $xmlString2 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num2.'</gsm>
+            <texte>'.$contenu2.'</texte>
+
+        </sms>';
+
+        $date2=date('dmYHis');
+        $filepath2 = storage_path() . '/SENDSMS/sms_'.$num2.'_'.$date2.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath2,$xmlString2,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user2= auth()->user();
+        $nomuser2=$user2->name.' '.$user2->lastname;
+        $from2='sms najda '.$nomuser2;
+        $par2=Auth::id();
+
+        $envoye2 = new Envoye([
+            'emetteur' => $from2,
+            'destinataire' => $num2,
+            'sujet' => $description2,
+            'description' => $description2,
+            'contenu'=> $contenu2,
+            'statut'=> 1,
+            'par'=> $par2,
+            'dossier'=>$dossier2,
+            'type'=>'sms'
+        ]);
+
+        $envoye2->save();
+
+
+        //Log::info('[Agent: '.$nomuser2.'] Envoi de SMS à '.$num2);
+$desc=' Envoi de SMS à '.$num2 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser2,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+if(isset($idambulancier22) && $idambulancier22!="" )
+{
+$numm3= Personne::where('id', $idambulancier22)->select('tel')->first();
+$num3=$numm3['tel'];
+$description3="Annulation de l'ordre de mission";
+$dossiersms3 = Dossier::find($iddoss);
+$dateheure3 = str_replace('T', ' ', $omparent['dateheuredep']);
+$dateheures3=date('d/m/Y H:i',strtotime($dateheure3));
+$dossier3= $dossiersms3['reference_medic'];
+$contenu3="Annulation mission (Ambulance) ref ".$dossier3. " du ".$dateheures3;
+  $contenu3= str_replace ( '&' ,'' ,$contenu3);
+        $contenu3= str_replace ( '<' ,'' ,$contenu3);
+        $contenu3= str_replace ( '>' ,'' ,$contenu3);
+
+
+        $xmlString3 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num3.'</gsm>
+            <texte>'.$contenu3.'</texte>
+        </sms>';
+
+        $date3=date('dmYHis');
+        $filepath3 = storage_path() . '/SENDSMS/sms_'.$num3.'_'.$date3.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath3,$xmlString3,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user3 = auth()->user();
+        $nomuser3=$user3->name.' '.$user3->lastname;
+        $from3='sms najda '.$nomuser3;
+        $par3=Auth::id();
+
+        $envoye3 = new Envoye([
+            'emetteur' => $from3,
+            'destinataire' => $num3,
+            'sujet' => $description3,
+            'description' => $description3,
+            'contenu'=> $contenu3,
+            'statut'=> 1,
+            'par'=> $par3,
+            'dossier'=>$dossier3,
+            'type'=>'sms'
+        ]);
+
+        $envoye3->save();
+
+
+       // Log::info('[Agent: '.$nomuser3.'] Envoi de SMS à '.$num3);
+$desc=' Envoi de SMS à '.$num3 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser3,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+
+}
+
+
+}
+$lparamed=$omparent2['lparamed'];
+if(isset($omparent['idparamed']) && $omparent['idparamed']!="" && $omparent['lparamed']!=$lparamed)
+{
+$numm4= Personne::where('id', $omparent['idparamed'])->select('tel')->first();
+$num4=$numm4['tel'];
+$description4='Ordre de mission';
+$dossiersms4 = Dossier::find($iddoss);
+$dateheure4 = str_replace('T', ' ', $omparent['dateheuredep']);
+$dateheures4=date('d/m/Y H:i',strtotime($dateheure4));
+$dossier4= $dossiersms4['reference_medic'];
+$contenu4=$dossier4." : Départ base le ".$dateheures4." mission (Ambulance) sur ".$omparent['lvehicule'] ." à destination de ".$omparent['CL_lieuprest_pc'].". Confirmer réception avec ref";
+  $contenu4= str_replace ( '&' ,'' ,$contenu4);
+        $contenu4= str_replace ( '<' ,'' ,$contenu4);
+        $contenu4= str_replace ( '>' ,'' ,$contenu4);
+
+
+        $xmlString4 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num4.'</gsm>
+            <texte>'.$contenu4.'</texte>
+        </sms>';
+
+        $date4=date('dmYHis');
+        $filepath4 = storage_path() . '/SENDSMS/sms_'.$num4.'_'.$date4.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath4,$xmlString4,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user4= auth()->user();
+        $nomuser4=$user4->name.' '.$user4->lastname;
+        $from4='sms najda '.$nomuser4;
+        $par4=Auth::id();
+
+        $envoye4 = new Envoye([
+            'emetteur' => $from4,
+            'destinataire' => $num4,
+            'sujet' => $description4,
+            'description' => $description4,
+            'contenu'=> $contenu4,
+            'statut'=> 1,
+            'par'=> $par4,
+            'dossier'=>$dossier4,
+            'type'=>'sms'
+        ]);
+
+        $envoye4->save();
+
+
+        //Log::info('[Agent: '.$nomuser4.'] Envoi de SMS à '.$num4);
+$desc=' Envoi de SMS à '.$num4 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser4,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+if(isset($idparamed2) && $idparamed2!="" )
+{
+$numm5= Personne::where('id', $idparamed2)->select('tel')->first();
+$num5=$numm5['tel'];
+$description5="Annulation de l'ordre de mission";
+$dossiersms5 = Dossier::find($iddoss);
+$dateheure5 = str_replace('T', ' ', $omparent['dateheuredep']);
+$dateheures5=date('d/m/Y H:i',strtotime($dateheure5));
+$dossier5= $dossiersms5['reference_medic'];
+$contenu5="Annulation mission (Ambulance) ref ".$dossier5. " du ".$dateheures5;
+  $contenu5= str_replace ( '&' ,'' ,$contenu5);
+        $contenu5= str_replace ( '<' ,'' ,$contenu5);
+        $contenu5= str_replace ( '>' ,'' ,$contenu5);
+
+
+        $xmlString5 = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num5.'</gsm>
+            <texte>'.$contenu5.'</texte>
+        </sms>';
+
+        $date5=date('dmYHis');
+        $filepath5 = storage_path() . '/SENDSMS/sms_'.$num5.'_'.$date5.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath5,$xmlString5,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user5 = auth()->user();
+        $nomuser5=$user5->name.' '.$user5->lastname;
+        $from5='sms najda '.$nomuser5;
+        $par5=Auth::id();
+
+        $envoye5 = new Envoye([
+            'emetteur' => $from5,
+            'destinataire' => $num5,
+            'sujet' => $description5,
+            'description' => $description5,
+            'contenu'=> $contenu5,
+            'statut'=> 1,
+            'par'=> $par5,
+            'dossier'=>$dossier5,
+            'type'=>'sms'
+        ]);
+
+        $envoye5->save();
+
+
+       // Log::info('[Agent: '.$nomuser5.'] Envoi de SMS à '.$num5);
+$desc=' Envoi de SMS à '.$num5 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser5,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+
+}
+
+
+}
+}
+
 $id=$omambulance->id;
 DB::table('validation_omambulance')->insert(
                ['idom' => $id,
@@ -9768,6 +10175,175 @@ if( isset($omparent['km_arrive']) && !empty($omparent['km_arrive']) && isset($om
 	                     $voiture->update(['km'=>$omparent['km_arrive']]);
 
 	                	}
+$parent = $omparent['parent'];
+				$omparent2=OMRemorquage::where('id', $parent)->first();
+$chauff2=Personne::where('name', $omparent2['lchauff'])->select('id')->first();
+
+   $idchauff2 =$chauff2['id']  ; 
+if (isset($omparent['complete']) && ! empty($omparent['complete']))
+{
+$lchauff=$omparent2['lchauff'];
+if(isset($omparent['idchauff']) && $omparent['idchauff']!="" && $omparent['lchauff']!=$lchauff)
+{
+$numm= Personne::where('id', $omparent['idchauff'])->select('tel')->first();
+$num=$numm['tel'];
+$description='Ordre de mission';
+$dossiersms = Dossier::find($iddoss);
+$dateheure = str_replace('T', ' ', $omparent['dateheuredep']);
+$dateheures=date('d/m/Y H:i',strtotime($dateheure));
+$dossier= $dossiersms['reference_medic'];
+$contenu=$dossier." : Départ base le ".$dateheures." mission (Remorquage) sur ".$omparent['lvehicule'] ." à destination de ".$omparent['CL_lieuprest_pc'].". Confirmer réception avec ref";
+  $contenu= str_replace ( '&' ,'' ,$contenu);
+        $contenu= str_replace ( '<' ,'' ,$contenu);
+        $contenu= str_replace ( '>' ,'' ,$contenu);
+
+ $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+
+            <gsm>'.$num.'</gsm>
+            <texte>'.$contenu.'</texte>
+        </sms>';
+
+        $date=date('dmYHis');
+        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+       file_put_contents($filepath,$xmlString,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user = auth()->user();
+
+        $nomuser=$user->name.' '.$user->lastname;
+
+        $from='sms najda '.$nomuser;
+
+        $par=Auth::id();
+
+
+
+        $envoye = new Envoye([
+
+            'emetteur' => $from,
+
+            'destinataire' => $num,
+
+            'sujet' => $description,
+
+            'description' => $description,
+
+            'contenu'=> $contenu,
+
+            'statut'=> 1,
+
+            'par'=> $par,
+
+            'dossier'=>$dossier,
+
+            'type'=>'sms'
+
+        ]);
+
+
+
+        $envoye->save();
+
+
+
+
+
+       // Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+
+$desc=' Envoi de SMS à '.$num ;
+
+ $hist = new Historique([
+
+              'description' => $desc,
+
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+if(isset($idchauff2) && $idchauff2!="" )
+{
+$numm1= Personne::where('id', $idchauff2)->select('tel')->first();
+$num1=$numm1['tel'];
+$description1="Annulation de l'ordre de mission";
+$dossiersms1 = Dossier::find($iddoss);
+$dateheure1 = str_replace('T', ' ', $omparent['dateheuredep']);
+$dateheures1=date('d/m/Y H:i',strtotime($dateheure1));
+$dossier1= $dossiersms1['reference_medic'];
+$contenu1="Annulation mission (Remorquage) ref ".$dossier1. " du ".$dateheures1 ;
+  $contenu1= str_replace ( '&' ,'' ,$contenu1);
+        $contenu1= str_replace ( '<' ,'' ,$contenu1);
+
+        $contenu1= str_replace ( '>' ,'' ,$contenu1);
+
+
+        $xmlString1 = '<?xml version="1.0" encoding="UTF-8" ?>
+
+        <sms>
+            <gsm>'.$num1.'</gsm>
+            <texte>'.$contenu1.'</texte>
+        </sms>';
+
+        $date1=date('dmYHis');
+        $filepath1 = storage_path() . '/SENDSMS/sms_'.$num1.'_'.$date1.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+      file_put_contents($filepath1,$xmlString1,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user1 = auth()->user();
+        $nomuser1=$user1->name.' '.$user1->lastname;
+        $from1='sms najda '.$nomuser1;
+        $par1=Auth::id();
+
+        $envoye1 = new Envoye([
+
+            'emetteur' => $from1,
+            'destinataire' => $num1,
+            'sujet' => $description1,
+            'description' => $description1,
+
+            'contenu'=> $contenu1,
+            'statut'=> 1,
+            'par'=> $par1,
+            'dossier'=>$dossier1,
+            'type'=>'sms'
+        ]);
+
+        $envoye1->save();
+
+
+        //Log::info('[Agent: '.$nomuser1.'] Envoi de SMS à '.$num1);
+$desc=' Envoi de SMS à '.$num1 ;
+ $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser1,
+             'user_id'=>auth::user()->id,
+        ]);	
+		
+		$hist->save();
+
+
+
+}
+
+
+}
+
+}
 $id=$omremorquage->id;
 DB::table('validation_omremorquage')->insert(
                ['idom' => $id,
