@@ -142,7 +142,7 @@ class OrdreMissionsController extends Controller
                 		}
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }}*/
-  if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+ /* if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
@@ -163,7 +163,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 	                     
 	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-	                	}
+	                	}*/
 
             
 
@@ -689,7 +689,7 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
 	                }  }
 */
 
- if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+ /*if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
@@ -710,7 +710,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 	                     
 	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-	                	}
+	                	}*/
              
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
@@ -2691,7 +2691,7 @@ intern
 
 
                }*/
-  if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+ /* if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
 	                     
@@ -2712,7 +2712,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['v
 	                     
 	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-	                	}
+	                	}*/
 
                 /* bloc test */
                 if ($_POST['affectea'] !== "interne")
@@ -3695,7 +3695,7 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
 	                }
 
                }*/
-  if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+ /* if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
 	                     
@@ -3717,7 +3717,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['v
 	                     
 	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-	                	}
+	                	}*/
 
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
@@ -5986,7 +5986,7 @@ $omparent2=OMRemorquage::where('id', $parent)->first();
 
 
                }*/
-if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+/*if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
@@ -6007,7 +6007,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 	                     
 	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-	                	}
+	                	}*/
 
                     /* bloc test */
 	                if ($_POST['affectea'] !== "interne")
@@ -6474,7 +6474,7 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
 
 
                }*/
-if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+/*if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
@@ -6495,7 +6495,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 	                     
 	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-	                	}
+	                	}*/
 
 
                     // affecter date  prévue destination ( prévue fin de mission)
@@ -9403,6 +9403,28 @@ $superviseur=  $nom.' '.$prenom.' / '.date('d/m/Y H:i', strtotime(str_replace('T
 	        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
                    $omtaxi = $omparent->replicate();
  $omtaxi->save(); 
+ if( isset($omparent['cartecarburant']) && !empty($omparent['cartecarburant']) && isset($omparent['idvehic']) && !empty($omparent['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['idvehic'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$omparent['cartecarburant']]);
+
+	                	}
+ if( isset($omparent['cartetelepeage']) && !empty($omparent['cartetelepeage'])  && isset($omparent['idvehic']) && !empty($omparent['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['idvehic'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$omparent['cartetelepeage']]);
+
+	                	}
+                  
+if( isset($omparent['km_arrive']) && !empty($omparent['km_arrive']) && isset($omparent['idvehic']) && !empty($omparent['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['idvehic'])->first();
+	                     
+	                     $voiture->update(['km'=>$omparent['km_arrive']]);
+
+	                	}
 $id=$omtaxi['id'];
 DB::table('validation_omtaxi')->insert(
                ['idom' => $id,
@@ -9474,6 +9496,29 @@ $superviseur=  $nom.' '.$prenom.' / '.date('d/m/Y H:i', strtotime(str_replace('T
 	        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
                    $omambulance = $omparent->replicate();
  $omambulance->save(); 
+if( isset($omparent['cartecarburant']) && !empty($omparent['cartecarburant']) && isset($omparent['vehicID']) && !empty($omparent['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['vehicID'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$omparent['cartecarburant']]);
+
+	                	}
+ if( isset($omparent['cartetelepeage']) && !empty($omparent['cartetelepeage']) && isset($omparent['vehicID']) && !empty($omparent['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['vehicID'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$omparent['cartetelepeage']]);
+
+	                	}
+
+                  
+if( isset($omparent['km_arrive']) && !empty($omparent['km_arrive']) && isset($omparent['vehicID']) && !empty($omparent['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['vehicID'])->first();
+	                     
+	                     $voiture->update(['km'=>$omparent['km_arrive']]);
+
+	                	}
 $id=$omambulance->id;
 DB::table('validation_omambulance')->insert(
                ['idom' => $id,
@@ -9545,6 +9590,28 @@ $superviseur=  $nom.' '.$prenom.' / '.date('d/m/Y H:i', strtotime(str_replace('T
 	        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
                    $omremorquage = $omparent->replicate();
 $omremorquage->save(); 
+if( isset($omparent['cartecarburant']) && !empty($omparent['cartecarburant']) && isset($omparent['idvehic']) && !empty($omparent['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['idvehic'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$omparent['cartecarburant']]);
+
+	                	}
+ if( isset($omparent['cartetelepeage']) && !empty($omparent['cartetelepeage'])  && isset($omparent['idvehic']) && !empty($omparent['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['idvehic'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$omparent['cartetelepeage']]);
+
+	                	}
+                  
+if( isset($omparent['km_arrive']) && !empty($omparent['km_arrive']) && isset($omparent['idvehic']) && !empty($omparent['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$omparent['idvehic'])->first();
+	                     
+	                     $voiture->update(['km'=>$omparent['km_arrive']]);
+
+	                	}
 $id=$omremorquage->id;
 DB::table('validation_omremorquage')->insert(
                ['idom' => $id,
