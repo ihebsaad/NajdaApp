@@ -1413,7 +1413,7 @@ echo "['Non ',    ".$count_retour_non."] ";
                              </div>
 
 
-                         </form>
+                        
 
                      </div>
                      <div class="modal-footer">
@@ -1422,6 +1422,7 @@ echo "['Non ',    ".$count_retour_non."] ";
                      </div>
                  </div>
              </div>
+ </form>
          </div>
      </div>
 
@@ -2325,7 +2326,7 @@ else{
 
     function resetForm(form) // Reset button clicked
     {
-        form.myButton.disabled = false;
+       form.myButton.disabled = false;
         form.myButton.value = "Submit";
     }
 
