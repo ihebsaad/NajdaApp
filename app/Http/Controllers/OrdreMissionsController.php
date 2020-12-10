@@ -2598,7 +2598,7 @@ $idambulancier22=$omparent2['idambulancier2'];*/
         			$parent = $_POST['parent'];
 
                 	$count = OMAmbulance::where('parent',$parent)->count();
-                	OMAmbulance::where('id', $parent)->update(['dernier' => 0 ,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
+                	OMAmbulance::where('id', $parent)->update(['dernier' => 0 ,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => "",'vehicIDvald' => "",'idparamedvald' => "",'idambulancier1vald' => "",'idambulancier2vald' => ""]);
 			        $omparent=OMAmbulance::where('id', $parent)->first();
 			        $filename='ambulance_Remplace-'.$parent;
 
@@ -3191,7 +3191,7 @@ return json_encode($omarray);
         			{ $prestambulance = $_POST['type_affectation_post'];
 					} else { 
 						$prestambulance = $_POST['type_affectation'];}
-        			OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
+        			OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => "",'vehicIDvald' => "",'idparamedvald' => "",'idambulancier1vald' =>"",'idambulancier2vald' =>""]);
         			$omparent=OMAmbulance::where('id', $parent)->first();
         			$filename='ambulance_Complet-'.$parent;
         			$name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -9002,7 +9002,7 @@ $desc=' Envoi de SMS à '.$num2 ;
 		
 		$hist->save();
 }}
-	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
+	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => "",'vehicIDvald' => "",'idparamedvald' => "",'idambulancier1vald' => "",'idambulancier2vald' => ""]);
 	        $omparent=OMAmbulance::where('id', $parent)->first();
 $idprestation=$omparent['idprestation'];
  $filename='ambulance_annulation-'.$parent;
@@ -9588,7 +9588,7 @@ DB::table('validation_omtaxi')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMTaxi::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at'],'idvehicvald' => $omparent['idvehic'],'idchauffvald' => $omparent['idchauff']]);           
+OMTaxi::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>NOW(),'idvehicvald' => $omparent['idvehic'],'idchauffvald' => $omparent['idchauff']]);           
 	 OMTaxi::where('id', $omparent['id'])->delete();           
 	if ($omtaxi->save()) {
 
@@ -10089,7 +10089,7 @@ DB::table('validation_omambulance')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMAmbulance::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at']]);           
+OMAmbulance::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>NOW(),'vehicIDvald' => $omparent['vehicID'],'idparamedvald' => $omparent['idparamed'],'idambulancier1vald' => $omparent['idambulancier1'],'idambulancier2vald' => $omparent['idambulancier2']]);           
 	OMAmbulance::where('id', $omparent['id'])->delete();
 if ($omambulance->save()) {
 
@@ -10351,7 +10351,7 @@ DB::table('validation_omremorquage')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMRemorquage::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at']]);           
+OMRemorquage::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>NOW()]);           
 	OMRemorquage::where('id', $omparent['id'])->delete();
        if ($omremorquage->save()) {
 
