@@ -42,7 +42,7 @@ class OrdreMissionsController extends Controller
                                 $parent = $_POST['parent'];
 				$omparent2=OMTaxi::where('id', $parent)->first();
                                 //$idchauff2=$omparent2['idchauff'];
-				OMTaxi::where('id', $parent)->update(['idvehic' => "",'idchauff' => ""]);
+				OMTaxi::where('id', $parent)->update(['idvehic' => "",'idvehicvald' => "",'idchauff' => "",'idchauffvald' => ""]);
 			}
 
         // verifier si remplacement ou annule
@@ -8708,7 +8708,7 @@ $desc=' Envoi de SMS à '.$num ;
 }}
 
 	    	//$count = OMTaxi::where('parent',$parent)->count();
-	    	OMTaxi::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
+	    	OMTaxi::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idvehicvald' => "",'idchauff' => "",'idchauffvald' => ""]);
 	        $omparent=OMTaxi::where('id', $parent)->first();
 $idprestation=$omparent['idprestation'];
 $filename='taxi_annulation-'.$parent;
@@ -9588,7 +9588,7 @@ DB::table('validation_omtaxi')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMTaxi::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at']]);           
+OMTaxi::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at'],'idvehicvald' => $omparent['idvehic'],'idchauffvald' => $omparent['idchauff']]);           
 	 OMTaxi::where('id', $omparent['id'])->delete();           
 	if ($omtaxi->save()) {
 
