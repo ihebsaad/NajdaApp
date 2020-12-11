@@ -5768,7 +5768,7 @@ public function pdfvalideomambulance()
 						$parent = $_POST['parent'];
 $omparent2=OMRemorquage::where('id', $parent)->first();
                                 //$idchauff2=$omparent2['idchauff'];
-						OMRemorquage::where('id', $parent)->update(['idvehic' => "",'idchauff' => ""]);
+						OMRemorquage::where('id', $parent)->update(['idvehic' => "",'idchauff' => "",'idvehicvald' => "",'idchauffvald' =>""]);
 					}
                 // MAJ disponibilite vehicule
 
@@ -9175,7 +9175,7 @@ $desc=' Envoi de SMS à '.$num ;
 
 }}
     
-	    	OMRemorquage::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
+	    	OMRemorquage::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => "",'idvehicvald' =>"",'idchauffvald' => ""]);
 	        $omparent=OMRemorquage::where('id', $parent)->first();
 $idprestation=$omparent['idprestation'];
 $filename='remorquage_annulation-'.$parent;
@@ -10351,7 +10351,7 @@ DB::table('validation_omremorquage')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMRemorquage::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>NOW()]);           
+OMRemorquage::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>NOW(),'idvehicvald' => $omparent['idvehic'],'idchauffvald' => $omparent['idchauff']]);           
 	OMRemorquage::where('id', $omparent['id'])->delete();
        if ($omremorquage->save()) {
 
