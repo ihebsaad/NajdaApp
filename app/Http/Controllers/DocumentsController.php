@@ -38,8 +38,15 @@ $garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assu
 
         $arrfile = Template_doc::where('id', $templateid)->first();
         $infodossier = Dossier::where('id', $dossier)->first();
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+{if($dossiertpa['type_affectation']==="MEDIC")
+{
+        $file=public_path($arrfile['path_m']);}
+else
+{$file=public_path($arrfile['path']);}}
+else
+{$file=public_path($arrfile['path']);}
 
-        $file=public_path($arrfile['path']);
             
             $champsArray = explode(',', $arrfile['champs']);
 
@@ -57,14 +64,45 @@ $garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assu
                 Document::where('id', $parent)->update(['dernier' => 0]);
 
                 if (isset($_POST['annule']))
-                    {$file=public_path($arrfile['template_annulation']);}
+                    {
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+{if($dossiertpa['type_affectation']==="MEDIC")
+{
+       $file=public_path($arrfile['template_annulation_m']);}
+else
+{ $file=public_path($arrfile['template_annulation']);}}
+else
+{ $file=public_path($arrfile['template_annulation']);}}
                 else {
 if(isset($_POST['modif']) && $_POST['modif']=='0')
 {
-$file=public_path($arrfile['template_remplace']);}
+
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+{if($dossiertpa['type_affectation']==="MEDIC")
+{
+       $file=public_path($arrfile['template_remplace_m']);}
+else
+{ $file=public_path($arrfile['template_remplace']);}}
+else
+{ $file=public_path($arrfile['template_remplace']);}
+
+}
 if(isset($_POST['modif']) && $_POST['modif']==='1')
 {
-$file=public_path($arrfile['template_modif']);}}
+
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+{if($dossiertpa['type_affectation']==="MEDIC")
+{
+       $file=public_path($arrfile['template_modif_m']);}
+else
+{ $file=public_path($arrfile['template_modif']);}}
+else
+{ $file=public_path($arrfile['template_modif']);}
+
+}
+
+
+}
             }
         }
         //return $_POST;
@@ -1375,7 +1413,20 @@ if($rub===0)
                 $array = array();
 
                 $array += [ 'templatehtml' => utf8_encode($arrfile['template_html'])];
-                $array += [ 'templatertf' => utf8_encode($arrfile['path'])];
+
+
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+{if($dossiertpa['type_affectation']==="MEDIC")
+{
+         $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
+else
+{    $array += [ 'templatertf' => utf8_encode($arrfile['path'])];}}
+else
+{    $array += [ 'templatertf' => utf8_encode($arrfile['path'])];}
+
+
+
+             
 
 
                 // ajout identification des tags
@@ -2019,7 +2070,15 @@ public function historique(Request $request)
 
         $arrfile = Template_doc::where('id', $templateid)->first();
         // template annulation
-        $file=public_path($arrfile['template_annulation']);
+       
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+{if($infodossier['type_affectation']==="MEDIC")
+{
+       $file=public_path($arrfile['template_annulation_m']);}
+else
+{  $file=public_path($arrfile['template_annulation']);}}
+else
+{  $file=public_path($arrfile['template_annulation']);}
         $mc=round(microtime(true) * 1000);
         $datees = strftime("%d-%m-%Y"."_".$mc); 
         $datesc = strftime("%d-%m-%Y"); 
