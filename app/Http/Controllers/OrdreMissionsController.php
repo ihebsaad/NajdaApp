@@ -2468,6 +2468,11 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
+                
+                $format = "Y-m-d\TH:i";
+               // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
+                $dateom = \DateTime::createFromFormat($format,$omtaxi->CL_heuredateRDV);
+
                 if($notes && count($notes)>0)
                 {
 
@@ -2476,8 +2481,13 @@ return json_encode($omarray);
                    {
                     if(stripos(substr($nt->villemission,0,11),$output) !== false )
                      {
+                       $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
+
+                       if($datenote>=$dateom)
+                       {
 
                        $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission taxi dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************************; ' ;
+                       }
                      }
                    }
 
@@ -2511,15 +2521,25 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
+                 $format = "Y-m-d\TH:i";
+               // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
+                $dateom = \DateTime::createFromFormat($format, $omambulance->CL_heuredateRDV);
+
+
                 if($notes && count($notes)>0)
                 {
-
+                  
                 foreach ($notes as $nt) {
                  if($output && !empty($output))
                    {
                     if(stripos(substr($nt->villemission,0,11),$output) !== false)
                      {
+                       $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
+
+                       if($datenote>=$dateom)
+                       {
                        $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission ambulance dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');******************************; ' ;
+                       }
                      }
                    }
 
@@ -2553,6 +2573,11 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
+                 $format = "Y-m-d\TH:i";
+               // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
+                $dateom = \DateTime::createFromFormat($format,$omremorquage->CL_heuredateRDV);
+
+
                 if($notes && count($notes)>0)
                 {
 
@@ -2561,7 +2586,11 @@ return json_encode($omarray);
                    {
                     if(stripos(substr($nt->villemission,0,11),$output) !== false)
                      {
+                      $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
+                      if($datenote>=$dateom)
+                       {
                        $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission remorquage dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************; ' ;
+                       }
                      }
                    }
 
