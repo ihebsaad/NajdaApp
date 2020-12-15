@@ -44,6 +44,17 @@ if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['no
         $file=public_path($arrfile['path_m']);}
 else
 {$file=public_path($arrfile['path']);}}
+else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
+{ if($dossiertpa['type_affectation']==="MEDIC")
+{
+        $file=public_path($arrfile['path_m']);}
+else if($dossiertpa['type_affectation']==="Medic International")
+{
+        $file=public_path($arrfile['path_m']);}
+else
+{$file=public_path($arrfile['path']);}
+
+}
 else
 {$file=public_path($arrfile['path']);}
 
@@ -71,8 +82,28 @@ if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE  || stristr($arrfile['n
        $file=public_path($arrfile['template_annulation_m']);}
 else
 { $file=public_path($arrfile['template_annulation']);}}
+
+
+else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
+{ if($dossiertpa['type_affectation']==="MEDIC")
+{
+      $file=public_path($arrfile['template_annulation_m']);}
+else if($dossiertpa['type_affectation']==="Medic International")
+{
+        $file=public_path($arrfile['template_annulation_m']);}
 else
-{ $file=public_path($arrfile['template_annulation']);}}
+{$file=public_path($arrfile['template_annulation']);}
+
+}
+
+else
+{ $file=public_path($arrfile['template_annulation']);}
+
+
+
+
+
+}
                 else {
 if(isset($_POST['modif']) && $_POST['modif']=='0')
 {
@@ -83,6 +114,18 @@ if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['no
        $file=public_path($arrfile['template_remplace_m']);}
 else
 { $file=public_path($arrfile['template_remplace']);}}
+else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
+{ if($dossiertpa['type_affectation']==="MEDIC")
+{
+       $file=public_path($arrfile['template_remplace_m']);}
+else if($dossiertpa['type_affectation']==="Medic International")
+{
+        $file=public_path($arrfile['template_remplace_m']);}
+else
+{$file=public_path($arrfile['template_remplace']);}
+
+}
+
 else
 { $file=public_path($arrfile['template_remplace']);}
 
@@ -96,6 +139,17 @@ if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['no
        $file=public_path($arrfile['template_modif_m']);}
 else
 { $file=public_path($arrfile['template_modif']);}}
+else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
+{ if($dossiertpa['type_affectation']==="MEDIC")
+{
+       $file=public_path($arrfile['template_modif_m']);}
+else if($dossiertpa['type_affectation']==="Medic International")
+{
+      $file=public_path($arrfile['template_modif_m']);}
+else
+{$file=public_path($arrfile['template_modif']);}
+
+}
 else
 { $file=public_path($arrfile['template_modif']);}
 
@@ -1421,6 +1475,19 @@ if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['no
          $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
 else
 {    $array += [ 'templatertf' => utf8_encode($arrfile['path'])];}}
+
+
+else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
+{ if($dossiertpa['type_affectation']==="MEDIC")
+{
+      $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
+else if($dossiertpa['type_affectation']==="Medic International")
+{
+      $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
+else
+{$array += [ 'templatertf' => utf8_encode($arrfile['path'])];}
+
+}
 else
 {    $array += [ 'templatertf' => utf8_encode($arrfile['path'])];}
 
@@ -2077,6 +2144,18 @@ if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['no
        $file=public_path($arrfile['template_annulation_m']);}
 else
 {  $file=public_path($arrfile['template_annulation']);}}
+
+else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
+{ if($infodossier['type_affectation']==="MEDIC")
+{
+     $file=public_path($arrfile['template_annulation_m']);}
+else if($infodossier['type_affectation']==="Medic International")
+{
+      $file=public_path($arrfile['template_annulation_m']);}
+else
+{$file=public_path($arrfile['template_annulation']);}
+
+}
 else
 {  $file=public_path($arrfile['template_annulation']);}
         $mc=round(microtime(true) * 1000);
