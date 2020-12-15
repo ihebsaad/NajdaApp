@@ -38,7 +38,7 @@ $garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assu
 
         $arrfile = Template_doc::where('id', $templateid)->first();
         $infodossier = Dossier::where('id', $dossier)->first();
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE)
 {if($dossiertpa['type_affectation']==="MEDIC")
 {
         $file=public_path($arrfile['path_m']);}
@@ -65,7 +65,7 @@ else
 
                 if (isset($_POST['annule']))
                     {
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE  || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
 {if($dossiertpa['type_affectation']==="MEDIC")
 {
        $file=public_path($arrfile['template_annulation_m']);}
@@ -77,7 +77,7 @@ else
 if(isset($_POST['modif']) && $_POST['modif']=='0')
 {
 
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
 {if($dossiertpa['type_affectation']==="MEDIC")
 {
        $file=public_path($arrfile['template_remplace_m']);}
@@ -90,7 +90,7 @@ else
 if(isset($_POST['modif']) && $_POST['modif']==='1')
 {
 
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE)
 {if($dossiertpa['type_affectation']==="MEDIC")
 {
        $file=public_path($arrfile['template_modif_m']);}
@@ -1415,7 +1415,7 @@ if($rub===0)
                 $array += [ 'templatehtml' => utf8_encode($arrfile['template_html'])];
 
 
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
 {if($dossiertpa['type_affectation']==="MEDIC")
 {
          $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
@@ -2071,7 +2071,7 @@ public function historique(Request $request)
         $arrfile = Template_doc::where('id', $templateid)->first();
         // template annulation
        
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE )
+if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
 {if($infodossier['type_affectation']==="MEDIC")
 {
        $file=public_path($arrfile['template_annulation_m']);}

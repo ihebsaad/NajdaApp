@@ -101,6 +101,15 @@ foreach ($array_client as $client) {
 		} else {
 	    echo "0 results agent";
 		}
+ $sqldos = "SELECT id,type_affectation FROM dossiers WHERE id=".$iddossier."";
+		$resultdos = $conn->query($sqldos);
+		if ($resultdos->num_rows > 0) {
+	    // output data of each row
+	    $detaildos = $resultdos->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_pharmacie</title>
@@ -318,7 +327,7 @@ else {
 <p class=rvps1><span class=rvts6>Médecin prescripteur : <input name="CL_name_medecin" placeholder="nom du medecin" value="<?php if(isset ($CL_name_medecin)) echo $CL_name_medecin; ?>"></input></span></p>
 <p class=rvps1><span class=rvts6>Montant (TND): <span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></br></span> Montant toutes lettres : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span> dinars</p>
 <p class=rvps1><span class=rvts6><br></span></p>
-<p class=rvps1><span class=rvts8>Nous soussignés, </span><span class=rvts7>Najda Assistance</span><span class=rvts8>, nous engageons par la présente à prendre en charge les frais relatifs à l</span><span class=rvts9>’</span><span class=rvts8>achat des médicaments prescrit pour le compte du (de la) patient(e) ci-dessus.</span><span class=rvts7> </span></p>
+<p class=rvps1><span class=rvts8>Nous soussignés, </span><span class=rvts7><?php if ($detaildos['type_affectation']==='MEDIC')  {echo 'Medic Multiservices'; } else  {echo  'Najda Assistance';}  ?></span><span class=rvts8>, nous engageons par la présente à prendre en charge les frais relatifs à l</span><span class=rvts9>’</span><span class=rvts8>achat des médicaments prescrit pour le compte du (de la) patient(e) ci-dessus.</span><span class=rvts7> </span></p>
 <p><span class=rvts2>Merci de nous adresser votre facture originale par voie postale dans les 20 jours au maximum, accompagnée d</span><span class=rvts10>’</span><span class=rvts2>une copie de la présente prise en charge à l</span><span class=rvts10>’</span><span class=rvts2>adresse susmentionnée en entête.</span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts11>ATTENTION IMPORTANT</span><span class=rvts12> </span></p>
@@ -330,7 +339,7 @@ else {
 <p class=rvps5><span class=rvts16>P/La Gérante</span></p>
 <p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /> </span></p>
 <p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
-<p class=rvps1><span class=rvts2>Plateau TPA</span></p>
+<p class=rvps1><span class=rvts2><?php if ($detaildos['type_affectation']==='MEDIC')  {echo 'Plateau d’assistance médicale'; } else  {echo  'Plateau TPA';}?></span></p>
 <p class=rvps1><span class=rvts2>« courrier électronique, sans signature »</span></p>
 </form>
 <script language="javascript" src="nombre_en_lettre.js"></script>
