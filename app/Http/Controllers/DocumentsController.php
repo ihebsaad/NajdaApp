@@ -50,7 +50,7 @@ else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
         $file=public_path($arrfile['path_m']);}
 else if($dossiertpa['type_affectation']==="Medic International")
 {
-        $file=public_path($arrfile['path_m']);}
+        $file=public_path($arrfile['path_mi']);}
 else
 {$file=public_path($arrfile['path']);}
 
@@ -90,7 +90,7 @@ else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
       $file=public_path($arrfile['template_annulation_m']);}
 else if($dossiertpa['type_affectation']==="Medic International")
 {
-        $file=public_path($arrfile['template_annulation_m']);}
+        $file=public_path($arrfile['template_annulation_mi']);}
 else
 {$file=public_path($arrfile['template_annulation']);}
 
@@ -120,7 +120,7 @@ else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
        $file=public_path($arrfile['template_remplace_m']);}
 else if($dossiertpa['type_affectation']==="Medic International")
 {
-        $file=public_path($arrfile['template_remplace_m']);}
+        $file=public_path($arrfile['template_remplace_mi']);}
 else
 {$file=public_path($arrfile['template_remplace']);}
 
@@ -145,7 +145,7 @@ else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
        $file=public_path($arrfile['template_modif_m']);}
 else if($dossiertpa['type_affectation']==="Medic International")
 {
-      $file=public_path($arrfile['template_modif_m']);}
+      $file=public_path($arrfile['template_modif_mi']);}
 else
 {$file=public_path($arrfile['template_modif']);}
 
@@ -1483,7 +1483,7 @@ else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
       $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
 else if($dossiertpa['type_affectation']==="Medic International")
 {
-      $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
+      $array += [ 'templatertf' => utf8_encode($arrfile['path_mi'])];}
 else
 {$array += [ 'templatertf' => utf8_encode($arrfile['path'])];}
 
@@ -2151,7 +2151,7 @@ else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
      $file=public_path($arrfile['template_annulation_m']);}
 else if($infodossier['type_affectation']==="Medic International")
 {
-      $file=public_path($arrfile['template_annulation_m']);}
+      $file=public_path($arrfile['template_annulation_mi']);}
 else
 {$file=public_path($arrfile['template_annulation']);}
 
