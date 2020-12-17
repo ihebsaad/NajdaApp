@@ -4508,6 +4508,18 @@ document.getElementById('genomhtml').disabled = false;
             var type_affectation = "";
             var nomprestextern = $("#prestselected").val();
             var idprestextern = $("#idprestselected").val();
+if (  ((tempdoc !== 'remplace') &&  (tempdoc !== 'complete') ) && (nomprestextern==="") && (affectea !== "mmentite"))
+        {
+document.getElementById('genomhtml').disabled = false;
+$("#affectationprest").val("Select").change();
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez selectionner le prestataire externe "
+            });
+            return false;
+     
+        }
         }
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();

@@ -1235,7 +1235,7 @@ function ferme()
 
 
      var queryParams = new URLSearchParams(window.location.search);
-alert(queryParams);
+//alert(queryParams);
 queryParams.set("openmodal", '0');
 history.replaceState(null, null, "?"+queryParams.toString());
     }
