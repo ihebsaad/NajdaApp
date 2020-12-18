@@ -20,7 +20,7 @@ use DB;
 use Illuminate\Support\Facades\Mail;
 use Swift_Mailer;
 use App\Historique;
-
+use App\Envoye;
 
 
 
@@ -301,7 +301,9 @@ return "faux";
 
 
         Prestation::where('id', $id)->update(array('statut' => $statut));
+
         $prestation=Prestation::where('id', $id)->first();
+
         $datep=$prestation->date_prestation;
         $dossierid=$prestation->dossier_id;
         $typep=$prestation->type_prestations_id;
@@ -358,6 +360,7 @@ DD-(FP-03/04)-07/01<br>";
         $emails = Adresse::where('nature', 'emailinterv')
             ->where('parent', $prestataire)
             ->pluck('champ');
+//dd($emails);
         $to = array();
 
         foreach ($emails as $email) {
@@ -402,12 +405,12 @@ DD-(FP-03/04)-07/01<br>";
 
         // Mail au SMQ Najda
 
-         //$cc2=array( 'saadiheb@gmail.com');
+        // $cc2=array( 'hammalisirine95@gmail.com');
        $cc2=array( 'nejib.karoui@medicmultiservices.com');
         Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
             $message
-               //  ->to('ihebsaad@gmail.com')
-                 ->to('smq@medicmultiservices.com')
+             //   ->to('hammalisirine120@gmail.com')
+                ->to('smq@medicmultiservices.com')
                 // ->to()
 
                 ->cc($cc2 ?: [])
@@ -421,7 +424,65 @@ DD-(FP-03/04)-07/01<br>";
                    }
                }*/
         });
+if(empty($to))
+{
+$telssms = Adresse::where('nature', 'telinterv')
+            ->where('parent', $prestataire)
+            ->where('typetel', 'Mobile')
+            ->pluck('champ');
 
+foreach($telssms as $telsms)
+{
+  $num = trim($telsms);
+       $contenu =$ref. " Najda Assistance a essayé de vs missionner pour ".$TypePrest.', '.$Specialite." mais vs etiez ".$raison.". Pr contestation/clarification mail smq@medicmultiservices.com ou tel 36003630";
+
+        $description = "Demande de prestation échouée";
+      
+        $dossier= $ref;
+
+        $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num.'</gsm>
+            <texte>'.$contenu.'</texte>
+        </sms>';
+
+        $date=date('dmYHis');
+        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
+
+        echo file_put_contents($filepath,$xmlString,0);
+        //    chmod($filepath, 0755);
+
+        //  umask($old);
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+        $from='sms najda '.$nomuser;
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => $from,
+            'destinataire' => $num,
+            'sujet' => $description,
+            'description' => $description,
+            'contenu'=> $contenu,
+            'statut'=> 1,
+            'par'=> $par,
+            'dossier'=>$dossier,
+            'type'=>'sms'
+        ]);
+
+        $envoye->save();
+
+	  $desc='Envoi de SMS à '.$num;		
+	 $hist = new Historique([
+              'description' => $desc,
+           'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);	$hist->save();}}
     }
 
 
