@@ -137,6 +137,7 @@ return "faux";
 }
         $abn= DossiersController::FullnameAbnDossierById($iddoss);
         $ref= DossiersController::RefDossierById($iddoss);
+$dossiersigent=Dossier::where('id',$iddoss)->first();
 
         $gouvernorat=    PrestatairesController::GouvByid($gouv);
         $Specialite=   PrestatairesController::SpecialiteByid($spec);
@@ -177,14 +178,18 @@ return "faux";
             // if($autorise =='procedure'){$to='ihebsaad@gmail.com';}
                  if($autorise =='procedure'){
                  $to='nejib.karoui@medicmultiservices.com';
+//$to='hammalisirine120@gmail.com';
                  $mr='Dr Karoui';
-                 $cc=array( 'smq@medicmultiservices.com ' );
+                $cc=array( 'smq@medicmultiservices.com ' );
+//$cc=array( 'hammalisirine95@gmail.com' );
                 $sujet = "sélection manuelle d'un prestataire déjà engagé";
 
                  }
                 if($autorise =='nejib'){
                      $to='nejib.karoui@gmail.com';
                     $cc=array( 'smq@medicmultiservices.com ');
+//$to='hammalisirine120@gmail.com';
+//$cc=array( 'hammalisirine95@gmail.com' );
                     $mr='Dr Karoui';
 
                 }
@@ -203,14 +208,131 @@ return "faux";
                 }
 
 
-                    $parametres =  DB::table('parametres')
+                   /* $parametres =  DB::table('parametres')
                     ->where('id','=', 1 )->first();
 
                 $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
                 $swiftTransport->setUsername('24ops@najda-assistance.com');
                 $swiftTransport->setPassword($parametres->pass_N);
                 $fromname="Najda Assistance";
-                $from='24ops@najda-assistance.com';
+                $from='24ops@najda-assistance.com';*/
+$parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+ $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        $swiftTransport->setUsername('24ops@najda-assistance.com');
+        $swiftTransport->setPassword($parametres->pass_N);
+        $fromname="Najda Assistance";
+        $from='24ops@najda-assistance.com';
+$entite="Najda Assistance";
+$signatureentite= $parametres->signature ;
+if($dossiersigent['type_affectation']==="Najda")
+{
+$entite="Najda Assistance";
+$signatureentite= $parametres->signature ;
+
+ $pass_N=$parametres->pass_N ;
+            // $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('24ops@najda-assistance.com');
+            $swiftTransport->setPassword($pass_N);
+$fromname = "Najda Assistance";
+$from = '24ops@najda-assistance.com';
+}
+ if($dossiersigent['type_affectation']==="MEDIC")
+{
+$entite="Medic' Multiservices";
+$signatureentite=$parametres->signature3 ;
+
+$pass_MEDIC =$parametres->pass_MEDIC ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('assistance@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_MEDIC);
+$from ='assistance@medicmultiservices.com';
+$fromname="Medic' Multiservices";
+}
+ if($dossiersigent['type_affectation']==="VAT")
+{
+$entite="Voyages Assistance Tunisie";
+$signatureentite=$parametres->signature2 ;
+$pass_VAT=$parametres->pass_VAT ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('hotels.vat@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_VAT);
+$from ='hotels.vat@medicmultiservices.com';
+$fromname="Voyages Assistance Tunisie";
+}
+if($dossiersigent['type_affectation']==="Medic International")
+{
+$entite="Medic’ International";
+$signatureentite=$parametres->signature6 ;
+ $pass_MI=$parametres->pass_MI ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('operations@medicinternational.tn');
+            $swiftTransport->setPassword($pass_MI);
+$from='operations@medicinternational.tn';
+$fromname="Medic International";
+}
+if($dossiersigent['type_affectation']==="Najda TPA")
+{
+$entite="Najda TPA";
+$signatureentite=$parametres->signature7 ;
+$pass_TPA=$parametres->pass_TPA ;
+          //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('tpa@najda-assistance.com');
+            $swiftTransport->setPassword($pass_TPA);
+$from='tpa@najda-assistance.com';
+$fromname="Najda Assistance (TPA)";
+}
+if($dossiersigent['type_affectation']==="Transport Najda")
+{
+$entite="Najda TPA";
+$signatureentite=$parametres->signature8 ;
+ $pass_TN=$parametres->pass_TN ;
+          //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('taxi@najda-assistance.com');
+            $swiftTransport->setPassword($pass_TN);
+$from='taxi@najda-assistance.com';
+$fromname="Najda Transport";
+
+}
+if($dossiersigent['type_affectation']==="Transport MEDIC")
+{
+$entite="Medic' Multiservices";
+$signatureentite=$parametres->signature4 ;
+ $pass_TM=$parametres->pass_TM ;
+          // $swiftTransport =  new \Swift_SmtpTransport( 'mail.bmail.tn', '25');
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
+            $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_TM);
+$from='ambulance.transp@medicmultiservices.com';
+$fromname="TRANSPORT MEDIC";
+
+}
+if($dossiersigent['type_affectation']==="Transport VAT")
+{
+$entite="Voyages Assistance Tunisie";
+$signatureentite=$parametres->signature5 ;
+ $pass_TV=$parametres->pass_TV ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('vat.transp@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_TV);
+$from='vat.transp@medicmultiservices.com';
+$fromname="Transport VAT";
+}
+if($dossiersigent['type_affectation']==="X-Press")
+{
+$entite="X-Press Remorquage";
+$signatureentite= $parametres->signature9  ;
+$pass_XP=$parametres->pass_XP ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('x-press1@najda-assistance.com');
+            $swiftTransport->setPassword($pass_XP);
+$from='x-press1@najda-assistance.com';
+ $fromname="X-Press remorquage";
+}
+
 
                 $swiftMailer = new Swift_Mailer($swiftTransport);
 
@@ -221,10 +343,10 @@ return "faux";
                 //  $to=array('ihebsaad@gmail.com');
 				
 				                 if($autorise =='procedure'){
-								$contenu = 'Bonjour de Najda, <br><br>sélection manuelle d\'un prestataire déjà engagé par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville ;
+								$contenu = 'Bonjour de '.$entite.', <br><br>sélection manuelle d\'un prestataire déjà engagé par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville.'<br><br><hr style="float:left;"><br><br>' .$signatureentite;
 
 								 }else{
-								$contenu = 'Bonjour de Najda, <br><br>'.$mr.' ,votre autorisation a été utilisée par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville ;
+								$contenu = 'Bonjour de '.$entite.' , <br><br>'.$mr.' ,votre autorisation a été utilisée par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville. '<br><br><hr style="float:left;"><br><br>' .$signatureentite;
 								 }
 
                   // $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
