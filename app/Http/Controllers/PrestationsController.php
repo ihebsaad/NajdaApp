@@ -312,9 +312,8 @@ return "faux";
 
         $abn= DossiersController::FullnameAbnDossierById($dossierid);
         $ref= DossiersController::RefDossierById($dossierid);
-       
-
-         $Specialite=   PrestatairesController::SpecialiteByid($specialite);
+        $dossiersigent=Dossier::where('id',$dossierid)->first();
+        $Specialite=   PrestatairesController::SpecialiteByid($specialite);
         $TypePrest=  PrestatairesController::TypeprestationByid($typep);
 $gouvprest=  PrestatairesController::GouvByid($gouv);
 
@@ -336,21 +335,128 @@ $gouvprest=  PrestatairesController::GouvByid($gouv);
 
         }
         $now=date('d/m/Y H:i');
+ $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+ $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        $swiftTransport->setUsername('24ops@najda-assistance.com');
+        $swiftTransport->setPassword($parametres->pass_N);
+        $fromname="Najda Assistance";
+        $from='24ops@najda-assistance.com';
+$entite="Najda Assistance";
+$signatureentite= $parametres->signature ;
+if($dossiersigent['type_affectation']==="Najda")
+{
+$entite="Najda Assistance";
+$signatureentite= $parametres->signature ;
+
+ $pass_N=$parametres->pass_N ;
+            // $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('24ops@najda-assistance.com');
+            $swiftTransport->setPassword($pass_N);
+$fromname = "Najda Assistance";
+$from = '24ops@najda-assistance.com';
+}
+ if($dossiersigent['type_affectation']==="MEDIC")
+{
+$entite="Medic' Multiservices";
+$signatureentite=$parametres->signature3 ;
+
+$pass_MEDIC =$parametres->pass_MEDIC ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('assistance@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_MEDIC);
+$from ='assistance@medicmultiservices.com';
+$fromname="Medic' Multiservices";
+}
+ if($dossiersigent['type_affectation']==="VAT")
+{
+$entite="Voyages Assistance Tunisie";
+$signatureentite=$parametres->signature2 ;
+$pass_VAT=$parametres->pass_VAT ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('hotels.vat@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_VAT);
+$from ='hotels.vat@medicmultiservices.com';
+$fromname="Voyages Assistance Tunisie";
+}
+if($dossiersigent['type_affectation']==="Medic International")
+{
+$entite="Medic’ International";
+$signatureentite=$parametres->signature6 ;
+ $pass_MI=$parametres->pass_MI ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('operations@medicinternational.tn');
+            $swiftTransport->setPassword($pass_MI);
+$from='operations@medicinternational.tn';
+$fromname="Medic International";
+}
+if($dossiersigent['type_affectation']==="Najda TPA")
+{
+$entite="Najda TPA";
+$signatureentite=$parametres->signature7 ;
+$pass_TPA=$parametres->pass_TPA ;
+          //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('tpa@najda-assistance.com');
+            $swiftTransport->setPassword($pass_TPA);
+$from='tpa@najda-assistance.com';
+$fromname="Najda Assistance (TPA)";
+}
+if($dossiersigent['type_affectation']==="Transport Najda")
+{
+$entite="Najda TPA";
+$signatureentite=$parametres->signature8 ;
+ $pass_TN=$parametres->pass_TN ;
+          //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('taxi@najda-assistance.com');
+            $swiftTransport->setPassword($pass_TN);
+$from='taxi@najda-assistance.com';
+$fromname="Najda Transport";
+
+}
+if($dossiersigent['type_affectation']==="Transport MEDIC")
+{
+$entite="Medic' Multiservices";
+$signatureentite=$parametres->signature4 ;
+ $pass_TM=$parametres->pass_TM ;
+          // $swiftTransport =  new \Swift_SmtpTransport( 'mail.bmail.tn', '25');
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
+            $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_TM);
+$from='ambulance.transp@medicmultiservices.com';
+$fromname="TRANSPORT MEDIC";
+
+}
+if($dossiersigent['type_affectation']==="Transport VAT")
+{
+$entite="Voyages Assistance Tunisie";
+$signatureentite=$parametres->signature5 ;
+ $pass_TV=$parametres->pass_TV ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('vat.transp@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_TV);
+$from='vat.transp@medicmultiservices.com';
+$fromname="Transport VAT";
+}
+if($dossiersigent['type_affectation']==="X-Press")
+{
+$entite="X-Press Remorquage";
+$signatureentite= $parametres->signature9  ;
+$pass_XP=$parametres->pass_XP ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('x-press1@najda-assistance.com');
+            $swiftTransport->setPassword($pass_XP);
+$from='x-press1@najda-assistance.com';
+ $fromname="X-Press remorquage";
+}
+
+
          $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $contenu = 'Bonjour ' . $nomprest .' de Najda Assistance'.',<br>
+        $contenu = 'Bonjour ' . $nomprest .' de '.$entite.',<br>
         Nous avons essayé de vous missionner  le '.$now.' pour la prestation '.$TypePrest.', '.$Specialite.' qui doit avoir lieu le '.$datep.' à  '.$gouvprest.' dans le cadre du dossier  '.$ref.' mais votre tour a été sauté pour la raison suivante : <br>'.$raison.'<br> Si toutefois vous avez une remarque ou commentaire à ce sujet, veuillez SVP nous le signaler par mail à l’adresse smq@medicmultiservices.com  ou par téléphone au 36 00 36 30 et demander à parler à la responsable qualité.<br>
-Avec tous nos remerciements pour votre collaboration.'.'<br><br><hr style="float:left;"><br><br>'."<b>Najda Assistance</b><br>
-www.najda-assistance.com<br>
-Centrale d'alarme/Operations<br>
-24/7 contacts:<br>
-Tel: +216 3600 3600<br>
-Alternative phone #: +33 972441777<br>
-Dernier recours: +216 73 820 000<br>
-Fax: +216 73 820 333<br>
-Email: 24ops@najda-assistance.com<br>
-Skype :'najdassist'<br>
-WhatsApp/SMS: +21628784143<br>
-DD-(FP-03/04)-07/01<br>";
+Avec tous nos remerciements pour votre collaboration.'. '<br><br><hr style="float:left;"><br><br>' .$signatureentite;
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
@@ -371,11 +477,7 @@ DD-(FP-03/04)-07/01<br>";
         $parametres =  DB::table('parametres')
             ->where('id','=', 1 )->first();
 
-        $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
-        $swiftTransport->setUsername('24ops@najda-assistance.com');
-        $swiftTransport->setPassword($parametres->pass_N);
-        $fromname="Najda Assistance";
-        $from='24ops@najda-assistance.com';
+       
 
             
 
@@ -405,11 +507,11 @@ DD-(FP-03/04)-07/01<br>";
 
         // Mail au SMQ Najda
 
-        // $cc2=array( 'hammalisirine95@gmail.com');
-       $cc2=array( 'nejib.karoui@medicmultiservices.com');
+       // $cc2=array( 'hammalisirine95@gmail.com');
+      $cc2=array( 'nejib.karoui@medicmultiservices.com');
         Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
             $message
-             //   ->to('hammalisirine120@gmail.com')
+               //->to('hammalisirine120@gmail.com')
                 ->to('smq@medicmultiservices.com')
                 // ->to()
 
