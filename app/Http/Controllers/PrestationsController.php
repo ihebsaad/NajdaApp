@@ -629,11 +629,11 @@ Avec tous nos remerciements pour votre collaboration.'. '<br><br><hr style="floa
 
         // Mail au SMQ Najda
 
-       // $cc2=array( 'hammalisirine95@gmail.com');
-      $cc2=array( 'nejib.karoui@medicmultiservices.com');
+      // $cc2=array( 'hammalisirine95@gmail.com');
+     $cc2=array( 'nejib.karoui@medicmultiservices.com');
         Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
             $message
-               //->to('hammalisirine120@gmail.com')
+             //  ->to('hammalisirine120@gmail.com')
                 ->to('smq@medicmultiservices.com')
                 // ->to()
 
@@ -658,7 +658,7 @@ $telssms = Adresse::where('nature', 'telinterv')
 foreach($telssms as $telsms)
 {
   $num = trim($telsms);
-       $contenu =$ref. " Najda Assistance a essayé de vs missionner pour ".$TypePrest.', '.$Specialite." mais vs etiez ".$raison.". Pr contestation/clarification mail smq@medicmultiservices.com ou tel 36003630";
+       $contenu =$ref." ".$entite. " a essayé de vs missionner pour ".$TypePrest.', '.$Specialite." mais vs etiez ".$raison.". Pr contestation/clarification mail smq@medicmultiservices.com ou tel 36003630";
 
         $description = "Demande de prestation échouée";
       
