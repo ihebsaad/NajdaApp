@@ -6011,6 +6011,16 @@ if ($from=='faxnajdassist@gmail.com')
             $signatureentite= $parametres->signature9 ;
 
         }
+if ($from=='x-press1@najda-assistance.com')
+        {  
+           $pass_XP=$parametres->pass_XP ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('x-press1@najda-assistance.com');
+            $swiftTransport->setPassword($pass_XP);
+            $fromname="X-Press remorquage";
+            $signatureentite= $parametres->signature9 ;
+
+        }
 
         if ($from=='hotels.vat@medicmultiservices.com')
         {  $pass_VAT=$parametres->pass_VAT ;
@@ -7031,7 +7041,69 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
          $message = Parametre::find(1);
-        $signature = $message["signature"];
+        //$signature = $message["signature"];
+$parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+ $dossiersigent=Dossier::where('id',$iddossier)->first();
+$signatureentite= $parametres->signature ;
+if($dossiersigent['type_affectation']==="Najda")
+{
+$entite="Najda Assistance";
+$signatureentite= $parametres->signature ;
+
+
+}
+ if($dossiersigent['type_affectation']==="MEDIC")
+{
+
+$signatureentite=$parametres->signature3 ;
+
+}
+ if($dossiersigent['type_affectation']==="VAT")
+{
+
+$signatureentite=$parametres->signature2 ;
+
+}
+if($dossiersigent['type_affectation']==="Medic International")
+{
+
+$signatureentite=$parametres->signature6 ;
+ 
+}
+if($dossiersigent['type_affectation']==="Najda TPA")
+{
+
+$signatureentite=$parametres->signature7 ;
+
+}
+if($dossiersigent['type_affectation']==="Transport Najda")
+{
+
+$signatureentite=$parametres->signature8 ;
+ 
+
+}
+if($dossiersigent['type_affectation']==="Transport MEDIC")
+{
+
+$signatureentite=$parametres->signature4 ;
+
+
+}
+if($dossiersigent['type_affectation']==="Transport VAT")
+{
+
+$signatureentite=$parametres->signature5 ;
+
+
+}
+if($dossiersigent['type_affectation']==="X-Press")
+{
+
+
+$signatureentite= $parametres->signature9  ;
+}
 
         if ($langue=='francais'){
 
@@ -7043,7 +7115,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
         }
 
-        $contenu=$mess.'<br><br>'.$signature;
+        $contenu=$mess.'<br><br>'.$signatureentite;
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
                 $message

@@ -1232,7 +1232,7 @@ $hist->save();
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('assistance@medicmultiservices.com');
             $swiftTransport->setPassword($pass_MEDIC);
-            $fromname="Medic International";
+            $fromname="Medic' Multiservices";
             $signatureentite= $parametres->signature3 ;
 
         }
@@ -1263,7 +1263,7 @@ $hist->save();
             $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('operations@medicinternational.tn');
             $swiftTransport->setPassword($pass_MI);
-            $fromname="Medic' Multiservices";
+            $fromname="Medic International";
             $signatureentite= $parametres->signature6 ;
 
         }

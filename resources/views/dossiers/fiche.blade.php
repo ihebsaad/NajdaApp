@@ -2559,6 +2559,67 @@ if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::Ch
                 <div id="formaccuse"  >
                     {{ csrf_field() }}
                     <?php $message= EntreesController::GetParametre($dossier->customer_id);
+$dossiersigent=Dossier::where('id',$dossier->id)->first();
+if($dossiersigent['type_affectation']==="Najda")
+{
+$entite="Najda Assistance";
+
+}
+ if($dossiersigent['type_affectation']==="MEDIC")
+{
+$entite="Medic' Multiservices";
+
+
+}
+ if($dossiersigent['type_affectation']==="VAT")
+{
+$entite="Voyages Assistance Tunisie";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Medic International")
+{
+$entite="Medic’ International";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Najda TPA")
+{
+$entite="Najda TPA";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Transport Najda")
+{
+$entite="Najda TPA";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Transport MEDIC")
+{
+$entite="Medic' Multiservices";
+
+
+}
+if($dossiersigent['type_affectation']==="Transport VAT")
+{
+$entite="Voyages Assistance Tunisie";
+
+
+
+}
+if($dossiersigent['type_affectation']==="X-Press")
+{
+$entite="X-Press Remorquage";
+
+
+
+}
+$message=str_replace('Najda', $entite, $message);
                     //  echo json_encode($message);?>
                <!--     <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php // echo $message   ;?></div>-->
 

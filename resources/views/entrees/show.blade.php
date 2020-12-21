@@ -470,6 +470,69 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
         $from='24ops@najda-assistance.com';
 		if($iddossier>0){
 			$clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
+$dossiersigent=Dossier::where('id',$iddossier)->first();
+if($dossiersigent['type_affectation']==="Najda")
+{
+$entite="Najda Assistance";
+$from = '24ops@najda-assistance.com';
+}
+ if($dossiersigent['type_affectation']==="MEDIC")
+{
+$entite="Medic' Multiservices";
+
+$from ='assistance@medicmultiservices.com';
+
+}
+ if($dossiersigent['type_affectation']==="VAT")
+{
+$entite="Voyages Assistance Tunisie";
+
+$from ='hotels.vat@medicmultiservices.com';
+
+}
+if($dossiersigent['type_affectation']==="Medic International")
+{
+$entite="Medic’ International";
+
+$from='operations@medicinternational.tn';
+
+}
+if($dossiersigent['type_affectation']==="Najda TPA")
+{
+$entite="Najda TPA";
+
+$from='tpa@najda-assistance.com';
+
+}
+if($dossiersigent['type_affectation']==="Transport Najda")
+{
+$entite="Najda TPA";
+$from='taxi@najda-assistance.com';
+
+
+}
+if($dossiersigent['type_affectation']==="Transport MEDIC")
+{
+$entite="Medic' Multiservices";
+
+$from='ambulance.transp@medicmultiservices.com';
+
+}
+if($dossiersigent['type_affectation']==="Transport VAT")
+{
+$entite="Voyages Assistance Tunisie";
+
+$from='vat.transp@medicmultiservices.com';
+
+}
+if($dossiersigent['type_affectation']==="X-Press")
+{
+$entite="X-Press Remorquage";
+
+$from='x-press1@najda-assistance.com';
+
+}
+
         $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
 $adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
 
@@ -567,12 +630,12 @@ $adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
             <div class="editor" >
                 <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  >
 			<?php if ($langue=='francais'){  ?>
-				Bonjour de Najda<br>
+				Bonjour de  <?php echo $entite  ?><br>
 				Nous accusons bonne réception de votre dernier mail demandant le(s) service(s) suivants(s) :<br>
 			<?php	
 			
 			}else{ ?>
-				Hello from Najda<br>
+				Hello from  <?php echo $entite ?><br>
 				We acknowledge receipt of your last email requesting the following service(s)<br>	
 					
 			<?php	}
@@ -580,18 +643,21 @@ $adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
 			$missions=\App\Mission::where('id_entree',$entree['id'] )->get();
 			 echo '<ul>' ;
 			foreach($missions as $miss){
-				echo  '<li><b>' .$miss->nom_type_miss.'</b></li>' ;
+$commentaire=" (".$miss->commentaire.")";
+				echo  '<li><b>' .$miss->nom_type_miss.$commentaire.'</b></li>' ;
 			}
 		  echo '</ul>' ;
  if ($langue=='francais'){  ?>
 				
-				Nous reviendrons vers vous au fur et à mesure que le(s) service(s) demandé(s) sera (seront) organisé(s).
+				Nous en prenons bonne note et reviendrons vers vous pour vous tenir informés au fur et à mesure de l’avancement dans la réalisation du (des) service(s) demandé(s).
 
 			<?php	
 			
 			}else{ ?>
 				
-				We will get back to you once the requested service (s) is (are) organized.
+				We are checking it and we will revert back to you and keep you informed as we establish the organization of the requested service(s).
+<br>
+*This is an automated email, the services are noted in French as in our management system.
 					
 			<?php	}
 			?>
