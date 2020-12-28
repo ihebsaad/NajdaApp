@@ -62,9 +62,12 @@ $sqlvh = "SELECT medecin_traitant3,medecin_traitant, medecin_traitant2 FROM doss
 
         $array_prest = array();
         while($rowvh = $resultvh->fetch_assoc()) {
-            $array_prest[] = array('medecin_traitant' => $rowvh["medecin_traitant"]  );
-            $array_prest[] = array('medecin_traitant' => $rowvh["medecin_traitant2"]  );
-            $array_prest[] = array('medecin_traitant' => $rowvh["medecin_traitant3"]  );
+           $array_prest[] = array('id' => 1,'medecin_traitant' => $rowvh["medecin_traitant"]  );
+$medecin=$rowvh["medecin_traitant"];
+$medecin1=$rowvh["medecin_traitant2"];
+$medecin2=$rowvh["medecin_traitant3"];
+            $array_prest[] = array('id' => 2,'medecin_traitant' => $rowvh["medecin_traitant2"]  );
+            $array_prest[] = array('id' => 3,'medecin_traitant' => $rowvh["medecin_traitant3"]  );
         }}
 $sqlstruc = "SELECT hospital_address3,hospital_address,hospital_address2 FROM dossiers WHERE id=".$iddossier."";
 
@@ -96,6 +99,34 @@ foreach ($array_client as $client) {
 	$IMA="oui";
 }
 }
+ $sqlagt = "SELECT id,nom FROM specialites WHERE id IN (SELECT specialite FROM specialites_typeprestations WHERE type_prestation=15) AND id IN (SELECT specialite FROM specialites_prestataires WHERE prestataire_id  IN (SELECT id FROM prestataires WHERE name='{$medecin}'))";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "";
+		}
+ $sqlagt1 = "SELECT id,nom FROM specialites WHERE id IN (SELECT specialite FROM specialites_typeprestations WHERE type_prestation=15) AND id IN (SELECT specialite FROM specialites_prestataires WHERE prestataire_id  IN (SELECT id FROM prestataires WHERE name='{$medecin1}'))";
+		$resultagt1 = $conn->query($sqlagt1);
+		if ($resultagt1->num_rows > 0) {
+	    // output data of each row
+	    $detailagt1 = $resultagt1->fetch_assoc();
+	    
+		} else {
+	    echo "";
+		}
+$sqlagt2 = "SELECT id,nom FROM specialites WHERE id IN (SELECT specialite FROM specialites_typeprestations WHERE type_prestation=15) AND id IN (SELECT specialite FROM specialites_prestataires WHERE prestataire_id  IN (SELECT id FROM prestataires WHERE name='{$medecin2}'))";
+		$resultagt2 = $conn->query($sqlagt2);
+		if ($resultagt2->num_rows > 0) {
+	    // output data of each row
+	    $detailagt2 = $resultagt2->fetch_assoc();
+	    
+		} else {
+	    echo "";
+		}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
 <html><head><title>v0v3vdqk8khqpdac0lr3ipig4xm8mf3m_RM_francais</title>
@@ -272,8 +303,31 @@ foreach ($array_struc as $struc) {
         <datalist id="inter__medecin">
             <?php
 foreach ($array_prest as $prest) {
-    
-    echo "<option value='".$prest['medecin_traitant']."' >".$prest['medecin_traitant']."</option>"; }
+    if($prest['id']===1)
+    {
+if(!empty($detailagt['nom']))
+{
+$medec='('.$detailagt['nom'].')';}
+else
+{$medec='';}
+    echo "<option value='".$prest['medecin_traitant'].''.$medec."' >".$prest['medecin_traitant'].''.$medec."</option>"; }
+if($prest['id']===2)
+    {
+if(!empty($detailagt1['nom']))
+{
+$medec1='('.$detailagt1['nom'].')';}
+else
+{$medec1='';}
+    echo "<option value='".$prest['medecin_traitant'].''.$medec1."' >".$prest['medecin_traitant'].''.$medec1."</option>"; }
+if($prest['id']===3)
+    {
+if(!empty($detailagt2['nom']))
+{
+$medec2='('.$detailagt2['nom'].')';}
+else
+{$medec2='';}
+    echo "<option value='".$prest['medecin_traitant'].''.$medec2."' >".$prest['medecin_traitant'].''.$medec2."</option>"; }
+  }
 ?>
 </span></p>
 <p class=rvps3><span class=rvts3><br></span></p>
