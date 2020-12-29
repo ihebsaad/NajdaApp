@@ -5953,11 +5953,11 @@ if ($from=='finances@najda-assistance.com')
 }
 
 
-if ($from=='faxnajdassist@gmail.com')
+if ($from=='faxnajda@najda-assistance.com')
 {
-    $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
-    $swiftTransport->setUsername('faxnajdassist@gmail.com');
-    $swiftTransport->setPassword('Naj@gyh+9kkW');
+    $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+    $swiftTransport->setUsername('faxnajda@najda-assistance.com');
+    $swiftTransport->setPassword('Esolutions@2021');
 
 }
         if ($from=='faxnajdassist@najda-assistance.com')
@@ -6872,8 +6872,8 @@ $commentaire = $request->get('commentaire');
         $sujet='1234,Najda,najda,'.$nom2.'@'.$numero.'';
 
 
-        $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
-        $swiftTransport->setUsername('faxnajdassist@gmail.com');
+        $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        $swiftTransport->setUsername('faxnajda@najda-assistance.com');
         $swiftTransport->setPassword($pass_Fax);
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
@@ -6963,7 +6963,7 @@ $commentaire = $request->get('commentaire');
 
         $par=Auth::id();
         $envoye = new Envoye([
-            'emetteur' => 'faxnajdassist@gmail.com', //env('emailenvoi')
+            'emetteur' => 'faxnajda@najda-assistance.com', //env('emailenvoi')
             'destinataire' => $nom .'-'.$numero,
             'par'=> $par,
             'sujet'=> 'Fax - '.$sujet,
@@ -7603,8 +7603,8 @@ else
         $doss = trim( $request->get('dossier'));
         $dossier= $this->RefDossierById($doss);////;
 
-        $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
-        $swiftTransport->setUsername('faxnajdassist@gmail.com');
+        $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        $swiftTransport->setUsername('faxnajda@najda-assistance.com');
         $swiftTransport->setPassword($pass_Fax);
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
