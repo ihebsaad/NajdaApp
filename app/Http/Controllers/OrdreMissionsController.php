@@ -398,7 +398,7 @@ header('Content-type: application/json');
 if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
 
 return json_encode($omarray);
-
+//return($resultatNote);
                 exit();}
         		    //exit();
         		}
@@ -744,7 +744,7 @@ header('Content-type: application/json');
 if(isset($resultatNote)) {$omarray=array('resultatNote'=>$resultatNote,'titre'=>$om['titre'],'parent'=>$om['parent']);} else {$omarray=array('titre'=>$om['titre'],'parent'=>$om['parent']);}
 
 return json_encode($omarray);
-
+//return($resultatNote);
                     exit();
         		}
         	}
@@ -2469,10 +2469,11 @@ return json_encode($omarray);
                 }
 
                 
-                $format = "Y-m-d\TH:i";
+                $format = "Y-m-d H:i:s";
+                $format2= "Y-m-d\TH:i";
                // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
-                $dateom = \DateTime::createFromFormat($format,$omtaxi->CL_heuredateRDV);
-
+                $dateom = \DateTime::createFromFormat($format2,$omtaxi->CL_heuredateRDV);
+                $datenote =false;
                 if($notes && count($notes)>0)
                 {
 
@@ -2493,6 +2494,7 @@ return json_encode($omarray);
 
                  }
                }
+              
 
                return($resultatNote);
 
@@ -2521,9 +2523,10 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
-                 $format = "Y-m-d\TH:i";
+                 $format = "Y-m-d H:i:s";
+                $format2= "Y-m-d\TH:i";
                // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
-                $dateom = \DateTime::createFromFormat($format, $omambulance->CL_heuredateRDV);
+                $dateom = \DateTime::createFromFormat($format2, $omambulance->CL_heuredateRDV);
 
 
                 if($notes && count($notes)>0)
@@ -2573,10 +2576,11 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
-                 $format = "Y-m-d\TH:i";
+                 $format = "Y-m-d H:i:s";
+                $format2= "Y-m-d\TH:i";
                // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
-                $dateom = \DateTime::createFromFormat($format,$omremorquage->CL_heuredateRDV);
-
+                $dateom = \DateTime::createFromFormat($format2,$omremorquage->CL_heuredateRDV);
+                $datenote=false;
 
                 if($notes && count($notes)>0)
                 {
@@ -2596,7 +2600,7 @@ return json_encode($omarray);
 
                  }
                }
-
+               
                return($resultatNote);
 
 
