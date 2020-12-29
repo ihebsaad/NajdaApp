@@ -506,7 +506,7 @@ $from='tpa@najda-assistance.com';
 }
 if($dossiersigent['type_affectation']==="Transport Najda")
 {
-$entite="Najda TPA";
+$entite="Najda Transport";
 $from='taxi@najda-assistance.com';
 
 

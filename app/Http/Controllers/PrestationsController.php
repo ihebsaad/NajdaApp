@@ -286,7 +286,7 @@ $fromname="Najda Assistance (TPA)";
 }
 if($dossiersigent['type_affectation']==="Transport Najda")
 {
-$entite="Najda TPA";
+$entite="Najda Transport";
 $signatureentite=$parametres->signature8 ;
  $pass_TN=$parametres->pass_TN ;
           //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
@@ -527,7 +527,7 @@ $fromname="Najda Assistance (TPA)";
 }
 if($dossiersigent['type_affectation']==="Transport Najda")
 {
-$entite="Najda TPA";
+$entite="Najda Transport";
 $signatureentite=$parametres->signature8 ;
  $pass_TN=$parametres->pass_TN ;
           //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
