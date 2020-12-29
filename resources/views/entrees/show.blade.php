@@ -611,9 +611,28 @@ $adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
         </div>
 
         <?php   ?>
+ <?php
+
+                        $subscriber_name = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_name',$dossiersigent['id']);
+                        $subscriber_lastname = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_lastname',$dossiersigent['id']);
+
+                        if ($from=='tpa@najda-assistance.com') {
+                            $nomabn = $subscriber_name . ' ' . $subscriber_lastname;
+                        }else{
+                            $nomabn = $subscriber_name ;
+                        }
+
+                        if ($langue=='francais'){
+                        $sujet=  $nomabn.'  - V/Réf: '.$dossiersigent['reference_customer'] .' - N/Réf: '.$dossiersigent['reference_medic'];
+
+                        }else{
+                        $sujet=  $nomabn.'  - Y/Ref: '.$dossiersigent['reference_customer'] .' - O/Ref: '.$dossiersigent['reference_medic'] ;
+
+                        }
+                        ?>
         <div class="form-group">
             <label for="sujet">Sujet :</label>
-            <input id="sujet" type="text" class="form-control" name="sujet" required value=" "/>
+            <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $sujet; ?>"/>
 
         </div>
 
