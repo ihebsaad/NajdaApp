@@ -4508,6 +4508,8 @@ document.getElementById('genomhtml').disabled = false;
             var type_affectation = "";
             var nomprestextern = $("#prestselected").val();
             var idprestextern = $("#idprestselected").val();
+            if (srctemp.indexOf("/odm_medic") === -1 )
+            {
 if (  ((tempdoc !== 'remplace') &&  (tempdoc !== 'complete') ) && (nomprestextern==="") && (affectea !== "mmentite"))
         {
 document.getElementById('genomhtml').disabled = false;
@@ -4519,7 +4521,7 @@ $("#affectationprest").val("Select").change();
             });
             return false;
      
-        }
+        }  }
         }
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();
