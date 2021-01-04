@@ -120,7 +120,7 @@ $seance =  DB::table('seance')
                 Emails Interventants
             </a>
         </div>
-		
+		 <?php      if($user->user_type=='admin') { ?>
 	<div class="col-sm-2">
                 <a href="{{ route('clients.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="   fas fa-mail-bulk"></span>
@@ -128,7 +128,7 @@ $seance =  DB::table('seance')
                 Emails Clients
                 </a>
      </div>
-	 
+	 <?php      } ?>
  
 
         
