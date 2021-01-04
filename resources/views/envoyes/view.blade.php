@@ -5,6 +5,7 @@
      <div class="row">
 
         <div class="col-lg-12 ">
+<input type="hidden" id="idenvoye" value="<?php echo $envoye['id']?>" ></input>
          <?php if(isset($envoye['dossier'])){
             $dossierid=App\Http\Controllers\DossiersController::IdDossierByRef(trim($envoye['dossier']));
            /* $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
@@ -87,7 +88,7 @@
                 <?php if ( $envoye->type != 'fax' ) {?>
 				<div class="form-group">
                     <label for="description">Description :</label>
-                    <input id="description" type="text" class="form-control" name="description" required value="{{ $envoye->description }}" />
+                    <input onchange="changing(this)" id="description" type="text" class="form-control" name="description" required value="{{ $envoye->description }}" />
                 </div>
                 <div class="form-group ">
                     <label for="contenu">contenu:</label>
@@ -109,7 +110,7 @@
 				
 				<div class="form-group">
                     <label for="description">Description :</label>
-                    <input id="description" type="text" class="form-control" name="description"   value="{{ $envoye->commentaire }}" />
+                    <input onchange="changing(this)" id="commentaire" type="text" class="form-control" name="commentaire"   value="{{ $envoye->commentaire }}" />
                 </div>
                 <?php } ?>
 
@@ -215,6 +216,33 @@
 
 
         });
+function changing(elm) {
+        var champ = elm.id;
+
+        var val = document.getElementById(champ).value;
+
+        var envoye = $('#idenvoye').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('envoyes.updating') }}",
+            method: "POST",
+            data: {envoye: envoye, champ: champ, val: val, _token: _token},
+            success: function (data) {
+                $('#' + champ).animate({
+                    opacity: '0.3',
+                });
+                $('#' + champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
     </script>
 
 

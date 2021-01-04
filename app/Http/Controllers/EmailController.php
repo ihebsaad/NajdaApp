@@ -6974,6 +6974,7 @@ $commentaire = $request->get('commentaire');
          //   'nb_attach'=> $count,
             'description'=> $description,
             'dossier'=> $dossier,
+ 'commentaire'=> $commentaire,
             // 'reception'=> date('d/m/Y H:i:s'),
 
         ]);

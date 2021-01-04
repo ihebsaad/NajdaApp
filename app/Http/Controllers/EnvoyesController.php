@@ -182,6 +182,20 @@ class EnvoyesController extends Controller
         // return redirect('/envoyes')->with('success', 'enregistré avec succès');
 
     }
+ public function updating(Request $request)
+    {
+        $id= $request->get('envoye');
+        $champ= strval($request->get('champ'));
+        
+            $val= $request->get('val');
+
+       
+        //  $dossier = Dossier::find($id);
+        // $dossier->$champ =   $val;
+        Envoye::where('id', $id)->update(array($champ => $val));
+
+    }
+
 
     /**
      * Display the specified resource.

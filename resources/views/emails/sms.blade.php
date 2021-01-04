@@ -15,12 +15,6 @@
        <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$doss}}" />
 
         <div class="form-group">
-            {{ csrf_field() }}
-            <label for="description">Description:</label>
-            <input id="description" type="text" class="form-control" name="description"     />
-     </div>
-
-        <div class="form-group">
             <?php if($type!='libre') {?>
 
             <label for="destinataire">Destinataire:</label>
@@ -72,6 +66,13 @@
 
 
     </div>
+
+        <div class="form-group">
+            {{ csrf_field() }}
+            <label for="description">Description:</label>
+            <input id="description" type="text" class="form-control" name="description"     />
+     </div>
+
 <?php
 $ref="";
 if (isset($doss)){
@@ -81,7 +82,7 @@ $ref  =  $dossier->reference_medic ;
 ?>
     <div class="form-group">
         <label for="contenu">Message:</label>
-        <textarea  type="text" class="form-control" name="message" style="height:150px"><?php if ($ref!=""){echo $ref; ?>(ref à inclure dans votre réponse SVP)<?php }?></textarea>
+        <textarea  type="text" class="form-control" name="message" style="height:150px"><?php if ($ref!=""){echo $ref; ?> (ref à inclure dans votre réponse SVP)<?php }?></textarea>
     </div>
       {{--  {!! NoCaptcha::renderJs() !!}     --}}
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>

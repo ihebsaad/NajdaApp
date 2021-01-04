@@ -202,6 +202,7 @@ Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@inde
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::post('/envoyes/savingbr','EnvoyesController@savingbr')->name('envoyes.savingbr');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
+Route::post('/envoyes/updating','EnvoyesController@updating')->name('envoyes.updating');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
@@ -757,4 +758,5 @@ Route::get('/update_immobile_non', function () {
 
 
 	});
+
 
