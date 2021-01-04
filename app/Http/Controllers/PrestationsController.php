@@ -830,7 +830,7 @@ foreach($telssms as $telsms)
     {
         $prestataire = Prestataire::find($id);
         if (isset($prestataire['name'])) {
-            return $prestataire['name'];
+            return $prestataire['name']." ".$prestataire['prenom'];
         } else {
             return '';
         }
