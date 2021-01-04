@@ -548,11 +548,13 @@ $adresses=Adresse::where('parent',$clientid)->where('nature','email')->get();
             <div class="row">
                 <div class="col-md-10">
                     
- <select id="libre" style="width:100%" required  class="itemName form-control" name="libre"   >
+ <select id="libre" style="width:100%" required  class="form-control" name="libre[]"  multiple   >
                             
                             <option value="<?php echo $entree['emetteur'] ;?>"><?php echo $entree['emetteur'] ;?></option>
                              @foreach($adresses as $adrs)
+<?php if ($adrs['champ']!==$entree['emetteur']) {?>
                                 <option value="<?php echo $adrs['champ'] ;?>"><?php echo $adrs['champ'] ;?></option>
+<?php }?>
                             @endforeach
                         </select>
 
@@ -783,7 +785,14 @@ if(isset($_GET['openmodal']) )
 
        <script type="text/javascript">
 	    
-
+ $('#libre').select2({
+                filter: true,
+                language: {
+                    noResults: function () {
+                        return 'Pas de résultats';
+                    }
+                }
+            });
     function checkForm(form) // Submit button clicked
     {
 

@@ -5903,14 +5903,19 @@ $id=0;
         $from = trim($request->get('from'));
         $description= $request->get('description');
         $attachs = $request->get('attachs');
+if($request->get('libre')!='')
+{
         $libre = $request->get('libre');
+$to=$request->get('libre');
+}
+
 		// pour l'accusé
 	    $accuse = $request->get('accuse');
         $entree = $request->get('entree');
 
-		if($libre!='' && $to !=''){array_push($to,$libre);}else{
+		/*if($libre!='' && $to !=''){array_push($to,$libre);}else{
 		 if($libre!='' && $to ==''){ $to[0]= $libre  ;}
-		}
+		}*/
 
 
        //    dd($request->all()) ;
