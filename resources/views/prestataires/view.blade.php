@@ -11,6 +11,7 @@ $user = auth()->user();
 
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+ <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
 @section('content')
 

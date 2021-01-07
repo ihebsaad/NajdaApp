@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="portlet box grey">
-        <div class="modal-header">Type du Contrat Client</div>
+        <div class="modal-header">Type de dossier Client</div>
     </div><div class="form-group">
      {{ csrf_field() }}
 
