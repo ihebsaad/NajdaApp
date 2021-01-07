@@ -2389,6 +2389,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                                             <?php $agents = User::get(); ?>
                                            
                                                 @foreach ($agents as $agt)
+                                                <?php if ( $agt['user_type']!= 'financier' &&  $agt['user_type']!= 'bureau'  ){ ?>
                                                 <?php if ( ($dossier->affecte >0) && $agentname["id"] == $agt["id"]){ ?>
                                                     <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option> <?php
                                                 }else{
@@ -2397,7 +2398,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                                                     <option value={{ $agt["id"] }} >{{ $agt["name"] .' '.$agt["lastname"] }}</option>
 
                                                 <?php }
-                                                }
+                                                }}
                                                 ?>
                                                 @endforeach    
                                         </select>
