@@ -4,8 +4,9 @@ use App\Http\Controllers\DossiersController;
 
 use App\Dossier ;
 use App\Attachement ;
-  $param= App\Parametre::find(1);$env=$param->env;
+ $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
 ?>
  <?php use \App\Http\Controllers\ClientsController;     ?>
 
@@ -124,7 +125,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     @if ($entree['nb_attach']  > 0)
                         <?php
                         // get attachements info from DB
-                        $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
+                        $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('entree_id', '=', $entree['id'] );
 
                         ?>
                         @if (!empty($attachs) )
@@ -138,7 +139,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="<?php if($att->type =="pdf"){if($att->path_org){ echo URL::asset('storage'.$att->path_org);}else{echo URL::asset('storage'.$att->path);} }else{ echo URL::asset('storage'.$att->path); }?>" download>Télécharger</a>)</h4>
 
                                     @switch($att->type)
-                                    
                                     @case('docx')
                                     @case('doc')
                                     @case('dot')
