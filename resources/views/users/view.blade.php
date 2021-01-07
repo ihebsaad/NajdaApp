@@ -75,6 +75,7 @@
                     <option  value="superviseur"  <?php if($user->user_type=='superviseur') {echo'selected="selected"';}?>  >Superviseur</option>
                     <option  value="financier"  <?php if($user->user_type=='financier') {echo'selected="selected"';}?>  >Financier</option>
                     <option  value="bureau"  <?php if($user->user_type=='bureau') {echo'selected="selected"';}?>  >Bureau d'ordre</option>
+<option  value="admin"  <?php if($user->user_type=='admin') {echo'selected="selected"';}?>  >Admin</option>
                 </select>
             </td>
         </tr>

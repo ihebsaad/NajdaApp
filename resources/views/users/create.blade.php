@@ -74,6 +74,7 @@
                                     <option  value="superviseur"   >Superviseur</option>
                                     <option  value="financier"    >Financier</option>
                                     <option  value="bureau"    >Bureau d'ordre</option>
+                                    <option  value="admin"    >Admin</option>
                                 </select>
 
                             </div>
