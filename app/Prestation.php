@@ -26,6 +26,8 @@ class Prestation extends Model
 'oms_docs',
 'facture',
 'parvenu',
+'rapp_15',
+'date_rapp_15',
 'mail_30_env',
 'mail_45_env',
 'mail_60_env'

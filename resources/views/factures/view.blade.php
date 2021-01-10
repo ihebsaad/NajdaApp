@@ -45,7 +45,8 @@ date_default_timezone_set('Africa/Tunis');
     $date_arrive=$facture['date_arrive'];
     $dateposte=$facture['date_poste'];
     $dateemail=$facture['date_email'];
- 
+    $dev=trim($facture['devise']);
+   
     $dateEmail=str_replace('/','-',$dateemail) ;
     $datePoste=str_replace('/','-',$dateposte) ;
     $dateValid=str_replace('/','-',$date_valid) ;
@@ -111,13 +112,15 @@ $mois=substr ( $date_arrive , 3  ,2 );
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Assistance</label>
-                                <select   name="client" class="form-control js-example-placeholder-single"     >
-                                    <option></option>
+                                <select  name="client" id="client" class="form-control js-example-placeholder-single" >
+                                    <option value=""></option>
                                     @foreach($clients as $cl  )
                                         <option
-                                                @if($refC==$cl->id)selected="selected"@endif
+                                                @if($refC==$cl->id) selected="selected" @endif
 
-                                        value="{{$cl->id}}"    >{{$cl->name}}</option>
+                                        value="{{$cl->id}}" >{{$cl->name}}</option>
+
+                                      
 
                                     @endforeach
 
@@ -143,10 +146,24 @@ $mois=substr ( $date_arrive , 3  ,2 );
 
         <div class="row" style="margin-top:20px">
         
-          <div class="col-md-3">
+          <div class="col-md-2">
              <div class="form-group">
              <label for="inputError" class="control-label">Montant</label>
                <input autocomplete="off" onchange="changing(this)" class="form-control input" name="montant" id="montant"  value="{{ $facture->montant }}">
+
+             </div>
+           </div>
+
+            <div class="col-md-1">
+             <div class="form-group">
+             <label for="inputError" class="control-label">devise</label>
+               <select  onchange="changing(this)" class="form-control input"   name="devise" id="devise"    style="width:70px">
+                        <option value=""></option>
+                        <option <?php if($dev=='$'){echo 'selected="selected"';}?>>$</option>
+                        <option <?php if($dev=='€'){echo 'selected="selected"';}?>>€</option>
+                        <option <?php if($dev=='TND'){echo 'selected="selected"';}?>>TND</option>
+                       
+                    </select>
 
              </div>
            </div>
@@ -200,7 +217,7 @@ $mois=substr ( $date_arrive , 3  ,2 );
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Mois</label>
-                    <select     class="form-control input"   name="mois" id="mois"    style="width:150px">
+                    <select   onchange="changing(this)"  class="form-control input"   name="mois" id="mois"    style="width:150px">
                         <option value=""></option>
                         <option <?php if($mois=='01'){echo 'selected="selected"';}?>  >  1  </option>
                         <option <?php if($mois=='02'){echo 'selected="selected"';}?> >   2  </option>

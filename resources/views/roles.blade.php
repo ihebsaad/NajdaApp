@@ -1143,6 +1143,8 @@ $deb_seance_22='';
 $fin_seance_22='';
 $deb_seance_33='';
 $fin_seance_33='';
+$deb_seance_3='';
+$fin_seance_3='';
 
 try {
 
@@ -1314,47 +1316,58 @@ catch (Exception $e) {
 
 //dd("fin gestion dossiers par séances");
 
-/*try {
-\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
+try {
+//\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures_version3();
 }
 catch (Exception $e) {
     echo 'Erreur lors de l envoi des emails automatique de factures : ',  $e->getMessage(), "\n";
-}*/
+}
 //dd(' ');
 //dd("envoi alertes factures exécuté");
 
+if($dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3)
+ {
 
+//dd($typeuser);
 try {
 
 $datespe = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierImmobileController::getDatecalcul());
-
+//dd($dtc);
 if($datespe->format('Y-m-d')!=$dtc2)
 {
+    //dd('calcul dossier immobile');
     if(\App\Http\Controllers\DossierImmobileController::getCalculDossImm()==1)
     {
-       // dd("faire le calcul");
-        //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
-        \App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
-        \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile();
         \App\Http\Controllers\DossierImmobileController::setCalculDossImm(false);
         \App\Http\Controllers\DossierImmobileController::setDatecalcul($dtc);
+       // dd("faire le calcul");
+        //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+        
+       
+       \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile_version2();
+       \App\Http\Controllers\FacturesController::envoi_mail_automatique_factures_version3();
+       
+        /// dd('calcul dossier immobile');
 
     }
 }
 else
 { 
 
-    //dd("meme date ; non  calcul ; mettre à jour  set calculdoss");
+  
      if(\App\Http\Controllers\DossierImmobileController::getCalculDossImm()==0)
     {
     //dd("meme date ; non  calcul ; mettre à jour  set calculdoss");
      \App\Http\Controllers\DossierImmobileController::setCalculDossImm(true);
+      //dd("meme date ; non  calcul ; mettre à jour  set calculdoss");
     }
 }
 
 }
 catch (Exception $e) {
 echo 'Erreur lors de l envoi des emails automatiques de dossiers immobiles / Factures Prestataires / Factures clients: ',  $e->getMessage(), "\n";
+}
+
 }
 
 

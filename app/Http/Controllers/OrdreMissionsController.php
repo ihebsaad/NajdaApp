@@ -388,8 +388,8 @@ $idprestation=$omparent['idprestation'];
                 // cas exit 1
 if($affectea!="externe")
 {
-                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);      }      
-             
+                $resultatNote=$this->retourner_notes_om_taxi($omtaxi); $resultatNote='';   }      
+                
                // return($resultatNote);
 header('Content-type: application/json');  
 
@@ -735,7 +735,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 
               // cas exit 2
                 $resultatNote=$this->retourner_notes_om_taxi($omtaxi);             
-             
+                $resultatNote='';
                 //return($resultatNote);
 header('Content-type: application/json');  
 
@@ -912,7 +912,8 @@ $desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$doss
 		        $attachement->save();*/
 
                 // cas exit 3
-                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);              
+                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);
+                $resultatNote='';              
              header('Content-type: application/json');  
 
    $om = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -3198,8 +3199,8 @@ $idprestation=$omparent['idprestation'];
 
                  // cas 1exit ambulance
 if($affectea!="externe")
-                 {$resultatNote=$this->retourner_notes_om_ambulance($omambulance);}             
-             
+                 {$resultatNote=$this->retourner_notes_om_ambulance($omambulance);$resultatNote='';}             
+                  
                  header('Content-type: application/json');  
 
    $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -3784,7 +3785,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['v
                 
                  // cas 2 exit ambulance
                  $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
-             
+                  $resultatNote='';
                    header('Content-type: application/json');  
 
    $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -3926,7 +3927,7 @@ $desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$doss
 
                   // cas 3 exit ambulance
                  $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
-             
+                  $resultatNote='';
                   header('Content-type: application/json');  
 
    $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -6234,7 +6235,7 @@ $idprestation=$omparent['idprestation'];
 	              
                     // cas 1 exit remorquage
 if($affectea!="externe")
-                 {$resultatNote=$this->retourner_notes_om_remorquage($omremorquage);}             
+                 {$resultatNote=$this->retourner_notes_om_remorquage($omremorquage); $resultatNote='';}             
              
                    header('Content-type: application/json');  
 
@@ -6552,7 +6553,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 
                  // cas 2 exit remorquage
                  $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
-             
+                 $resultatNote='';
                  header('Content-type: application/json');  
 
    $om = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -6697,7 +6698,7 @@ $desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$doss
 		        $attachement->save();*/
                  // cas 3 exit remorquage
                  $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
-             
+                 $resultatNote='';
                            
              
                   header('Content-type: application/json');  
