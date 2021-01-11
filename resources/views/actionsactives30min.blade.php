@@ -98,12 +98,15 @@
             </thead>
             <tbody>
 
-             <?php $actions =App\ActionEC::where('statut', 'active')->orderBy('created_at', 'desc')->get(); ?>
+             <?php $actions =App\ActionEC::where('statut', 'active')->whereNotNull('date_deb')->orderBy('created_at', 'desc')->get(); ?>
              @foreach($actions as $aa)
              <?php 
                       $format = "Y-m-d H:i:s";
                       $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-                      $dtb  = \DateTime::createFromFormat($format,$aa->date_deb)->modify('+ 30 minutes');
+                      $dtb  = \DateTime::createFromFormat($format,$aa->date_deb);
+                      //dd($dtb);
+                      $dtb=$dtb->modify('+30 minutes');
+                      //dd($dtb);
                       $datesys=\DateTime::createFromFormat($format, $dtc );
 
 
