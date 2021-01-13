@@ -14,9 +14,7 @@ use App\Attachement ;
 use  \App\Http\Controllers\PrestatairesController;
  use  \App\Http\Controllers\DocsController;
 ?>
-
 <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
-
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
 <!--select css-->
@@ -630,46 +628,6 @@ use  \App\Http\Controllers\PrestatairesController;
 
                                                                 </div>
 
-                                                                <?php if( trim($dossier->type_affectation)=='Najda TPA') {?>
-                                                                <div class="row">
-
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="tpa" class="control-label"> ID Assuré  </label>
-
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="number" id="ID_assure"    class="form-control" value="{{ $dossier->ID_assure }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="col-md-8">
-                                                                        <div class="form-group">
-                                                                            <label for="tpa" class="control-label"> Spécialité Médicale </label>
-
-                                                                            <?php  $specsTPA = DB::table('specialites_typeprestations')
-                                                                                ->where('type_prestation',15)  // medcecin traitant
-                                                                                ->get();
-
-                                                                            ?>
-                                                                            <div class="input-group-control">
-                                                                                <select id="specialite_TPA"   onchange="changing(this)"  class="form-control" value="{{ $dossier->specialite_TPA }}" >
-                                                                                    <option value=""></option>
-                                                                                    <?php  foreach($specsTPA as $spec)
-                                                                                    {
-                                                                                        $nomSpec=\App\Http\Controllers\SpecialitesController::NomSpecialiteById($spec->specialite);
-                                                                                        if($dossier->specialite_TPA==$nomSpec){$selected='selected="selected"';}else{$selected='';}
-                                                                                        echo '<option  '.$selected.'   value="'.$nomSpec.'" >'. $nomSpec  .'</option>';
-                                                                                    }
-                                                                                    ?>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <?php }?>
 
 
                                                                 <div class="row" style="margin-top:50px">
@@ -1290,7 +1248,46 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                           <?php if( trim($dossier->type_affectation)=='Najda TPA') {?>
+                                                            <div class="row">
 
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label for="tpa" class="control-label"> ID Assuré  </label>
+
+                                                                        <div class="input-group-control">
+                                                                            <input onchange="changing(this)" type="number" id="ID_assure"    class="form-control" value="{{ $dossier->ID_assure }}" >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group">
+                                                                        <label for="tpa" class="control-label"> Spécialité Médicale </label>
+
+                                                                      <?php  $specsTPA = DB::table('specialites_typeprestations')
+                                                                        ->where('type_prestation',15)  // medcecin traitant
+                                                                        ->get();
+
+                                                                        ?>
+                                                                        <div class="input-group-control">
+                                                                            <select id="specialite_TPA"    class="form-control" value="{{ $dossier->specialite_TPA }}" >
+                                                                                <option value=""></option>
+                                                                              <?php  foreach($specsTPA as $spec)
+                                                                                {
+                                                                                    $nomSpec=\App\Http\Controllers\SpecialitesController::NomSpecialiteById($spec->specialite);
+                                                                                    if($dossier->specialite_TPA==$nomSpec){$selected='selected="selected"';}else{$selected='';}
+                                                                                    echo '<option  '.$selected.'   value="'.$nomSpec.'" >'. $nomSpec  .'</option>';
+                                                                                }
+                                                                                ?>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                          <?php }?>
                                                         </div>
 
 
@@ -1985,6 +1982,8 @@ use  \App\Http\Controllers\PrestatairesController;
                                           <?php  if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}?>
 
                                             @foreach ($agents as $agt)
+<?php if ( $agt['user_type']!= 'financier' &&  $agt['user_type']!= 'bureau'  ){ ?>
+
                                                 <?php if ( ($dossier->affecte >0) && $agentname["id"] == $agt["id"]){ ?>
                                                 <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option> <?php
                                                 }else{
@@ -1993,7 +1992,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                 <option value={{ $agt["id"] }} >{{ $agt["name"] .' '.$agt["lastname"] }}</option>
 
                                                 <?php }
-                                                }
+                                                } }
                                                 ?>
                                             @endforeach
                                         </select>
@@ -2318,40 +2317,42 @@ use  \App\Http\Controllers\PrestatairesController;
 </div>
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="createAccuse"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Envoyer un accusé de réception</h5>
+<!-- Modal -->
 
+<!-- Modal -->
+<div class="modal fade" id="createAccuse"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Envoyer un accusé de réception</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    {{ csrf_field() }}
                 </div>
-                <div class="modal-body">
-                    <div class="card-body">
+                <div class="form-group">
 
-                        {{ csrf_field() }}
-                    </div>
-                    <div class="form-group">
+                    <?php $typea=trim(strtoupper($dossier->type_affectation));
+                    $from='';
+                    if($typea=='NAJDA'){$from='24ops@najda-assistance.com';}
+                    if($typea=='VAT'){$from='hotels.vat@medicmultiservices.com';}
+                    if($typea=='MEDIC'){$from='assistance@medicmultiservices.com';}
+                    if($typea=='TRANSPORT MEDIC'){$from='ambulance.transp@medicmultiservices.com';}
+                    if($typea=='TRANSPORT VAT'){$from='vat.transp@medicmultiservices.com';}
+                    if($typea=='MEDIC INTERNATIONAL'){$from='operations@medicinternational.tn';}
+                    if($typea=='NAJDA TPA'){$from='tpa@najda-assistance.com';}
+                    if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
+                    if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
 
-                        <?php $typea=trim(strtoupper($dossier->type_affectation));
-                        $from='';
-                        if($typea=='NAJDA'){$from='24ops@najda-assistance.com';}
-                        if($typea=='VAT'){$from='hotels.vat@medicmultiservices.com';}
-                        if($typea=='MEDIC'){$from='assistance@medicmultiservices.com';}
-                        if($typea=='TRANSPORT MEDIC'){$from='ambulance.transp@medicmultiservices.com';}
-                        if($typea=='TRANSPORT VAT'){$from='vat.transp@medicmultiservices.com';}
-                        if($typea=='MEDIC INTERNATIONAL'){$from='operations@medicinternational.tn';}
-                        if($typea=='NAJDA TPA'){$from='tpa@najda-assistance.com';}
-                        if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
-                        if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
+                    $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$dossier->customer_id);
 
-                        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$dossier->customer_id);
-
-                        ?>
+                    ?>
                         <label for="destinataire">Sujet:</label>
 
                         <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
-                        <?php
+                     <?php
 
                         $subscriber_name = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_name',$dossier->id);
                         $subscriber_lastname = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_lastname',$dossier->id);
@@ -2363,52 +2364,111 @@ use  \App\Http\Controllers\PrestatairesController;
                         }
 
                         if ($langue=='francais'){
-                            $sujet=  $nomabn.'  - V/Réf: '.$dossier->reference_customer .' - N/Réf: '.$dossier->reference_medic ;
+                        $sujet=  $nomabn.'  - V/Réf: '.$dossier->reference_customer .' - N/Réf: '.$dossier->reference_medic ;
 
                         }else{
-                            $sujet=  $nomabn.'  - Y/Ref: '.$dossier->reference_customer .' - O/Ref: '.$dossier->reference_medic ;
+                        $sujet=  $nomabn.'  - Y/Ref: '.$dossier->reference_customer .' - O/Ref: '.$dossier->reference_medic ;
 
                         }
                         ?>
-                        <input style="width:100%" class="form-control" type="sujet"   name="sujet" id="sujet" value="<?php echo $sujet; ?>" />
+                     <input style="width:100%" class="form-control" type="sujet"   name="sujet" id="sujet" value="<?php echo $sujet; ?>" />
 
-                        <label for="destinataire">Destinataire:</label>
+                    <label for="destinataire">Destinataire:</label>
 
-                        <select id="emaildestinataire"    required  class="form-control" name="destinataire[]" style="width:100%" multiple >
-                            <option>ihebsaad@gmail.com</option>
-                            <option>saadiheb@gmail.com</option>
-                            <?php foreach($listeemails as  $mail)
-                            { ?>
+                    <select id="emaildestinataire"    required  class="form-control" name="destinataire[]" style="width:100%" multiple >
+                       
+                       <?php foreach($listeemails as  $mail)
+                           { ?>
                             <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:12px">(<?php echo PrestatairesController::NomByEmail( $mail) .' '.PrestatairesController::PrenomByEmail( $mail)  ;?>)  "</small> </option>
-                            <?php } ?>
-                        </select>
-                    </div>
+                        <?php } ?>
+                    </select>
+                </div>
 
-                    <div id="formaccuse"  >
-                        {{ csrf_field() }}
-                        <?php $message= EntreesController::GetParametre($dossier->customer_id);
-                        //  echo json_encode($message);?>
-                    <!--     <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php // echo $message   ;?></div>-->
+                <div id="formaccuse"  >
+                    {{ csrf_field() }}
+                    <?php $message= EntreesController::GetParametre($dossier->customer_id);
+$dossiersigent=Dossier::where('id',$dossier->id)->first();
+if($dossiersigent['type_affectation']==="Najda")
+{
+$entite="Najda Assistance";
 
-                        <div class="form-group ">
-                            <label for="contenu">Contenu:</label>
-                            <div class="editor" >
-                                <textarea style="min-height: 280px;" id="message"  class="textarea tex-com"   name="contenu" required  ><?php echo $message   ;?></textarea>
-                            </div>
+}
+ if($dossiersigent['type_affectation']==="MEDIC")
+{
+$entite="Medic' Multiservices";
+
+
+}
+ if($dossiersigent['type_affectation']==="VAT")
+{
+$entite="Voyages Assistance Tunisie";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Medic International")
+{
+$entite="Medic’ International";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Najda TPA")
+{
+$entite="Najda TPA";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Transport Najda")
+{
+$entite="Najda Transport";
+
+
+
+}
+if($dossiersigent['type_affectation']==="Transport MEDIC")
+{
+$entite="Medic' Multiservices";
+
+
+}
+if($dossiersigent['type_affectation']==="Transport VAT")
+{
+$entite="Voyages Assistance Tunisie";
+
+
+
+}
+if($dossiersigent['type_affectation']==="X-Press")
+{
+$entite="X-Press Remorquage";
+
+
+
+}
+$message=str_replace('Najda', $entite, $message);
+                    //  echo json_encode($message);?>
+               <!--     <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php // echo $message   ;?></div>-->
+
+                    <div class="form-group ">
+                        <label for="contenu">Contenu:</label>
+                        <div class="editor" >
+                            <textarea style="min-height: 280px;" id="message"  class="textarea tex-com"   name="contenu" required  ><?php echo $message   ;?></textarea>
                         </div>
-
                     </div>
 
+                </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="submit" onclick="document.getElementById('sendaccuse').disabled=true" id="sendaccuse" class="btn btn-primary">Envoyer</button>
-                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="submit" onclick="document.getElementById('sendaccuse').disabled=true" id="sendaccuse" class="btn btn-primary">Envoyer</button>
             </div>
         </div>
     </div>
-
+</div>
 
 <div class="modal  " id="crendu" >
     <?php     $listedossiers = DB::table('dossiers')->get();
@@ -2487,19 +2547,19 @@ use  \App\Http\Controllers\PrestatairesController;
                                 <option value="3001">3001</option>
                                 <?php foreach($phonesDossier   as $phone)
                                 {
-                                    echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.'  | '.$phone->remarque.')</option>';
+                                    echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesCl   as $phone)
                                 {
-                                    echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'  ( '.$phone->nom.' '.$phone->prenom.'  | '.$phone->remarque.') </option>';
+                                    echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'   '.$phone->nom.' '.$phone->prenom.' </option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesInt   as $phone)
                                 {
-                                    echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.'  | '.$phone->remarque.')</option>';
+                                    echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
 
                                 }
                                 ?>
@@ -3263,7 +3323,7 @@ function disabling(elm) {
                     }
                 });
             }else{
-                alert('sélectionnez le destinataire !');
+                  alert('sélectionnez le destinataire !');
                 document.getElementById('sendaccuse').disabled=false;
             }
         });
