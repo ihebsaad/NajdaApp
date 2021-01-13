@@ -279,7 +279,7 @@ class EntreesController extends Controller
         $nomuser = $user->name ." ".$user->lastname ;
 
  		
-	   $desc='Archivage d\'Email  '.$sujet;		
+	   $desc='Archivage d\'Email  '.$entree->sujet;		
 	 $hist = new Historique([
               'description' => $desc,
             'user' => $nomuser,
