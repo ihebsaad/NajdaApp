@@ -2158,6 +2158,7 @@ if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::Ch
                                           <?php  if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}?>
 
                                             @foreach ($agents as $agt)
+<?php if ( $agt['user_type']!= 'financier' &&  $agt['user_type']!= 'bureau'  ){ ?>
                                                 <?php if ( ($dossier->affecte >0) && $agentname["id"] == $agt["id"]){ ?>
                                                 <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option> <?php
                                                 }else{
@@ -2166,7 +2167,7 @@ if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::Ch
                                                 <option value={{ $agt["id"] }} >{{ $agt["name"] .' '.$agt["lastname"] }}</option>
 
                                                 <?php }
-                                                }
+                                                }}
                                                 ?>
                                             @endforeach
                                         </select>
