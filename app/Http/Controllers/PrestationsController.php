@@ -447,13 +447,13 @@ $gouvprest=  PrestatairesController::GouvByid($gouv);
         $raison = '';
         $sujet = 'Demande de prestation échouée';
         if (trim($statut) == 'nonjoignable') {
-            $raison = 'Non Joignable';
+           $raison = '<b> Non Joignable </b> ';
         }
         if (trim($statut)  == 'nondisponible') {
-            $raison = 'Non Disponbile';
+             $raison = '<b> Non Disponbile </b>';
         }
         if (trim($statut)  == 'autre') {
-            $raison = $details;
+             $raison = "<b>".$details."</b>";
 
         }
         $now=date('d/m/Y H:i');
@@ -606,15 +606,15 @@ Avec tous nos remerciements pour votre collaboration.'. '<br><br><hr style="floa
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
         Mail::setSwiftMailer($swiftMailer);
-
+$cc2=array( 'nejib.karoui@medicmultiservices.com');
         // Mail au prestataire
-        Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$cc2,$from,$fromname) {
             $message
                // ->to('saadiheb@gmail.com')
                 // ->to()
 
               //  ->cc($cc ?: [])
-                //  ->bcc($ccimails ?: [])
+                ->bcc($cc2)
                 ->subject($sujet)
                 ->setBody($contenu, 'text/html')
                 ->setFrom([$from => $fromname]);
