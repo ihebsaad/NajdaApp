@@ -373,6 +373,40 @@ class EntreesController extends Controller
 
         return redirect('/entrees/dispatching')->with('success', '  Supprimé');
     }
+public function destroy3($id)
+    {
+        $entree = Entree::find($id);
+$ref=$entree["dossier"];
+
+$doss=Dossier::where('reference_medic',$ref)->first();
+
+        $entree->delete();
+
+
+        // supprimer notif
+        $notif=Notif::where('entree',$id)->first();
+        if(isset ($notif)) { $notif->delete();}
+
+        $par=Auth::id();
+        $user = User::find($par);
+        $nomuser = $user->name ."".$user->lastname ;
+
+ 
+	  $desc='Supprimer un Email : '  ;		
+	 $hist = new Historique([
+              'description' => $desc,
+            'user' => $nomuser,
+             'user_id'=>auth::user()->id,
+        ]);$hist->save();
+		
+		 
+
+if($doss['id']!==null)
+{
+        return redirect('/dossiers/view/'.$doss['id'])->with('success', '  Supprimé');}
+else
+{return redirect('/entrees')->with('success', '  Supprimé');}
+    }
 
     public function destroy($id)
     {

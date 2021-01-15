@@ -123,6 +123,7 @@ Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/destroy2/{id}', 'EntreesController@destroy2');
+Route::get('/entrees/destroy3/{id}', 'EntreesController@destroy3');
 Route::get('/entrees/spam/{id}', 'EntreesController@spam');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/traiter/{id}', 'EntreesController@traiter');

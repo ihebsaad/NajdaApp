@@ -7,11 +7,16 @@
         <div class="col-lg-12 ">
 <input type="hidden" id="idenvoye" value="<?php echo $envoye['id']?>" ></input>
          <?php if(isset($envoye['dossier'])){
-            $dossierid=App\Http\Controllers\DossiersController::IdDossierByRef(trim($envoye['dossier']));
-           /* $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
+  $dossier=App\Dossier::where("reference_medic",trim($envoye['dossier']))->first();
+$dossierid=$dossier['id'];
+          
+/* $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
             $dossierid= $dosss['id'];*/
 
-             ?>   <span style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossierid)}}" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></span>
+             ?>   <span style="font-weight:bold;"><a  href="<?php echo $urlapp.'/dossiers/view/'.$dossierid;?>" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></span>
 
              <div class="btn-group pull-right">
                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
