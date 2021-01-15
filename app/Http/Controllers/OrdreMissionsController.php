@@ -8675,7 +8675,7 @@ public function pdfvalideomtaxi()
 if($omparent1['affectea']!="externe")
 {
 
-if(isset($omparent1['idchauff']) && $omparent1['idchauff']!="")
+if(isset($omparent1['idchauff']) && $omparent1['idchauff']!=""&& $omparent1['idchauff']!=null)
 {
 $numm= Personne::where('id', $omparent1['idchauff'])->select('tel')->first();
 $num=$numm['tel'];
@@ -8844,7 +8844,7 @@ $desc=' Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dan
 if($omparent1['affectea']!="externe")
 {
 
-if(isset($omparent1['idambulancier1']) && $omparent1['idambulancier1']!="")
+if(isset($omparent1['idambulancier1']) && $omparent1['idambulancier1']!=""&& $omparent1['idambulancier1']!=null)
 {
 $numm= Personne::where('id', $omparent1['idambulancier1'])->select('tel')->first();
 $num=$numm['tel'];
@@ -8909,7 +8909,7 @@ $desc=' Envoi de SMS à '.$num ;
 
 
 }
-if(isset($omparent1['idambulancier2']) && $omparent1['idambulancier2']!="" )
+if(isset($omparent1['idambulancier2']) && $omparent1['idambulancier2']!="" && $omparent1['idambulancier2']!=null)
 {
 $numm1= Personne::where('id', $omparent1['idambulancier2'])->select('tel')->first();
 $num1=$numm1['tel'];
@@ -8973,7 +8973,7 @@ $desc=' Envoi de SMS à '.$num1 ;
 		$hist->save();
 
         }
-if(isset($omparent1['idparamed']) && $omparent1['idparamed']!="")
+if(isset($omparent1['idparamed']) && $omparent1['idparamed']!=""&& $omparent1['idparamed']!=null)
 {
 $numm2= Personne::where('id', $omparent1['idparamed'])->select('tel')->first();
 $num2=$numm2['tel'];
@@ -9143,7 +9143,7 @@ $desc='Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans
 if($omparent1['affectea']!="externe")
 {
 
-if(isset($omparent1['idchauff']) && $omparent1['idchauff']!="")
+if(isset($omparent1['idchauff']) && $omparent1['idchauff']!=""&& $omparent1['idchauff']!=null)
 {
 $numm= Personne::where('id', $omparent1['idchauff'])->select('tel')->first();
 $num=$numm['tel'];
