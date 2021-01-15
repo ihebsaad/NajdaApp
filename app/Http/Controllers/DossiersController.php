@@ -1692,7 +1692,7 @@ $hist->save();
 
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
-            ->where('parenttype','dossier')
+          
             ->get();
 
         $phonesCl =   Adresse::where('nature', 'tel')
@@ -2652,8 +2652,8 @@ $hist->save();
 
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
-            ->where('parenttype','dossier')
             ->get();
+
 
         $phonesCl =   Adresse::where('nature', 'tel')
             ->where('parent',$cl)
