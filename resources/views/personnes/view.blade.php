@@ -126,7 +126,7 @@
 <?php
 use App\Dossier ;
 use App\Envoye ;
-$dossiers = Dossier::get();
+$dossiers = Dossier::orderby('id','desc')->get();
 if ($personne->tel!=''){
     $envoyes = Envoye::orderBy('id', 'desc')->where('type','sms' )->where('destinataire', $personne->tel)->paginate(5);
 }else{
@@ -137,7 +137,7 @@ if ($personne->tel!=''){
 
 
 <!-- Modal SMS -->
-<div class="modal fade" id="sendsms" tabindex="-1" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+<div class="modal fade" id="sendsms" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,10 +155,9 @@ if ($personne->tel!=''){
                             <label for="description">Dossier:</label>
 
                             <div class="form-group">
-                                 <select id ="dossier"  class="form-control " style="width: 120px">
+           <select id ="dossier"  class="form-control" style="width: 120px">
                                     <option></option>
                                     <?php foreach($dossiers as $ds)
-
                                     {
                                         echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
                                 </select>
@@ -262,15 +261,26 @@ if ($personne->tel!=''){
         </div>
     </div>
 </div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script type="text/javascript">
+$('#dossier').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
 
-
+        });
+</script>
 @endsection
 
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
+
 <script>
 
 /*

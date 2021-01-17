@@ -552,7 +552,7 @@ return ('modification interdite');
             ->get();
         $specialites2=$specialites2->unique();
 
-        $dossiers = Dossier::where('current_status','<>','Cloture')
+        $dossiers = Dossier::where('current_status','<>','Cloture')->orderby('id','desc')
              ->get();
 
         return view('prestataires.view',['specialites2'=>$specialites2, 'dossiers'=>$dossiers,'specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));

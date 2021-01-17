@@ -138,7 +138,7 @@
 <?php
 use App\Dossier ;
 use App\Envoye ;
-$dossiers = Dossier::get();
+$dossiers = Dossier::orderby('id','desc')->get();
 if ($user->phone!=''){
     $envoyes = Envoye::orderBy('id', 'desc')->where('type','sms' )->where('destinataire', $user->phone)->paginate(5);
 }else{
@@ -149,7 +149,7 @@ if ($user->phone!=''){
 
 
 <!-- Modal SMS -->
-<div class="modal fade" id="sendsms" tabindex="-1" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+<div class="modal fade" id="sendsms"  role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -277,12 +277,24 @@ if ($user->phone!=''){
         #tabstats td{border-left:1px solid white;border-bottom:1px solid white;min-width:50px;min-height: 25px;;text-align: center;}
         #tabstats tr{margin-bottom:15px;text-align: center;height: 40px;}
         </style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script type="text/javascript">
+$('#dossier').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+</script>
+
 @endsection
 
 
-
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
 
 <script>
 
@@ -303,7 +315,7 @@ return 'Pas de résultats';
 });
 
 
-    function changing(elm) {
+     function changing(elm) {
         var champ = elm.id;
 
         var val = document.getElementById(champ).value;
