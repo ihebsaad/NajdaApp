@@ -676,8 +676,8 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
     100%{opacity: 1;}
 }
 		</style>
-	<br><br><br><br><br><br>	
-	<h4>Nous sommes le <br><br><b id="jour" style="color:red;font-size:38px;"><?php echo $sd1; ?></b></h4>	
+	<br><br><br><br><br><br><br><br><br><br><br><br><br>	
+	<h4 style="margin-left:-320px;">Nous sommes le <br><br><b id="jour" style="color:red;font-size:38px;"><?php echo $sd1; ?></b></h4>	
 		
 </div>  
   
