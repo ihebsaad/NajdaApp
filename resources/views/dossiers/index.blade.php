@@ -58,7 +58,10 @@
                                
                                         <select id="reference_medic1" name="reference_medic1" class="form-control select2" >
                                             <option value="">Sélectionner</option>
-                                             @foreach(App\Dossier::orderBy('id','DESC')->get() as $c)
+                                            <?php  $dtc = (new \DateTime())->format('2018-12-31 00:00:00');
+                                                  $ccc= App\Dossier::whereNotNull('created_at')->where('created_at','>=', $dtc)->orderBy('id','DESC')->get();
+                                             ?>
+                                             @foreach( $ccc as $c)
 
                                                 <option value="{{$c->reference_medic}}">{{$c->reference_medic}}</option>
 
@@ -517,7 +520,7 @@
    // var start = moment().subtract(29, 'days');
    // var start = moment().set({'year': 2015, 'month': 0 , 'day': 0});
    
-      var start = moment("01/01/2015", "DD/MM/YYYY");
+      var start = moment("01/01/2020", "DD/MM/YYYY");
     //var start ='01/01/2015' ;
     var end = moment();
 

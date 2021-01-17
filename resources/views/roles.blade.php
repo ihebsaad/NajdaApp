@@ -1344,8 +1344,8 @@ if($datespe->format('Y-m-d')!=$dtc2)
         //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
         
        
-       \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile_version2();
-       \App\Http\Controllers\FacturesController::envoi_mail_automatique_factures_version3();
+       //\App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile_version2();
+       //\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures_version3();
        
         /// dd('calcul dossier immobile');
 

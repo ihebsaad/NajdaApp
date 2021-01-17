@@ -44,6 +44,7 @@ use App\Notification;
 use App\Notif ;
 use App\Historique ;
 use Swift_Mailer;
+use App\DossierImmobile;
 
 ini_set('memory_limit','1024M');
 ini_set('upload_max_filesize','50M');
@@ -3581,9 +3582,17 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                 ]); 
                 $affechis->save();
 
+                $desc=' Clôture de dossier: ' . $refd .' '.$etat;       
+                $hist = new Historique([
+                      'description' => $desc,
+                    'user' => $nomuser,
+                    'user_id'=>auth::user()->id,
+                ]); 
+                $hist->save();
+
                 // supprimer le id dossier de table dossiers immmobiles
 
-                $dm = App\DossierImmobile::where('dossier_id',$iddossier)->first();  
+                $dm = DossierImmobile::where('dossier_id',$iddossier)->first();  
                 if($dm)
                 {
                     if (! empty($dm)) {
@@ -3591,13 +3600,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                     }
                 }
 
-     $desc=' Clôture de dossier: ' . $refd .' '.$etat;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>auth::user()->id,
-        ]);	
-$hist->save();
+     
                 }
             }else{
               Dossier::where('id',$iddossier)->update(array('current_status'=>'inactif','affecte'=>0 , 'sub_status'=>'immobile'));

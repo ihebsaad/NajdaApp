@@ -85,7 +85,7 @@ class RechercheController extends Controller
        $affecOuNon='';
        $etat='';
        $burl = URL::to("/");
-
+       $dtc = (new \DateTime())->format('2018-12-31 00:00:00');
         if($request->get('qy'))
         {
           $qery=$request->get('qy');
@@ -96,7 +96,7 @@ class RechercheController extends Controller
 
     //--recherhe  des dossiers selon la reférence médic (référence selon la société) --
 
-           $data=DB::Table('dossiers')->where('reference_medic','like','%'.$qery.'%')->limit(10)->orderBy('id','desc')->get();
+           $data=DB::Table('dossiers')->where('reference_medic','like','%'.$qery.'%')->whereNotNull('created_at')->where('created_at','>=', $dtc)->limit(10)->orderBy('id','desc')->get();
 
          
           if(count($data)!=0)
@@ -132,7 +132,7 @@ class RechercheController extends Controller
 
     // recherche  des dossiers selon la reférence client (référence selon la société) --
  
-         $data=DB::Table('dossiers')->where('reference_customer','like','%'.$qery.'%')->limit(10)->orderBy('id','desc')->get();
+         $data=DB::Table('dossiers')->where('reference_customer','like','%'.$qery.'%')->whereNotNull('created_at')->where('created_at','>=', $dtc)->limit(10)->orderBy('id','desc')->get();
 
          
           if(count($data)!=0)
@@ -169,7 +169,10 @@ class RechercheController extends Controller
 
     //-recherhe sur le nom et le prénom de l'abonnée 
 
-           $data=DB::Table('dossiers')->where('subscriber_name','like','%'.$qery.'%')->orWhere('subscriber_lastname','like','%'.$qery.'%')->limit(10)->orderBy('id','desc')->get();
+           $data=DB::Table('dossiers')->whereNotNull('created_at')->where('created_at','>=', $dtc)
+                ->where(function($q) use($qery) {                             
+                               $q->where('subscriber_name','like','%'.$qery.'%')->orWhere('subscriber_lastname','like','%'.$qery.'%');
+                                })->limit(10)->orderBy('id','desc')->get();
 
         //  $output='<div><ul class="dropdown-menu " style="display:block ; position:relative ; top:-65px; ">';
           if(count($data)!=0)
@@ -207,7 +210,7 @@ class RechercheController extends Controller
 
          //-recherhe sur l'immatriculation sans caractères spéciaux - _ ( )
 
-           $dossiertechs=DB::Table('dossiers')->whereNotNull('vehicule_immatriculation')->orderBy('id','desc')->get();
+           $dossiertechs=DB::Table('dossiers')->whereNotNull('vehicule_immatriculation')->whereNotNull('created_at')->where('created_at','>=', $dtc)->orderBy('id','desc')->get();
           // dd($dossiertechs);
            $collectDossierTech = collect();
            //$c->add(new Post);
@@ -939,7 +942,10 @@ class RechercheController extends Controller
 
         }// fin else 2
        }// fin else 1
-
+       // $prests=$prests->sortBy('name');
+       $prests = $prests->sortBy(function($prests) {
+       return sprintf('%-12s%s', $prests->name,  $prests->prenom);
+       });
 
       return view('prestataires.index', compact('prests'));  
 
