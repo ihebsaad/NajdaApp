@@ -3089,7 +3089,7 @@ if($count==0) {
                             </label>
 							 </center></section>
 				
-							
+							<br>
                         <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
 
@@ -4181,7 +4181,8 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
             }
         });
         // fermerdossier
-        $('#fermerdossier').click(function(){
+        //$('#fermerdossier').click(function(){
+            $(document).on('click','#fermerdossier',function(){
             var dossier = $('#dossier').val();
             var statut ="Cloture";
             var sanssuite=0;
@@ -4203,7 +4204,8 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 });
         });
         // ouvrirdossier
-        $('#ouvrirdossier').click(function(){
+        //$('#ouvrirdossier').click(function(){
+          $(document).on('click','#ouvrirdossier',function(){
             var dossier = $('#dossier').val();
             var statut ="actif";
             var _token = $('input[name="_token"]').val();
