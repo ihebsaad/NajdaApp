@@ -660,7 +660,7 @@ DB::table('adresses')
         Facture::where('prestataire',$id)->update(array('prestataire' => null));
         Prestation::where('prestataire_id',$id)->update(array('prestataire_id' => 0));
 
-        return redirect('/prestataires')->with('success', '  Supprimé ');
+        return redirect()->back()->with('success', '  Supprimé ');
  }
     }
 
