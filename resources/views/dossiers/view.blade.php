@@ -53,7 +53,7 @@ function custom_echo($x, $length)
 -->
                 <!-- Include the webphone_api.js to your webpage -->
 
-<script src="{{ asset('public/najdaapp/najdaapp/webphone/webphone_api.js') }}"></script>
+<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
 
 
 @section('content')
