@@ -1835,7 +1835,7 @@ use  \App\Http\Controllers\DocsController;
 
 
 $('#idpresthos').val(title);
-alert(title);
+//alert(title);
 
 
 
@@ -1853,7 +1853,7 @@ function modif_prest1(elm) {
 
 
 $('#idprestmed').val(title);
-alert(title);
+//alert(title);
 
 
 
@@ -1871,7 +1871,7 @@ function modif_prest2(elm) {
 
 
 $('#idprestemp').val(title);
-alert(title);
+//alert(title);
 
 
 
@@ -1889,7 +1889,7 @@ function modif_prest3(elm) {
 
 
 $('#idprestemp2').val(title);
-alert(title);
+//alert(title);
 
 
 
@@ -1907,7 +1907,7 @@ function modif_prest4(elm) {
 
 
 $('#idprestemp3').val(title);
-alert(title);
+//alert(title);
 
 
 
@@ -1925,7 +1925,7 @@ function modif_prest5(elm) {
 
 
 $('#idpresthotel').val(title);
-alert(title);
+//alert(title);
 
 
 
