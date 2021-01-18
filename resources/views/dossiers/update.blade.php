@@ -20,6 +20,7 @@ use  \App\Http\Controllers\PrestatairesController;
 <!--select css-->
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
 @section('content')
     <?php
     $users=UsersController::ListeUsers();
@@ -1114,8 +1115,8 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                             <?php
 
                                                                             foreach($traitants as $tr)
-                                                                            { if (trim($dossier->medecin_traitant) == trim(PrestatairesController::ChampById('name',$tr->prestataire_id))){ $selected='selected="selected"'; }else{ $selected=''; }
-                                                                                if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option title="'.$tr->prestataire_id.'" '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('name',$tr->prestataire_id).' Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' Tel: '.PrestatairesController::ChampById('phone_cell',$tr->prestataire_id) .'</option>';}
+                                                                            { if (trim($dossier->medecin_traitant) == trim(PrestatairesController::ChampById('name',$tr->prestataire_id))){ $selected='selected="selected"'; }else{ $selected=''; } $Tel=\App\Adresse::where('parent',$tr->prestataire_id)->where('nature','telinterv')->first(); if(isset($Tel)){$tel=$Tel->champ;}else{$tel='';}
+                                                                                if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option title="'.$tr->prestataire_id.'" '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('prenom',$tr->prestataire_id).' '.PrestatairesController::ChampById('name',$tr->prestataire_id).' - Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' - Tel: './*PrestatairesController::ChampById('phone_cell',$tr->prestataire_id).*/' ' . $tel .'</option>';}
                                                                             }
 
                                                                             ?>
@@ -2544,22 +2545,25 @@ $message=str_replace('Najda', $entite, $message);
 
                             <select  class="form-control" id="numtel" name="numtel"   >
                                 <option value=""></option>
-                                <option value="3001">3001</option>
+                              
                                 <?php foreach($phonesDossier   as $phone)
                                 {
-                                    echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+$title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
+                                    echo '<option class="telsassures" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesCl   as $phone)
                                 {
-                                    echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'   '.$phone->nom.' '.$phone->prenom.' </option>';
+$title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
+                                    echo '<option class="telsclients" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'   '.$phone->nom.' '.$phone->prenom.' </option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesInt   as $phone)
                                 {
-                                    echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+$title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
+                                    echo '<option class="telsintervs" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
 
                                 }
                                 ?>
@@ -2573,43 +2577,125 @@ $message=str_replace('Najda', $entite, $message);
             </div>
 
             <div class="modal-footer">
-                <a  type="button" class="btn btn-primary" href="phone" id="launchPhone"  >Appeler</a>
-
-                <script>
-
-                    $('#launchPhone').on('click', function(event) {
-                        event.preventDefault();
-                        var num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
-                        var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?num='+num,
-                            features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
-                        var session=null;
-                        // This is set when the phone is open and removed on close
-                        if (!localStorage.getItem('ctxPhone')) {
-                            window.open(url, 'ctxPhone', features);
-
-                            return false;
-                        } else {
-                            window.alert('Phone already open.');
-
-                        }
-                        alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
-
-                    });
 
 
-                    /* window.onload = function(){
-                     window.document.getElementById('numDisplay').value= document.getElementById('numtel').value ;
-                     }*/
-                </script>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                  <?php
+$idagent=$dossier->user_id;
+         $CurrentUser = auth()->user();
+         $iduser=$CurrentUser->id;
 
+if($iduser===32)
+{
+?>
+                        <input id="extensiontel" name="extensiontel" type="hidden" value="2000">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="3862oOPD3F">
+<?php
+}
+else
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2001">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="z6Hm&FqQF2G@S3">
+<?php
+}
+?>
+
+                    <button type="button"  class="btn btn-primary"  onclick="ButtonOnclick();">Appeler</button>
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
 
     </div>
 
 </div>
+<!--Modal Tel-->
 
+    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="numatransfer">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Saisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="numatransfer" novalidate="novalidate">
+
+                                <input id="numatrans" name="numatrans" type="text" value="" />
+                                   
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+<?php
+
+?>
+
+                    <button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+<!--Modal Tel 2-->
+
+    <div class="modal fade" id="appelinterfaceenvoi"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="telenvoi"  sytle="width:20px;height:10px">
+            <div class="modal-content">
+                <div class="modal-header">
+                  
+</div>
+                <div class="modal-body">
+                    <div class="card-body" >
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="appelinterfaceenvoi" novalidate="novalidate">
+  <div id="call_duration">&nbsp;</div>
+            <div id="status_call">&nbsp;</div>
+<input id="nomencours" name="nomencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
+ <input id="numencours" name="numencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+
+                   
+ <button type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
+ <div id="mettreenattente" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
+ <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
+ <div id="couperson" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
+ <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
+ <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
     <div class="modal  " id="OuvrirDoss" >
         <div class="modal-dialog" >
@@ -3178,6 +3264,83 @@ function disabling(elm) {
         });
 
     });
+function ButtonOnclick()
+        {
+
+
+                     $('#appelinterfaceenvoi').modal({show:true});
+
+
+     num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+nom=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].title;
+
+     $(".modal-body #numencours").val( num );
+
+//alert(nom);
+$(".modal-body #nomencours").val(nom );
+  $("#faireappel").modal('hide');
+                
+ 
+  /**Configuration parameters*/
+ var extensiontel = $('#extensiontel').val();
+ var motdepassetel = $('#motdepassetel').val();
+//alert(extensiontel);
+        webphone_api.parameters['username'] = extensiontel;      // SIP account username
+        webphone_api.parameters['password'] = motdepassetel;      // SIP account password (see the "Parameters encryption" in the documentation)        
+        webphone_api.parameters['callto'] = '';        // destination number to call
+        webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
+        webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
+  webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
+ webphone_api.start();
+            num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+//alert(webphone_api.getstatus());
+//document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
+                webphone_api.call(num);
+
+//testiscall();
+
+
+}
+ 
+           function Hangup()
+        {
+            webphone_api.hangup();
+            
+        }
+    function transfer()
+        {
+numtrans=$('#numatrans').val();;
+//alert(numtrans);
+            webphone_api.Transfer(numtrans);
+        }
+  function hold(state)
+        {
+if(state===true)
+
+         {   webphone_api.hold(state);
+document.getElementById('mettreenattente').style.display = 'none';
+document.getElementById('reprendreappel').style.display = 'inline-block';}
+if(state===false)
+
+         {   webphone_api.hold(state);
+document.getElementById('reprendreappel').style.display = 'none';
+document.getElementById('mettreenattente').style.display = 'inline-block';}
+
+        }
+function mute(state,direction)
+        {
+if(state===true)
+
+         {   webphone_api.mute(state,direction);
+document.getElementById('couperson').style.display = 'none';
+document.getElementById('reactiveson').style.display = 'inline-block';}
+if(state===false)
+
+         {   webphone_api.mute(state,direction);
+document.getElementById('reactiveson').style.display = 'none';
+document.getElementById('couperson').style.display = 'inline-block';}
+
+        }
 
 
 
