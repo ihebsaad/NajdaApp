@@ -611,7 +611,7 @@ if (isset($dossier))
                                             <?php $agents = App\User::get(); ?>
                                            
                                                 @foreach ($agents as $agt)
-                                                @if($agt->isOnline())
+                                                {{--@if($agt->isOnline())--}}
                                                   
                                                 <?php if (!empty ($agentname)) { ?>
                                                 @if ($agentname["id"] == $agt["id"])
@@ -624,7 +624,7 @@ if (isset($dossier))
                                                 else
                                                       {  echo '<option value='.$agt["id"] .' >'.$agt["name"].' '.$agt["lastname"].'</option>';}
                                                 ?>
-                                                @endif
+                                                {{--@endif--}}
                                                 @endforeach    
                 </select>
 

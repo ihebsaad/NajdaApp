@@ -320,6 +320,7 @@ class DossierImmobileController extends Controller
             // $to='kbskhaled@gmail.com' ;
             // $cc = 'kbskhaledfb@gmail.com';
             $cc=array();
+            $bcc=array();
 
             $destinataires = null;
             $dests = null;
@@ -351,8 +352,8 @@ class DossierImmobileController extends Controller
   
                   }
                     // cc nejib karoui; 
-                   array_push($cc,'nejib.karoui@gmail.com');
-                   array_push($cc,'kbskhaled@gmail.com');
+                   array_push($bcc,'nejib.karoui@gmail.com');
+                   array_push($bcc,'kbskhaled@gmail.com');
   
                }
   
@@ -361,18 +362,19 @@ class DossierImmobileController extends Controller
              {
                $to=$dm->client_adresse ; // null;
                 // cc nejib karoui; 
-                  array_push($cc,'nejib.karoui@gmail.com');
-                  array_push($cc,'kbskhaled@gmail.com');
+                  array_push($bcc,'nejib.karoui@gmail.com');
+                  array_push($bcc,'kbskhaled@gmail.com');
   
                //$cc=null; 
              }
 
            $swiftMailer = new Swift_Mailer($swiftTransport);
                 Mail::setSwiftMailer($swiftMailer);      
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
                $message        
                ->to($to)
                ->cc($cc ?: [])
+               ->bcc($bcc ?: [])
                ->subject($sujet)
                ->setBody($contenu, 'text/html')
                ->setFrom([$from => $fromname]);
@@ -628,11 +630,24 @@ And the rest of the entity signature*/
 
                        
                     }
-
+                     
+                     $nom_ass='';
+                     $prenom_ass='';
+                     $nom_prenom='';
+              
+                    $nom_ass=$dossier->subscriber_name;
+                    $prenom_ass=$dossier->subscriber_lastname;
+              
+                    if( $nom_ass && $prenom_ass)
+                    {
+                     $nom_prenom=$prenom_ass.' '.$nom_ass ; 
+                    }
 
                     $nouv= new DossierImmobile ([
                       'dossier_id'=>$dossier->id,
                       'reference_doss' =>$dossier->reference_medic,
+                      'nom_assure' =>$nom_prenom,
+                      'ref_client'=>$dossier->reference_customer,
                       'client_id' =>$dossier->customer_id,
                       'client_name' =>$cliname,
                       'client_adresse' =>$climail,
@@ -890,7 +905,7 @@ And the rest of the entity signature*/
                   }
                 }
 //=======================================================================================================
-
+             
 
             if($dm->langue_client=='Fr')
             {
@@ -900,7 +915,7 @@ And the rest of the entity signature*/
                 (Signé): Mail généré automatiquement";
             $contenu=$contenu.'<br><br>Cordialement <br> Najda Assistance<br><br><hr style="float:left;"><br><br>';*/
 
-            $sujet = 'Clôture du dossier '.$dm->reference_doss;
+            $sujet = 'Dossier immobile '.$dm->nom_assure.' - '.$dm->ref_client.' - '.$dm->reference_doss;
             $contenu = "Bonjour de ".$entete.",<br><br>
                     Nous avons constaté qu’aucune action n’a été entreprise dans ce dossier depuis 3 jours, et aucune action n’y est programmée.<br><br> Merci de nous indiquer s’il y a lieu de le clôturer ou si nous devons le garder ouvert. Et dans ce dernier cas quelles sont vos instructions pour la suite ?<br><br>
                 (Signé): Ceci est un email généré automatiquement par le système de gestion de Najda Assistance.";
@@ -915,7 +930,7 @@ And the rest of the entity signature*/
               The file ".$dm->reference_doss." has seen no action or instruction from you for 72 hours. Please let us know if we need to close it, or if you have any new instructions concerning it?<br>
             (Signed): Mail generated automatically";
             $contenu=$contenu.'<br><br>Best regards <br> Najda Assistance <br><br><hr style="float:left;"><br><br>';*/
-             $sujet = 'Close the file '.$dm->reference_doss;
+             $sujet = 'Motionless file '.$dm->nom_assure.' - '.$dm->ref_client.' - '.$dm->reference_doss;
              $contenu = "Hello from ".$entete.",<br><br>
               We noticed that no action has been taken on this file for 3 days, and there is no action scheduled for the upcoming days.<br><br>
               Please let us know whether we should close the file or keep it open. In that case what are your following instructions?<br><br>
@@ -931,7 +946,7 @@ And the rest of the entity signature*/
             // $to='kbskhaled@gmail.com' ;
             // $cc = 'kbskhaledfb@gmail.com';
             $cc=array();
-
+            $bcc=array();
             $destinataires = null;
             $dests = null;
              if($dm->client_adresse)
@@ -962,28 +977,33 @@ And the rest of the entity signature*/
   
                   }
                     // cc nejib karoui; 
-                   array_push($cc,'nejib.karoui@gmail.com');
-                   array_push($cc,'kbskhaled@gmail.com');
+                  // array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                  //array_push($bcc,'kbskhaled@gmail.com');
+                  // array_push($bcc,'24ops@najda-assistance.com');
   
-               }
-  
+               
+                 array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                 array_push($bcc,'kbskhaled@gmail.com');
+                 array_push($bcc,'24ops@najda-assistance.com');
              }
              else
              {
                $to=$dm->client_adresse ; // null;
                 // cc nejib karoui; 
-                  array_push($cc,'nejib.karoui@gmail.com');
-                  array_push($cc,'kbskhaled@gmail.com');
+                   array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                   array_push($bcc,'kbskhaled@gmail.com');
+                   array_push($bcc,'24ops@najda-assistance.com');
   
                //$cc=null; 
              }
-
+           // dd($bcc);
            $swiftMailer = new Swift_Mailer($swiftTransport);
                 Mail::setSwiftMailer($swiftMailer);      
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
                $message        
                ->to($to)
                ->cc($cc ?: [])
+               ->bcc($bcc ?: [])
                ->subject($sujet)
                ->setBody($contenu, 'text/html')
                ->setFrom([$from => $fromname]);
@@ -1020,7 +1040,8 @@ And the rest of the entity signature*/
 
 
             }
-
+         
+		  }
 
          }
          else

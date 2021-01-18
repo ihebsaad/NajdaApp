@@ -264,6 +264,7 @@ class FacturesController extends Controller
     {
             
             $cc=array();
+            $bcc=array();
             $destinataires = null;
             $dests = null;
              /*if($adresses)
@@ -301,8 +302,9 @@ class FacturesController extends Controller
   
                   }
                 //nejib.karoui@gmail.com
-                  array_push($cc,'nejib.karoui@gmail.com');
-                  array_push($cc,'kbskhaled@gmail.com');
+                   array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                   array_push($bcc,'kbskhaled@gmail.com');
+                   array_push($bcc,'24ops@najda-assistance.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
   
                }
@@ -310,18 +312,20 @@ class FacturesController extends Controller
                {
                $to=$dests[0]; // null;
                 //nejib.karoui@gmail.com
-                 array_push($cc,'nejib.karoui@gmail.com');
-                 array_push($cc,'kbskhaled@gmail.com');
+                array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                   array_push($bcc,'kbskhaled@gmail.com');
+                   array_push($bcc,'24ops@najda-assistance.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
  
                }
 
                 $swiftMailer = new Swift_Mailer($swiftTransport);
                 Mail::setSwiftMailer($swiftMailer);      
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
                $message        
                ->to($to)
                ->cc($cc ?: [])
+               ->bcc($bcc ?: [])
                ->subject($sujet)
                ->setBody($contenu, 'text/html')
                ->setFrom([$from => $fromname]);
@@ -1570,8 +1574,8 @@ Many thanks for your collaboration.<br><br>
   
                   }
                  
-                 array_push($cc,'nejib.karoui@gmail.com');
-                 array_push($cc,'kbskhaled@gmail.com');
+                 array_push($cc,'nejib.karoui@medicmultiservices.com');
+                // array_push($cc,'kbskhaled@gmail.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
   
                }
@@ -1579,8 +1583,8 @@ Many thanks for your collaboration.<br><br>
                {
                $to=$dests[0] ; // null;
           
-                array_push($cc,'nejib.karoui@gmail.com');
-                array_push($cc,'kbskhaled@gmail.com');
+                array_push($cc,'nejib.karoui@medicmultiservices.com');
+                //array_push($cc,'kbskhaled@gmail.com');
                 //array_push($cc,'nbsnajoua@gmail.com');
                }
     
@@ -1626,8 +1630,8 @@ Many thanks for your collaboration.<br><br>
   
                   }
                   
-                  array_push($cc,'nejib.karoui@gmail.com');
-                  array_push($cc,'kbskhaled@gmail.com');
+                  array_push($cc,'nejib.karoui@medicmultiservices.com');
+                 // array_push($cc,'kbskhaled@gmail.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
   
                }
@@ -1635,8 +1639,8 @@ Many thanks for your collaboration.<br><br>
                {
                $to=$dests[0] ; // null;
              
-                 array_push($cc,'nejib.karoui@gmail.com');
-                 array_push($cc,'kbskhaled@gmail.com');
+                 array_push($cc,'nejib.karoui@medicmultiservices.com');
+                // array_push($cc,'kbskhaled@gmail.com');
                  //array_push($cc,'nbsnajoua@gmail.com');
                }
     
@@ -2243,7 +2247,7 @@ Many thanks for your collaboration.<br><br>
                             $dateSys = \DateTime::createFromFormat($format, $dtc);
                             //dd($dateSys->diff($date_rapp)->d);
 
-                            if( $dateSys >  $date_rapp && intval($dateSys->diff($date_rapp)->d)>15)
+                    if( $dateSys > $date_rapp && intval($dateSys->diff($date_rapp)->format('%R%a'))> 15)
                             {
 
                                $contenu = "Alerte pour le financier - Rappel periodique de 15 jours <br>
@@ -2897,7 +2901,7 @@ Many thanks for your collaboration<br><br>
                             $dtc=(new \DateTime())->format($format);
                             $dateSys = \DateTime::createFromFormat($format, $dtc);
 
-                            if( $dateSys >  $date_rapp && intval($dateSys->diff($date_rapp)->d)>15)
+                    if( $dateSys > $date_rapp && intval($dateSys->diff($date_rapp)->format('%R%a')) > 15)
                             {
 
                               $contenu = "Alerte pour le financier - Rappel periodique de 15 jours <br>
