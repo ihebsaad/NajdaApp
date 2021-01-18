@@ -458,7 +458,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
     <form  enctype="multipart/form-data" id="theform" method="POST" action="{{action('EmailController@send')}}"    onsubmit="return checkForm(this);"  >
         {{ csrf_field() }}
 
-        <input id="dossier" type="hidden" class="form-control" name="dossier"  value="0" />
+        <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$dossier->id}}" />
         <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
         <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
         <input id="accuse" type="hidden" class="form-control" name="accuse"  value="1" />
