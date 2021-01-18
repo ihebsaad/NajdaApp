@@ -6869,7 +6869,7 @@ $commentaire = $request->get('commentaire');
 
         $cc='ihebsaad@gmail.com';
         //  $cc='';
-        //    $to='ihebsaad@gmail.com';
+        // $to='hammalisirine120@gmail.com';
          $to='envoifax@najda-assistance.com';
          // nom sans espace
         $nom2 = str_replace(' ', '', $nom);
@@ -7570,7 +7570,7 @@ else
         ]);	$hist->save();
 		
 		
-        $urlapp="http://$_SERVER[HTTP_HOST]/najdatest";
+        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 $urlsending=$urlapp.'/envoyes';
 if($smsper!==null)
                 {$urlsending=$urlapp.'/personnes/view/'.$smsper;}
