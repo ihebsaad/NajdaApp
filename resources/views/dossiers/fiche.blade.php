@@ -2843,6 +2843,7 @@ else
         <div class="modal-dialog" role="telenvoi"  sytle="width:20px;height:10px">
             <div class="modal-content">
                 <div class="modal-header">
+<h3 class="modal-title" style="text-align:center"  id=" "><center>Passer un appel </center> </h3>
                   
 </div>
                 <div class="modal-body">

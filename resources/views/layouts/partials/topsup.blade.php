@@ -3,6 +3,8 @@
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+
 <header class="header">
     <?php
     use App\Entree;
@@ -148,7 +150,7 @@
           </form>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a   id="phonebtn" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
+          <a   data-toggle="modal" data-target="#appelinterfacerecep" id="phonebtn"  class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:-5px ">
               <span class="fas fa-fw fas fa-phone fa-2x"></span>
           </a> 
         </div>
@@ -269,6 +271,93 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     </div>
 </div>
 
+ <!--Modal Tel-->
+
+    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="numatransfer">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Saisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="numatransfer" novalidate="novalidate">
+
+                                <input id="numatrans" name="numatrans" type="text" value="" />
+                                   
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+<?php
+
+?>
+
+                    <button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+<!--Modal Tel 2-->
+
+    <div class="modal fade" id="appelinterfacerecep"    role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+ <div class="modal-dialog modal-lg" role="telrecep"  sytle="width:200px;height:30px">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" style="text-align:center"  id=" "><center>Recevoir un appel </center> </h3>
+</div>
+                <div class="modal-body">
+                    <div class="card-body" >
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="appelinterfacerecep" novalidate="novalidate">
+  <div id="call_duration">&nbsp;</div>
+            <div id="status_call">&nbsp;</div>
+<input id="nomencoursrecep" name="nomencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
+ <input id="numencoursrecep" name="numencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+
+<button type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
+ <button type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
+ <div id="mettreenattente" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
+ <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
+ <div id="couperson" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
+ <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
+ <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
 
 <style>
@@ -307,6 +396,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         position:relative ;
         top:-65px;
         left: -50px;
+
+
+    }
+.modal-lg
+    {
+
+        max-width:60%;
 
 
     }
@@ -554,6 +650,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
 
+
 </script>
 
 <script>
@@ -617,23 +714,49 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 <script>
 
-    $('#phonebtn').on('click', function(event) {
-        event.preventDefault();
-        var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php',
-            features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
-        var session=null;
-        // This is set when the phone is open and removed on close
-        if (!localStorage.getItem('ctxPhone')) {
-            window.open(url, 'ctxPhone', features);
+      function Hangup()
+        {
+            webphone_api.hangup();
+            
+        }
+function accept()
+        {
+            webphone_api.accept();
+            
+        }
+    function transfer()
+        {
+numtrans=$('#numatrans').val();;
+//alert(numtrans);
+            webphone_api.Transfer(numtrans);
+        }
+  function hold(state)
+        {
+if(state===true)
 
-            return false;
-        } else {
-            window.alert('Phone already open.');
+         {   webphone_api.hold(state);
+document.getElementById('mettreenattente').style.display = 'none';
+document.getElementById('reprendreappel').style.display = 'inline-block';}
+if(state===false)
+
+         {   webphone_api.hold(state);
+document.getElementById('reprendreappel').style.display = 'none';
+document.getElementById('mettreenattente').style.display = 'inline-block';}
 
         }
-        alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
+function mute(state,direction)
+        {
+if(state===true)
 
-    });
+         {   webphone_api.mute(state,direction);
+document.getElementById('couperson').style.display = 'none';
+document.getElementById('reactiveson').style.display = 'inline-block';}
+if(state===false)
 
+         {   webphone_api.mute(state,direction);
+document.getElementById('reactiveson').style.display = 'none';
+document.getElementById('couperson').style.display = 'inline-block';}
+
+        }
 
 </script>
