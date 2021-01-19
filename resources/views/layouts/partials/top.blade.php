@@ -12,6 +12,26 @@
      User::where('id', $iduser)->update(array('statut'=>'1'));
 
     ?>
+     <?php
+
+         $CurrentUser = auth()->user();
+         $iduser=$CurrentUser->id;
+
+if($iduser===32)
+{
+?>
+                        <input id="extensiontel" name="extensiontel" type="hidden" value="2000">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="3862oOPD3F">
+<?php
+}
+else
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2001">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="z6Hm&FqQF2G@S3">
+<?php
+}
+?>
         <div class="collapse bg-grey" id="navbarHeader">
              @include('layouts.partials._top_menu')
         </div>
@@ -376,10 +396,11 @@
 
                             <form id="appelinterfacerecep" novalidate="novalidate">
   <div id="call_duration">&nbsp;</div>
-            <div id="status_call">&nbsp;</div>
-<input id="nomencoursrecep" name="nomencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
- <input id="numencoursrecep" name="numencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
-
+            <div style="color:green;font-size: 30px;"id="status_call">&nbsp;</div>
+<input id="nomencoursrecep" name="nomencours" type="text" readonly value="" style="font-size: 30px;border: none;">
+ <div>
+<input id="numencoursrecep" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
+</div>
                             </form>
 
                         </div>
@@ -392,11 +413,11 @@
 
 <button type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
  <button type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
- <div id="mettreenattente" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
+ <div id="mettreenattente" style="display :none;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
  <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
- <div id="couperson" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
+ <div id="couperson" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
  <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
- <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
+ <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
@@ -703,7 +724,55 @@ $iduser=$user->id; ?>
 </script>
 
 <script>
+$(document).ready(function() {
+var extensiontel = $('#extensiontel').val();
+ var motdepassetel = $('#motdepassetel').val();
+//alert(extensiontel);
+        webphone_api.parameters['username'] = extensiontel;      // SIP account username
+        webphone_api.parameters['password'] = motdepassetel;      // SIP account password (see the "Parameters encryption" in the documentation)        
+        webphone_api.parameters['callto'] = '';        // destination number to call
+        webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
+        webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
+  webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
+ webphone_api.start();
+webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
 
+{
+
+                if (event === 'setup' && direction == 2)
+
+                {
+$('#appelinterfacerecep').modal({show: true});
+            $(".modal-body #numencoursrecep").val(peerdisplayname );
+var _token = $('input[name="_token"]').val();
+$.ajax({
+
+                    url:"{{ route('entrees.detectnom')}}",
+                    method:"POST",
+                    data:'_token='+_token+'&peerdisplayname='+peerdisplayname,
+                    success:function(data)
+                    {
+                         $(".modal-body #nomencoursrecep").val(data );
+                    }
+                });  
+
+                }  
+ if (event === 'connected' && direction == 2)
+
+                {
+document.getElementById('mettreenattente').style.display = 'inline-block';
+ document.getElementById('couperson').style.display = 'inline-block'; 
+document.getElementById('transferapp').style.display = 'inline-block';
+document.getElementById('status_call').innerHTML="Appel en cours";
+              }  
+if (event === 'disconnected')
+{
+$('#appelinterfacerecep').modal('hide');
+ location.reload();
+} 
+
+});
+});
       function Hangup()
         {
             webphone_api.hangup();
@@ -748,5 +817,6 @@ document.getElementById('reactiveson').style.display = 'none';
 document.getElementById('couperson').style.display = 'inline-block';}
 
         }
+
 
 </script>

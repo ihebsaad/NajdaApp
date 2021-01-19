@@ -3200,8 +3200,8 @@ else
     </div>
    <!--Modal Tel-->
 
-    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
-        <div class="modal-dialog" role="numatransfer">
+    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="numatransfer1">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModal2">Saisir le numéro</h5>
@@ -3213,9 +3213,9 @@ else
                         <div class="form-group">
                             {{ csrf_field() }}
 
-                            <form id="numatransfer" novalidate="novalidate">
+                            <form id="numatransfer1" novalidate="novalidate">
 
-                                <input id="numatrans" name="numatrans" type="text" value="" />
+                                <input id="numatrans1" name="numatrans1" type="text" value="" />
                                    
                         </div>
                     </div>
@@ -3254,9 +3254,12 @@ else
 
                             <form id="appelinterfaceenvoi" novalidate="novalidate">
   <div id="call_duration">&nbsp;</div>
-            <div id="status_call">&nbsp;</div>
-<input id="nomencours" name="nomencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
- <input id="numencours" name="numencours" type="text" readonly value="" style="font-size: 30px;text-align: center;border: none;margin-left:50px;">
+            <div style="color:green;font-size: 30px;"id="status_callenv">&nbsp;</div>
+<input id="nomencours" name="nomencours" type="text" readonly value="" style="font-size: 30px;border: none;">
+ <div>
+<input id="numencours" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
+</div>
+         
 
                             </form>
 
@@ -3269,12 +3272,12 @@ else
 
 
                    
- <button type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
- <div id="mettreenattente" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
- <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
- <div id="couperson" style="display :inline-block;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
- <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
- <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
+ <button type="button"  class="btn btn-primary"  onclick="Hangup1();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
+ <div id="mettreenattenteenv" style="display:none;"><button type="button"  class="btn btn-primary" onclick="hold1(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
+ <div id="reprendreappelenv" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="hold1(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
+ <div id="coupersonenv" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute1(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
+ <div id="reactivesonenv" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute1(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
+ <button id="transferappenv" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer1"><i class="fas fa-reply-all"></i> Transférer</button>
 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
@@ -6311,6 +6314,29 @@ webphone_api.onAppStateChange (function (state)
 
 
     
+ $(document).ready(function() {
+
+webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
+
+{
+
+                
+ if (event === 'connected' && direction === 1 )
+
+                {
+document.getElementById('mettreenattenteenv').style.display = 'inline-block';
+ document.getElementById('coupersonenv').style.display = 'inline-block'; 
+document.getElementById('transferappenv').style.display = 'inline-block';
+document.getElementById('status_callenv').innerHTML="Appel en cours";
+              }  
+if (event === 'disconnected')
+{
+$('#appelinterfaceenvoi').modal('hide');
+ location.reload();
+} 
+
+});
+});
  
 
        
@@ -6332,7 +6358,7 @@ $(".modal-body #nomencours").val(nom );
                 
  
   /**Configuration parameters*/
- var extensiontel = $('#extensiontel').val();
+ /*var extensiontel = $('#extensiontel').val();
  var motdepassetel = $('#motdepassetel').val();
 //alert(extensiontel);
         webphone_api.parameters['username'] = extensiontel;      // SIP account username
@@ -6341,7 +6367,7 @@ $(".modal-body #nomencours").val(nom );
         webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
         webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
   webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
- webphone_api.start();
+ webphone_api.start();*/
             num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
 //alert(webphone_api.getstatus());
 //document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
@@ -6351,44 +6377,47 @@ $(".modal-body #nomencours").val(nom );
 
 
 }
- 
-           function Hangup()
+
+           function Hangup1()
         {
             webphone_api.hangup();
             
         }
-    function transfer()
+    function transfer1()
         {
-numtrans=$('#numatrans').val();;
+numtrans=$('#numatrans1').val();;
 //alert(numtrans);
             webphone_api.Transfer(numtrans);
         }
-  function hold(state)
+  function hold1(state)
         {
+alert('state');
 if(state===true)
 
-         {   webphone_api.hold(state);
-document.getElementById('mettreenattente').style.display = 'none';
-document.getElementById('reprendreappel').style.display = 'inline-block';}
+         {  
+
+ webphone_api.hold(state);
+document.getElementById('mettreenattenteenv').style.display = 'none';
+document.getElementById('reprendreappelenv').style.display = 'inline-block';}
 if(state===false)
 
          {   webphone_api.hold(state);
-document.getElementById('reprendreappel').style.display = 'none';
-document.getElementById('mettreenattente').style.display = 'inline-block';}
+document.getElementById('reprendreappelenv').style.display = 'none';
+document.getElementById('mettreenattenteenv').style.display = 'inline-block';}
 
         }
-function mute(state,direction)
+function mute1(state,direction)
         {
 if(state===true)
 
          {   webphone_api.mute(state,direction);
-document.getElementById('couperson').style.display = 'none';
-document.getElementById('reactiveson').style.display = 'inline-block';}
+document.getElementById('coupersonenv').style.display = 'none';
+document.getElementById('reactivesonenv').style.display = 'inline-block';}
 if(state===false)
 
          {   webphone_api.mute(state,direction);
-document.getElementById('reactiveson').style.display = 'none';
-document.getElementById('couperson').style.display = 'inline-block';}
+document.getElementById('reactivesonenv').style.display = 'none';
+document.getElementById('coupersonenv').style.display = 'inline-block';}
 
         }
    

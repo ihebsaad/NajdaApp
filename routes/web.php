@@ -113,6 +113,7 @@ Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@
 Route::get('/entrees/',  'EntreesController@index')->name('entrees.index');
 Route::get('/entrees/finances',  'EntreesController@finances')->name('entrees.finances');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
+Route::post('/entrees/detectnom','EntreesController@detectnom')->name('entrees.detectnom');
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/enregistrements','EntreesController@enregistrements')->name('entrees.enregistrements');
 Route::get('/entrees/view/{id}', 'EntreesController@view');

@@ -25,7 +25,7 @@ use Breadlesscode\Office\Converter;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Facades\File;
 use App\Historique;
-
+use App\Adresse;
 
 ini_set('memory_limit','1024M');
 ini_set('upload_max_filesize','50M');
@@ -841,7 +841,19 @@ else
         ]);	$hist->save();
 
     }
+public function detectnom(Request $request)
+    {
+        if ($request->get('peerdisplayname') != null)
+        {  
+            $entree = $request->get('peerdisplayname');
+            ;
+            //$entree = Entree::where(['id' => $identree])->first();
+            $Adress=Adresse::where('champ', $entree)->first();
+           
+            return $Adress->nom.' '.$Adress->prenom.' ( '.$Adress->remarque .' ) ';
+        }
 
+    }
 
 
 
