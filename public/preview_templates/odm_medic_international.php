@@ -1282,7 +1282,7 @@ foreach ($array_adls as $adl) {
 				<p id="hotel" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
 <?php } ?>	
       
- <span style="font-family:'Times New Roman'; font-weight:bold">où une chambre est réservée</span><span style="font-family:'Times New Roman'">&#xa0; </span>
+ <span style="font-family:'Times New Roman'; font-weight:bold"><input name="CL_nomhotel" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_nomhotel'])) {echo "value='".$detailom['CL_nomhotel']."'";}} ?> >où une chambre est réservée</span><span style="font-family:'Times New Roman'">&#xa0; </span>
        <span style="font-family:'Times New Roman'; font-weight:bold">en votre nom pour la nuitée du </span><span style="font-family:'Times New Roman'">&#xa0; </span>
              <input type="datetime-local" name="CL_debut_res" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_debut_res'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_debut_res']))."'";}} ?> >
         <span style="font-family:'Times New Roman'; font-weight:bold"> au </span><span style="font-family:'Times New Roman'">&#xa0; </span>
