@@ -3227,7 +3227,7 @@ else
 
 ?>
 
-                    <button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>
+                    <button type="button"  class="btn btn-primary"  onclick="transfer1();">Transférer</button>
    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 
@@ -3239,7 +3239,7 @@ else
     </div>
 <!--Modal Tel 2-->
 
-    <div class="modal fade" id="appelinterfaceenvoi"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" id="appelinterfaceenvoi"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" data-backdrop="static"  data-keyboard="false" >
         <div class="modal-dialog" role="telenvoi"  sytle="width:20px;height:10px">
             <div class="modal-content">
                 <div class="modal-header">
@@ -3254,7 +3254,15 @@ else
 
                             <form id="appelinterfaceenvoi" novalidate="novalidate">
   <div id="call_duration">&nbsp;</div>
-            <div style="color:green;font-size: 30px;"id="status_callenv">&nbsp;</div>
+                <div style="font-size: 30px;">
+
+<label style="color:green;font-size: 30px;"id="status_callenv"></label>
+
+
+<label style="margin-left:150px;font-size: 30px;"id="min2"></label>
+<label style="font-size:30px;" id="sec2"></label>
+
+</div>
 <input id="nomencours" name="nomencours" type="text" readonly value="" style="font-size: 30px;border: none;">
  <div>
 <input id="numencours" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
@@ -6324,6 +6332,25 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
  if (event === 'connected' && direction === 1 )
 
                 {
+var minutesLabel2 = document.getElementById("min2");
+var secondsLabel2 = document.getElementById("sec2");
+var totalSeconds2 = 0;
+setInterval(setTime2, 1000);
+
+function setTime2() {
+  ++totalSeconds2;
+  secondsLabel2.innerHTML = pad2(totalSeconds2 % 60);
+  minutesLabel2.innerHTML = pad2(parseInt(totalSeconds2 / 60))+":";
+}
+
+function pad2(val2) {
+  var valString2 = val2 + "";
+  if (valString2.length < 2) {
+    return "0" + valString2;
+  } else {
+    return valString2;
+  }
+}
 document.getElementById('mettreenattenteenv').style.display = 'inline-block';
  document.getElementById('coupersonenv').style.display = 'inline-block'; 
 document.getElementById('transferappenv').style.display = 'inline-block';
@@ -6391,7 +6418,7 @@ numtrans=$('#numatrans1').val();;
         }
   function hold1(state)
         {
-alert('state');
+//alert('state');
 if(state===true)
 
          {  

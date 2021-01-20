@@ -171,7 +171,7 @@ else
           </form>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a   data-toggle="modal" data-target="#appelinterfacerecep" id="phonebtn"  class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:-5px ">
+          <a   data-toggle="modal" data-target="#faireappel1" id="phonebtn"  class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:-5px ">
               <span class="fas fa-fw fas fa-phone fa-2x"></span>
           </a> 
         </div>
@@ -333,7 +333,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     </div>
 <!--Modal Tel 2-->
 
-    <div class="modal fade" id="appelinterfacerecep"    role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal fade" id="appelinterfacerecep"    role="dialog" aria-labelledby="basicModal" aria-hidden="true" data-backdrop="static"  data-keyboard="false" >
  <div class="modal-dialog modal-lg" role="telrecep"  sytle="width:200px;height:30px">
             <div class="modal-content">
                 <div class="modal-header">
@@ -348,7 +348,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                             <form id="appelinterfacerecep" novalidate="novalidate">
   <div id="call_duration">&nbsp;</div>
-            <div style="color:green;font-size: 30px;"id="status_call">&nbsp;</div>
+            
+                <div style="font-size: 30px;">
+
+<label style="color:green;font-size: 30px;"id="status_call"></label>
+
+
+<label style="margin-left:180px;font-size: 30px;"id="minutes1"></label>
+<label style="font-size:30px;" id="seconds1"></label>
+
+</div>
 <input id="nomencoursrecep" name="nomencours" type="text" readonly value="" style="font-size: 30px;border: none;">
  <div>
 <input id="numencoursrecep" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
@@ -364,7 +373,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 <div class="modal-footer">
 
 
-<button type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
+<button id="repondre" type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
  <button type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
  <div id="mettreenattente" style="display :none;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
  <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
@@ -381,6 +390,144 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         </div>
 
     </div>
+<!--Modal Tel-->
+
+    <div class="modal fade" id="faireappel1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="tel">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Saisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="faireappel1" novalidate="novalidate">
+
+                               
+                                     <label for="numtel1">Numéro</label>
+ <input id="numtel1" name="numtel1" type="text"  value="" ></input>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+ <button type="button"  class="btn btn-primary"  onclick="ButtonOnclick2();">Appeler</button>
+ <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+<!--Modal Tel-->
+
+    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="numatransfer2">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Saisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="numatransfer2" novalidate="novalidate">
+
+                                <input id="numatrans2" name="numatrans2" type="text" value="" />
+                                   
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+<?php
+
+?>
+
+                    <button type="button"  class="btn btn-primary"  onclick="transfer2();">Transférer</button>
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+<!--Modal Tel 2-->
+
+    <div class="modal fade" id="appelinterfaceenvoi2"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+        <div class="modal-dialog" role="telenvoi"  sytle="width:20px;height:10px">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" style="text-align:center"  id=" "><center>Passer un appel </center> </h3>
+</div>
+                <div class="modal-body">
+                    <div class="card-body" >
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="appelinterfaceenvoi2" novalidate="novalidate">
+  
+            <div style="font-size: 30px;">
+
+<label style="color:green;font-size: 30px;"id="status_callenv2"></label>
+
+
+<label style="margin-left:150px;font-size: 30px;"id="minutes"></label>
+<label style="font-size:30px;" id="seconds"></label>
+
+</div>
+<input id="nomencours2" name="nomencours" type="text" readonly value="" style="font-size: 30px;border: none;">
+ <div>
+<input id="numencours2" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
+</div>
+         
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+
+                   
+ <button type="button"  class="btn btn-primary"  onclick="Hangup2();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
+ <div id="mettreenattenteenv2" style="display:none;"><button type="button"  class="btn btn-primary" onclick="hold2(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
+ <div id="reprendreappelenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="hold2(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
+ <div id="coupersonenv2" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute2(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
+ <div id="reactivesonenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute2(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
+ <button id="transferappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer1"><i class="fas fa-reply-all"></i> Transférer</button>
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
 
 
 <style>
@@ -772,13 +919,63 @@ $.ajax({
  if (event === 'connected' && direction == 2)
 
                 {
+var minutesLabel1 = document.getElementById("minutes1");
+var secondsLabel1 = document.getElementById("seconds1");
+var totalSeconds1 = 0;
+setInterval(setTime1, 1000);
+
+function setTime1() {
+  ++totalSeconds1;
+  secondsLabel1.innerHTML = pad1(totalSeconds1 % 60);
+  minutesLabel1.innerHTML = pad1(parseInt(totalSeconds1 / 60))+":";
+}
+
+function pad1(val1) {
+  var valString1 = val1 + "";
+  if (valString1.length < 2) {
+    return "0" + valString1;
+  } else {
+    return valString1;
+  }
+}
 document.getElementById('mettreenattente').style.display = 'inline-block';
  document.getElementById('couperson').style.display = 'inline-block'; 
 document.getElementById('transferapp').style.display = 'inline-block';
-document.getElementById('status_call').innerHTML="Appel en cours";              }  
-if (event === 'disconnected' && direction == 2)
+document.getElementById('status_call').innerHTML="Appel en cours"; 
+document.getElementById('repondre').style.display = 'none';
+             }  
+if (event === 'connected' && direction == 1)
+
+                {
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+setInterval(setTime, 1000);
+
+function setTime() {
+  ++totalSeconds;
+  secondsLabel.innerHTML = pad(totalSeconds % 60);
+  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60))+":";
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+
+document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
+ document.getElementById('coupersonenv2').style.display = 'inline-block'; 
+document.getElementById('transferappenv2').style.display = 'inline-block';
+document.getElementById('status_callenv2').innerHTML="Appel en cours"; } 
+if (event === 'disconnected')
 {
 $('#appelinterfacerecep').modal('hide');
+ location.reload();
+$('#appelinterfaceenvoi2').modal('hide');
  location.reload();
 } 
 
@@ -826,6 +1023,84 @@ if(state===false)
          {   webphone_api.mute(state,direction);
 document.getElementById('reactiveson').style.display = 'none';
 document.getElementById('couperson').style.display = 'inline-block';}
+
+        }
+   function ButtonOnclick2()
+        {
+
+
+peerdisplayname=document.getElementById('numtel1').value;
+if(peerdisplayname!=="")
+{
+$('#appelinterfaceenvoi2').modal({show:true});
+//alert(peerdisplayname);
+     $(".modal-body #numencours2").val(peerdisplayname );
+var _token = $('input[name="_token"]').val();
+$.ajax({
+
+                    url:"{{ route('entrees.detectnom')}}",
+                    method:"POST",
+                    data:'_token='+_token+'&peerdisplayname='+peerdisplayname,
+                    success:function(data)
+                    {
+                         $(".modal-body #nomencours2").val(data );
+                    }
+                }); 
+
+
+  $("#faireappel1").modal('hide');
+                
+ 
+ 
+                webphone_api.call(peerdisplayname);}
+
+//testiscall();
+
+
+
+
+}
+
+           function Hangup2()
+        {
+            webphone_api.hangup();
+            
+        }
+    function transfer2()
+        {
+numtrans=$('#numatrans2').val();;
+//alert(numtrans);
+            webphone_api.Transfer(numtrans);
+        }
+  function hold2(state)
+        {
+
+if(state===true)
+
+         {  
+
+ webphone_api.hold(state);
+document.getElementById('mettreenattenteenv2').style.display = 'none';
+document.getElementById('reprendreappelenv2').style.display = 'inline-block';}
+if(state===false)
+
+         {   webphone_api.hold(state);
+document.getElementById('reprendreappelenv2').style.display = 'none';
+document.getElementById('mettreenattenteenv2').style.display = 'inline-block';}
+
+        }
+function mute2(state,direction)
+        {
+if(state===true)
+
+         {   webphone_api.mute(state,direction);
+document.getElementById('coupersonenv2').style.display = 'none';
+document.getElementById('reactivesonenv2').style.display = 'inline-block';}
+if(state===false)
+
+         {   webphone_api.mute(state,direction);
+document.getElementById('reactivesonenv2').style.display = 'none';
+document.getElementById('coupersonenv2').style.display = 'inline-block';}
 
         }
 
