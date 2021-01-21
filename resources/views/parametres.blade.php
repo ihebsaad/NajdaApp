@@ -490,7 +490,7 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 <div class="padding:20px 20px 20px 20px"><br>
 
     <?php
-    $type_missions = TypeMission::get();
+    $type_missions = TypeMission::orderby('nom_type_Mission','asc')->get();
 
 
     ?>
@@ -601,7 +601,7 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
         <select id="typeMissauto" name="typeMissauto" class="form-control select2" style="margin-left: 17px ;width:70%; border: 1px solid #ccc; height: 32px">
           <option value="">Sélectionner</option>
           <?php
-          $typesMissions = TypeMission::get();
+          $typesMissions = TypeMission::orderby('nom_type_Mission','asc')->get();
           ?>
              @foreach( $typesMissions as $c) 
 
