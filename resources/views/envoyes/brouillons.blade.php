@@ -85,8 +85,9 @@
 
                     </a>
                 </div>
+<a  href=" {{ route('emails.envoimailbr', $envoye['id']) }}" >
                 <div class="media-body pl-3">
-                    <div class="subject"><a  href=" {{ route('emails.envoimailbr', $envoye['id']) }}" >{{$envoye->description}}</a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div>
+                    <div class="subject">{{$envoye->description}}<small style="margin-top:10px;">{{$envoye->destinataire}}</small></div>
                     <div class="stats">
                         <div class="row">
                             <div class="col-sm-8 col-md-8 col-lg-8">
@@ -98,6 +99,7 @@
                     </div>
                 </div>
             </div>
+</a>
         @endforeach
 
 
