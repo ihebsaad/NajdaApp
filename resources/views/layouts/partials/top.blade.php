@@ -420,7 +420,7 @@ else
 
 
 <button id="repondre" type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
- <button type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
+ <button id="racc2" type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher </button>
  <div id="mettreenattente" style="display :none;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
  <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
  <div id="couperson" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
@@ -557,7 +557,7 @@ else
 
 
                    
- <button type="button"  class="btn btn-primary"  onclick="Hangup2();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
+ <button id="racc3" type="button"  class="btn btn-primary"  onclick="Hangup2();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
  <div id="mettreenattenteenv2" style="display:none;"><button type="button"  class="btn btn-primary" onclick="hold2(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
  <div id="reprendreappelenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="hold2(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
  <div id="coupersonenv2" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute2(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
@@ -867,6 +867,7 @@ $iduser=$user->id; ?>
 
 <script>
 $(document).ready(function() {
+var countrecep=1;
 var extensiontel = $('#extensiontel').val();
  var motdepassetel = $('#motdepassetel').val();
 //alert(extensiontel);
@@ -953,15 +954,94 @@ function pad(val) {
 document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
  document.getElementById('coupersonenv2').style.display = 'inline-block'; 
 document.getElementById('transferappenv2').style.display = 'inline-block';
-document.getElementById('status_callenv2').innerHTML="Appel en cours"; } 
-if (event === 'disconnected')
+document.getElementById('status_callenv2').innerHTML="Appel en cours";
+var minutesLabel2 = document.getElementById("min2");
+var secondsLabel2 = document.getElementById("sec2");
+var totalSeconds2 = 0;
+setInterval(setTime2, 1000);
+
+function setTime2() {
+  ++totalSeconds2;
+  secondsLabel2.innerHTML = pad2(totalSeconds2 % 60);
+  minutesLabel2.innerHTML = pad2(parseInt(totalSeconds2 / 60))+":";
+}
+
+function pad2(val2) {
+  var valString2 = val2 + "";
+  if (valString2.length < 2) {
+    return "0" + valString2;
+  } else {
+    return valString2;
+  }
+}
+document.getElementById('mettreenattenteenv').style.display = 'inline-block';
+ document.getElementById('coupersonenv').style.display = 'inline-block'; 
+document.getElementById('transferappenv').style.display = 'inline-block';
+document.getElementById('status_callenv').innerHTML="Appel en cours";
+ } 
+if (event === 'disconnected' && direction == 2)
 {
 $('#appelinterfacerecep').modal('hide');
- location.reload();
-$('#appelinterfaceenvoi2').modal('hide');
- location.reload();
-} 
+$('#appelinterfaceenvoi').modal('hide');
+ //location.reload();
 
+} 
+if (event === 'disconnected' && direction == 1)
+{
+// location.reload();
+$('#appelinterfaceenvoi2').modal('hide');}
+
+});
+
+webphone_api.onCdr(function (caller, called, connecttime, duration, direction, peerdisplayname, reason, line)
+{
+if (direction == 1)
+{
+
+ var durationInt = parseInt(duration,10);
+var durationSec = Math.floor((durationInt+500)/1000);
+var _token = $('input[name="_token"]').val();
+
+//alert(iddossier);
+$.ajax({
+
+                    url:"{{ route('envoyes.envoyetel')}}",
+                    method:"POST",
+
+                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec,
+                    success:function(data)
+                    {
+                      location.reload(); 
+
+
+                    }
+                });
+
+}
+if ( direction == 2)
+{
+
+var durationInt = parseInt(duration,10);
+var durationSec = Math.floor((durationInt+500)/1000);
+var _token = $('input[name="_token"]').val();
+
+
+
+$.ajax({
+
+                    url:"{{ route('entrees.entreetel')}}",
+                    method:"POST",
+                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec,
+                    success:function(data)
+                    {
+                     location.reload(); 
+
+
+                    }
+                });
+
+
+}
 });
 });
       function Hangup()

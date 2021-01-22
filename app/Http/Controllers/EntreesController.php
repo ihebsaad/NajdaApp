@@ -854,6 +854,26 @@ public function detectnom(Request $request)
         }
 
     }
+public function entreetel(Request $request)
+    {
+$date=NOW();
+$counttel=Entree::where('type','tel')->count();
+         $entree = new Entree([
+                    'destinataire' => $request->get('called'),
+                    'mailid'=>'tel-'.$counttel,
+                    'emetteur' => $request->get('caller'),
+                    'sujet' => "",
+                    'contenutxt'=> "",
+                    'contenu' => "",
+                    'reception' =>$date,
+                    'duration' =>$request->get('duration'),
+                    'type' => 'tel',
+                    'dossier' => "",
+                    'dossierid' => 0
+
+                ]);
+$entree->save();
+    }
 
 
 

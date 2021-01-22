@@ -971,14 +971,68 @@ document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
  document.getElementById('coupersonenv2').style.display = 'inline-block'; 
 document.getElementById('transferappenv2').style.display = 'inline-block';
 document.getElementById('status_callenv2').innerHTML="Appel en cours"; } 
-if (event === 'disconnected')
+if (event === 'disconnected' && direction == 2)
 {
 $('#appelinterfacerecep').modal('hide');
- location.reload();
-$('#appelinterfaceenvoi2').modal('hide');
- location.reload();
-} 
 
+
+} 
+if (event === 'disconnected' && direction == 1)
+{
+// location.reload();
+$('#appelinterfaceenvoi2').modal('hide');} 
+
+});
+webphone_api.onCdr(function (caller, called, connecttime, duration, direction, peerdisplayname, reason, line)
+{
+if ( direction == 1)
+{
+
+ var durationInt = parseInt(duration,10);
+var durationSec = Math.floor((durationInt+500)/1000);
+var _token = $('input[name="_token"]').val();
+
+
+
+$.ajax({
+
+                    url:"{{ route('envoyes.envoyetel')}}",
+                    method:"POST",
+
+                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec,
+                    success:function(data)
+                    {
+                      location.reload(); 
+
+
+                    }
+                });
+
+}
+if ( direction == 2)
+{
+
+var durationInt = parseInt(duration,10);
+var durationSec = Math.floor((durationInt+500)/1000);
+var _token = $('input[name="_token"]').val();
+
+
+
+$.ajax({
+
+                    url:"{{ route('entrees.entreetel')}}",
+                    method:"POST",
+                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec,
+                    success:function(data)
+                    {
+                     location.reload(); 
+
+
+                    }
+                });
+
+
+}
 });
 });
       function Hangup()

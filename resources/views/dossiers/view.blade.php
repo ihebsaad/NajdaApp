@@ -3280,7 +3280,7 @@ else
 
 
                    
- <button type="button"  class="btn btn-primary"  onclick="Hangup1();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
+ <button id="racc" type="button"  class="btn btn-primary"  onclick="Hangup1();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
  <div id="mettreenattenteenv" style="display:none;"><button type="button"  class="btn btn-primary" onclick="hold1(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
  <div id="reprendreappelenv" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="hold1(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
  <div id="coupersonenv" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute1(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
@@ -6322,49 +6322,7 @@ webphone_api.onAppStateChange (function (state)
 
 
     
- $(document).ready(function() {
 
-webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
-
-{
-
-                
- if (event === 'connected' && direction === 1 )
-
-                {
-var minutesLabel2 = document.getElementById("min2");
-var secondsLabel2 = document.getElementById("sec2");
-var totalSeconds2 = 0;
-setInterval(setTime2, 1000);
-
-function setTime2() {
-  ++totalSeconds2;
-  secondsLabel2.innerHTML = pad2(totalSeconds2 % 60);
-  minutesLabel2.innerHTML = pad2(parseInt(totalSeconds2 / 60))+":";
-}
-
-function pad2(val2) {
-  var valString2 = val2 + "";
-  if (valString2.length < 2) {
-    return "0" + valString2;
-  } else {
-    return valString2;
-  }
-}
-document.getElementById('mettreenattenteenv').style.display = 'inline-block';
- document.getElementById('coupersonenv').style.display = 'inline-block'; 
-document.getElementById('transferappenv').style.display = 'inline-block';
-document.getElementById('status_callenv').innerHTML="Appel en cours";
-              }  
-if (event === 'disconnected')
-{
-$('#appelinterfaceenvoi').modal('hide');
- location.reload();
-} 
-
-});
-});
- 
 
        
         function ButtonOnclick()

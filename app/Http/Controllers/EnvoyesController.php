@@ -340,5 +340,25 @@ class EnvoyesController extends Controller
 
 
    }
+public function envoyetel(Request $request)
+    {
+$date=NOW();
+$counttel=Envoye::where('type','tel')->count();
+         $envoye = new Envoye([
+                    'destinataire' => $request->get('called'),
+                    
+                    'emetteur' => $request->get('caller'),
+                    'sujet' => "",
+                    
+                    'contenu' => "",
+                    'reception' =>$date,
+                    'duration' =>$request->get('duration'),
+                    'type' => 'tel',
+                    
+                    'dossier' => ''
+
+                ]);
+$envoye->save();
+    }
 }
 

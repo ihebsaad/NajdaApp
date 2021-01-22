@@ -3601,49 +3601,7 @@ $(".modal-body #nomencours").val(nom );
 
 
 }
-$(document).ready(function() {
 
-webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
-
-{
-
-                
- if (event === 'connected' && direction == 1)
-
-                {
-var minutesLabel2 = document.getElementById("minutes2");
-var secondsLabel2 = document.getElementById("seconds2");
-var totalSeconds2 = 0;
-setInterval(setTime2, 1000);
-
-function setTime2() {
-  ++totalSeconds2;
-  secondsLabel2.innerHTML = pad2(totalSeconds2 % 60);
-  minutesLabel2.innerHTML = pad2(parseInt(totalSeconds2 / 60))+":";
-}
-
-function pad2(val2) {
-  var valString2 = val2 + "";
-  if (valString2.length < 2) {
-    return "0" + valString2;
-  } else {
-    return valString2;
-  }
-}
-document.getElementById('mettreenattenteenv').style.display = 'inline-block';
- document.getElementById('coupersonenv').style.display = 'inline-block'; 
-document.getElementById('transferappenv').style.display = 'inline-block';
-document.getElementById('status_callenv').innerHTML="Appel en cours";
-              }  
-if (event === 'disconnected')
-{
-$('#appelinterfaceenvoi').modal('hide');
- location.reload();
-} 
-
-});
-});
- 
            function Hangup1()
         {
             webphone_api.hangup();
