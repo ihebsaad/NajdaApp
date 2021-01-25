@@ -128,7 +128,14 @@ class EnvoyesController extends Controller
     public function savingBR(Request $request)
     {
         $par=Auth::id();
-
+if($request->get('cc')===null)
+{$cc=[];}
+else
+{$cc=$request->get('cc');}
+if($request->get('cci')===null)
+{$cci=[];}
+else
+{$cci=$request->get('cci');}
 
 
         $envoye = new Envoye([
@@ -136,8 +143,8 @@ class EnvoyesController extends Controller
          //   'destinataire' => trim ($request->get('destinataire')),
             'destinataire' => '',
             'contenu'=> trim ($request->get('contenu')),
-            'cc'=> trim ($request->get('cc')),
-          //  'cci'=> trim ($request->get('cci')),
+              'cc'=> trim (implode($cc)),
+          'cci'=> trim (implode($cci)),
             'statut'=> 0,
             'nb_attach'=> 0,
             'par'=> $par,
@@ -158,17 +165,28 @@ class EnvoyesController extends Controller
 
     public function updatingbr(Request $request)
     {
-
+if($request->get('cc')===null)
+{$cc=[];}
+else
+{$cc=$request->get('cc');}
+if($request->get('cci')===null)
+{$cci=[];}
+else
+{$cci=$request->get('cci');}
+if($request->get('destinataire')==="")
+{$destinataire=[];}
+else
+{$destinataire=$request->get('destinataire');}
 
         $id =$request->get('envoye');
         $envoye = Envoye::find($id);
 
         $envoye->update(array(
             'emetteur' => '24ops1@najda-assistance.com', //env('emailenvoi')
-            'destinataire' => trim ($request->get('destinataire')),
+            'destinataire' =>  trim (implode($destinataire)),
             'contenu'=> trim ($request->get('contenu')),
-            'cc'=> trim ($request->get('cc')),
-           // 'cci'=> trim ($request->get('cci')),
+            'cc'=> trim (implode($cc)),
+          'cci'=> trim (implode($cci)),
             'statut'=> 0,
             'nb_attach'=> 0,
 
