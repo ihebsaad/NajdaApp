@@ -8,8 +8,8 @@ if (isset($_GET['CL_facture_devis'])) {$CL_facture_devis=$_GET['CL_facture_devis
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name']; $subscriber_name2=$_GET['subscriber_name']; }
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
@@ -83,6 +83,31 @@ mysqli_query($conn,"set names 'utf8'");
 		} else {
 	    echo "0 results agent";
 		}
+        $sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname,type_affectation FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+         $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -349,9 +374,51 @@ else {
 <p class=rvps3><span class=rvts3>ORDRE DE REPARATION/PRISE EN CHARGE </span></p>
 <p class=rvps3><span class=rvts4><br></span></p>
 <p class=rvps4><span class=rvts5>Nous</span><span class=rvts6> </span><span class=rvts5>soussignés,</span><span class=rvts6> </span><span class=rvts7>Najda</span><span class=rvts8> </span><span class=rvts7>Assistance</span><span class=rvts5>,</span><span class=rvts6> </span><span class=rvts5>nous</span><span class=rvts6> </span><span class=rvts5>engageons</span><span class=rvts6> </span><span class=rvts5>à</span><span class=rvts6> </span><span class=rvts5>prendre</span><span class=rvts6> </span><span class=rvts5>en</span><span class=rvts6> </span><span class=rvts5>charge</span><span class=rvts6> </span><span class=rvts5>les</span><span class=rvts6> </span><span class=rvts5>frais</span><span class=rvts6> </span><span class=rvts5>de</span><span class=rvts6> </span><span class=rvts5>réparation</span><span class=rvts6> </span><span class=rvts5>et</span><span class=rvts6> </span><span class=rvts5>éventuellement</span><span class=rvts6> </span><span class=rvts5>des</span><span class=rvts6> </span><span class=rvts5>pièces</span><span class=rvts6> </span><span class=rvts5>de rechange</span><span class=rvts9> </span><span class=rvts5>telles</span><span class=rvts9> </span><span class=rvts5>que</span><span class=rvts9> </span><span class=rvts5>détaillées</span><span class=rvts6> </span><span class=rvts5>dans</span><span class=rvts9> </span><span class=rvts5>votre</span><span class=rvts9> <input name="CL_facture_devis" placeholder="Facture Devis" type="text" value="<?php if(isset ($CL_facture_devis)) echo $CL_facture_devis; ?>"></input></span><span class=rvts5>relatif</span><span class=rvts9> </span><span class=rvts5>au</span><span class=rvts6> </span><span class=rvts5>véhicule  <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule
-" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>  immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> et</span><span class=rvts6> </span><span class=rvts5>appartenant</span><span class=rvts9> </span><span class=rvts5>à</span><span class=rvts9> </span><span class=rvts5>notre</span><span class=rvts9> </span><span class=rvts5>client(e)</span><span class=rvts5> Mr/Mme <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />.</span></p>
+" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>  immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> et</span><span class=rvts6> </span><span class=rvts5>appartenant</span><span class=rvts9> </span><span class=rvts5>à</span><span class=rvts9> </span><span class=rvts5>notre</span><span class=rvts9> </span><span class=rvts5>client(e)</span><span class=rvts5> Mr/Mme 
+
+
+<?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+    <select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select><select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select>.</span></p>
+<?php
+}else
+{
+?>
+ <input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/> <input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /> .</span></p>
+
+  <?php
+}
+?>
+
+
 <p class=rvps4><span class=rvts5>Nous</span><span class=rvts6> </span><span class=rvts5>vous</span><span class=rvts6> </span><span class=rvts5>rappelons</span><span class=rvts6> </span><span class=rvts5>que</span><span class=rvts6> </span><span class=rvts5>les</span><span class=rvts6> </span><span class=rvts5>réparations</span><span class=rvts6> </span><span class=rvts5>doivent</span><span class=rvts6> </span><span class=rvts5>êtes</span><span class=rvts6> </span><span class=rvts5>effectuées</span><span class=rvts6> </span><span class=rvts5>selon</span><span class=rvts6> </span><span class=rvts5>les</span><span class=rvts6> </span><span class=rvts5>normes</span><span class=rvts6> </span><span class=rvts5>de</span><span class=rvts6> </span><span class=rvts5>sécurité</span><span class=rvts6> </span><span class=rvts5>et</span><span class=rvts6> </span><span class=rvts5>standards</span><span class=rvts6> </span><span class=rvts5>exigés</span><span class=rvts6> </span><span class=rvts5>par</span><span class=rvts6> </span><span class=rvts5>le</span><span class=rvts6> </span><span class=rvts5>constructeur</span><span class=rvts6> </span><span class=rvts5>du véhicule</span><span class=rvts6> </span><span class=rvts5>et</span><span class=rvts6> </span><span class=rvts5>que</span><span class=rvts6> </span><span class=rvts5>les</span><span class=rvts6> </span><span class=rvts5>pièces</span><span class=rvts6> </span><span class=rvts5>de</span><span class=rvts6> </span><span class=rvts5>rechange</span><span class=rvts6> </span><span class=rvts5>éventuelles</span><span class=rvts6> </span><span class=rvts5>doivent</span><span class=rvts6> </span> <span class=rvts5>être</span><span class=rvts6> </span><span class=rvts5>d</span><span class=rvts10>’</span><span class=rvts5>origine</span><span class=rvts6> </span><span class=rvts5>reconnues</span><span class=rvts6> </span><span class=rvts5>par</span><span class=rvts6> </span><span class=rvts5>la</span><span class=rvts6> </span><span class=rvts5>maison</span><span class=rvts6> </span><span class=rvts5>de</span><span class=rvts6> </span><span class=rvts5>fabrication</span><span class=rvts6> </span><span class=rvts5>du</span><span class=rvts6> </span><span class=rvts5>véhicule.</span></p>
-<p class=rvps4><span class=rvts5>Merci de nous adresser votre facture originale au nom de Najda Assistance</span><span class=rvts6> </span><span class=rvts5>dès que possible (et au plus tard 15 jours après la restitution du véhicule) </span><span class=rvts11>accompagnée des pièces justificatives notamment la liste des pièces de rechange éventuelles</span><span class=rvts5> par courrier postal à</span><span class=rvts6> </span><span class=rvts5>l</span><span class=rvts10>’</span><span class=rvts5>adresse</span><span class=rvts6> </span><span class=rvts5>ci-dessus</span><span class=rvts6> </span><span class=rvts5>en</span><span class=rvts6> </span><span class=rvts5>mentionnant</span><span class=rvts6> </span><span class=rvts5>notre</span><span class=rvts6> </span><span class=rvts5>référence</span><span class=rvts6> </span><span class=rvts5>de</span><span class=rvts6> </span><span class=rvts5>dossier </span> <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /><span class=rvts6> </span><span class=rvts5></span></p>
+<p class=rvps4><span class=rvts5>Merci de nous adresser votre facture originale au nom de Najda Assistance</span><span class=rvts6> </span><span class=rvts5>dès que possible (et au plus tard 15 jours après la restitution du véhicule) </span><span class=rvts11>accompagnée des pièces justificatives notamment la liste des pièces de rechange éventuelles</span><span class=rvts5> par courrier postal à</span><span class=rvts6> </span><span class=rvts5>l</span><span class=rvts10>’</span><span class=rvts5>adresse</span><span class=rvts6> </span><span class=rvts5>ci-dessus</span><span class=rvts6> </span><span class=rvts5>en</span><span class=rvts6> </span><span class=rvts5>mentionnant</span><span class=rvts6> </span><span class=rvts5>notre</span><span class=rvts6> </span><span class=rvts5>référence</span><span class=rvts6> </span><span class=rvts5>de</span><span class=rvts6> </span><span class=rvts5>dossier </span> <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /><span class=rvts6> </span><span class=rvts5></span></p>
 <p><span class=rvts12>ATTENTION IMPORTANT</span><span class=rvts13> </span></p>
 <p><span class=rvts14><br></span></p>
 <p class=rvps1><span class=rvts15>Toute facture reçue dans nos locaux plus de 60 jours après le service rendu ne pourra plus être garantie pour règlement. Cette prise en charge a donc une validité maximale de 60 jours après la date de la prestation de service.</span></p>

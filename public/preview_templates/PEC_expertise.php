@@ -7,8 +7,8 @@ if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_date_heure_debut'])) {$CL_date_heure_debut=$_GET['CL_date_heure_debut'];}
 if (isset($_GET['CL_date_heure_fin'])) {$CL_date_heure_fin=$_GET['CL_date_heure_fin'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name'];$subscriber_name3=$_GET['subscriber_name'];   }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname']; $subscriber_lastname3=$_GET['subscriber_lastname'];}
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name'];$subscriber_name2=$_GET['subscriber_name'];$subscriber_name3=$_GET['subscriber_name'];   }
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname']; $subscriber_lastname2=$_GET['subscriber_lastname']; $subscriber_lastname3=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
@@ -110,6 +110,31 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 		} else {
 	    echo "0 results agent";
 		}
+          $sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname,type_affectation FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+        $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>taml0bzv01qwdlqbdo97kjxixaeohm1q_PEC_expertise</title>
@@ -468,9 +493,47 @@ else {
 }
  }
 ?>
-<p class=rvps9><span class=rvts15>Nom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
-<p class=rvps9><span class=rvts15>Prénom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
-<p class=rvps9><span class=rvts15>Notre référence</span><span class=rvts13>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> |<input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> </span></p>
+
+<?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+<p class=rvps9><span class=rvts15>Nom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select> </span></p>
+<p class=rvps9><span class=rvts15>Prénom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17> <select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select> </span></p>
+<?php
+}else
+{
+?>
+<p class=rvps9><span class=rvts15>Nom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /></span></p>
+<p class=rvps9><span class=rvts15>Prénom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/></span></p>
+<?php
+}
+?>
+<p class=rvps9><span class=rvts15>Notre référence</span><span class=rvts13>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" />  </span></p>
 <p class=rvps9><span class=rvts15>Type du véhicule</span><span class=rvts17> </span><span class=rvts13>: <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> </span></p>
 <p class=rvps9><span class=rvts15>Immatriculation</span><span class=rvts17> </span><span class=rvts13>: <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input></span></p>
 <p class=rvps9><span class=rvts15>Contact abonné</span><span class=rvts17> </span><span class=rvts13>:<input name="subscriber_phone_cell" list="subscriber_phone_cell" placeholder="téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell;?>"/>

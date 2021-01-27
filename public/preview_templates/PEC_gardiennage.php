@@ -7,8 +7,8 @@ if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];  }
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name']; $subscriber_name2=$_GET['subscriber_name'];}
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];  }
 if (isset($_GET['CL_date_heure_debut'])) {$CL_date_heure_debut=$_GET['CL_date_heure_debut'];}
 if (isset($_GET['CL_date_heure_fin'])) {$CL_date_heure_fin=$_GET['CL_date_heure_fin'];}
 if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
@@ -84,7 +84,31 @@ $resultvh = $conn->query($sqlvh);
 		} else {
 	    echo "0 results agent";
 		}
+$sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname,type_affectation FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+        $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
 
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_gardiennage</title>
@@ -276,9 +300,50 @@ else {
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
-<p class=rvps1><span class=rvts6>Nous soussignés, </span><span class=rvts5>Najda Assistance</span><span class=rvts6>, nous engageons à prendre en charge les frais relatifs au gardiennage dans vos locaux du véhicule </span><span class=rvts5> </input> <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>">, </span><span class=rvts6>immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> appartenant à notre client(e) Mr/Mme <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  pour la période du </span><span class=rvts5><input name="CL_date_heure_debut" placeholder="Date Heure Debut" value="<?php if(isset ($CL_date_heure_debut)) echo $CL_date_heure_debut; ?>"></input></span><span class=rvts6> au  <input name="CL_date_heure_fin" placeholder="Date Heure fin" value="<?php if(isset ($CL_date_heure_fin)) echo $CL_date_heure_fin; ?>"></input> et pour le coût total de </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts6>TND, (soit</span><span class=rvts5> </span><span class=rvts6><input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars)</span><span class=rvts5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+<p class=rvps1><span class=rvts6>Nous soussignés, </span><span class=rvts5>Najda Assistance</span><span class=rvts6>, nous engageons à prendre en charge les frais relatifs au gardiennage dans vos locaux du véhicule </span><span class=rvts5> </input> <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>">, </span><span class=rvts6>immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> appartenant à notre client(e) Mr/Mme 
+
+   <?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+<select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select> <select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select>
+<?php
+}else
+{
+?>
+<input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/><input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /> 
+<?php
+}
+?>
+
+
+pour la période du </span><span class=rvts5><input name="CL_date_heure_debut" placeholder="Date Heure Debut" value="<?php if(isset ($CL_date_heure_debut)) echo $CL_date_heure_debut; ?>"></input></span><span class=rvts6> au  <input name="CL_date_heure_fin" placeholder="Date Heure fin" value="<?php if(isset ($CL_date_heure_fin)) echo $CL_date_heure_fin; ?>"></input> et pour le coût total de </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts6>TND, (soit</span><span class=rvts5> </span><span class=rvts6><input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars)</span><span class=rvts5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
 <p class=rvps5><span class=rvts6><br></span></p>
-<p class=rvps1><span class=rvts6>Merci de nous adresser votre facture originale dès que possible par courrier postal au nom de </span><span class=rvts5>Najda Assistance</span><span class=rvts6> à l</span><span class=rvts7>’</span><span class=rvts6>adresse ci-dessus en mentionnant notre référence de dossier <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" />  </span></p>
+<p class=rvps1><span class=rvts6>Merci de nous adresser votre facture originale dès que possible par courrier postal au nom de </span><span class=rvts5>Najda Assistance</span><span class=rvts6> à l</span><span class=rvts7>’</span><span class=rvts6>adresse ci-dessus en mentionnant notre référence de dossier <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" />   </span></p>
 <p class=rvps1><span class=rvts5><br></span></p>
 <p class=rvps1><span class=rvts5><br></span></p>
 <p class=rvps1><span class=rvts8>ATTENTION IMPORTANT</span><span class=rvts9> </span></p>

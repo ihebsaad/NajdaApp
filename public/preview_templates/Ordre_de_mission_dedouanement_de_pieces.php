@@ -11,8 +11,8 @@ if (isset($_GET['CL_name'])) {$CL_name=$_GET['CL_name'];}
 if (isset($_GET['CL_nlta'])) {$CL_nlta=$_GET['CL_nlta'];}
 if (isset($_GET['CL_date_heure_ariv'])) {$CL_date_heure_ariv=$_GET['CL_date_heure_ariv'];}
 if (isset($_GET['CL_cordonnes_vol'])) {$CL_cordonnes_vol=$_GET['CL_cordonnes_vol'];}
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name']; }
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname']; }
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
@@ -110,6 +110,31 @@ foreach ($array_client as $client) {
 		} else {
 	    echo "0 results agent";
 		}
+        $sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+         $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>w5mvim5sot8rvi4n6hbsfpa25ahs9suk_Ordre_de_mission_d%C3%A9douanement_de_pi%C3%A8ces_R%C3%A9v</title>
@@ -294,7 +319,55 @@ else {
 }}
 ?>
 </select>
-</span><span class=rvts2><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input>&nbsp; représentée par son gérant Mr <input name="CL_name"  placeholder="name" value="<?php if(isset ($CL_name)) echo $CL_name; ?>" /> est chargée par nos soins de procéder au dédouanement de pièces sous le numéro de LTA  <input name="CL_nlta"  placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>" /> et qui arrivera le <input name="CL_date_heure_ariv" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_ariv)) echo $CL_date_heure_ariv; ?>"></input> sur le vol <input name="CL_cordonnes_vol" placeholder="Cordonnes Vol" value="<?php if(isset ($CL_cordonnes_vol)) echo $CL_cordonnes_vol; ?>"></input> au nom de notre client(e) </span><span class=rvts9><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span><span class=rvts2> </span><br><span class=rvts2>A noter que la pièce de rechange en question sera montée sur le véhicule de notre client(e) de marque  <input name="vehicule_marque" placeholder="marque du véhicule
+</span><span class=rvts2><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input>&nbsp; représentée par son gérant Mr <input name="CL_name"  placeholder="name" value="<?php if(isset ($CL_name)) echo $CL_name; ?>" /> est chargée par nos soins de procéder au dédouanement de pièces sous le numéro de LTA  <input name="CL_nlta"  placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>" /> et qui arrivera le <input name="CL_date_heure_ariv" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_ariv)) echo $CL_date_heure_ariv; ?>"></input> sur le vol <input name="CL_cordonnes_vol" placeholder="Cordonnes Vol" value="<?php if(isset ($CL_cordonnes_vol)) echo $CL_cordonnes_vol; ?>"></input> au nom de notre client(e) </span><span class=rvts9>
+
+
+<?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+
+    <select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select><select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select>
+
+<?php
+}else
+{
+?>
+
+<input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/> <input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /> 
+
+    <?php
+}
+?>
+
+
+
+
+</span><span class=rvts2> </span><br><span class=rvts2>A noter que la pièce de rechange en question sera montée sur le véhicule de notre client(e) de marque  <input name="vehicule_marque" placeholder="marque du véhicule
 " value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>  immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> en circulation temporaire en Tunisie et nécessitant la réparation avant son retour vers l</span><span class=rvts7>’</span><span class=rvts2>étranger. Le véhicule sera réparé au garage </span><span class=rvts8>
 <select id="inter__garage" name="inter__garage" autocomplete="off" onchange="intgaragechange();" >

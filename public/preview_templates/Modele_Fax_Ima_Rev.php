@@ -191,6 +191,15 @@ $sqlomtaxi = "SELECT idprestation,CL_lieudecharge_dec,CL_lieuprest_pc FROM om_ta
 		} else {
 	    echo "0 results agent";
 		}
+                $sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
 
 
 ?>
@@ -409,7 +418,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps2><span class=rvts4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
 <p class=rvps2><span class=rvts7>Référence IMA : </span><span class=rvts8><input name="reference_customer" id="reference_customer"placeholder="reference client" value="<?php if(isset ($reference_customer)) echo $reference_customer; ?>"></input></span></p>
 <p class=rvps2><span class=rvts8><br></span></p>
-<p class=rvps2><span class=rvts7>Nom : </span><span class=rvts8><input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
+<p class=rvps2><span class=rvts7>Nom : </span><span class=rvts8> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /><input id="subscriber_lastname"  name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/> </span></p>
 <p class=rvps2><span class=rvts4>&nbsp;</span><span class=rvts9>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
 <p class=rvps3><span class=rvts9> </span><span class=rvts10>Sousse le&nbsp;<input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input> </span></p>
 <p><span class=rvts11><br></span></p>

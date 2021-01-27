@@ -6,8 +6,8 @@ if (isset($_GET['inter__dossier'])) {$inter__dossier=$_GET['inter__dossier'];}
 if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name'];$subscriber_name2=$_GET['subscriber_name']; }
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
 if (isset($_GET['subscriber_phone_cell'])) {$subscriber_phone_cell=$_GET['subscriber_phone_cell']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_date_heure_deplacement'])) {$CL_date_heure_deplacement=$_GET['CL_date_heure_deplacement'];}
@@ -108,6 +108,31 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 		} else {
 	    echo "0 results agent";
 		}
+         $sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname,type_affectation FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+        $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
   
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -305,11 +330,11 @@ $prestid=0;
  echo '<option value="'.$prest.'" id="'.$prestid.'" >Veuillez sélectionner le prestataire</option>';
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
- echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';   
+ echo '<option value="'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';   
   }
 else {
     
-    echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
+    echo '<option value="'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';}
 }}
     
    
@@ -344,8 +369,48 @@ else {
 }
  }
 ?>
-<p class=rvps5><span class=rvts6>Nom Assuré</span><span class=rvts7> : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
-<p><span class=rvts5>Prénom : </span><span class=rvts8> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
+
+<?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+<p class=rvps5><span class=rvts6>Nom Assuré</span><span class=rvts7> : <select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select> </span></p>
+<p><span class=rvts5>Prénom : </span><span class=rvts8> <select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select> </span></p>
+<?php
+}else
+{
+?>
+<p class=rvps5><span class=rvts6>Nom Assuré</span><span class=rvts7> : <input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /> </span></p>
+<p><span class=rvts5>Prénom : </span><span class=rvts8> <input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/> </span></p>
+<?php
+}
+?>
+
+
 <p><span class=rvts5>Tél assuré : </span><span class=rvts8> <input name="subscriber_phone_cell" list="subscriber_phone_cell" placeholder="téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell;?>"/> 
 <datalist id="subscriber_phone_cell">
 <?php
@@ -358,7 +423,7 @@ foreach ($array_tel as $tel) {
 ?>
 </datalist>
 </span></p>
-<p><span class=rvts5>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" />  </span></p>
+<p><span class=rvts5>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" />   </span></p>
 <p><span class=rvts5>Date et heure du déplacement: </span><span class=rvts8> <input name="CL_date_heure_deplacement" placeholder="Date Heure Deplacement" value="<?php if(isset ($CL_date_heure_deplacement)) echo $CL_date_heure_deplacement; ?>"></input></span><span class=rvts9>&nbsp;&nbsp; </span></p>
 <p><span class=rvts5>Lieu du déplacement : <input name="CL_lieu_deplacement" placeholder="Lieu Deplacement" value="<?php if(isset ($CL_lieu_deplacement)) echo $CL_lieu_deplacement; ?>"></input></span></p>
 <p><span class=rvts5>Motif du déplacement : <input name="CL_motif_deplacement" placeholder="Motif Deplacement" value="<?php if(isset ($CL_motif_deplacement)) echo $CL_motif_deplacement; ?>"></input></span><span class=rvts9>&nbsp;&nbsp; </span></p>

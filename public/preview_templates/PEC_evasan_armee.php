@@ -1,9 +1,10 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['CL_avion_l410_helicoptere'])) {$CL_avion_l410_helicoptere=$_GET['CL_avion_l410_helicoptere'];}
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name'];$subscriber_name2=$_GET['subscriber_name']; }
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
 if (isset($_GET['CL_date_debut'])) {$CL_date_debut=$_GET['CL_date_debut'];}
 if (isset($_GET['CL_date_fin'])) {$CL_date_fin=$_GET['CL_date_fin'];}
 if (isset($_GET['CL_base_laouina_aeroport'])) {$CL_base_laouina_aeroport=$_GET['CL_base_laouina_aeroport'];}
@@ -87,6 +88,32 @@ $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 		} else {
 	    echo "0 results agent";
 		}
+        $sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname,type_affectation FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+        $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
+  
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_evasan_armee</title>
@@ -272,7 +299,51 @@ $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 <p class=rvps1><span class=rvts8><br></span></p>
 <p class=rvps1><span class=rvts6>Monsieur le Ministre,</span></p>
 <p class=rvps1><span class=rvts8><br></span></p>
-<p class=rvps1><span class=rvts6>Nous avons l</span><span class=rvts9>’</span><span class=rvts6>honneur de vous confirmer notre prise en charge de l</span><span class=rvts9>’</span><span class=rvts6>évacuation sanitaire par (<input name="CL_avion_l410_helicoptere" placeholder="Avion L410 Helicoptere" value="<?php if(isset ($CL_avion_l410_helicoptere)) echo $CL_avion_l410_helicoptere; ?>"></input>) </span><span class=rvts8>du (de la) patient(e) Mr/Mme </span><span class=rvts10> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  </span><span class=rvts6>de </span><span class=rvts11><input name="CL_date_debut" placeholder="Date Debut" value="<?php if(isset ($CL_date_debut)) echo $CL_date_debut; ?>"></input> </span><span class=rvts6>vers <input name="CL_date_fin" placeholder="Date Fin"value="<?php if(isset ($CL_date_fin)) echo $CL_date_fin; ?>"></input> </span></p>
+<p class=rvps1><span class=rvts6>Nous avons l</span><span class=rvts9>’</span><span class=rvts6>honneur de vous confirmer notre prise en charge de l</span><span class=rvts9>’</span><span class=rvts6>évacuation sanitaire par (<input name="CL_avion_l410_helicoptere" placeholder="Avion L410 Helicoptere" value="<?php if(isset ($CL_avion_l410_helicoptere)) echo $CL_avion_l410_helicoptere; ?>"></input>) </span><span class=rvts8>du (de la) patient(e) Mr/Mme </span><span class=rvts10>
+
+
+<?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+
+<select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select> <select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select>
+
+<?php
+}else
+{
+?>
+ <input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/><input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" />
+
+<?php
+}
+?>
+
+  </span><span class=rvts6>de </span><span class=rvts11><input name="CL_date_debut" placeholder="Date Debut" value="<?php if(isset ($CL_date_debut)) echo $CL_date_debut; ?>"></input> </span><span class=rvts6>vers <input name="CL_date_fin" placeholder="Date Fin"value="<?php if(isset ($CL_date_fin)) echo $CL_date_fin; ?>"></input> </span></p>
 <p class=rvps1><span class=rvts6> </span></p>
 <p class=rvps1><span class=rvts6>Notre équipe médicale, qui se rendra à (<input name="CL_base_laouina_aeroport" placeholder="Base Laouina Aeroport" value="<?php if(isset ($CL_base_laouina_aeroport)) echo $CL_base_laouina_aeroport; ?>"></input> </span><span class=rvts11>) </span><span class=rvts6>…… sera composée du </span><span class=rvts8>Dr </span><span class=rvts11><input name="CL_name_directeur" placeholder="Name Directeur" value="<?php if(isset ($CL_name_directeur)) echo $CL_name_directeur; ?>"></input> )</span><span class=rvts6>, </span><span class=rvts8>CIN # </span><span class=rvts11><input name="CL_cin_directeur" placeholder="Cin Directeur" value="<?php if(isset ($CL_cin_directeur)) echo $CL_cin_directeur; ?>"></input> </span><span class=rvts8>, </span><span class=rvts6>médecin, du paramédical </span><span class=rvts8>Mr </span><span class=rvts11><input name="CL_name_medecin" placeholder="Name Medecin" value="<?php if(isset ($CL_name_medecin)) echo $CL_name_medecin; ?>"></input></span><span class=rvts6>, </span><span class=rvts8>CIN # </span><span class=rvts11><input name="CL_cin_medecin" placeholder="Cin Medecin" value="<?php if(isset ($CL_cin_medecin)) echo $CL_cin_medecin; ?>"></input></span><span class=rvts6>et de </span><span class=rvts8>Mr <input name="CL_name_chauffeur" placeholder="Name Chauffeur" value="<?php if(isset ($CL_name_chauffeur)) echo $CL_name_chauffeur; ?>"></input> ,</span><span class=rvts6> </span><span class=rvts8>CIN # </span><span class=rvts11><input name="CL_cin_chauffeur" placeholder="Cin Chauffeur" value="<?php if(isset ($CL_cin_chauffeur)) echo $CL_cin_chauffeur; ?>"></input> </span><span class=rvts8>, </span><span class=rvts6>chauffeur ambulancier.</span></p>
 <p class=rvps1><span class=rvts6>Cette équipe se présentera à bord de </span><span class=rvts8>l</span><span class=rvts12>’</span><span class=rvts8>ambulance</span><span class=rvts6> de Medic</span><span class=rvts9>’</span><span class=rvts6> Multiservices, immatriculée</span><span class=rvts11>  <input name="CL_immatriculation" list="CL_immatriculation" placeholder="immatriculation"  value="<?php if(isset ($CL_immatriculation)) echo $CL_immatriculation; ?>">
@@ -288,7 +359,7 @@ foreach ($array_vehic as $vehic) {
 ?>
 </datalist></input>
 </span><span class=rvts8>.</span><span class=rvts6> Elle devrait se présenter à l</span><span class=rvts9>’</span><span class=rvts6>entrée de la base le </span><span class=rvts11><input name="CL_date_heure_entree_base" placeholder="Date Heure Entree Base" value="<?php if(isset ($CL_date_heure_entree_base)) echo $CL_date_heure_entree_base; ?>"></input></span></p>
-<p class=rvps4><span class=rvts13>Merci de nous faire adresser la facture relative par vos services dans les meilleurs délais à l</span><span class=rvts14>’</span><span class=rvts13>adresse ci-dessus en mentionnant notre </span><span class=rvts15>référence de dossier </span><span class=rvts16><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" />  </span></p>
+<p class=rvps4><span class=rvts13>Merci de nous faire adresser la facture relative par vos services dans les meilleurs délais à l</span><span class=rvts14>’</span><span class=rvts13>adresse ci-dessus en mentionnant notre </span><span class=rvts15>référence de dossier </span><span class=rvts16><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" /> </span></p>
 <p class=rvps1><span class=rvts6>Veuillez agréer, Monsieur le Ministre, nos profonds respects.</span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6>P/La Gérante</span></p>

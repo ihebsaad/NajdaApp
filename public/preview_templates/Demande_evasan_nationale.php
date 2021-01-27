@@ -1,9 +1,10 @@
 <?php 
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];}
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];}
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name'];}
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname'];}
 if (isset($_GET['CL_localisation'])) {$CL_localisation=$_GET['CL_localisation'];}
 if (isset($_GET['CL_nationalite'])) {$CL_nationalite=$_GET['CL_nationalite'];}
 if (isset($_GET['CL_diagnostic'])) {$CL_diagnostic=$_GET['CL_diagnostic'];}
@@ -104,6 +105,31 @@ foreach ($array_client as $client) {
 		} else {
 	    echo "0 results agent";
 		}
+		$sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+		$resultdos = $conn->query($sqldos);
+		if ($resultdos->num_rows > 0) {
+	    // output data of each row
+	    $detaildos = $resultdos->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
+		 $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>Demande_evasan_nationale</title>
@@ -257,7 +283,55 @@ p,ul,ol /* Paragraph Style */
  }
 ?>
 pour le cas d</span><span class=rvts8>’</span><span class=rvts7>un de leurs assurés de trouvant à <input name="CL_localisation" id="CL_localisation" placeholder="localisation"  value="<?php if(isset ($CL_localisation)) echo $CL_localisation; ?>"></input>.</span></p>
-<p class=rvps1><span class=rvts7>Il s</span><span class=rvts8>’</span><span class=rvts7>agit de Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> de nationalité <input name="CL_nationalite" placeholder="nationalité"  value="<?php if(isset ($CL_nationalite)) echo $CL_nationalite; ?>"></input> qui présente</span><span class=rvts9> </span><span class=rvts7><input name="CL_diagnostic" placeholder="diagnostic"  value="<?php if(isset ($CL_diagnostic)) echo $CL_diagnostic; ?>"></input>.</span></p>
+<p class=rvps1><span class=rvts7>Il s</span><span class=rvts8>’</span><span class=rvts7>agit de Mr/Mme 
+
+<?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+<span class=rvts7>
+<select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select><select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select>
+</span>
+
+<?php
+}else
+{
+?>
+
+<span class=rvts7>
+ <input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/> <input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>"
+  />
+</span>
+    
+	<?php
+}
+?>
+
+	   de nationalité <input name="CL_nationalite" placeholder="nationalité"  value="<?php if(isset ($CL_nationalite)) echo $CL_nationalite; ?>"/> qui présente</span> <span class=rvts9> </span><span class=rvts7><input name="CL_diagnostic" placeholder="diagnostic"  value="<?php if(isset ($CL_diagnostic)) echo $CL_diagnostic; ?>"></input>.</span></p>
 <p class=rvps1><span class=rvts7><br></span></p>
 <p class=rvps1><span class=rvts7>La demande est une </span><span class=rvts9>évacuation sanitaire par avion de <input name="CL_lsortie" placeholder="sortie"  value="<?php if(isset ($CL_lsortie)) echo $CL_lsortie; ?>"></input> à <input name="CL_larrivee" placeholder="arrivee"  value="<?php if(isset ($CL_larrivee)) echo $CL_larrivee; ?>"></input> </span><span class=rvts7>en date du</span><span class=rvts10> </span><span class=rvts7><input name="CL_dateevac" placeholder="date"  value="<?php if(isset ($CL_dateevac)) echo $CL_dateevac; ?>"></input> dans <input name="CL_matine_apresmidi" placeholder="la matinée/après-midi"  value="<?php if(isset ($CL_matine_apresmidi)) echo $CL_matine_apresmidi; ?>"></input>.</span></p>
 <p class=rvps1><span class=rvts7>Si notre demande obtient votre accord, notre équipe médicale se rendra à Tunis à bord de l</span><span class=rvts8>’</span><span class=rvts7>ambulance de Medic</span><span class=rvts8>’</span><span class=rvts7> Multiservices, immatriculée </span><span class=rvts11> <input name="CL_immatriculation" list="CL_immatriculation" placeholder="immatriculation"  value="<?php if(isset ($CL_immatriculation)) echo $CL_immatriculation; ?>">
