@@ -1,8 +1,9 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['ville'])) {$ville=$_GET['ville'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber__name'])) {$subscriber__name=$_GET['subscriber__name']; }
+if (isset($_GET['subscriber__lastname'])) {$subscriber__lastname=$_GET['subscriber__lastname']; }
 if (isset($_GET['CL_pays'])) {$CL_pays=$_GET['CL_pays'];}
 if (isset($_GET['CL_passport'])) {$CL_passport=$_GET['CL_passport'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
@@ -71,6 +72,31 @@ foreach ($array_client as $client) {
 	$IMA="oui";
 }
 }
+ $sqldos = "SELECT id,benefdiff,subscriber_name,subscriber_lastname,type_affectation FROM dossiers WHERE id=".$iddossier."";
+        $resultdos = $conn->query($sqldos);
+        if ($resultdos->num_rows > 0) {
+        // output data of each row
+        $detaildos = $resultdos->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+         $sqlbenef = "SELECT subscriber_name,beneficiaire,beneficiaire2,beneficiaire3,prenom_benef,prenom_benef2,prenom_benef3,subscriber_lastname FROM dossiers WHERE id=".$iddossier."";
+
+    $resultbenef = $conn->query($sqlbenef);
+    if ($resultbenef->num_rows > 0) {
+
+        $array_benef = array();
+        while($rowbenef = $resultbenef->fetch_assoc()) {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire"] ,'prenom_benef' => $rowbenef["prenom_benef"] );
+            if($rowbenef["beneficiaire2"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire2"] ,'prenom_benef' => $rowbenef["prenom_benef2"]  );}
+             if($rowbenef["beneficiaire3"]!==null)
+            {
+            $array_benef[] = array('beneficiaire' => $rowbenef["beneficiaire3"] ,'prenom_benef' => $rowbenef["prenom_benef3"]  );}
+              $array_benef[] = array('beneficiaire' => $rowbenef["subscriber_name"]  ,'prenom_benef' => $rowbenef["subscriber_lastname"] );
+            }}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -179,7 +205,47 @@ foreach ($array_client as $client) {
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
-<p class=rvps4><span class=rvts1>Je soussigné  <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_pays" placeholder="Pays" value="<?php if(isset ($CL_pays)) echo $CL_pays; ?>"></input>  N° <input name="CL_passport" placeholder="Passport" value="<?php if(isset ($CL_passport)) echo $CL_passport; ?>"></input> autorise par la présente la société </span><span class=rvts3>Najda Assistance,</span><span class=rvts1> agissant en tant que correspondant de ma société d</span><span class=rvts4>’</span><span class=rvts1>assistance 
+<p class=rvps4><span class=rvts1>Je soussigné  
+<?php
+if($detaildos['benefdiff']==='1')
+{
+?>
+   <select id="subscriber__lastname" name="subscriber__lastname" autocomplete="off"  >
+            <?php
+
+foreach ($array_benef as $benef) {
+    if($benef['prenom_benef'] === $subscriber__lastname) {
+    
+    
+    echo "<option value='".$benef['prenom_benef']."' selected >".$benef['prenom_benef']."</option>";}
+    else{
+       echo "<option value='".$benef['prenom_benef']."' >".$benef['prenom_benef']."</option>";  
+    }
+}
+?>
+</select> 
+<select id="subscriber__name" name="subscriber__name" autocomplete="off"  >
+            <?php
+foreach ($array_benef as $benef) {
+    if($benef['beneficiaire'] === $subscriber__name) {
+    
+    echo "<option value='".$benef['beneficiaire']."'  selected>".$benef['beneficiaire']."</option>";}
+       else {
+    
+    echo "<option value='".$benef['beneficiaire']."' >".$benef['beneficiaire']."</option>";}
+}
+?>
+</select>
+     <?php
+}else
+{
+?>
+<input id="subscriber__lastname"  name="subscriber__lastname" placeholder="nom du l'abonnée"  value="<?php  if(isset ($detaildos['subscriber_lastname'])) echo $detaildos['subscriber_lastname']; ?>"/> <input name="subscriber__name" id="subscriber__name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildos['subscriber_name'])) echo $detaildos['subscriber_name']; ?>" />
+  <?php
+}
+?>
+
+     titulaire du passeport <input name="CL_pays" placeholder="Pays" value="<?php if(isset ($CL_pays)) echo $CL_pays; ?>"></input>  N° <input name="CL_passport" placeholder="Passport" value="<?php if(isset ($CL_passport)) echo $CL_passport; ?>"></input> autorise par la présente la société </span><span class=rvts3>Najda Assistance,</span><span class=rvts1> agissant en tant que correspondant de ma société d</span><span class=rvts4>’</span><span class=rvts1>assistance 
 <?php 
 {if( $IMA==='oui' )
  {
