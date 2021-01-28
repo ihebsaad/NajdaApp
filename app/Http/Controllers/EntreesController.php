@@ -857,7 +857,12 @@ public function detectnom(Request $request)
 public function entreetel(Request $request)
     {
 $date=NOW();
-$counttel=Entree::where('type','tel')->count();
+ $counttel=Entree::where('type','tel')->count();
+
+if($request->get('natureappelrecu')==='librerecu')
+{
+
+       
          $entree = new Entree([
                     'destinataire' => $request->get('called'),
                     'mailid'=>'tel-'.$counttel,
@@ -872,7 +877,7 @@ $counttel=Entree::where('type','tel')->count();
                     'dossierid' => 0
 
                 ]);
-$entree->save();
+$entree->save();}
     }
 
 

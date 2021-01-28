@@ -6327,7 +6327,7 @@ webphone_api.onAppStateChange (function (state)
        
         function ButtonOnclick()
         {
-
+document.getElementById('natureappel').value='dossier';
 
                      $('#appelinterfaceenvoi').modal({show:true});
 

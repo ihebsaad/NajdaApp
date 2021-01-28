@@ -362,7 +362,10 @@ public function envoyetel(Request $request)
     {
 $date=NOW();
 $counttel=Envoye::where('type','tel')->count();
-         $envoye = new Envoye([
+
+
+if($request->get('natureappel')==='dossier')
+        {$envoye = new Envoye([
                     'destinataire' => $request->get('called'),
                     
                     'emetteur' => $request->get('caller'),
@@ -373,10 +376,27 @@ $counttel=Envoye::where('type','tel')->count();
                     'duration' =>$request->get('duration'),
                     'type' => 'tel',
                     
-                    'dossier' => ''
+                    'dossier' => $request->get('refdossier'),
 
                 ]);
-$envoye->save();
+$envoye->save();}
+if($request->get('natureappel')==='libre')
+        {$envoye = new Envoye([
+                    'destinataire' => $request->get('called'),
+                    
+                    'emetteur' => $request->get('caller'),
+                    'sujet' => "",
+                    
+                    'contenu' => "",
+                    'reception' =>$date,
+                    'duration' =>$request->get('duration'),
+                    'type' => 'tel',
+                    
+                    'dossier' => '',
+
+                ]);
+$envoye->save();}
+
     }
 }
 

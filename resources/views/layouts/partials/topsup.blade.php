@@ -25,6 +25,8 @@ else
 }
 ?>
 <header class="header">
+  <input id="natureappel" name="natureappel" type="hidden" value="" />
+   <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />   
     <?php
     use App\Entree;
     $seance =  DB::table('seance')
@@ -901,6 +903,7 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
                 if (event === 'setup' && direction == 2)
 
                 {
+                  document.getElementById('natureappelrecu').value='librerecu';    
 $('#appelinterfacerecep').modal({show: true});
             $(".modal-body #numencoursrecep").val(peerdisplayname );
 var _token = $('input[name="_token"]').val();
@@ -987,7 +990,7 @@ webphone_api.onCdr(function (caller, called, connecttime, duration, direction, p
 {
 if ( direction == 1)
 {
-
+var natureappel = $('#natureappel').val();
  var durationInt = parseInt(duration,10);
 var durationSec = Math.floor((durationInt+500)/1000);
 var _token = $('input[name="_token"]').val();
@@ -999,7 +1002,7 @@ $.ajax({
                     url:"{{ route('envoyes.envoyetel')}}",
                     method:"POST",
 
-                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec,
+                  data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappel='+natureappel,
                     success:function(data)
                     {
                       location.reload(); 
@@ -1016,13 +1019,13 @@ var durationInt = parseInt(duration,10);
 var durationSec = Math.floor((durationInt+500)/1000);
 var _token = $('input[name="_token"]').val();
 
-
+var natureappelrecu = $('#natureappelrecu').val();
 
 $.ajax({
 
                     url:"{{ route('entrees.entreetel')}}",
                     method:"POST",
-                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec,
+                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu,
                     success:function(data)
                     {
                      location.reload(); 
@@ -1042,6 +1045,7 @@ $.ajax({
         }
 function accept()
         {
+            document.getElementById('natureappelrecu').value='librerecu';  
             webphone_api.accept();
             
         }
@@ -1082,7 +1086,7 @@ document.getElementById('couperson').style.display = 'inline-block';}
    function ButtonOnclick2()
         {
 
-
+document.getElementById('natureappel').value='libre';
 peerdisplayname=document.getElementById('numtel1').value;
 if(peerdisplayname!=="")
 {

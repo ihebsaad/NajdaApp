@@ -2671,8 +2671,8 @@ else
 <label style="color:green;font-size: 30px;"id="status_callenv"></label>
 
 
-<label style="margin-left:150px;font-size: 30px;"id="minutes2"></label>
-<label style="font-size:30px;" id="seconds2"></label>
+<label style="margin-left:150px;font-size: 30px;"id="min2"></label>
+<label style="font-size:30px;" id="sec2"></label>
 
 </div>
 <input id="nomencours" name="nomencours" type="text" readonly value="" style="font-size: 30px;border: none;">
@@ -3277,7 +3277,7 @@ function disabling(elm) {
     });
 function ButtonOnclick()
         {
-
+document.getElementById('natureappel').value='dossier';
 
                      $('#appelinterfaceenvoi').modal({show:true});
 
