@@ -666,7 +666,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
 $iduser=0;
 $user = auth()->user();
-if isset($user){
+if (isset($user)){
  $iduser=$user->id;
  }
 $seance =  DB::table('seance')
