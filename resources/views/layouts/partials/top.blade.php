@@ -34,7 +34,8 @@ else
 ?>
         <div class="collapse bg-grey" id="navbarHeader">
           <input id="natureappel" name="natureappel" type="hidden" value="" />
-          <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />                         
+          <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />   
+            <input id="iduser" name="iduser" type="hidden" value="{{$iduser}}" />                       
              @include('layouts.partials._top_menu')
         </div>
     <div class="navbar ">
@@ -575,6 +576,58 @@ else
         </div>
 
     </div>
+    <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappel" >
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Compte Rendu </center> </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+<input type="hidden"    id="idenvoyetel"   class="form-control" name="idenvoyetel"    />
+                      
+
+                       <!-- <div class="form-group">
+                            <label for="sujet">Dossier :</label>
+                            <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
+                                <option></option>
+                                <?php /* foreach($listedossiers as $ds)
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  */ ?>
+                            </select>
+                        </div>
+                        -->
+                        <div class="form-group">
+                            <label for="sujetcr">Sujet :</label>
+                            <input type="text"    id="sujetcrtel"   class="form-control" name="sujetcrtel"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncr">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrtel"   class="form-control" name="descriptioncrtel"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucr">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrtel"   class="form-control" name="contenucrtel"    ></textarea>
+
+                        </div>
+
+                        
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a id="ajoutcompterappel"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <style>
     @media  (max-width: 1280px)  /*** 150 % ***/  {
@@ -1015,7 +1068,15 @@ $.ajax({
                     data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&refdossier='+refdossier+'&natureappel='+natureappel,
                     success:function(data)
                     {
-                      location.reload(); 
+                      if(natureappel==="dossier")
+                      {
+
+                        //alert(data);
+                         document.getElementById('idenvoyetel').value=data;  
+                         $("#appelinterfaceenvoi").modal('hide');
+                         $('#crenduappel').modal({show:true});
+
+                      }
 
 
                     }
@@ -1029,7 +1090,7 @@ var durationInt = parseInt(duration,10);
 var durationSec = Math.floor((durationInt+500)/1000);
 var _token = $('input[name="_token"]').val();
 var natureappelrecu= $('#natureappelrecu').val();
-alert(natureappelrecu);
+//alert(natureappelrecu);
 
 
 $.ajax({
@@ -1176,6 +1237,27 @@ document.getElementById('reactivesonenv2').style.display = 'none';
 document.getElementById('coupersonenv2').style.display = 'inline-block';}
 
         }
+         $('#ajoutcompterappel').click(function() {
+            
+            var envoyetel = document.getElementById('idenvoyetel').value;
+           var _token=$('input[name="_token"]').val();
+            var contenu = document.getElementById('contenucrtel').value;
+            var sujet = document.getElementById('sujetcrtel').value;
+            var description = document.getElementById('descriptioncrtel').value;
+            var iduser=document.getElementById('iduser').value;
+            if(contenu != ''){
+                $.ajax({
+                    url: "{{ route('envoyes.ajoutcompterappel') }}",
+                    method: "POST",
+                    data: { envoyetel:envoyetel,contenu:contenu, sujet:sujet,description:description,iduser:iduser, _token: _token},
+                    success: function (data) {
+                     location.reload();
+                    }
+                });
+            }else{
+                alert('le contenu est obligatoire !');
+            }
+        }); //
 
 
 </script>

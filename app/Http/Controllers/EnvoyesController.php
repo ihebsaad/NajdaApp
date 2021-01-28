@@ -379,7 +379,10 @@ if($request->get('natureappel')==='dossier')
                     'dossier' => $request->get('refdossier'),
 
                 ]);
-$envoye->save();}
+
+$envoye->save();
+
+ return $envoye->id;}
 if($request->get('natureappel')==='libre')
         {$envoye = new Envoye([
                     'destinataire' => $request->get('called'),
@@ -398,5 +401,20 @@ if($request->get('natureappel')==='libre')
 $envoye->save();}
 
     }
+    public function ajoutcompterappel(Request $request)
+    {
+
+      $envoye = Envoye::find($request->get('envoyetel'));
+
+        $envoye->update(array(
+           
+            'contenu'=> trim ($request->get('contenu')),
+            'par'=> $request->get('iduser'),
+            'sujet'=>trim ($request->get('sujet')),
+            'description'=> trim ($request->get('description'))
+
+        ));
+    }
+
 }
 

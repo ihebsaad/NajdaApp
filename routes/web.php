@@ -205,6 +205,7 @@ Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@inde
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::post('/envoyes/savingbr','EnvoyesController@savingbr')->name('envoyes.savingbr');
 Route::post('/envoyes/envoyetel','EnvoyesController@envoyetel')->name('envoyes.envoyetel');
+Route::post('/envoyes/ajoutcompterappel','EnvoyesController@ajoutcompterappel')->name('envoyes.ajoutcompterappel');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::post('/envoyes/updating','EnvoyesController@updating')->name('envoyes.updating');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
