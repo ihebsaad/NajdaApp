@@ -1,5 +1,8 @@
-<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 <header class="header">
+  <script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <?php
     use App\Entree;
     use App\User;
@@ -550,7 +553,7 @@ else
  <div>
 <input id="numencours2" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
-         
+        
 
                             </form>
 
@@ -631,20 +634,21 @@ else
             </div>
         </div>
     </div>
-    <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappellibre"  data-backdrop="static"  data-keyboard="false">
-        <div class="modal-dialog" >
+    <div class="modal fade" style="z-index:10000!important;left: 20px;"  id="crenduappellibre" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true"  data-backdrop="static"  data-keyboard="false">
+
+        <div class="modal-dialog" role="crlibre" >
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Dispatch et Compte Rendu </center> </h5>
+                    <h5 class="modal-title" style="text-align:center"  id=""><center>Dispatch et Compte Rendu </center> </h5>
                 </div>
                 <div class="modal-body">
                     <div class="card-body">
-<input type="hidden"    id="idenvoyetellibre"   class="form-control" name="idenvoyetellibre"    />
+<input type="hidden"    id="idenvoyetellibre"   class="form-control" name="idenvoyetellibre" />
                       
 
                        <div class="form-group">
                             <label for="dossiercrlibre">Dossier :</label>
-                            <select   id="dossiercrlibre"  style="width:100%;"  name="dossiercrlibre"     >
+                            <select   id="dossiercrlibre"  style="width:100%;color:black!important;"  name="dossiercrlibre" class="form-control "   >
                                 <option></option>
                                 <?php 
 
@@ -789,12 +793,13 @@ else
 
     }
 </style>
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script>
 
-/*$(document).ready(function() {
-    $("#dossiercrlibre").select2();
-  });*/
+$(document).ready(function() {
+    
+  });
     function colorerSeq(string,qy) {
         if(qy!='')
         {
@@ -962,10 +967,7 @@ $seance =  DB::table('seance')
 $user = auth()->user();
 $iduser=$user->id; ?>
 <!--select css-->
-<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 
 <script>
@@ -975,8 +977,10 @@ $iduser=$user->id; ?>
         $('#modalconfirm').modal({show: true});
 
     });
+     // $('.js-example-basic-single').select2();
     /*
     $("#dossierid").select2();
+  
 
     $('#phoneicon').click(function() {
 
@@ -1164,10 +1168,12 @@ if (event === 'disconnected' && direction == 1)
 // location.reload();
 $('#appelinterfaceenvoi2').modal('hide');}
 
+ //$("#dossiercrlibre").select2();
 });
 
 webphone_api.onCdr(function (caller, called, connecttime, duration, direction, peerdisplayname, reason, line)
 {
+
 if (direction == 1)
 {
 
@@ -1201,6 +1207,7 @@ $.ajax({
                          document.getElementById('idenvoyetellibre').value=data;  
                          $("#appelinterfaceenvoi2").modal('hide');
                          $('#crenduappellibre').modal({show:true});
+                         //$("#dossiercrlibre").select2();
 
                       }
 
