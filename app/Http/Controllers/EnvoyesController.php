@@ -398,7 +398,8 @@ if($request->get('natureappel')==='libre')
                     'dossier' => '',
 
                 ]);
-$envoye->save();}
+$envoye->save();
+ return $envoye->id;}
 
     }
     public function ajoutcompterappel(Request $request)
@@ -411,6 +412,21 @@ $envoye->save();}
             'contenu'=> trim ($request->get('contenu')),
             'par'=> $request->get('iduser'),
             'sujet'=>trim ($request->get('sujet')),
+            'description'=> trim ($request->get('description'))
+
+        ));
+    }
+    public function ajoutcompterappellibre(Request $request)
+    {
+
+      $envoye = Envoye::find($request->get('envoyetel'));
+
+        $envoye->update(array(
+           
+            'contenu'=> trim ($request->get('contenu')),
+            'par'=> $request->get('iduser'),
+            'sujet'=>trim ($request->get('sujet')),
+            'dossier' => $request->get('dossier'),
             'description'=> trim ($request->get('description'))
 
         ));

@@ -877,9 +877,30 @@ if($request->get('natureappelrecu')==='librerecu')
                     'dossierid' => 0
 
                 ]);
-$entree->save();}
+$entree->save();
+return $entree->id;
+}
     }
 
+public function ajoutcompterappelrecu(Request $request)
+    {
+
+      $entree = Entree::find($request->get('envoyetel'));
+       $dossierrecu=Dossier::where('reference_medic',$request->get('dossier'))->first();
+$iddossier= $dossierrecu['id'];
+        $entree->update(array(
+           
+            'contenu'=> trim ($request->get('contenu')),
+            'par'=> $request->get('iduser'),
+            'sujet'=>trim ($request->get('sujet')),
+            'dossier' => $request->get('dossier'),
+            'dossierid'=> $iddossier,
+            'commentaire'=> trim ($request->get('description'))
+
+      
+
+        ));
+    }
 
 
 }

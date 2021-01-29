@@ -114,6 +114,7 @@ Route::get('/entrees/',  'EntreesController@index')->name('entrees.index');
 Route::get('/entrees/finances',  'EntreesController@finances')->name('entrees.finances');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 Route::post('/entrees/entreetel','EntreesController@entreetel')->name('entrees.entreetel');
+Route::post('/entrees/ajoutcompterappelrecu','EntreesController@ajoutcompterappelrecu')->name('entrees.ajoutcompterappelrecu');
 Route::post('/entrees/detectnom','EntreesController@detectnom')->name('entrees.detectnom');
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/enregistrements','EntreesController@enregistrements')->name('entrees.enregistrements');
@@ -206,6 +207,7 @@ Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving'
 Route::post('/envoyes/savingbr','EnvoyesController@savingbr')->name('envoyes.savingbr');
 Route::post('/envoyes/envoyetel','EnvoyesController@envoyetel')->name('envoyes.envoyetel');
 Route::post('/envoyes/ajoutcompterappel','EnvoyesController@ajoutcompterappel')->name('envoyes.ajoutcompterappel');
+Route::post('/envoyes/ajoutcompterappellibre','EnvoyesController@ajoutcompterappellibre')->name('envoyes.ajoutcompterappellibre');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::post('/envoyes/updating','EnvoyesController@updating')->name('envoyes.updating');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');

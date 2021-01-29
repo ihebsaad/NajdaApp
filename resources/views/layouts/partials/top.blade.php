@@ -3,6 +3,9 @@
 <?php
     use App\Entree;
     use App\User;
+use App\Dossier;
+     $listedossiers = Dossier::where('current_status','<>','Cloture')->orderby('id','desc')
+             ->get();
     $seance =  DB::table('seance')
         ->where('id','=', 1 )->first();
     $user = auth()->user();
@@ -576,7 +579,7 @@ else
         </div>
 
     </div>
-    <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappel" >
+    <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappel" data-backdrop="static"  data-keyboard="false" >
         <div class="modal-dialog" >
             <div class="modal-content">
                 <div class="modal-header">
@@ -623,6 +626,116 @@ else
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappel"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappellibre"  data-backdrop="static"  data-keyboard="false">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Dispatch et Compte Rendu </center> </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+<input type="hidden"    id="idenvoyetellibre"   class="form-control" name="idenvoyetellibre"    />
+                      
+
+                       <div class="form-group">
+                            <label for="dossiercrlibre">Dossier :</label>
+                            <select   id="dossiercrlibre"  style="width:100%;"  name="dossiercrlibre"     >
+                                <option></option>
+                                <?php 
+
+                                foreach($listedossiers as $ds)
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  
+                                ?>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sujetcrlibre">Sujet :</label>
+                            <input type="text"    id="sujetcrlibre"   class="form-control" name="sujetcrlibre"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncrlibre">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrlibre"   class="form-control" name="descriptioncrlibre"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucr">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrlibre"   class="form-control" name="contenucrlibre"    ></textarea>
+
+                        </div>
+
+                        
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a id="ajoutcompterappellibre"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappelrecu"  data-backdrop="static"  data-keyboard="false">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Dispatch et Compte Rendu </center> </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+<input type="hidden"    id="idenvoyetelrecu"   class="form-control" name="idenvoyetelrecu"    />
+                      
+
+                       <div class="form-group">
+                            <label for="dossiercrrecu">Dossier :</label>
+                            <select   id="dossiercrrecu"  style="width:100%;"  name="dossiercrrecu"     >
+                                <option></option>
+                                <?php 
+
+                                foreach($listedossiers as $ds)
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  
+                                ?>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sujetcrrecu">Sujet :</label>
+                            <input type="text"    id="sujetcrrecu"   class="form-control" name="sujetcrrecu"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncrrecu">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrrecu"   class="form-control" name="descriptioncrrecu"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucr">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrrecu"   class="form-control" name="contenucrrecu"    ></textarea>
+
+                        </div>
+
+                        
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a id="ajoutcompterappelrecu"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
@@ -679,7 +792,9 @@ else
 
 <script>
 
-
+/*$(document).ready(function() {
+    $("#dossiercrlibre").select2();
+  });*/
     function colorerSeq(string,qy) {
         if(qy!='')
         {
@@ -922,6 +1037,8 @@ $iduser=$user->id; ?>
 
 <script>
 $(document).ready(function() {
+  /*$("#dossiercrlibre").select2();*/
+
 var countrecep=1;
 var extensiontel = $('#extensiontel').val();
  var motdepassetel = $('#motdepassetel').val();
@@ -931,7 +1048,7 @@ var extensiontel = $('#extensiontel').val();
         webphone_api.parameters['callto'] = '';        // destination number to call
         webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
         webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
-  webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED_DATETIME.wav'; 
+       webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED_DATETIME.wav'; 
  webphone_api.start();
 webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
 
@@ -1077,6 +1194,16 @@ $.ajax({
                          $('#crenduappel').modal({show:true});
 
                       }
+                      if(natureappel==="libre")
+                      {
+
+                        //alert(data);
+                         document.getElementById('idenvoyetellibre').value=data;  
+                         $("#appelinterfaceenvoi2").modal('hide');
+                         $('#crenduappellibre').modal({show:true});
+
+                      }
+
 
 
                     }
@@ -1100,7 +1227,16 @@ $.ajax({
                     data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu,
                     success:function(data)
                     {
-                     location.reload(); 
+                      if(natureappelrecu==="librerecu")
+                      {
+
+                        //alert(data);
+                         document.getElementById('idenvoyetelrecu').value=data;  
+                         $("#appelinterfacerecep").modal('hide');
+                         $('#crenduappelrecu').modal({show:true});
+
+                      }
+
 
 
                     }
@@ -1258,6 +1394,52 @@ document.getElementById('coupersonenv2').style.display = 'inline-block';}
                 alert('le contenu est obligatoire !');
             }
         }); //
+          $('#ajoutcompterappellibre').click(function() {
+           
+            var envoyetel = document.getElementById('idenvoyetellibre').value;
+            
+           var _token=$('input[name="_token"]').val();
+            var contenu = document.getElementById('contenucrlibre').value;
+            var sujet = document.getElementById('sujetcrlibre').value;
+            var description = document.getElementById('descriptioncrlibre').value;
+            var dossier = $('#dossiercrlibre').val();
+            var iduser=document.getElementById('iduser').value;
+            if(contenu != ''){
+                $.ajax({
+                    url: "{{ route('envoyes.ajoutcompterappellibre') }}",
+                    method: "POST",
+                    data: { envoyetel:envoyetel,contenu:contenu, sujet:sujet,description:description,iduser:iduser,dossier:dossier, _token: _token},
+                    success: function (data) {
+                     location.reload();
+                    }
+                });
+            }else{
+                alert('le contenu est obligatoire !');
+            }
+        }); 
 
+$('#ajoutcompterappelrecu').click(function() {
+           
+            var envoyetel = document.getElementById('idenvoyetelrecu').value;
+            
+           var _token=$('input[name="_token"]').val();
+            var contenu = document.getElementById('contenucrrecu').value;
+            var sujet = document.getElementById('sujetcrrecu').value;
+            var description = document.getElementById('descriptioncrrecu').value;
+            var dossier = $('#dossiercrrecu').val();
+            var iduser=document.getElementById('iduser').value;
+            if(contenu != ''){
+                $.ajax({
+                    url: "{{ route('entrees.ajoutcompterappelrecu') }}",
+                    method: "POST",
+                    data: { envoyetel:envoyetel,contenu:contenu, sujet:sujet,description:description,iduser:iduser,dossier:dossier, _token: _token},
+                    success: function (data) {
+                     location.reload();
+                    }
+                });
+            }else{
+                alert('le contenu est obligatoire !');
+            }
+        }); 
 
 </script>
