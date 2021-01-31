@@ -73,8 +73,50 @@ $dossierid=$dossier['id'];
                             <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
 
                         </div>-->
+                       <?php  if($envoye->type==='tel' ){
+                ?>
+                    <div class="col-md-10">
+                      Date:    
+                 
+                {{ $envoye->reception }}  <?php echo ", "; ?> Duration:
+                   <?php 
+function convert($seconds) {
+  $t = round($seconds);
+  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+}
+
+                echo  convert($envoye->duration) ?>
+             
+          
+                        
+                      <!--  <div class="col-md-2">
+                            <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
+
+                        </div>-->
+                  
+                    
+                    
+                     
+                          
+                 
+             
+                      <!--  <div class="col-md-2">
+                            <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
+
+                        </div>-->
+                    
+                </div>
+                    <?php   } ?>
+
                     </div>
                 </div>
+
+           
+               
+                   
+                
+                   
+                
                 <?php if ($type=='email') {?>
                 <div class="form-group" style="margin-top:10px;">
                     <div id="autres" class="row"   >

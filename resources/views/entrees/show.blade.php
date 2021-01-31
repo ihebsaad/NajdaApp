@@ -153,7 +153,33 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                     </div>
                         <div class="col-sm-4 col-md-4 col-lg-4 " style="padding-right: 0px;">
-                            <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email'){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>
+
+
+                            <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email' || ($entree['type']=='tel' && $entree['par']!==null )  ){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; 
+
+if($entree['type']=='tel')
+{
+  function convert($seconds) {
+  $t = round($seconds);
+  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+}
+?>
+
+ <span  class="pull-right"><b>,Durée: </b><?php echo  convert($entree['duration'] );?> </span>
+  <?php
+}
+else
+{
+  echo "";
+}
+}
+else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
+?>
+                          
+
+
+                   
+                        </span>
                             <?php 
                                 // verifier si l'entree possede de notification et la marque comme lu
                                 $identr=$entree['id'];
