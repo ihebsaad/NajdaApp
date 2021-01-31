@@ -358,11 +358,31 @@ $garanties=DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)
                                     <p class="overme">
 
                                         <?php if ($communin['boite']==0 || $communin['boite']==null)
-                                        {  echo '<span class="commsujet" style="font-size:12px"><B>Emetteur: </B>'. $communin['emetteur'].'</span>';
+                                        { 
+
+                                        	if($communin['type']=="tel") {
+
+
+$adressecomm=Adresse::where("champ",$communin['emetteur'])->first();
+                                         echo '<span class="commsujet" style="font-size:12px"><B>Emetteur: </B>'. $communin['emetteur']."(".$adressecomm['prenom']." ".$adressecomm['nom'].")".'</span>';
+
                                        echo '<span class="cd-date">'.
                                        $communin['reception'] .'<i class="fa fa-fw fa-clock-o"></i><br>
                                         </span>';
                                         }
+                                      else
+                                      {
+ echo '<span class="commsujet" style="font-size:12px"><B>Emetteur: </B>'. $communin['emetteur'].'</span>';
+
+                                       echo '<span class="cd-date">'.
+                                       $communin['reception'] .'<i class="fa fa-fw fa-clock-o"></i><br>
+                                        </span>';
+
+                                      }
+
+
+
+                                    }
                                         ?>
                                              <?php if ($communin['boite']==1 && $communin['par']>0 )
                                             {

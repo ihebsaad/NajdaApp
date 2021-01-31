@@ -1,5 +1,8 @@
 @extends('layouts.mainlayout')
-<?php // use DB; ?>
+<?php // use DB; 
+
+Use App\Adresse;
+?>
 @section('content')
 
      <div class="row">
@@ -17,7 +20,7 @@ $dossierid=$dossier['id'];
             $dossierid= $dosss['id'];*/
 
              ?>   <span style="font-weight:bold;"><a  href="<?php echo $urlapp.'/dossiers/view/'.$dossierid;?>" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></span>
-
+<?php if($envoye['type']!=="tel") { ?>
              <div class="btn-group pull-right">
                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                      <i class="fas fa-share"></i> Transférer <i class="fa fa-angle-down"></i>
@@ -37,12 +40,16 @@ $dossierid=$dossier['id'];
                      </li>
 
                  </ul>
-             </div><br><?php } ?>
+             </div>
+<?php } ?>
+        <br><?php } ?>
 
         <?php $type= $envoye['type'];
             if ($type=='email') { echo ' <H3 style="margin-left:20px;margin-bottom:10px">  <i class="fa fa-lg fa-envelope"></i> Email envoyé</H3>'; }
             if ($type=='sms') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fas fa-lg  fa-sms"></i> SMS envoyé</H3>'; }
             if ($type=='fax') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-fax"></i> FAX envoyé</H3>'; }
+            
+            if ($type=='tel') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-mobile"></i> Appel envoyé</H3>'; }
 
     ?>
 
@@ -51,7 +58,16 @@ $dossierid=$dossier['id'];
                     <label for="destinataire">destinataire:</label>
                     <div class="row">
                         <div class="col-md-10">
-                   {{ $envoye->destinataire }}
+                            <?php    if ($type=='tel')  { 
+ $adressecomm=Adresse::where("champ",$envoye['destinataire'])->first();
+
+
+                                ?>
+
+                   {{ $envoye->destinataire." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"  }}
+               <?php   } else { ?>
+                {{ $envoye->destinataire }}
+                 <?php   } ?>
                         </div>
                       <!--  <div class="col-md-2">
                             <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>

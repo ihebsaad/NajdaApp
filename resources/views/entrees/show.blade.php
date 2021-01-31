@@ -15,6 +15,7 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\TagsController;
 Use App\Common;
 Use App\Adresse;
+Use App\USer;
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -74,6 +75,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                                     $iduser=Auth::id();
                                   //  if ($iduser==$disp) { ?>
+                                    <?php if($entree['type']!=="tel") {?>
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" style="color:black" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
@@ -94,7 +96,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                         <span class="fa fa-fw fa-envelope"></span> Accusé
                                     </a>
                                 <?php } ?>
-								
+
+								   
                                 <?php if ($entree->dossierid >0 ){ ?>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -117,6 +120,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                     </ul>
                                 </div>
                                 <?php } ?>
+                                 <?php } ?>
                                     <a  href="{{action('EntreesController@destroy3', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                     </a>
@@ -127,12 +131,26 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         </div>
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body">
+              <?php
+              $adressecomm=Adresse::where("champ",$entree['emetteur'])->first();
+              $usercom=User::where("id",$entree['par'])->first();
+              ?>
                 <div class="row" style="font-size:12px;">
                         <div class="col-sm-4 col-md-4 col-lg-4"style=" padding-top: 4px; ">
-                            <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
+                          <?php if ($entree['type']==="tel" ){?>
+                            <span><b>Emetteur: </b>{{ $entree['emetteur']." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"  }}</span>
+ <?php } else {?>
+<span><b>Emetteur: </b>{{ $entree['emetteur'] }}</span>
+<?php } ?>
                         </div>
                     <div class="col-sm-4 col-md-4 col-lg-4" style=" padding-left: 0px; ">
-                        <span><b>À : </b>{{ $entree['destinataire']  }}</span>
+                       <?php if ($entree['type']==="tel" ){?>
+                        <span><b>À : </b>{{ $entree['destinataire']." (".$usercom['name']." ".$usercom['lastname'].")" }}</span>
+
+                         <?php } else {?>
+                          <span><b>À : </b>{{ $entree['destinataire']  }}</span>
+<?php } ?>
+
                     </div>
                         <div class="col-sm-4 col-md-4 col-lg-4 " style="padding-right: 0px;">
                             <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email'){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>
@@ -403,7 +421,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                         </form>
         </div>
 
+<?php if($entree['type']!=="tel") {?>
         <center> <button style="margin-bottom:15px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annulerAttenteReponse"> Annuler attente de réponse</button></center>
+      <?php }?>
 </div>
 
 <style>
