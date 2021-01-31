@@ -118,6 +118,8 @@ Route::post('/entrees/ajoutcompterappelrecu','EntreesController@ajoutcompterappe
 Route::post('/entrees/detectnom','EntreesController@detectnom')->name('entrees.detectnom');
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/enregistrements','EntreesController@enregistrements')->name('entrees.enregistrements');
+Route::get('/entrees/enregistrementsnondispatch','EntreesController@enregistrementsnondispatch')->name('entrees.enregistrementsnondispatch');
+Route::get('/entrees/enregistrementsdispatch','EntreesController@enregistrementsdispatch')->name('entrees.enregistrementsdispatch');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show')->name('entrees.show');
 Route::get('/entrees/showdisp/{id}', 'EntreesController@showdisp')->name('entrees.showdisp');
@@ -203,6 +205,9 @@ Route::get('/boites/show/{id}', 'BoitesController@show');
 /*** Envoyes : Email envoyées et brouillons  **/
 //Route::resource('/envoyes',  'EnvoyesController');
 Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@index'));
+Route::get('/envoyes/enregistrements','EnvoyesController@enregistrements')->name('envoyes.enregistrements');
+Route::get('/envoyes/enregistrementsnondispatch','EnvoyesController@enregistrementsnondispatch')->name('envoyes.enregistrementsnondispatch');
+Route::get('/envoyes/enregistrementsdispatch','EnvoyesController@enregistrementsdispatch')->name('envoyes.enregistrementsdispatch');
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::post('/envoyes/savingbr','EnvoyesController@savingbr')->name('envoyes.savingbr');
 Route::post('/envoyes/envoyetel','EnvoyesController@envoyetel')->name('envoyes.envoyetel');

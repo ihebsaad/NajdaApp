@@ -23,9 +23,9 @@ Use App\USer;
             <div class="row" style="align:right;">
                 
                
-               <a class="btn btn-default" id="recherchertp" href="{{url('/entrees/enregistrements')}}"> Tous </a>
-                    <a class="btn btn-default" id="recherchertp" href="{{url('/entrees/enregistrementsdispatch')}}"> Dispatchés</a>
-                    <a class="btn btn-default" id="recherchertp" href="{{url('/entrees/enregistrementsnondispatch')}}">Non Dispatchés</a>
+               <a class="btn btn-default" id="recherchertp" href="{{url('/envoyes/enregistrements')}}"> Tous </a>
+                    <a class="btn btn-default" id="recherchertp" href="{{url('/envoyes/enregistrementsdispatch')}}"> Dispatchés</a>
+                    <a class="btn btn-default" id="recherchertp" href="{{url('/envoyes/enregistrementsnondispatch')}}">Non Dispatchés</a>
                
             </div>
         </div>
@@ -69,8 +69,8 @@ Use App\USer;
               ?>
                 <tr> 
                      <td style="width:10%;font-size:12px;width:10%;max-width:80px"><?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></td>
-                    <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"; ?></td>
-                      <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$usercom['name']." ".$usercom['lastname'].")"; ?></td>
+                    <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercom['prenom']." ".$usercom['nom'].")"; ?></td>
+                      <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecomm['name']." ".$adressecomm['lastname'].")"; ?></td>
 
                  <!--    <td  style="width:30%;font-size:12px;;max-width:150px;float:left    "         >
 		 <audio controls>
@@ -79,8 +79,7 @@ Use App\USer;
 </audio></td>!-->
                     <td  style="width:8%;font-size:12px;;max-width:80px   "  ><?php    echo convert($enreg->duration) ; ?></a></td>
                     <!--<td  style="width:8%;font-size:12px;;max-width:80px "><?php // echo DossiersController::RefDossierById($enreg['dossier']).' - '.DossiersController::FullnameAbnDossierById($enreg['dossier']);?></td>!-->
-                     <td  style="width:8%;font-size:12px;;max-width:80px   "  ><a  <?php if ($enreg->dossier!='') {  ?>   href="<?php echo $urlapp.'/entrees/show/',$enreg->id?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$enreg->id?>"    <?php } ?>     >
-
+                     <td  style="width:8%;font-size:12px;;max-width:80px   "  ><a   href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>"  >
                         <?php    echo $enreg->sujet ; ?></a></td>
                     <td stle=";max-width:60px">
                         @can('isAdmin')

@@ -175,7 +175,28 @@ $seance =  DB::table('seance')
     <?php  } ?>
 
     </div>
+    <div class="row">
+    
+       <div class="col-sm-2">
+            <a href="{{ route('envoyes.enregistrements') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+                <span class="fa fa-lg fa-fw fa-phone"></span>
+                <br>
 
+Appels envoyés         
+</a>
+        </div>
+        <div class="col-sm-2">
+           <a href="{{ route('entrees.enregistrements') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+                <span class="fa fa-lg fa-fw fa-phone"></span>
+                <br>
+
+Appels reçus
+
+</a>
+        </div>
+         
+
+    </div>
  
 
    <div class="row"  style="padding-left:50px">

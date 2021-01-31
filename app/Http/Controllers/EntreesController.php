@@ -79,8 +79,22 @@ class EntreesController extends Controller
 
     public function enregistrements()
     {
-        //
-        $enregs =  DB::table('enregistrements')->orderBy('id', 'desc')->get();
+       $par=Auth::id();
+        $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get();
+        return view('entrees.enregistrements',['enregs' => $enregs] );
+
+    }
+    public function enregistrementsdispatch()
+    {
+       $par=Auth::id();
+        $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+        return view('entrees.enregistrements',['enregs' => $enregs] );
+
+    }
+     public function enregistrementsnondispatch()
+    {
+       $par=Auth::id();
+        $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get();
         return view('entrees.enregistrements',['enregs' => $enregs] );
 
     }

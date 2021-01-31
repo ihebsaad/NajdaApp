@@ -431,6 +431,28 @@ $envoye->save();
 
         ));
     }
+    public function enregistrements()
+    {
+       $par=Auth::id();
+        $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get();
+        return view('envoyes.enregistrements',['enregs' => $enregs] );
+
+    }
+    public function enregistrementsdispatch()
+    {
+       $par=Auth::id();
+        $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+        return view('envoyes.enregistrements',['enregs' => $enregs] );
+
+    }
+     public function enregistrementsnondispatch()
+    {
+       $par=Auth::id();
+        $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get();
+        return view('envoyes.enregistrements',['enregs' => $enregs] );
+
+    }
+
 
 }
 
