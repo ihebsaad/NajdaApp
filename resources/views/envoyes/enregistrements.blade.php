@@ -64,13 +64,13 @@ Use App\USer;
                 ?>
 
                  <?php
-              $adressecomm=Adresse::where("champ",$enreg->emetteur)->first();
+              $adressecomm=Adresse::where("champ",$enreg->destinataire)->first();
               $usercom=User::where("id",$enreg->par)->first();
               ?>
                 <tr> 
                      <td style="width:10%;font-size:12px;width:10%;max-width:80px"><?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></td>
-                    <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercom['prenom']." ".$usercom['nom'].")"; ?></td>
-                      <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecomm['name']." ".$adressecomm['lastname'].")"; ?></td>
+                    <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercom['name']." ".$usercom['lastname'].")"; ?></td>
+                      <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"; ?></td>
 
                  <!--    <td  style="width:30%;font-size:12px;;max-width:150px;float:left    "         >
 		 <audio controls>
