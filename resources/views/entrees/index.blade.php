@@ -1,4 +1,4 @@
-@extends('layouts.fulllayout')
+@extends('layouts.mainlayout')
 
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/dataTables.bootstrap.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/buttons.bootstrap.css') }}" />
@@ -9,9 +9,15 @@
 <?php  use App\Http\Controllers\DossiersController;
 Use App\Common;
 
-  $param= App\Parametre::find(1);$env=$param->env;
+ $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
- 
+/*
+function SstartsWith ($string, $startString)
+{
+    $len = strlen($startString);
+    return (substr($string, 0, $len) === $startString);
+}
+*/
 
 ?>
 
@@ -57,7 +63,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             <?php
                           $sujet=trim($entree['sujet']);
 
-                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") /*||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND") */  ) {
+                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
                                  $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
                             }
                                  echo $sujet;
@@ -76,9 +82,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             @endforeach
             </tbody>
         </table>
-
-    Affichage par 500 : <br>  <?php echo $entrees->links() ;  ?>
-
     </div>
 @endsection
 
