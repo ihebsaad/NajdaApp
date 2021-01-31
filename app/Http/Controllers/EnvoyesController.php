@@ -434,23 +434,49 @@ $envoye->save();
     public function enregistrements()
     {
        $par=Auth::id();
+       $userpar = auth()->user();
+       if($userpar->user_type==="admin")
+       {
+        $enregs =  DB::table('envoyes')->where('type','tel')->orderBy('id', 'desc')->get();
+        return view('envoyes.enregistrements',['enregs' => $enregs] );
+      }
+      else
+      {
         $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get();
         return view('envoyes.enregistrements',['enregs' => $enregs] );
+      }
 
     }
     public function enregistrementsdispatch()
     {
        $par=Auth::id();
-        $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+         $userpar = auth()->user();
+         if($userpar->user_type==="admin")
+       {
+        $enregs =  DB::table('envoyes')->where('type','tel')->whereNotNull('dossier')->orderBy('id', 'desc')->get();
         return view('envoyes.enregistrements',['enregs' => $enregs] );
-
+         }
+      else
+      {
+$enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+        return view('envoyes.enregistrements',['enregs' => $enregs] );
+      }
     }
      public function enregistrementsnondispatch()
     {
        $par=Auth::id();
-        $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get();
+         $userpar = auth()->user();
+         if($userpar->user_type==="admin")
+       {
+        $enregs =  DB::table('envoyes')->where('type','tel')->whereNull('dossier')->orderBy('id', 'desc')->get();
         return view('envoyes.enregistrements',['enregs' => $enregs] );
 
+      }
+       else
+      {
+ $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get();
+        return view('envoyes.enregistrements',['enregs' => $enregs] );
+      }
     }
 
 

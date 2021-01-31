@@ -80,24 +80,51 @@ class EntreesController extends Controller
     public function enregistrements()
     {
        $par=Auth::id();
-        $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get();
+       $userpar = auth()->user();
+         if($userpar->user_type==="admin")
+       {
+        $enregs =  DB::table('entrees')->where('type','tel')->whereNotNull('par')->orderBy('id', 'desc')->get();
+    }
+    else
+    {
+         $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get();
+    }
         return view('entrees.enregistrements',['enregs' => $enregs] );
+    
 
     }
     public function enregistrementsdispatch()
     {
        $par=Auth::id();
-        $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+       $userpar = auth()->user();
+         if($userpar->user_type==="admin")
+       {
+        $enregs =  DB::table('entrees')->where('type','tel')->whereNotNull('par')->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+    }
+    else
+    {
+       $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->whereNotNull('dossier')->orderBy('id', 'desc')->get(); 
+    }
         return view('entrees.enregistrements',['enregs' => $enregs] );
+    
 
     }
      public function enregistrementsnondispatch()
     {
        $par=Auth::id();
-        $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get();
-        return view('entrees.enregistrements',['enregs' => $enregs] );
-
+       $userpar = auth()->user();
+         if($userpar->user_type==="admin")
+       {
+        $enregs =  DB::table('entrees')->where('type','tel')->whereNotNull('par')->whereNull('dossier')->orderBy('id', 'desc')->get();
     }
+    else
+    {
+        $enregs =  DB::table('entrees')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get(); 
+    }
+        return view('entrees.enregistrements',['enregs' => $enregs] );
+    }
+
+    
 
 
     public function dispatching()
