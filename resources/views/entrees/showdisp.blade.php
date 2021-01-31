@@ -14,7 +14,8 @@ Use App\Common;
 use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
 use App\Http\Controllers\NotificationsController;
-
+Use App\Adresse;
+Use App\USer;
 
 ?>
 {{-- page level styles --}}
@@ -50,6 +51,7 @@ use App\Http\Controllers\NotificationsController;
                                 @if (!empty($entree->dossier))
                                     <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
                                 @endif
+                                @if (($entree->type)!=="tel")
                                 @if (empty($entree->dossier))
                                         <a   class="btn btn-md btn-success"   href="{{route('dossiers.create',['identree'=> $entree['id']]) }}"  > <i class="fas fa-folder-plus"></i> Créer un Dossier</a>
                                      <!--   <button class="btn   " id="showdispl" style="background-color: #c5d6eb;color:#333333;"  ><b><i class="fas fa-folder"></i> Dispatcher</b></button>-->
@@ -65,6 +67,7 @@ use App\Http\Controllers\NotificationsController;
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
+                                   @endif
 
 
                                     <!--<a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
@@ -107,12 +110,27 @@ use App\Http\Controllers\NotificationsController;
                     <button style="margin-left:35px" type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
                     </div>
                 </div>
+                <?php
+              $adressecomm=Adresse::where("champ",$entree['emetteur'])->first();
+              $usercom=User::where("id",$entree['par'])->first();
+              ?>
                 <div class="row" style="font-size:12px;">
                     <div class="col-sm-5 col-md-5 col-lg-5" style=" padding-top: 4px; ">
-                        <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
+
+                         <?php if ($entree['type']==="tel" ){?>
+                            <span><b>Emetteur: </b>{{ $entree['emetteur']." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"  }}</span>
+ <?php } else {?>
+<span><b>Emetteur: </b>{{ $entree['emetteur'] }}</span>
+<?php } ?>
+                      
                     </div>
                     <div class="col-sm-4 col-md-4 col-lg-4" style=" padding-left: 0px; ">
-                        <span><b>À: </b>{{ $entree['destinataire']  }}</span>
+                        <?php if ($entree['type']==="tel" ){?>
+                       <span><b>À : </b>{{ $entree['destinataire']." (".$usercom['name']." ".$usercom['lastname'].")" }}</span>
+
+                         <?php } else {?>
+                          <span><b>À : </b>{{ $entree['destinataire']  }}</span>
+<?php } ?>
                     </div>
                         <div class="col-sm-3 col-md-3 col-lg-3 " style="padding-right: 0px;">
                             <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email'){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>

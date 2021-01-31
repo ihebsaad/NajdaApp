@@ -46,7 +46,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             <tbody>
             @foreach($entrees as $entree)
                 <tr><?php $type=$entree['type'];?>
-                    <td style="font-size:14px;width:6%"><a  href="<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></a></td>
+                    <td style="font-size:14px;width:6%"><a  href="<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='tel'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></a></td>
                     <td  style="width:10%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><a  href="<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"><?php echo $entree['emetteur']; ?></a></td>
                     <td style="width:10%;font-size:12px;width:10%"><?php echo  date('d/m/Y H:i', strtotime($entree['reception'])) ; ?></td>
                     <td  style="width:10%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['destinataire']; ?></td>
