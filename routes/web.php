@@ -208,6 +208,7 @@ Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@inde
 Route::get('/envoyes/enregistrements','EnvoyesController@enregistrements')->name('envoyes.enregistrements');
 Route::get('/envoyes/enregistrementsnondispatch','EnvoyesController@enregistrementsnondispatch')->name('envoyes.enregistrementsnondispatch');
 Route::get('/envoyes/enregistrementsdispatch','EnvoyesController@enregistrementsdispatch')->name('envoyes.enregistrementsdispatch');
+Route::post('/envoyes/dispatchf2','EnvoyesController@dispatchf2')->name('envoyes.dispatchf2');
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::post('/envoyes/savingbr','EnvoyesController@savingbr')->name('envoyes.savingbr');
 Route::post('/envoyes/envoyetel','EnvoyesController@envoyetel')->name('envoyes.envoyetel');

@@ -223,7 +223,7 @@ else
      */
     public function view($id)
     {
-        $dossiers = Dossier::all();
+        $dossiers = Dossier::orderby('id','desc')->get();
 
         $envoye = Envoye::find($id);
         $refdoss=$envoye->dossier;
@@ -477,6 +477,16 @@ $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereN
  $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get();
         return view('envoyes.enregistrements',['enregs' => $enregs] );
       }
+    }
+    public   function dispatchf2(Request $request)
+    {
+
+      $idenvoye = $request->get('envoye');
+        $dossier = trim($request->get('dossier'));
+        $iddossier = $request->get('iddossier');
+        $envoye = Envoye::find($idenvoye);
+        $envoye->dossier=$dossier;
+        $envoye->save();
     }
 
 

@@ -43,6 +43,24 @@ $dossierid=$dossier['id'];
              </div>
 <?php } ?>
         <br><?php } ?>
+     <?php if($envoye['type']==="tel") { 
+
+     	?>
+  <div class="btn-group pull-right">
+  	 <?php if($envoye['dossier']===null) { 
+
+     	?>
+ <button id="afffolder" class="btn   " style="width:180px;background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i>  Dispatcher</b></button>
+ </div>
+
+<?php } else { 
+
+     	?>
+ <button id="afffolder" class="btn   " style="width:180px;background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i>  Re-Dispatcher</b></button>
+ </div>
+
+     	<?php }}?>
+
 
         <?php $type= $envoye['type'];
             if ($type=='email') { echo ' <H3 style="margin-left:20px;margin-bottom:10px">  <i class="fa fa-lg fa-envelope"></i> Email envoyé</H3>'; }
@@ -224,9 +242,56 @@ function convert($seconds) {
 
         </div>
     </div>
+    <!-- Modal -->
+<div class="modal fade" id="affectfolder"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            		 <?php if($envoye['dossier']===null) { 
+
+     	?>
+                <h3 style="text-align:center" class="modal-title" id="exampleModalLabel">Dispatcher</h3>
+<?php } else { ?>
+	  <h3 style="text-align:center" class="modal-title" id="exampleModalLabel">Re-Dispatcher</h3>
+	<?php } ?>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <form method="post" >
+                        {{ csrf_field() }}
+
+                        <div class="form-group">
+                            <label for="type">Dossier :</label>
+                         <select id ="affdoss"  class="form-control select2" style="width: 100%">
+                             <option></option>
+                         <?php foreach($dossiers as $ds)
+
+                               {
+                               echo '<option  title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                         </select>
+                            <br><br><br>
+                        </div>
+
+
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <script type="text/javascript">
+
+    $("#affdoss").select2();
+
 
         function visibilite(divId)
         {
@@ -305,6 +370,27 @@ function changing(elm) {
 
         // }
     }
+     $('#updatefolder').click(function(){
+            var envoye = $('#idenvoye').val();
+            var dossier = $('#affdoss').val();
+             var iddossier = $('#affdoss').find("option:selected").attr("title");
+
+
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('envoyes.dispatchf2') }}",
+                method:"POST",
+                data:{envoye:envoye,dossier:dossier,iddossier:iddossier, _token:_token},
+                success:function(data){
+
+                    window.location =data;
+
+
+
+                }
+            });
+
+        });
 
     </script>
 
