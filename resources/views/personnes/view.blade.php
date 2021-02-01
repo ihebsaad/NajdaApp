@@ -290,10 +290,29 @@ $('#dossier').select2({
 
 
   // $('#dossier').select2( );
-
+function checkEmail(email) {
+             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+             return re.test(email);
+         };
     function changing(elm) {
         var champ=elm.id;
-
+        if (champ=="email") {
+            
+     
+         var email = document.getElementById("email").value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#email').val(''); 
+             return false;
+         } 
+         
+         
+        };
         var val =document.getElementById(champ).value;
         //  var type = $('#type').val();
         var personne = $('#id').val();
