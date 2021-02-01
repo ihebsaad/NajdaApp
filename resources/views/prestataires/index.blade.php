@@ -110,20 +110,28 @@ $user = auth()->user();
                              <div class="row">
 
                           
+                        <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.1"></script>
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Ville </label>
-                                <select id="ville_id_search" name="ville_id_search" class="form-control js-example-placeholder-single select2" >
-                                    <option value="">sélectionner</option>
-                                      @foreach(App\Ville::get() as $c)
-
-                                         <option value="{{$c->id}}">{{$c->name}}</option>
-
-                                      @endforeach
-                                                                    
-                                </select>
+                                <div class="row" style=";margin-bottom:0px;"><style>.algolia-places{width:100%;}</style></div>
+                                 <input class="form-control" style="padding-left:5px" type="text" name="ville_id_search"  id="ville_id_search" />
+                             
+                                
                             </div>
+
+                        
+                        <script>
+                        (function() {
+                            var placesAutocomplete2 = places({ 
+                                appId: 'plCFMZRCP0KR',
+                                apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                container: document.querySelector('#ville_id_search'),
+                            });
+                            
+                        })();
+                        </script>
                         </div>
 
                         <div class="col-md-4">
