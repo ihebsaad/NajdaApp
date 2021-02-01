@@ -675,59 +675,59 @@ use App\Http\Controllers\DossiersController;
 
                                                                 </div>
                                                                 <div class="row">
-																<h3>Tables de garanties</h3>
-																<?php  
-																$garanties=\App\Garantie::get();
-																$garanties_assure= \DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)->pluck('garantie');
-																  $garanties_assure=$garanties_assure->toArray();
-																?>
-                     				 <div class="row">
+                                                                <h3>Tables de garanties</h3>
+                                                                <?php  
+                                                                $garanties=\App\Garantie::get();
+                                                                $garanties_assure= \DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)->pluck('garantie');
+                                                                  $garanties_assure=$garanties_assure->toArray();
+                                                                ?>
+                                     <div class="row">
                                     <select class="form-control  col-lg-12   " style="width:400px" name="garanties"  multiple  id="garanties">
 
 
                                         <option></option>
                               
                                         <?php $c=0; foreach($garanties as $gr){ $c++;
-									if (in_array($gr->id, $garanties_assure)) {$selected="selected='selected'";}else{$selected="";}
-										?>
-									  <option  id="gr-<?php echo $c; ?>"   {{$selected}}  value="<?php echo $gr->id;?>"    value="<?php echo $gr->id;?>">  <?php echo $gr->nom;?></option>
-										 <?php }?>
+                                    if (in_array($gr->id, $garanties_assure)) {$selected="selected='selected'";}else{$selected="";}
+                                        ?>
+                                      <option  id="gr-<?php echo $c; ?>"   {{$selected}}  value="<?php echo $gr->id;?>"    value="<?php echo $gr->id;?>">  <?php echo $gr->nom;?></option>
+                                         <?php }?>
 
  
                                     </select>
 
-                                </div>	
-                     				 <div class="row">
-									 <h3> Rubriques</h3>
-									 <?php 
-									 $annee=date('Y');
-									 $rubriques_assure= \DB::table('rubriques_assure')->where('id_assure',$dossier->ID_assure)->where('annee',$annee)->get();
-										if(count($rubriques_assure)>0){ ?>
-										<table class="table table-striped" id="tabgr">
-										<tr>
-										<th>Garantie</th><th>Rubrique</th><th>Plafond</th><th>Montant</th>
-										</tr>
-									<?php	
-									foreach($rubriques_assure as $rb)
-										 { 
-										 $rubriqueinit = \App\RubriqueInitial::where('id',$rb->rubriqueinitial)->first();
+                                </div>  
+                                     <div class="row">
+                                     <h3> Rubriques</h3>
+                                     <?php 
+                                     $annee=date('Y');
+                                     $rubriques_assure= \DB::table('rubriques_assure')->where('id_assure',$dossier->ID_assure)->where('annee',$annee)->get();
+                                        if(count($rubriques_assure)>0){ ?>
+                                        <table class="table table-striped" id="tabgr">
+                                        <tr>
+                                        <th>Garantie</th><th>Rubrique</th><th>Plafond</th><th>Montant</th>
+                                        </tr>
+                                    <?php   
+                                    foreach($rubriques_assure as $rb)
+                                         { 
+                                         $rubriqueinit = \App\RubriqueInitial::where('id',$rb->rubriqueinitial)->first();
 $rubrique = \App\Rubrique::where('id',$rb->rubrique)->first();
-										 $garantie = \App\Garantie::where('id',$rubrique->garantie)->first();
-										 
-								 	echo '<tr><td> '.$garantie->nom.'</td><td>'.$rubriqueinit->nom.'</td><td> '.$rubrique->montant.' '.$rubrique->devise.'</td><td> '.$rb->mrestant.'</td></tr>';
-										 }
-										} // count
-										 ?>
-										</table>
-									<style>
-									#tabgr td{min-width:150px;padding:5px 5px 5px 5px;}
-									</style>
-								  </div>	
+                                         $garantie = \App\Garantie::where('id',$rubrique->garantie)->first();
+                                         
+                                    echo '<tr><td> '.$garantie->nom.'</td><td>'.$rubriqueinit->nom.'</td><td> '.$rubrique->montant.' '.$rubrique->devise.'</td><td> '.$rb->mrestant.'</td></tr>';
+                                         }
+                                        } // count
+                                         ?>
+                                        </table>
+                                    <style>
+                                    #tabgr td{min-width:150px;padding:5px 5px 5px 5px;}
+                                    </style>
+                                  </div>    
 
-																	
+                                                                    
                                                                 </div>
 
-																	
+                                                                    
                                                                 <?php }?>
 
                                                                 <div class="row" style="margin-top:50px">
@@ -1536,9 +1536,9 @@ if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::Ch
 <option <?php if(strtoupper($dossier->vehicule_marque)=="AUTRE"){echo 'selected="selected"';}?> value="AUTRE">AUTRE</option>
 
 </select>
-																
-																
-																
+                                                                
+                                                                
+                                                                
                                                                 </div>
                                                             </div>
 
@@ -2234,7 +2234,7 @@ if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::Ch
                             </div>
 
                             <div class="form-group ">
-                                <label for="code">Adresse Email</label>
+                                <label for="code">Adresse Email </label>
                                 <div class="row">
                                     <input type="email"   class="form-control"  id="emaildoss"   onchange="checkexiste(this,'mail')" />
 
@@ -3174,7 +3174,10 @@ if($count==0) {
         $('.telsclients').css('display','none');
     }
 
-
+function checkEmail(email) {
+             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+             return re.test(email);
+         };
     function changing(elm) {
         var champ=elm.id;
 
@@ -3658,26 +3661,26 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
    /* $('#addtel').click(function () {
         $('#adding6').modal({show : true});
     });*/
-	
+    
  
 
         function addgarantie(garantie,elm,num){
 
-		
-	
+        
+    
   var sel = document.getElementById('garanties');
 
   var opt = sel.options[num];
-	//   alert(opt.selected);
+    //   alert(opt.selected);
  
 
  
             var assure = $('#ID_assure').val();
             var _token = $('input[name="_token"]').val();
-			//alert('Previous : '+previous);
+            //alert('Previous : '+previous);
 
-			if(elm.checked)
-			{/*	
+            if(elm.checked)
+            {/* 
             $.ajax({
                 url:"{{ route('garanties.addgr') }}",
                 method:"POST",
@@ -3691,12 +3694,12 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
                 } 
 
             });*/
-			}else{ // suppression
-				/*
-				// confirmation
-				  var r = confirm("Êtes-vous sûrs de supprimer cette table de garanties ?");
-				if (r == true) {				
-			   $.ajax({
+            }else{ // suppression
+                /*
+                // confirmation
+                  var r = confirm("Êtes-vous sûrs de supprimer cette table de garanties ?");
+                if (r == true) {                
+               $.ajax({
                 url:"{{ route('garanties.removegr') }}",
                 method:"POST",
                 data:{assure:assure,garantie:garantie, _token:_token},
@@ -3708,16 +3711,34 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
 
                 } 
 
-            });	
-			
-				} // confirmation	
-					*/
-			} // suppression
+            }); 
+            
+                } // confirmation   
+                    */
+            } // suppression
  
         }
-		
-    function changingAddress(id,champ,elm) {
+        
+    function changingAddress(id,champ,elm) { 
+
         var champid=elm.id;
+        if (champid.slice(0, 6)=="em-em-") { 
+            
+     
+         var email = document.getElementById(champid).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#'+champid).val(''); 
+             return false;
+         } 
+         
+         
+        };
         var val =document.getElementById(champid).value;
 
         //if ( (val != '')) {
@@ -3741,6 +3762,23 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
 
     function checkexiste( elm,type) {
         var id=elm.id;
+        if (id=="emaildoss") { 
+            
+     
+         var email = document.getElementById(id).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#emaildoss').val(''); 
+             return false;
+         } 
+         
+         
+        };
         var val =document.getElementById(id).value;
         //  var type = $('#type').val();
 
@@ -3857,12 +3895,12 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
         });
 
 
-		
+        
 
 
 
-		
-		
+        
+        
         $('#add2').click(function(){
              var prestataire = $('#selectedprest').val();
             var dossier_id = $('#iddossupdate').val();
@@ -4326,10 +4364,10 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
         } // updating
 
 
-		
-		
-		
-	
+        
+        
+        
+    
         var $topo2 = $('#garanties');
 
         var valArray2 = ($topo2.val()) ? $topo2.val() : [];
@@ -4362,17 +4400,17 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
         function UpdatingG(array, type) {
             $.each(array, function(i, item) {
 
-			
+            
             var assure = $('#ID_assure').val();
             var _token = $('input[name="_token"]').val();
-			
-				
+            
+                
   var sel = document.getElementById('garanties');
 
  // var opt = sel.options[item].value;
   
                 if (type=="selected"){
-				//	alert("added : "+item);
+                //  alert("added : "+item);
 
            $.ajax({
                 url:"{{ route('garanties.addgr') }}",
@@ -4390,13 +4428,13 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
                 }
 
                 if (type=="removed"){
-			// alert("removed "+item);
+            // alert("removed "+item);
 
  
-				// confirmation
-				  var r = confirm("Êtes-vous sûrs de supprimer cette table de garanties ?");
-				if (r == true) {				
-			   $.ajax({
+                // confirmation
+                  var r = confirm("Êtes-vous sûrs de supprimer cette table de garanties ?");
+                if (r == true) {                
+               $.ajax({
                 url:"{{ route('garanties.removegr') }}",
                 method:"POST",
                 data:{assure:assure,garantie:item, _token:_token},
@@ -4408,18 +4446,18 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
 
                 } 
 
-            });	
-			
-				} // confirmation	
+            }); 
+            
+                } // confirmation   
                 }
 
             });
         } // updating
 
-	
-		
-		
-		 
+    
+        
+        
+         
 
     }); // $ function
 

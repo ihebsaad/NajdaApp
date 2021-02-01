@@ -2831,9 +2831,9 @@ else
 
     $type=$entree['type'];
     $time=$entree['created_at'];$heure= "<small>Il y'a ".time_elapsed_string($time, false).'</small>';
-    //	$emetteur= $entree['emetteur'] ;
+    //  $emetteur= $entree['emetteur'] ;
     $emetteur=custom_echo($entree['emetteur'],'18');
-    //	$sujet= $entree['sujet'] ;
+    //  $sujet= $entree['sujet'] ;
     $sujet=custom_echo($entree['sujet'],'20');
     $attachs=$entree['nb_attach'];
 
@@ -3365,6 +3365,10 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
+    function checkEmail(email) {
+             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+             return re.test(email);
+         };
 
    /* $('#addtel').click(function () {
         $('#adding6').modal({show : true});
@@ -3372,6 +3376,23 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
 
     function changingAddress(id,champ,elm) {
         var champid=elm.id;
+        if (champid.slice(0, 6)=="em-em-") { 
+            
+     
+         var email = document.getElementById(champid).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#'+champid).val(''); 
+             return false;
+         } 
+         
+         
+        };
         var val =document.getElementById(champid).value;
 
         //if ( (val != '')) {
@@ -3395,6 +3416,23 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
 
     function checkexiste( elm,type) {
         var id=elm.id;
+        if (id=="emaildoss") { 
+            
+     
+         var email = document.getElementById(id).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#emaildoss').val(''); 
+             return false;
+         } 
+         
+         
+        };
         var val =document.getElementById(id).value;
         //  var type = $('#type').val();
 
@@ -3574,7 +3612,7 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
             var hospital=document.getElementById('nonis_hospitalized').checked;
 
             if(hospital)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3587,7 +3625,7 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
             var hospital=document.getElementById('nonis_hospitalized').checked;
 
             if(hospital)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3600,7 +3638,7 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
             var docs=document.getElementById('documents').checked;
 
             if(docs)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3612,7 +3650,7 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
             var docs=document.getElementById('documents').checked;
 
             if(docs)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3635,7 +3673,7 @@ document.getElementById('coupersonenv').style.display = 'inline-block';}
 
             var   div=document.getElementById('ben3');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
