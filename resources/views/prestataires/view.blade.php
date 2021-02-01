@@ -22,9 +22,9 @@ $user = auth()->user();
 
         <div class="col-md-6">
         <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>
-		  <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;
-		<?php } ?>
-		</div>
+          <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;
+        <?php } ?>
+        </div>
         <div class="col-md-6">
         <a class="btn btn-default" id="recherchertp" href="{{url('/prestataires')}}"> Liste des intervenants</a>
         </div>
@@ -56,18 +56,18 @@ $user = auth()->user();
                                 <i class="fas a-lg fa-file-invoice"></i>  Factures
                             </a>
                         </li>
-						
-					  <li class="nav-item ">
+                        
+                      <li class="nav-item ">
                             <a class="nav-link  " href="#tab05" data-toggle="tab"  onclick="showinfos5();hideinfos();hideinfos2();hideinfos3();hideinfos4();hideinfos6();">
                                 <i class="fas a-lg fa-star"></i>  Evaluations
                             </a>
-                        </li>	
-					  <li class="nav-item ">
+                        </li>   
+                      <li class="nav-item ">
                             <a class="nav-link  " href="#tab06" data-toggle="tab"  onclick="showinfos6();hideinfos();hideinfos2();hideinfos3();hideinfos4();hideinfos5();">
                                 <i class="fas a-lg fa-bar-chart"></i>  Statistiques
                             </a>
-                        </li>	
-						
+                        </li>   
+                        
             </ul>
 
         </div>
@@ -205,7 +205,7 @@ $user = auth()->user();
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Ville du siège social</label><br>
+                                <label>Ville du siège social</label><br> 
 
                                 <input onchange="changing(this)" type="text" class="form-control input" name="ville" id="ville" value="{{ $prestataire->ville }}">
 
@@ -505,7 +505,7 @@ $user = auth()->user();
         <tr id="headtable">
             <th style="width:10%">ID</th>
             <th style="width:10%">Date</th>
-            <th style="width:10%">Dossier</th>			
+            <th style="width:10%">Dossier</th>          
             <th style="width:15%">Type</th>
             <th style="width:15%">Spécialité</th>
             <th style="width:15%">Gouvernorat</th>
@@ -535,7 +535,7 @@ $user = auth()->user();
                 <td style="width:10%;   ">
                <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                         <?php  echo PrestationsController::DossierById($dossid);  ?>
-                    </a></td>				
+                    </a></td>               
                 <td style="width:15%;">
                     <?php $typeprest= $prestation['type_prestations_id'];
                     echo PrestationsController::TypePrestationById($typeprest);  ?>
@@ -613,15 +613,15 @@ $user = auth()->user();
             </div>
 
             <div id="tab04" class="tab-pane fade    " style="padding-top:30px">
-			
-			     <?php  
-				$user = auth()->user();
+            
+                 <?php  
+                $user = auth()->user();
                 $type =    $user->user_type;
-				 use \App\Facture ;
-				 use \App\Http\Controllers\ClientsController ;
-				 
-				if ($type == 'financier' || $type == 'bureau' || $type == 'admin' ) {   ?>
-			      <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                 use \App\Facture ;
+                 use \App\Http\Controllers\ClientsController ;
+                 
+                if ($type == 'financier' || $type == 'bureau' || $type == 'admin' ) {   ?>
+                  <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
                         <thead>
                         <tr id="headtable">
                             <th style="width:10%">ID</th>
@@ -633,9 +633,9 @@ $user = auth()->user();
                         </thead>
                         <tbody>
                         <?php 
-						$factures= Facture::where('prestataire',$prestataire->id)->get() ;  ?>
+                        $factures= Facture::where('prestataire',$prestataire->id)->get() ;  ?>
                         @foreach($factures as $facture)
-						   <?php if(isset($facture->iddossier)){ $iddossier= $facture->iddossier; $dossier= App\Dossier::where('id',$iddossier)->first();$ref=$dossier['reference_medic'] ; $abn= $dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] ;}
+                           <?php if(isset($facture->iddossier)){ $iddossier= $facture->iddossier; $dossier= App\Dossier::where('id',$iddossier)->first();$ref=$dossier['reference_medic'] ; $abn= $dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] ;}
                          ?>
                             <tr  >
                                 <td style="width:10%;">
@@ -656,17 +656,17 @@ $user = auth()->user();
                         @endforeach
                         </tbody>
                     </table>
-			
-				 <?php } else{
-					 echo '<center><h2> Zone réservée au financiers </h2></center>';
-				 }  ?>
-				 
-			</div>
+            
+                 <?php } else{
+                     echo '<center><h2> Zone réservée au financiers </h2></center>';
+                 }  ?>
+                 
+            </div>
 
-			
+            
             <div id="tab05" class="tab-pane fade    " style="padding-top:30px">
-					
-			      <table class="table table-striped" id="mytable3" style="width:100%;margin-top:15px;">
+                    
+                  <table class="table table-striped" id="mytable3" style="width:100%;margin-top:15px;">
                         <thead>
                         <tr id="headtable">
                             <th style="width:10%;text-align:center">ID</th>
@@ -681,9 +681,9 @@ $user = auth()->user();
                         </thead>
                         <tbody>
                         <?php 
-						$ratings= \App\Rating::where('prestataire',$prestataire->id)->get() ;  ?>
+                        $ratings= \App\Rating::where('prestataire',$prestataire->id)->get() ;  ?>
                         @foreach($ratings as $rating)
-						   <?php     ?>
+                           <?php     ?>
                             <tr  >
                                 <td style="width:10%;text-align:center">
                                     <a href="{{action('PrestatairesController@view_rating', $rating->id)}}" ><?php echo sprintf("%05d",$rating->id);?></a>
@@ -693,13 +693,13 @@ $user = auth()->user();
                                  </td>
                                 <td style="width:10%;text-align:center">
                                     <a href="{{action('PrestatairesController@view', $rating->prestataire)}}" ><?php echo PrestationsController::PrestataireById($rating->prestataire); ?></a>
-                                 </td>								 
+                                 </td>                               
                                 <td style="width:10%;text-align:center">
                                     <?php if ($rating->disponibilite==1){  echo '<b class="text-success">OUI</b>' ;}else{echo '<b class="text-danger">NON</b>';} ?>
                                     </td>
-									 <td style="width:20%;text-align:center">
-									  <?php echo $rating->ponctualite ; ?>
-									</td> 
+                                     <td style="width:20%;text-align:center">
+                                      <?php echo $rating->ponctualite ; ?>
+                                    </td> 
                                 <td style="width:10%;text-align:center">
                                     <?php if ($rating->reactivite==1){  echo '<b class="text-success">OUI</b>' ;}else{echo '<b class="text-danger">NON</b>';} ?>
                                 </td>
@@ -710,15 +710,15 @@ $user = auth()->user();
                             </tr>
                         @endforeach
                         </tbody>
-                    </table>			
-			
-			
-			
-			</div>
-			
-			
+                    </table>            
+            
+            
+            
+            </div>
+            
+            
             <div id="tab06" class="tab-pane fade    " style="padding-top:30px">
-<?php		
+<?php       
 $count_disponibilite_oui=\App\Rating::where('prestataire',$prestataire->id)->where('disponibilite',1)->count(); 
 $count_disponibilite_non=\App\Rating::where('prestataire',$prestataire->id)->where('disponibilite',0)->count(); 
 
@@ -746,46 +746,46 @@ $count_retour_non=\App\Rating::where('prestataire',$prestataire->id)->where('ret
 
         var data = google.visualization.arrayToDataTable([
           ['Disponibilité', 'Nombre'],
-		   
+           
 <?php
  
-echo "['Oui',    ".$count_disponibilite_oui."] , ";	 
-echo "['Non ',    ".$count_disponibilite_non."] ";	 
+echo "['Oui',    ".$count_disponibilite_oui."] , ";  
+echo "['Non ',    ".$count_disponibilite_non."] ";   
  
-?>		 
+?>       
         ]);
 
         var options = {
           title: 'Pourcentage de disponibilité',
-		  is3D: true,
-		    colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
- 	  
+          is3D: true,
+            colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+      
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
         chart.draw(data, options);
       }
-	  
+      
       function drawChart2() {
 
         var data = google.visualization.arrayToDataTable([
           ['Ponctualité', 'Nombre'],
-		   
+           
 <?php
  
-echo "['Avant RDV',    ".$count_ponctualite_avant."] , ";	 
-echo "['A l`heure ',    ".$count_ponctualite_heure."], ";	 
-echo "['Après RDV ',    ".$count_ponctualite_apres."] ";	 
+echo "['Avant RDV',    ".$count_ponctualite_avant."] , ";    
+echo "['A l`heure ',    ".$count_ponctualite_heure."], ";    
+echo "['Après RDV ',    ".$count_ponctualite_apres."] ";     
  
-?>		 
+?>       
         ]);
 
         var options = {
           title: 'Pourcentage de ponctualité',
-		  is3D: true,
-		    colors: [ '#fd9883','#dcdcdc','#f3b49f']
- 	  
+          is3D: true,
+            colors: [ '#fd9883','#dcdcdc','#f3b49f']
+      
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
@@ -797,20 +797,20 @@ echo "['Après RDV ',    ".$count_ponctualite_apres."] ";
 
         var data = google.visualization.arrayToDataTable([
           ['Réactivité', 'Nombre'],
-		   
+           
 <?php
  
-echo "['Oui',    ".$count_reactivite_oui."] , ";	 
-echo "['Non ',    ".$count_reactivite_non."] ";	 
+echo "['Oui',    ".$count_reactivite_oui."] , ";     
+echo "['Non ',    ".$count_reactivite_non."] ";  
  
-?>		 
+?>       
         ]);
 
         var options = {
           title: 'Pourcentage de réactivité',
-		  is3D: true,
-		    colors: [ '#4fc1e9', '#dcdcdc' ]
- 	  
+          is3D: true,
+            colors: [ '#4fc1e9', '#dcdcdc' ]
+      
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart3'));
@@ -823,26 +823,26 @@ echo "['Non ',    ".$count_reactivite_non."] ";
 
         var data = google.visualization.arrayToDataTable([
           ['Disponibilité', 'Nombre'],
-		   
+           
 <?php
  
-echo "['Oui',    ".$count_retour_oui."] , ";	 
-echo "['Non ',    ".$count_retour_non."] ";	 
+echo "['Oui',    ".$count_retour_oui."] , ";     
+echo "['Non ',    ".$count_retour_non."] ";  
  
-?>		 
+?>       
         ]);
 
         var options = {
           title: "Pourcentage de retour d'informations",
-		  is3D: true //,
-		  //  colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
- 	  
+          is3D: true //,
+          //  colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+      
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart4'));
 
         chart.draw(data, options);
-      }	  
+      }   
     </script>
  
  
@@ -850,12 +850,12 @@ echo "['Non ',    ".$count_retour_non."] ";
     <div id="piechart2" style="width: 600px; height: 400px;"></div><br><br>
     <div id="piechart3" style="width: 600px; height: 400px;"></div><br><br>
     <div id="piechart4" style="width: 600px; height: 400px;"></div>
-	
+    
     </div>
-			
-			
-			
-			
+            
+            
+            
+            
             </div>
 
     </section>
@@ -1536,15 +1536,15 @@ else
     function hideinfos3() {
         $('#tab03').css('display','none');
     }
-	  function hideinfos4() {
+      function hideinfos4() {
         $('#tab04').css('display','none');
     }
-	  function hideinfos5() {
+      function hideinfos5() {
         $('#tab05').css('display','none');
     }
-	  function hideinfos6() {
+      function hideinfos6() {
         $('#tab06').css('display','none');
-    }		
+    }       
     function showinfos() {
         $('#tab01').css('display','block');
     }
@@ -1555,13 +1555,13 @@ else
     function showinfos3() {
         $('#tab03').css('display','block');
     }
-	  function showinfos4() {
+      function showinfos4() {
         $('#tab04').css('display','block');
     }
-	  function showinfos5() {
+      function showinfos5() {
         $('#tab05').css('display','block');
     }
-	  function showinfos6() {
+      function showinfos6() {
         $('#tab06').css('display','block');
     }
 
@@ -1668,12 +1668,28 @@ else
             }
         });
          } else {
-			alert('le nom est obligatoire');
+            alert('le nom est obligatoire');
          }
     }
 
     function changingAddress(id,champ,elm) {
+
         var champid=elm.id;
+        if (champid.slice(0, 5)=="email") {
+            
+     
+         var email = document.getElementById(champid).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $("#"+champid).val(''); 
+             return false;
+         } 
+     };
         var val =document.getElementById(champid).value;
 
         //if ( (val != '')) {
@@ -2253,10 +2269,30 @@ else{
         document.getElementById('ledestinataire').value=parseInt(num);
 
     }
-
+    function checkEmail(email) {
+             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+             return re.test(email);
+         }; 
 
     function checkexiste( elm,type) {
         var id=elm.id;
+        if (id=="champ2") { 
+            
+     
+         var email = document.getElementById(id).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#champ2').val(''); 
+             return false;
+         } 
+         
+         
+        };
         var val =document.getElementById(id).value;
         //  var type = $('#type').val();
 
@@ -2336,7 +2372,7 @@ else{
         //divPrecedent.style.display='none';
         divPrecedent=document.getElementById(divId);
         if(divPrecedent.style.display==='none')
-        {divPrecedent.style.display='block';	 }
+        {divPrecedent.style.display='block';     }
         else
         {divPrecedent.style.display='none';     }
     }
