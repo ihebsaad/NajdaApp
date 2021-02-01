@@ -124,8 +124,8 @@
             <tr><td><span>Actions Actives </span></td><td><b><?php echo $actives;?></b></td></tr>
         </table>
 
-		<a href="{{action('UsersController@stats', $user['id'])}}" ><span class="btn btn-success" style='color:white;margin-left:80px ;margin-top:60px ;width:250px;font-weight: 600;font-size:20px;'>Statistiques détaillés </span></a>
-		
+        <a href="{{action('UsersController@stats', $user['id'])}}" ><span class="btn btn-success" style='color:white;margin-left:80px ;margin-top:60px ;width:250px;font-weight: 600;font-size:20px;'>Statistiques détaillés </span></a>
+        
       <!--  <div class="form-group">
             <div class="col-md-6 col-md-offset-4 ">
                 <button type="submit" class="btn btn-primary">
@@ -272,7 +272,7 @@ if ($user->phone!=''){
         </div>
     </div>
 </div>
-	<style>
+    <style>
         #tabstats {font-size: 15px;padding:30px 30px 30px 30px;}
         #tabstats td{border-left:1px solid white;border-bottom:1px solid white;min-width:50px;min-height: 25px;;text-align: center;}
         #tabstats tr{margin-bottom:15px;text-align: center;height: 40px;}
@@ -298,6 +298,7 @@ $('#dossier').select2({
 
 <script>
 
+
 $(function () {
 $('.itemName').select2({
 filter: true,
@@ -313,11 +314,31 @@ return 'Pas de résultats';
 
 
 });
-
+function checkEmail(email) {
+             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+             return re.test(email);
+         };
 
      function changing(elm) {
-        var champ = elm.id;
 
+        var champ = elm.id;
+        if (champ=="boite") {
+            
+     
+         var email = document.getElementById("boite").value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#boite').val('');
+             return false;
+         } 
+         
+         
+        };
         var val = document.getElementById(champ).value;
 
         var user = $('#iduser').val();
