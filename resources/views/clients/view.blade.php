@@ -78,11 +78,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             </div>
 
 
-			
-			
-	
+            
+            
+    
  <form    action="{{action('ClientsController@view2')}}" >
-	<div class="row">
+    <div class="row">
     <input id="id"   type="hidden" name="id"   value="<?php echo $client['id'] ;?>"   />
 
  
@@ -95,22 +95,22 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 <label for="fin">Fin:</label>
     <input id="fin"  autocomplete="off" placeholder="jj-mm-aaaa" class="form-control datepicker" name="fin" required value="" format='jj-mm-aaaa' />
   </div>
-	
-	
+    
+    
  <div class="form-group col-xs-12 col-md-3">
    <label></label> 
-	 <input  type="submit" class="form-control btn btn-success"  value="Voir" style="margin-top:20px" />
+     <input  type="submit" class="form-control btn btn-success"  value="Voir" style="margin-top:20px" />
   </div>
-	 
+     
 </div>
-	  </form>
-	  <?php if (isset($debut) && isset($fin)) {
-		$debut=$_GET['debut'];
-		$fin=$_GET['fin'];
-		echo 'Debut : ' .$debut;
-		
-	  ?>
-	            <div class="row"  style="margin-bottom:30px">
+      </form>
+      <?php if (isset($debut) && isset($fin)) {
+        $debut=$_GET['debut'];
+        $fin=$_GET['fin'];
+        echo 'Debut : ' .$debut;
+        
+      ?>
+                <div class="row"  style="margin-bottom:30px">
             <div class="col-md-2">
                 <a href="{{action('ClientsController@dossiers', $client['id'])}}" >Total Dossiers Par date  : <?php echo ClientsController::CountDossCLDate( $client['id'],$debut,$fin); ?> </a> | (<a href="{{action('ClientsController@ouverts', $client['id'])}}" > Ouverts : <?php echo ClientsController::CountDossCLouvertsDate( $client['id'],$debut,$fin); ?> </a>)
             </div>
@@ -127,9 +127,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     Transport : <?php echo ClientsController::CountDossCLTranspDate( $client['id'],$debut,$fin); ?>
                 </div>
 
-            </div>		
-			
-	  <?php } ?>	
+            </div>      
+            
+      <?php } ?>    
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -715,13 +715,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                 </div>
                             </div>
 
-								
-	<?php							
-	$groupe=$client->groupe;
-	 
-  	 $contratsg=DB::table('contrats_clients')->where('parent',$groupe)->where('type','commun')->count();
-	if($contratsg==0){
-	?>
+                                
+    <?php                           
+    $groupe=$client->groupe;
+     
+     $contratsg=DB::table('contrats_clients')->where('parent',$groupe)->where('type','commun')->count();
+    if($contratsg==0){
+    ?>
                             <div class="form-group ">
                                 <h3>Contrats</h3>
 
@@ -750,15 +750,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                     </select>
 
                                 </div>
-								
-			 		
+                                
+                    
                             </div>
 
-	  <?php }
-					else{ echo '<center><h2>Client sous Contrats groupe</h2></center>';}
+      <?php }
+                    else{ echo '<center><h2>Client sous Contrats groupe</h2></center>';}
 
 
-				  ?>
+                  ?>
                             <div class="row" style="margin-top:40px">
                                 <div class="col-md-8">
                                     <h4><i class="fa fa-lg fa-user"></i>  Responsables Gestion</h4>
@@ -1081,18 +1081,18 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         </div>
 
     @can('isAdmin')
-	<?php 
- 	$count= \App\Dossier::where('customer_id',$client->id)->count();
-	if ($count>0){
-		echo 'Suppression interdite : Client impliqué dans '.$count.' dossier(s)'; 
-	}else{
-		?>
+    <?php 
+    $count= \App\Dossier::where('customer_id',$client->id)->count();
+    if ($count>0){
+        echo 'Suppression interdite : Client impliqué dans '.$count.' dossier(s)'; 
+    }else{
+        ?>
    <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('ClientsController@destroy', $client->id )}}" class="pull-right btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
             <span class="fa fa-fw fa-trash-alt"></span> Supprimer le client
         </a>
-	<?php 		}
-	
-	?>
+    <?php       }
+    
+    ?>
     @endcan
 
     <input type="hidden" id="idcl" class="form-control"   value={{ $client->id }}>
@@ -1765,7 +1765,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     </div>
                 </div>
             </div>
-			</form>
+            </form>
    </div>
    </div>
 
@@ -1833,8 +1833,29 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     {
         document.getElementById('destinatairesms').value =''+num;
     }
+    function checkEmail(email) {
+             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+             return re.test(email);
+         };
     function checkexiste( elm,type) {
         var id=elm.id;
+        if (id=="champ2") { 
+            
+     
+         var email = document.getElementById(id).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $('#champ2').val(''); 
+             return false;
+         } 
+         
+         
+        };
         var val =document.getElementById(id).value;
         //  var type = $('#type').val();
 
@@ -2107,7 +2128,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             var fax = $('#faxg').val();
             var observ = $('#remarqueg').val();
             var nature = $('#nature7').val();
-			
+            
             if (  (tel!='')  || (email!='')  )
             {
                 var _token = $('input[name="_token"]').val();
@@ -2379,6 +2400,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     });
 
     function changing(elm) {
+
         var champ=elm.id;
 
         var val =document.getElementById(champ).value;
@@ -2405,6 +2427,21 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
     function changingAddress(id,champ,elm) {
         var champid=elm.id;
+        if (champid.slice(0, 5)=="email") {
+            
+     
+         var email = document.getElementById(champid).value;
+     
+         if (!(checkEmail(email))) {
+            Swal.fire({
+                            type: 'Error',
+                            title: 'Champs invalide...',
+                            text:'Adresse e-mail non valide'
+                        });
+            $("#"+champid).val(''); 
+             return false;
+         } 
+     };
         var val =document.getElementById(champid).value;
 
         //if ( (val != '')) {
@@ -2485,16 +2522,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         //divPrecedent.style.display='none';
         divPrecedent=document.getElementById(divId);
         if(divPrecedent.style.display==='none')
-        {divPrecedent.style.display='block';	 }
+        {divPrecedent.style.display='block';     }
         else
         {divPrecedent.style.display='none';     }
     }
 
     $(document).ready(function(){
 
-	
-		
-	        $( ".datepicker" ).datepicker({
+    
+        
+            $( ".datepicker" ).datepicker({
 
             altField: "#datepicker",
             closeText: 'Fermer',
@@ -2513,8 +2550,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             dateFormat: "dd-mm-yy"
 
         });
-		
-		
+        
+        
         $('#theform').submit(function(){
             $(this).children('input[type=submit]').prop('disabled', true);
         });
@@ -2836,9 +2873,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         verrou=false;
         //alert(values);
     })
-	
+    
 
-		
+        
 </script>
 <style>.headtable{background-color: grey!important;color:white;}
     table{margin-bottom:40px;}
