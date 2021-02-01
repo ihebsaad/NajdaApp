@@ -3010,11 +3010,12 @@ if(strstr($dossier['reference_medic'],"MI")){
                             </div>
                             <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
                             </div>
-                            <input class="form-control"   style="padding-left:5px" type="text"   name="ville" id="villepr3"  placeholder="toutes" />
+                            <input class="form-control" value="<?php echo $ville; ?>" style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr3" />
                             <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode3" />
 
                         </div>
-                      <!--  <script>
+
+                        <script>
                             (function() {
                                 var placesAutocomplete4 = places({
                                     appId: 'plCFMZRCP0KR',
@@ -3025,7 +3026,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                                     document.querySelector('#villecode3').value = e.suggestion.postcode || '';
                                 });
                             })();
-                        </script>-->
+                        </script>
 
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
