@@ -449,7 +449,7 @@ class RechercheController extends Controller
       /* array:5 [▼
   "pres_id_search" => null
   "typepres_id_search" => null
-  "gouv_id_search" => null
+  "gouv_id_search" => null 
   "ville_id_search" => null
   "spec_id_search" => null
 ]*/
@@ -543,9 +543,9 @@ class RechercheController extends Controller
             if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
             {
               $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+              $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();
 
-                 $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+                
 
                  $result=array_intersect($idprestatairetype, $prestatairesville);
     
@@ -635,8 +635,7 @@ class RechercheController extends Controller
             {
               $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
 
-                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
 
@@ -670,8 +669,7 @@ class RechercheController extends Controller
 
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();
 
                
                  $result1=array_intersect($idprestatairetype, $idprestatairegouv);
@@ -703,8 +701,7 @@ class RechercheController extends Controller
 
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
 
@@ -769,8 +766,7 @@ class RechercheController extends Controller
              
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();
 
                  $result=array_intersect($idprestatairegouv,$prestatairesville);
     
@@ -830,8 +826,7 @@ class RechercheController extends Controller
            
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
                 
@@ -866,8 +861,7 @@ class RechercheController extends Controller
              if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
             {
              
-                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();        
+                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();       
     
            $result=array_unique($prestatairesville);
           // $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
@@ -891,8 +885,7 @@ class RechercheController extends Controller
            if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')!=null )
             {
                           
-                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
-                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('typepres_id_search'))->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
                 
