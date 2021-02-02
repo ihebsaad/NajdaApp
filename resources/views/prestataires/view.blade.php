@@ -2312,7 +2312,7 @@ else{
                     if(parsed['fonction']!=null){string+='Fonction : '+parsed['fonction']+ ' - '; }
                     if(parsed['remarque']!=null){string+='Remarque : '+parsed['remarque']+ ' - '; }
                     if(parsed['type']!=null){string+='Type : '+parsed['type']+ ' '; }
-                    //if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
+                    if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
 
                     if(parsed['nature']=='email' || parsed['nature']=='tel' || parsed['nature']=='fax' )
                     {  // client

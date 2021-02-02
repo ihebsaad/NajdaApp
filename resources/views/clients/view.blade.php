@@ -1895,6 +1895,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             string+='<br>   lien : <a href="<?php echo $urlapp.'/prestataires/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Prestataire</a>';
 
                         }
+if(parsed['nature']=='emaildoss' || parsed['nature']=='teldoss' || parsed['nature']=='faxdoss' )
+                        {  // client
+                            string+='<br>   lien : <a href="<?php echo $urlapp.'/dossiers/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche dossier</a>';
+
+                        }
                     }
                    // alert(string);
                     Swal.fire({
