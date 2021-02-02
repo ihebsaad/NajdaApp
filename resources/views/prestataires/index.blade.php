@@ -113,15 +113,14 @@ $user = auth()->user();
                         <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.1"></script>
 
                         <div class="col-md-4">
-                            <div class="form-group">
+                            <div class="form-group"> 
                                 <label>Ville </label>
                                 <div class="row" style=";margin-bottom:0px;"><style>.algolia-places{width:100%;}</style></div>
                                  <input class="form-control" style="padding-left:5px" type="text" name="ville_id_search"  id="ville_id_search" />
+                                 
                              
-                                
                             </div>
 
-                        
                         <script>
                         (function() {
                             var placesAutocomplete2 = places({ 
@@ -129,6 +128,7 @@ $user = auth()->user();
                                 apiKey: 'aafa6174d8fa956cd4789056c04735e1',
                                 container: document.querySelector('#ville_id_search'),
                             });
+                             
                             
                         })();
                         </script>
@@ -203,14 +203,15 @@ $user = auth()->user();
             <tbody>
             @if(isset($prests))
             @foreach($prests as $prestataire)
-                <?php $id= $prestataire->id ;$ville='';
+                <?php $id= $prestataire->id ;
+                /*  $ville='';
                 if($prestataire->ville !=''){$ville=$prestataire->ville;}else{
 
 
                      $villeid=intval($prestataire->ville_id );
             /*    if (isset($villes[$villeid]['name']) ){if($villeid>0) {$ville=$villes[$villeid-1]['name'];}}
-                else{$ville=$prestataire['ville'];}*/
-                }
+                else{$ville=$prestataire['ville'];}
+                }*/
 
                 $gouvs=  PrestatairesController::PrestataireGouvs($id);
                 $typesp=  PrestatairesController::PrestataireTypesP($id);
@@ -221,7 +222,7 @@ $user = auth()->user();
                     <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo ' <b> '. $prestataire->civilite .' '. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
                     <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
                     <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
-                    <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
+                    <td style="font-size:12px;width:10%"><?php echo $prestataire->ville; ?></td>
                     <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
  <td  ><?php if ($prestataire->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
                     <td style="font-size:13px;width:10%">
