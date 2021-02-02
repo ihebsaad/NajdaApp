@@ -655,6 +655,16 @@ DB::table('adresses')
                 ['parent', '=',$id],
                 ['nature', '=', 'telinterv'],
             ])->delete();
+DB::table('adresses')
+            ->where([
+                ['parent', '=',$id],
+                ['nature', '=', 'emailinterv'],
+            ])->delete();
+DB::table('adresses')
+            ->where([
+                ['parent', '=',$id],
+                ['nature', '=', 'faxinterv'],
+            ])->delete();
 
         Evaluation::where('prestataire',$id)->delete();
         Facture::where('prestataire',$id)->update(array('prestataire' => null));
