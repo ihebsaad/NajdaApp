@@ -2312,7 +2312,7 @@ else{
                     if(parsed['fonction']!=null){string+='Fonction : '+parsed['fonction']+ ' - '; }
                     if(parsed['remarque']!=null){string+='Remarque : '+parsed['remarque']+ ' - '; }
                     if(parsed['type']!=null){string+='Type : '+parsed['type']+ ' '; }
-                    if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
+                    //if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
 
                     if(parsed['nature']=='email' || parsed['nature']=='tel' || parsed['nature']=='fax' )
                     {  // client
@@ -2322,6 +2322,11 @@ else{
                         if(parsed['nature']=='emailinterv' || parsed['nature']=='telinterv' || parsed['nature']=='faxinterv' )
                         {  // client
                             string+='<br>   lien : <a href="<?php echo $urlapp.'/prestataires/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Prestataire</a>';
+
+                        }
+if(parsed['nature']=='emaildoss' || parsed['nature']=='teldoss' || parsed['nature']=='faxdoss' )
+                        {  // client
+                            string+='<br>   lien : <a href="<?php echo $urlapp.'/dossiers/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche dossier</a>';
 
                         }
                     }
