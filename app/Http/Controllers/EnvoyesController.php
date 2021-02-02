@@ -420,6 +420,28 @@ $envoye->save();
     {
 
       $envoye = Envoye::find($request->get('envoyetel'));
+    /*$ftp_server='host.enterpriseesolutions.com';
+      $conn_id = ftp_connect($ftp_server) or die("Impossible de se connecter au serveur $ftp_server");
+$ftp_user_name='mizutest';
+$ftp_user_pass='NajdaApp2020!';
+// connexion avec un nom d'utilisateur et un mot de passe
+ $login_result= ftp_login($conn_id, $ftp_user_name, $ftp_user_pass) or die("Authorization failed");
+ ftp_pasv ($conn_id, true) or die("Passive mode failed");
+ 
+// récupère le contenue du dossier courant
+ $folder_exists =is_dir('.');
+$contents = ftp_mlsd($conn_id, '.');
+
+//dd($envoye['reception']);
+foreach ($contents as $cont )
+{
+$voice="voice_".$envoye['emetteur']."_".$envoye['destinataire'];
+ //dd($voice);
+  if(stristr($cont['name'], $voice)==TRUE && (date('Y:M:D h:i:s', $cont['modify'])>=$envoye['reception']))
+  {
+   dd(date('Y:M:D h:i:s', $cont['modify']));
+  }
+}*/
 
         $envoye->update(array(
            
