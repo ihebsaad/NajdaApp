@@ -420,7 +420,7 @@ $envoye->save();
     {
 
       $envoye = Envoye::find($request->get('envoyetel'));
-    /*$ftp_server='host.enterpriseesolutions.com';
+   /* $ftp_server='host.enterpriseesolutions.com';
       $conn_id = ftp_connect($ftp_server) or die("Impossible de se connecter au serveur $ftp_server");
 $ftp_user_name='mizutest';
 $ftp_user_pass='NajdaApp2020!';
@@ -436,7 +436,7 @@ $contents = ftp_mlsd($conn_id, '.');
 foreach ($contents as $cont )
 {
 $voice="voice_".$envoye['emetteur']."_".$envoye['destinataire'];
- //dd($voice);
+ dd(date ('YMDhis',$envoye['reception']));
   if(stristr($cont['name'], $voice)==TRUE && (date('Y:M:D h:i:s', $cont['modify'])>=$envoye['reception']))
   {
    dd(date('Y:M:D h:i:s', $cont['modify']));
