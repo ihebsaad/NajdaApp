@@ -56,16 +56,17 @@ $user = auth()->user();
                             <label>Prestataire </label>
                              </div>
                              <div class="row">
-                            <input type="text" list="pres_search" name="pres_id_search" value="" class="form-control select2"/>
-                                <datalist id="pres_search">
+                            <input type="text" list="pres_search" id="presid"  name="pres_id_search" value="" class="form-control select2"/>
+                                <datalist id="pres_search" >
                                 @foreach(App\Prestataire::orderBy('name','ASC')->get(["id","name","prenom"]) as $p)
 
-                                 <option ido="{{$p->id}}"> {{$p->name}} {{$p->prenom}} </option>  
+                                 <option value="{{$p->name}} {{$p->prenom}}" data-value="{{$p->id}}" ></option>  
 
                                 @endforeach
                                 </datalist>
                                 <input type="hidden" value="" id="pres_id_search_hidden" name="pres_id_search_hidden" />
                                  </div>
+
 
                             {{--<select class="form-control select2" name="pres_id_search" id="pres_id_search">
                                 <option value="">sélectionner</option>
@@ -227,21 +228,21 @@ $user = auth()->user();
  <td  ><?php if ($prestataire->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
                     <td style="font-size:13px;width:10%">
                         @can('isAdmin')
-  	<?php 
- 	$count1= \App\Facture::where('prestataire',$prestataire['id'])->count();
- 	//$count2= \App\Intervenant::where('prestataire_id',$prestataire['id'])->count();
- 	$count3= \App\Prestation::where('prestataire_id',$prestataire['id'])->where('effectue',1)->count();
- 	//$count4= \App\Evaluation::where('prestataire',$prestataire['id'])->count();
-	$count= $count1+$count3;
-	if ($count>0){
-		echo 'Suppression interdite'; 
-	}else{ ?>                         
+    <?php 
+    $count1= \App\Facture::where('prestataire',$prestataire['id'])->count();
+    //$count2= \App\Intervenant::where('prestataire_id',$prestataire['id'])->count();
+    $count3= \App\Prestation::where('prestataire_id',$prestataire['id'])->where('effectue',1)->count();
+    //$count4= \App\Evaluation::where('prestataire',$prestataire['id'])->count();
+    $count= $count1+$count3;
+    if ($count>0){
+        echo 'Suppression interdite'; 
+    }else{ ?>                         
 
-						   <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestatairesController@destroy', $prestataire['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                           <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestatairesController@destroy', $prestataire['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span> Supp
                             </a>
-	<?php  } ?>				
-							
+    <?php  } ?>             
+                            
                         @endcan</td>
 
                 </tr>
@@ -300,7 +301,7 @@ $user = auth()->user();
 
             var table = $('#mytable').DataTable({
                 orderCellsTop: true,
-               			  order:[],
+                          order:[],
  dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
@@ -357,7 +358,7 @@ $user = auth()->user();
                         .search(this.value)
                         .draw();
                 });
-				
+                
                 $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
                     console.log('Time elapsed!', this.value);
                     $(this).blur();
@@ -485,6 +486,14 @@ $user = auth()->user();
 </script>
 
 <script>
+    $('#presid').on('input', function() {
+        const value = $(this).val();
+        alert(value);
+        const data_value = $('#pres_search [value="' + value + '"]').data('value');
+        document.getElementById("pres_id_search_hidden").value = data_value;
+      });
+
+
  $(document).ready(function() {
   
     $("#pres_id_search").select2();
@@ -495,8 +504,10 @@ $user = auth()->user();
 
 
 
-    /// fill phone number on select prest Prise en charge
-    document.querySelector('input[list="pres_search"]').addEventListener('input', onInput);
+
+    /// fill phone number on select prest Prise en charge. (khaled)
+
+   /* document.querySelector('input[list="pres_search"]').addEventListener('input', onInput);
 
     function onInput(e) {
 
@@ -519,7 +530,7 @@ $user = auth()->user();
         }
        }
       }
-    }
+    }*/
 
 
 
