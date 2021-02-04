@@ -363,10 +363,10 @@ $prestid=0;
 foreach ($array_prest as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
-      echo '<option value="'.$prest["nom"].''.$prest["prenom"].'" id="'.$prest["id"].'" selected >'.$prest["nom"].''.$prest["prenom"].'</option>';}
+      echo '<option value="'.$prest["nom"].' '.$prest["prenom"].'" id="'.$prest["id"].'" selected >'.$prest["nom"].' '.$prest["prenom"].'</option>';}
 else {
     
-    echo '<option value="'.$prest["nom"].''.$prest["prenom"].'" id="'.$prest["id"].'" >'.$prest["nom"].''.$prest["prenom"].'</option>';}
+    echo '<option value="'.$prest["nom"].' '.$prest["prenom"].'" id="'.$prest["id"].'" >'.$prest["nom"].' '.$prest["prenom"].'</option>';}
 }}
 ?>
 </select>
@@ -449,11 +449,10 @@ $prestid=0;
 
 foreach ($array_presta as $presta) {
 if(($presta['id'] === $id__prestataire1)) {
-    
-    echo '<option value="'.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" selected >'.$presta["prenom"].''.$presta["name"].'</option>';}
+    echo '<option value="'.$presta["prenom"].' '.$presta["name"].'" id="'.$presta["id"].'" selected >'.$presta["prenom"].' '.$presta["name"].'</option>';}
 else {
     
-      echo '<option value="'.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["prenom"].''.$presta["name"].'</option>';}
+       echo '<option value="'.$presta["prenom"].' '.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["prenom"].' '.$presta["name"].'</option>';}
 }}
     
    
