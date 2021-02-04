@@ -1682,7 +1682,7 @@ $hist->save();
 
         $entrees1 =   Entree::where('dossier', $ref)
             ->where('destinataire','<>','finances@najda-assistance.com')
-            ->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
+            ->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
         $envoyes1 =   Envoye::where('dossier', $ref)
             ->where('emetteur','<>','finances@najda-assistance.com')
