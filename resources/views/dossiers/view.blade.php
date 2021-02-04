@@ -3010,7 +3010,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                             </div>
                             <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
                             </div>
-                            <input class="form-control" value="<?php echo $ville; ?>" style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr3" />
+                            <input class="form-control"  style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr3" />
                             <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode3" />
 
                         </div>
