@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Entree extends Model
 {
     //
-    protected $fillable = ['emetteur','sujet','sujet2','contenu','contenutxt','nb_attach','reception','duration','type','dossier','statut','mailid','mission_id','affecte','notif','viewed','boite','destinataire','dossierid','commentaire','accuse','par'];
+    protected $fillable = ['emetteur','sujet','sujet2','contenu','contenutxt','nb_attach','reception','duration','type','dossier','statut','mailid','mission_id','affecte','notif','viewed','boite','destinataire','dossierid','commentaire','accuse','par','path'];
 
 // boite = 0 reception , 1 = envoi
 

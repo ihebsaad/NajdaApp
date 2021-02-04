@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Envoye extends Model
 {
     //
-    protected $fillable = ['emetteur','sujet','contenu','destinataire','nb_attach' ,'par','statut','cc','cci','type','reception','duration','boite' ,'dossier','description','commentaire'];
+    protected $fillable = ['emetteur','sujet','contenu','destinataire','nb_attach' ,'par','statut','cc','cci','type','reception','duration','boite' ,'dossier','description','commentaire','path'];
 // boite = 0 reception , 1 = envoi
     public function attachements()
     {
