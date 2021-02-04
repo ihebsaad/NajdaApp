@@ -404,6 +404,16 @@ $adressecomm=Adresse::where("champ",$communin['emetteur'])->first();
 
 
                                         </span>
+                                    <?php if($communin['type']=="tel" && $communin['par']!==null) {    ?>
+<br>
+                                         <span class="cd-media">
+                                            <audio style="width:150px;"controls>
+  <source src="<?php  echo  $communin["path"] ; ?>" type="audio/wav">
+ Your browser does not support the audio element.
+</audio>
+</span>
+<br>
+ <?php }?>
                                         <?php if($communin['type']=="email") {
                                             if($communin['nb_attach']>0) { ?> <span style="font-size:12px"><i class="fa fa-fw fa-paperclip"></i>(<?php echo $communin['nb_attach'];?>) Attachements</span><br>
                                         <?php } } ?>

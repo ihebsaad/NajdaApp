@@ -173,7 +173,32 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
                 </div>
             </div>
         </div>
+        <?php
+
+                                  
+
+                                   if($entree['type']== "tel")
+                                   {
+                                        if($entree['par']!== null)
+                                    {
+ echo '<b style="margin-left:60px;">      Média : </b>'?>
+  <audio style="width:200px;"controls>
+  <source src="<?php  echo  $entree["path"] ; ?>" type="audio/wav">
+ Your browser does not support the audio element.
+</audio><br><br><br>
+                                  <?php  }
+                                    else{
+                                       echo '<b style="margin-left:60px;">Média : </b>'. $entree['contenutxt'].'<br><br><br>';
+
+                                    }
+                                  
+
+                                   echo '<b style="margin-left:60px;">      Description : </b>'. $entree['commentaire'].'<br>';
+                                   }
+
+                                  ?>
 </div>
+
 <div class="panel panel-default panelciel " >
         <!--<div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">-->
         <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" >

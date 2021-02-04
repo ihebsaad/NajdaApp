@@ -182,6 +182,25 @@ function convert($seconds) {
                 </div>
 
                 <?php } ?>
+               <?php if ( $envoye->type == 'tel' ) {?>
+                  <div class="form-group ">
+                    <label for="media">Média:</label>
+                <div>
+
+                  <audio style="width:200px;"controls>
+  <source src="<?php  echo  $envoye["path"] ; ?>" type="audio/wav">
+ Your browser does not support the audio element.
+</audio>
+
+                
+                
+                
+                 </div>
+
+                </div>
+                <br><br><br>
+
+<?php } ?>
                 <?php if ( $envoye->type == 'fax' ) {?>
 				
 				 <div class="form-group">

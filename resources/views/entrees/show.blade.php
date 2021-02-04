@@ -275,7 +275,20 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
 
                                    if($entree['type']== "tel")
                                    {
-                                   echo '<b>Média : </b>'. $entree['contenutxt'].'<br>';
+                                    if($entree['par']!== null)
+                                    {
+ echo '<b>Média : </b>'?>
+  <audio style="width:200px;"controls>
+  <source src="<?php  echo  $entree["path"] ; ?>" type="audio/wav">
+ Your browser does not support the audio element.
+</audio><br><br><br>
+                                  <?php  }
+                                    else{
+                                       echo '<b>Média : </b>'. $entree['contenutxt'].'<br><br><br>';
+
+                                    }
+                                  
+
                                    echo '<b>Description : </b>'. $entree['commentaire'].'<br>';
                                    }
 
