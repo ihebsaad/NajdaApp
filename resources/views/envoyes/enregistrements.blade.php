@@ -30,27 +30,29 @@ Use App\USer;
             </div>
         </div>
     <div class="uper">
-        <table class="table table-striped" id="mytable" style="width:100%">
+         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                 <th style="width:10%;max-width:80px">Date</th>
-                <th style="width:10%;;max-width:100px">Appelant</th>
-                 <th style="width:10%;;max-width:100px">Appelé</th>
+                 <th style="font-size:10px;width:20%;max-width:30px">Date</th>
+                <th style="font-size:10px;width:15%;max-width:30px">Appelant</th>
+                 <th style="font-size:10px;width:15%;;max-width:30px">Appelé</th>
+                 <th style="font-size:10px;width:5%;;max-width:30px">Media</th>
              <!--   <th style="width:45%;max-width:250px;">Contenu</th>!-->
-                <th style="width:8%;;max-width:80px">Durée</th>
+                <th style="font-size:10px;width:15%;;max-width:30px">Durée</th>
                <!-- <th style="width:8%;;max-width:80px ">Dossier</th>!-->
-               <th style="width:8%;;max-width:80px">Sujet</th>
-                <th  class="no-sort" style="width:8%;max-width:60px"></th>
+               <th style="font-size:10px;width:10%;;max-width:30px">Sujet</th>
+                <th  class="no-sort" style="font-size:10px;width:10%;max-width:30px"></th>
              </tr>
             <tr>
-                 <th style="width:10%;max-width:80px">Date</th>
-                <th style="width:10%;;max-width:100px">Appelant</th>
-                 <th style="width:10%;;max-width:100px">Appelé</th>
+                 <th style="font-size:10px;width:20%;max-width:30px">Date</th>
+                <th style="font-size:10px;width:15%;;max-width:30px">Appelant</th>
+                 <th style="font-size:10px;width:15%;;max-width:30px">Appelé</th>
+                      <th style="font-size:10px;width:5%;;max-width:30px">Media</th>
                 <!--<th id="colmn3" style="width:30%;;max-width:150px;">Contenu</th>!-->
-                <th style="width:8%;;max-width:80px;">Durée</th>
+                <th style="font-size:10px;width:15%;;max-width:30px;">Durée</th>
                <!-- <th style="width:8%;;max-width:80px; ">Dossier</th>!-->
-                 <th style="width:8%;;max-width:80px">Sujet</th>
-                <th id="colmn6" class="no-sort" style="width:8%;;max-width:60px"></th>
+                 <th style="font-size:10px;width:10%;;max-width:30px">Sujet</th>
+                <th id="colmn6" class="no-sort" style="width:10%;;max-width:30px"></th>
              </tr>
             </thead>
             <tbody>
@@ -68,18 +70,19 @@ Use App\USer;
               $usercom=User::where("id",$enreg->par)->first();
               ?>
                 <tr> 
-                     <td style="width:10%;font-size:12px;width:10%;max-width:80px"><?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></td>
-                    <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercom['name']." ".$usercom['lastname'].")"; ?></td>
-                      <td  style="width:10%;font-size:12px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"; ?></td>
+                     <td style="width:10%;font-size:10px;width:10%;max-width:80px"><?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></td>
+                    <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercom['name']." ".$usercom['lastname'].")"; ?></td>
+                      <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"; ?></td>
 
-                 <!--    <td  style="width:30%;font-size:12px;;max-width:150px;float:left    "         >
-		 <audio controls>
-  <source src="<?php   //echo  URL::asset('storage'.$enreg->path) ; ?>" type="audio/wav">
+                   <td  style="width:5px;font-size:10px;max-width:2px;float:left    "         >
+         <audio style="width:15px;"controls>
+  <source src="<?php   echo  $enreg->path ; ?>" type="audio/wav">
  Your browser does not support the audio element.
-</audio></td>!-->
-                    <td  style="width:8%;font-size:12px;;max-width:80px   "  ><?php    echo convert($enreg->duration) ; ?></a></td>
+</audio></td>
+                  
+                    <td  style="width:8%;font-size:10px;max-width:80px   "  ><?php    echo convert($enreg->duration) ; ?></a></td>
                     <!--<td  style="width:8%;font-size:12px;;max-width:80px "><?php // echo DossiersController::RefDossierById($enreg['dossier']).' - '.DossiersController::FullnameAbnDossierById($enreg['dossier']);?></td>!-->
-                     <td  style="width:8%;font-size:12px;;max-width:80px   "  ><a   href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>"  >
+                     <td  style="width:8%;font-size:10px;max-width:80px   "  ><a   href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>"  >
                         <?php    echo $enreg->sujet ; ?></a></td>
                     <td stle=";max-width:60px">
                         @can('isAdmin')
