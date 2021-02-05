@@ -1052,7 +1052,8 @@ var extensiontel = $('#extensiontel').val();
         webphone_api.parameters['callto'] = '';        // destination number to call
         webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
         webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
-       webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED_DATETIME.wav'; 
+       //webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED_DATETIME.wav'; 
+webphone_api.parameters['voicerecupload'] = 'ftp://ftpmizuuser:Najda2020@192.168.1.249/voice_CALLER_CALLED_DATETIME.wav'; 
  webphone_api.start();
 webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
 
