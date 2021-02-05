@@ -67,7 +67,7 @@ $dossierid=$dossier['id'];
             if ($type=='sms') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fas fa-lg  fa-sms"></i> SMS envoyé</H3>'; }
             if ($type=='fax') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-fax"></i> FAX envoyé</H3>'; }
             
-            if ($type=='tel') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-mobile"></i> Appel envoyé</H3>'; }
+            if ($type=='tel') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-mobile"></i> Appel émis</H3>'; }
 
     ?>
 
