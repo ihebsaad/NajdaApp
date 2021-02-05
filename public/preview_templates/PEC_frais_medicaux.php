@@ -125,14 +125,14 @@ $sign = 'non';
 {     if ( $id==$doc['dossier'] )
 		{  $iddoc=$doc['doc'];} } 
 	
-$sqlstruc = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id  IN (8,9))";
+$sqlstruc = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id  IN (8,9))";
 
     $resultstruc = $conn->query($sqlstruc);
     if ($resultstruc->num_rows > 0) {
 
         $array_struc = array();
         while($rowstruc = $resultstruc->fetch_assoc()) {
-            $array_struc[] = array('id' => $rowstruc["id"],'name' => $rowstruc["name"]  );
+            $array_struc[] = array('id' => $rowstruc["id"],'name' => $rowstruc["name"],"prenom" => $rowstruc["prenom"],"civilite" => $rowstruc["civilite"]  );
         }	
 $sqlclient = "SELECT id,groupe,name FROM clients";
 	$resultclient = $conn->query($sqlclient);
@@ -569,10 +569,10 @@ $prestid=0;
 foreach ($array_struc as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
-    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+   echo '<option value="'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'</option>';}
 else {
     
-    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
+     echo '<option value="'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'</option>';}
 }}
 ?>
 </select>

@@ -72,14 +72,14 @@ mysqli_set_charset($conn,"utf8");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlimag = "SELECT id,name FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1 ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 6)";
+$sqlimag = "SELECT id,name,prenom,civilite FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1 ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 6)";
 
     $resultimag = $conn->query($sqlimag);
     if ($resultimag->num_rows > 0) {
 
         $array_imag = array();
         while($rowimag = $resultimag->fetch_assoc()) {
-            $array_imag[] = array('id' => $rowimag["id"],"name" => $rowimag["name"]  );
+            $array_imag[] = array('id' => $rowimag["id"],"name" => $rowimag["name"],"prenom" => $rowimag["prenom"],"civilite" => $rowimag["civilite"]  );
         } 
 $sqlclient = "SELECT id,groupe,name FROM clients";
 	$resultclient = $conn->query($sqlclient);
@@ -348,10 +348,10 @@ $prestid=0;
 foreach ($array_imag as $prest) {
 if(($prest['id'] === $id__prestataire)) {
     
-    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["name"].'</option>';}
+   echo '<option value="'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'" id="'.$prest["id"].'" selected >'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'</option>';}
 else {
     
-    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';}
+     echo '<option value="'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].' '.$prest["prenom"].' '.$prest["name"].'</option>';}
 }}
 ?>
 </select>
