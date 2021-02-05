@@ -182,7 +182,7 @@ $seance =  DB::table('seance')
                 <span class="fa fa-lg fa-fw fa-phone"></span>
                 <br>
 
-Appels envoyés         
+Appels émis         
 </a>
         </div>
         <div class="col-sm-2">
