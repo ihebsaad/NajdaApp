@@ -1,8 +1,8 @@
 <?php
 // Connect to FTP host
-$host='host.enterpriseesolutions.com';
-$user='mizutest';
-$pass='NajdaApp2020!';
+$host='192.168.1.249';
+$user='ftpmizuuser';
+$pass='Najda2020';
 $port='21';
 $conn = ftp_connect($host, $port) or die("Could not connect to {$host}\n");
 
@@ -75,7 +75,7 @@ $emet=$difs[1];
 $dest=$difs[2];
 echo($difs[1]);
 echo($difs[2]);
-$difpath="http://enterpriseesolutions.com/call_records/".$dif;
+$difpath="http://192.168.1.249/najdaapp/storage/appels/".$dif;
 $sqlU = "UPDATE entrees SET path='".$difpath."' WHERE emetteur='".$emet."'AND destinataire='".$dest."'AND path IS NULL";
 $sqlUI = "UPDATE envoyes SET path='".$difpath."' WHERE emetteur='".$emet."'AND destinataire='".$dest."'AND path IS NULL";
    
