@@ -182,7 +182,7 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
                                         if($entree['par']!== null)
                                     {
  echo '<b style="margin-left:60px;">      Média : </b>'?>
-  <audio style="width:200px;"controls>
+  <audio style="width:300px;"controls>
   <source src="<?php  echo  $entree["path"] ; ?>" type="audio/wav">
  Your browser does not support the audio element.
 </audio><br><br><br>
