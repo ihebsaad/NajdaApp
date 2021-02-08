@@ -18,11 +18,18 @@ if($iduser===32)
                         <input id="motdepassetel" name="motdepassetel" type="hidden" value="3862oOPD3F">
 <?php
 }
-else
+else if($iduser===37)
 {
 ?>
  <input id="extensiontel" name="extensiontel" type="hidden" value="2001">
                         <input id="motdepassetel" name="motdepassetel" type="hidden" value="z6Hm&FqQF2G@S3">
+<?php
+}
+else 
+{
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2002">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="najda2020!-A">
 <?php
 }
 ?>
