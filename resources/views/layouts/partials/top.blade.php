@@ -636,7 +636,7 @@ else
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappel"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button id="fermecompterendu" type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -692,7 +692,7 @@ else
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappellibre"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button id="fermecompterendulibre" type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -747,7 +747,7 @@ else
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappelrecu"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button id="fermecompterendurecu" type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -1275,8 +1275,10 @@ function accept()
     function transfer()
         {
 numtrans=$('#numatrans').val();
-alert(numtrans);
-            webphone_api.Transfer(numtrans);
+//numtrans.toString();
+//alert(numtrans);
+            webphone_api.transfer(numtrans);
+//alert("OK");
         }
   function hold(state)
         {
@@ -1354,8 +1356,10 @@ $.ajax({
     function transfer2()
         {
 numtrans=$('#numatrans2').val();
-alert(numtrans);
-            webphone_api.Transfer(numtrans);
+//numtrans.toString();
+//alert(numtrans);
+            webphone_api.transfer(numtrans);
+//alert("OK");
         }
   function hold2(state)
         {
@@ -1456,5 +1460,17 @@ $('#ajoutcompterappelrecu').click(function() {
                 alert('le contenu est obligatoire !');
             }
         }); 
+$('#fermecompterendu').click(function(){
+ 
+                            window.location.reload();
+});
+$('#fermecompterendulibre').click(function(){
+ 
+                            window.location.reload();
+});
+$('#fermecompterendurecu').click(function(){
+ 
+                            window.location.reload();
+});
 
 </script>

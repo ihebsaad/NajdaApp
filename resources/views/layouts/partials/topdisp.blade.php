@@ -1031,8 +1031,9 @@ function accept()
     function transfer()
         {
 numtrans=$('#numatrans').val();
-alert(numtrans);
-            webphone_api.Transfer(numtrans);
+//numtrans.toString();
+//alert(numtrans);
+            webphone_api.transfer(numtrans);
         }
   function hold(state)
         {
@@ -1107,8 +1108,9 @@ $.ajax({
     function transfer2()
         {
 numtrans=$('#numatrans2').val();
-alert(numtrans);
-            webphone_api.Transfer(numtrans);
+//numtrans.toString();
+//alert(numtrans);
+            webphone_api.transfer(numtrans);
         }
   function hold2(state)
         {
