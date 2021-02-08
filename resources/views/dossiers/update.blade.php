@@ -3320,8 +3320,9 @@ $(".modal-body #nomencours").val(nom );
     function transfer1()
         {
 numtrans=$('#numatrans1').val();
-alert(numtrans);
-            webphone_api.Transfer(numtrans);
+//numtrans.toString();
+//alert(numtrans);
+            webphone_api.transfer(numtrans);
         }
   function hold1(state)
         {

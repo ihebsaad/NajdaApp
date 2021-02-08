@@ -407,7 +407,7 @@ $adressecomm=Adresse::where("champ",$communin['emetteur'])->first();
                                     <?php if($communin['type']=="tel" && $communin['par']!==null) {    ?>
 <br>
                                          <span class="cd-media">
-                                            <audio style="width:150px;"controls>
+                                            <audio style="width:200px;"controls>
   <source src="<?php  echo  $communin["path"] ; ?>" type="audio/wav">
  Your browser does not support the audio element.
 </audio>
@@ -6402,8 +6402,9 @@ $(".modal-body #nomencours").val(nom );
     function transfer1()
         {
 numtrans=$('#numatrans1').val();
-alert(numtrans);
-            webphone_api.Transfer(numtrans);
+//numtrans.toString();
+//alert(numtrans);
+            webphone_api.transfer(numtrans);
         }
   function hold1(state)
         {
