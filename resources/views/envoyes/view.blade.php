@@ -187,7 +187,7 @@ function convert($seconds) {
                     <label for="media">Média:</label>
                 <div>
 
-                  <audio style="width:200px;"controls>
+                  <audio style="width:300px;"controls>
   <source src="<?php  echo  $envoye["path"] ; ?>" type="audio/wav">
  Your browser does not support the audio element.
 </audio>
