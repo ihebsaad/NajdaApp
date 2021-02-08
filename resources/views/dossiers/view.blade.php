@@ -6401,8 +6401,8 @@ $(".modal-body #nomencours").val(nom );
         }
     function transfer1()
         {
-numtrans=$('#numatrans1').val();;
-//alert(numtrans);
+numtrans=$('#numatrans1').val();
+alert(numtrans);
             webphone_api.Transfer(numtrans);
         }
   function hold1(state)
