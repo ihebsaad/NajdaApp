@@ -72,11 +72,12 @@ $dif1 = str_replace("_", "-", $dif);
 
  $difs= explode('-', $dif1);
 $emet=$difs[1];
+$emet1=$difs[1].' -RG-Najda_assistance';
 $dest=$difs[2];
 echo($difs[1]);
 echo($difs[2]);
 $difpath="http://192.168.1.249/najdaapp/storage/appels/".$dif;
-$sqlU = "UPDATE entrees SET path='".$difpath."' WHERE emetteur='".$emet."'AND destinataire='".$dest."'AND path IS NULL";
+$sqlU = "UPDATE entrees SET path='".$difpath."' WHERE emetteur IN ('".$emet."','".$emet1."') AND destinataire='".$dest."'AND path IS NULL";
 $sqlUI = "UPDATE envoyes SET path='".$difpath."' WHERE emetteur='".$emet."'AND destinataire='".$dest."'AND path IS NULL";
    
    if (mysqli_query($conn, $sqlU)) {
