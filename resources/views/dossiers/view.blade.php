@@ -3317,7 +3317,7 @@ else
  <div id="coupersonenv" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute1(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
  <div id="reactivesonenv" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute1(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
  <button id="transferappenv" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer1"><i class="fas fa-reply-all"></i> Transférer</button>
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -3401,6 +3401,10 @@ else
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
+$('.reloadclass').click(function(){
+ 
+                            window.location.reload();
+});
 //script pour activer l onglet OM si lurl contient le mot CreerOM 
  $(document).ready(function() {
  
