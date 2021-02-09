@@ -8,31 +8,126 @@
 use App\Dossier;
      $listedossiersappel= Dossier::where('current_status','<>','Cloture')->orderby('id','desc')
              ->get();
-         $CurrentUser = auth()->user();
+    $CurrentUser = auth()->user();
          $iduser=$CurrentUser->id;
 
-if($iduser===32)
+if($iduser===49)
 {
 ?>
-                        <input id="extensiontel" name="extensiontel" type="hidden" value="2000">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="3862oOPD3F">
+                        <input id="extensiontel" name="extensiontel" type="hidden" value="2010">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="oM2Uv*2010">
+<?php
+}
+else if($iduser===3)
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2011">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="C7Hgi12011">
+<?php
+}
+else if($iduser===8)
+
+{
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2027">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="TeiifB2027 ">
+<?php
+}
+else if($iduser===5)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2017">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="sDL0gJ2017">
+<?php
+}
+else if($iduser===21)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2018">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="X1y0Iu2018">
+<?php
+}
+else if($iduser===45)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2025">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="9W7U_t2025">
+<?php
+}
+else if($iduser===20)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2013">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="PB1eGd2013">
+<?php
+}
+else if($iduser===9)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2021">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="B+SC2b2021">
+<?php
+}
+else if($iduser===4)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="239">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="m4Urh+239">
+<?php
+}
+else if($iduser===1)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2030">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="+VBcOU2030">
+
+<?php
+}
+else if($iduser===32)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2016">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="i2M4N@2016">
 <?php
 }
 else if($iduser===37)
+
 {
+
 ?>
- <input id="extensiontel" name="extensiontel" type="hidden" value="2001">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="z6Hm&FqQF2G@S3">
+<input id="extensiontel" name="extensiontel" type="hidden" value="2020">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="_sMHR42020">
 <?php
 }
 else 
+
 {
+
 ?>
-<input id="extensiontel" name="extensiontel" type="hidden" value="2002">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="najda2020!-A">
+<input id="extensiontel" name="extensiontel" type="hidden" value="2024">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="-8JkWX2024">
+
 <?php
 }
+
 ?>
+         
 <header class="header">
    <input id="iduser" name="iduser" type="hidden" value="{{$iduser}}" />   
   <input id="natureappel" name="natureappel" type="hidden" value="" />
@@ -298,7 +393,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             </div>
             <div class="modal-footer">
                 <a id="ajoutcompter"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                <button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
             </div>
         </div>
     </div>
@@ -392,7 +487,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
  <div id="couperson" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
  <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
  <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -529,7 +624,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
  <div id="coupersonenv2" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute2(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
  <div id="reactivesonenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute2(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
  <button id="transferappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer1"><i class="fas fa-reply-all"></i> Transférer</button>
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -589,7 +684,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappellibre"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -644,7 +739,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappelrecu"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -701,6 +796,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
 <script>
+$('.reloadclass').click(function(){
+ 
+                            window.location.reload();
+});
 
 
     function colorerSeq(string,qy) {

@@ -18,33 +18,133 @@ use App\Dossier;
      User::where('id', $iduser)->update(array('statut'=>'1'));
 
     ?>
-     <?php
+    <?php
 
          $CurrentUser = auth()->user();
          $iduser=$CurrentUser->id;
 
-if($iduser===32)
+if($iduser===49)
 {
 ?>
-                        <input id="extensiontel" name="extensiontel" type="hidden" value="2000">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="3862oOPD3F">
+                        <input id="extensiontel" name="extensiontel" type="hidden" value="2010">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="oM2Uv*2010">
+<?php
+}
+else if($iduser===3)
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2011">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="C7Hgi12011">
+<?php
+}
+else if($iduser===8)
+
+{
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2027">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="TeiifB2027 ">
+<?php
+}
+else if($iduser===5)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2017">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="sDL0gJ2017">
+<?php
+}
+else if($iduser===21)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2018">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="X1y0Iu2018">
+<?php
+}
+else if($iduser===45)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2025">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="9W7U_t2025">
+<?php
+}
+else if($iduser===20)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2013">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="PB1eGd2013">
+<?php
+}
+else if($iduser===9)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2021">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="B+SC2b2021">
+<?php
+}
+else if($iduser===4)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="239">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="m4Urh+239">
+<?php
+}
+else if($iduser===1)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2030">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="+VBcOU2030">
+
+<?php
+}
+else if($iduser===32)
+
+{
+
+?>
+<input id="extensiontel" name="extensiontel" type="hidden" value="2016">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="i2M4N@2016">
 <?php
 }
 else if($iduser===37)
+
 {
+
 ?>
- <input id="extensiontel" name="extensiontel" type="hidden" value="2001">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="z6Hm&FqQF2G@S3">
+<input id="extensiontel" name="extensiontel" type="hidden" value="2020">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="_sMHR42020">
 <?php
 }
 else 
+
 {
+
 ?>
-<input id="extensiontel" name="extensiontel" type="hidden" value="2002">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="najda2020!-A">
+<input id="extensiontel" name="extensiontel" type="hidden" value="2024">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="-8JkWX2024">
+
 <?php
 }
+
 ?>
+
+
+
+
+
+
         <div class="collapse bg-grey" id="navbarHeader">
           <input id="natureappel" name="natureappel" type="hidden" value="" />
           <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />   
@@ -442,7 +542,7 @@ else
  <div id="couperson" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
  <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
  <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -455,24 +555,28 @@ else
 <!--Modal Tel-->
 
     <div class="modal fade" id="faireappel1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
-        <div class="modal-dialog" role="tel">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModal2">Saisir le numéro</h5>
-
+        <div class="modal-dialog modal-sm" role="tel">
+            <div class="modal-content" style="background-color: #4A4A4A;color: white;">
+                <div class="modal-header"><center>
+                    <h3 class="modal-title" id="exampleModal2">Passer un appel</h3>
+</center>
                 </div>
                 <div class="modal-body">
-                    <div class="card-body" sytle="height:300px">
+                    <div class="card-body" style="height:130px">
 
 
                         <div class="form-group">
                             {{ csrf_field() }}
 
                             <form id="faireappel1" novalidate="novalidate">
+				<label  for="numtel1"><b>Numéro :</b> </label>
+    				<input class="form-control" id="numtel1" name="numtel1" type="text"  value="" placeholder="Enter Numéro">
+<br>
+<center>
+<i  class="fa" style="font-size:55px;color: white;transform: rotate(-45deg);">&#xf2a0;</i>
 
-                               
-                                     <label for="numtel1">Numéro</label>
- <input id="numtel1" name="numtel1" type="text"  value="" ></input>
+</center>
+       <br>                              
                             </form>
 
                         </div>
@@ -480,10 +584,10 @@ else
 
                 </div>
 
-                <div class="modal-footer">
- <button type="button"  class="btn btn-primary"  onclick="ButtonOnclick2();">Appeler</button>
- <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-
+                <div class="modal-footer"><center>
+ <button type="button"  class="btn btn-success"  onclick="ButtonOnclick2();"><i class="fa fa-phone" aria-hidden="true"></i> Appeler</button>
+ <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+</center>
                 </div>
             </div>
 
@@ -579,7 +683,7 @@ else
  <div id="coupersonenv2" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute2(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
  <div id="reactivesonenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute2(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
  <button id="transferappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer1"><i class="fas fa-reply-all"></i> Transférer</button>
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -636,7 +740,7 @@ else
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappel"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button id="fermecompterendu" type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button  type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -692,7 +796,7 @@ else
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappellibre"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button id="fermecompterendulibre" type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button  type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -747,7 +851,7 @@ else
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappelrecu"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button id="fermecompterendurecu" type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button  type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -1069,6 +1173,7 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
                 if (event === 'setup' && direction == 2)
 
                 {
+
               
 $('#appelinterfacerecep').modal({show: true});
             $(".modal-body #numencoursrecep").val(peerdisplayname );
@@ -1460,17 +1565,10 @@ $('#ajoutcompterappelrecu').click(function() {
                 alert('le contenu est obligatoire !');
             }
         }); 
-$('#fermecompterendu').click(function(){
+$('.reloadclass').click(function(){
  
                             window.location.reload();
 });
-$('#fermecompterendulibre').click(function(){
- 
-                            window.location.reload();
-});
-$('#fermecompterendurecu').click(function(){
- 
-                            window.location.reload();
-});
+
 
 </script>
