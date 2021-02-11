@@ -529,6 +529,7 @@ else
  <div>
 <input id="numencoursrecep" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
+
                             </form>
 
                         </div>
@@ -537,8 +538,6 @@ else
                 </div>
 
                 <div class="modal-footer">
-
-
 <button id="repondre" type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
  <button id="racc2" type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher </button>
  <div id="mettreenattente" style="display :none;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
@@ -546,6 +545,8 @@ else
  <div id="couperson" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
  <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
  <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
+
+
 <button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
 
 
@@ -559,6 +560,38 @@ else
         </div>
 
     </div>
+<!-- Modal appels recus-->
+<div class="modal fade" id="modalappels"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="appels" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModal2">Appels reçus</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                  
+                    <table class="table table-striped" id="tableappels" style="width:100%;margin-top:15px;">
+                            <thead>
+                            <tr id="headtable">
+                                <th style="">Numéro</th>
+                                <th style="">Actions</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="fermerhis"type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--Modal Tel-->
 
     <div class="modal fade" id="faireappel1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
@@ -1181,7 +1214,18 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
 
                 {
 
+aurlf="<button  style='color:green' href='#' onclick='accept4(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
+aurlf1="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
+$('#modalappels').modal({show: true});
+ $("#tableappels tbody").append("<tr id='"+peername+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
               
+  
+
+                }  
+ if (event === 'connected' && direction == 2 )
+
+                {
+$('#modalappels').modal('hide');
 $('#appelinterfacerecep').modal({show: true});
             $(".modal-body #numencoursrecep").val(peerdisplayname );
 var _token = $('input[name="_token"]').val();
@@ -1195,12 +1239,7 @@ $.ajax({
 if(incall != 1){
                          $(".modal-body #nomencoursrecep").val(data );}
                     }
-                });  
-
-                }  
- if (event === 'connected' && direction == 2 )
-
-                {
+                });
 var minutesLabel1 = document.getElementById("minutes1");
 var secondsLabel1 = document.getElementById("seconds1");
 var totalSeconds1 = 0;
@@ -1279,8 +1318,17 @@ document.getElementById('status_callenv').innerHTML="Appel en cours";
  } 
 if (event === 'disconnected' && direction == 2  && webphone_api.isincall()!=true )
 {
+ //webphone_api.setline(peername);
+           //webphone_api.hangup(true);
+$('table#tableappels tr#'+peername).remove();
 
 incall = 0;
+var Countappelsrecus = $('#tableappels tr').length;
+//alert(Countappelsrecus);
+if(Countappelsrecus===1)
+{
+$('#modalappels').modal('hide');
+}
 //alert(webphone_api.isincall ());
 $('#appelinterfacerecep').modal('hide');
 
@@ -1393,10 +1441,27 @@ document.getElementById('idenvoyetelrecu').value=data;  }
 incall = 0;
             
         }
+function disappel(peername)
+        {
+          webphone_api.setline(peername);
+          webphone_api.hangup(true);
+incall = 0;
+            
+        }
 function accept()
         {
+
             document.getElementById('natureappelrecu').value='librerecu';  
             webphone_api.accept();
+incall = 1;
+            
+        }
+function accept4(peername)
+        {
+$('table#tableappels tr#'+peername).remove();
+            document.getElementById('natureappelrecu').value='librerecu';  
+webphone_api.setline(peername);
+            webphone_api.accept(true);
 incall = 1;
             
         }
@@ -1481,6 +1546,7 @@ $.ajax({
             webphone_api.hangup();
             
         }
+   
     function transfer2()
         {
 numtrans=$('#numatrans2').val();
