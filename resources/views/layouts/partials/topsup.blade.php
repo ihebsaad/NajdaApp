@@ -4,12 +4,14 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+<script>var incall = 0 ;</script>
 <?php
 use App\Dossier;
      $listedossiersappel= Dossier::where('current_status','<>','Cloture')->orderby('id','desc')
              ->get();
     $CurrentUser = auth()->user();
          $iduser=$CurrentUser->id;
+
 
 if($iduser===49)
 {
@@ -127,7 +129,8 @@ else
 }
 
 ?>
-         
+
+
 <header class="header">
    <input id="iduser" name="iduser" type="hidden" value="{{$iduser}}" />   
   <input id="natureappel" name="natureappel" type="hidden" value="" />
@@ -1118,7 +1121,7 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
 
 {
 
-                if (event === 'setup' && direction == 2)
+                if (event === 'setup' && direction == 2 && incall != 1)
 
                 {
                   document.getElementById('natureappelrecu').value='librerecu';    
@@ -1129,7 +1132,7 @@ $.ajax({
 
                     url:"{{ route('entrees.detectnom')}}",
                     method:"POST",
-                    data:'_token='+_token+'&peerdisplayname='+peerdisplayname,
+                    data:'_token='+_token+'&peerdisplayname='+peername,
                     success:function(data)
                     {
                          $(".modal-body #nomencoursrecep").val(data );
@@ -1137,7 +1140,7 @@ $.ajax({
                 });  
 
                 }  
- if (event === 'connected' && direction == 2)
+ if (event === 'connected' && direction == 2 )
 
                 {
 var minutesLabel1 = document.getElementById("minutes1");
@@ -1192,8 +1195,9 @@ document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
  document.getElementById('coupersonenv2').style.display = 'inline-block'; 
 document.getElementById('transferappenv2').style.display = 'inline-block';
 document.getElementById('status_callenv2').innerHTML="Appel en cours"; } 
-if (event === 'disconnected' && direction == 2)
+if (event === 'disconnected' && direction == 2 && webphone_api.isincall()!=true)
 {
+incall = 0;
 $('#appelinterfacerecep').modal('hide');
 
 
@@ -1206,6 +1210,7 @@ $('#appelinterfaceenvoi2').modal('hide');}
 });
 webphone_api.onCdr(function (caller, called, connecttime, duration, direction, peerdisplayname, reason, line)
 {
+
 if ( direction == 1)
 {
 var natureappel = $('#natureappel').val();
@@ -1223,7 +1228,7 @@ $.ajax({
                   data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappel='+natureappel,
                     success:function(data)
                     {
-               if(natureappel==="libre")
+               if(natureappel==="libre" )
                       {
 
                         //alert(data);
@@ -1254,11 +1259,15 @@ $.ajax({
                     data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu,
                     success:function(data)
                     {
-                    if(natureappelrecu==="librerecu")
+                    if(natureappelrecu==="librerecu" && incall != 1)
                       {
 
                         //alert(data);
-                         document.getElementById('idenvoyetelrecu').value=data;  
+                         if(document.getElementById('idenvoyetelrecu').value==='')
+
+                        { 
+
+document.getElementById('idenvoyetelrecu').value=data;  }  
                          $("#appelinterfacerecep").modal('hide');
                          $('#crenduappelrecu').modal({show:true});
 
@@ -1275,12 +1284,14 @@ $.ajax({
       function Hangup()
         {
             webphone_api.hangup();
+incall = 0;
             
         }
 function accept()
         {
             document.getElementById('natureappelrecu').value='librerecu';  
             webphone_api.accept();
+incall = 1;
             
         }
     function transfer()
@@ -1336,7 +1347,8 @@ $.ajax({
                     data:'_token='+_token+'&peerdisplayname='+peerdisplayname,
                     success:function(data)
                     {
-                         $(".modal-body #nomencours2").val(data );
+if(incall != 1){
+                         $(".modal-body #nomencours2").val(data );}
                     }
                 }); 
 

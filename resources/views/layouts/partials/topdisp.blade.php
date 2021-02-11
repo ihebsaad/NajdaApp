@@ -1,7 +1,8 @@
 <script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
 <header class="header">
   <input id="natureappel" name="natureappel" type="hidden" value="" />
-   <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />    
+   <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />
+<script>var incall = 0 ;</script>
    
     <?php
 use App\Dossier;
@@ -11,6 +12,7 @@ use App\Dossier;
 
          $CurrentUser = auth()->user();
          $iduser=$CurrentUser->id;
+
 
 if($iduser===49)
 {
@@ -128,6 +130,7 @@ else
 }
 
 ?>
+
  <div class="collapse bg-grey" id="navbarHeader">
              @include('layouts.partials._top_menu')
 
@@ -955,11 +958,12 @@ var extensiontel = $('#extensiontel').val();
   //webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED_DATETIME.wav'; 
 webphone_api.parameters['voicerecupload'] = 'ftp://ftpmizuuser:Najda2020@192.168.1.249/voice_CALLER_CALLED_DATETIME.wav'; 
  webphone_api.start();
+
 webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
 
 {
 
-                if (event === 'setup' && direction == 2)
+                if (event === 'setup' && direction == 2 && incall != 1 )
 
                 {
                   document.getElementById('natureappelrecu').value='librerecu';    
@@ -970,15 +974,16 @@ $.ajax({
 
                     url:"{{ route('entrees.detectnom')}}",
                     method:"POST",
-                    data:'_token='+_token+'&peerdisplayname='+peerdisplayname,
+                    data:'_token='+_token+'&peerdisplayname='+peername,
                     success:function(data)
                     {
-                         $(".modal-body #nomencoursrecep").val(data );
+if(incall != 1){
+                         $(".modal-body #nomencoursrecep").val(data );}
                     }
                 });  
 
                 }  
- if (event === 'connected' && direction == 2)
+ if (event === 'connected' && direction == 2  )
 
                 {
 var minutesLabel1 = document.getElementById("minutes1");
@@ -1033,13 +1038,14 @@ document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
  document.getElementById('coupersonenv2').style.display = 'inline-block'; 
 document.getElementById('transferappenv2').style.display = 'inline-block';
 document.getElementById('status_callenv2').innerHTML="Appel en cours"; }  
-if (event === 'disconnected' && direction == 2)
+if (event === 'disconnected' && direction == 2 && webphone_api.isincall()!=true)
 {
+incall = 0;
 $('#appelinterfacerecep').modal('hide');
 
 
 } 
-if (event === 'disconnected' && direction == 1)
+if (event === 'disconnected' && direction == 1 )
 {
 // location.reload();
 $('#appelinterfaceenvoi2').modal('hide');}
@@ -1096,11 +1102,16 @@ $.ajax({
                     data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu,
                     success:function(data)
                     {
-                     if(natureappelrecu==="librerecu")
+                     if(natureappelrecu==="librerecu" && incall !=1)
                       {
 
                         //alert(data);
-                         document.getElementById('idenvoyetelrecu').value=data;  
+                       
+if(document.getElementById('idenvoyetelrecu').value==='')
+
+                        { 
+
+document.getElementById('idenvoyetelrecu').value=data;  } 
                          $("#appelinterfacerecep").modal('hide');
                          $('#crenduappelrecu').modal({show:true});
 
@@ -1117,12 +1128,14 @@ $.ajax({
       function Hangup()
         {
             webphone_api.hangup();
+incall = 0;
             
         }
 function accept()
         {
             document.getElementById('natureappelrecu').value='librerecu';  
             webphone_api.accept();
+incall = 1;
             
         }
     function transfer()

@@ -3,6 +3,7 @@
 <header class="header">
   <script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<script>var incall = 0 ;</script>
 <?php
     use App\Entree;
     use App\User;
@@ -22,6 +23,8 @@ use App\Dossier;
 
          $CurrentUser = auth()->user();
          $iduser=$CurrentUser->id;
+
+$extensionuser=$CurrentUser->extension;
 
 if($iduser===49)
 {
@@ -143,6 +146,7 @@ else
 
 
 
+<input id="extensionid" name="extensionid" type="hidden" value="<?php echo $extensionuser ?>">
 
 
         <div class="collapse bg-grey" id="navbarHeader">
@@ -543,6 +547,9 @@ else
  <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
  <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
 <button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
+
+
+
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -809,7 +816,7 @@ else
                 </div>
                 <div class="modal-body">
                     <div class="card-body">
-<input type="hidden"    id="idenvoyetelrecu"   class="form-control" name="idenvoyetelrecu"    />
+<input type="hidden"  id="idenvoyetelrecu"  class="form-control" name="idenvoyetelrecu"    />
                       
 
                        <div class="form-group">
@@ -1170,7 +1177,7 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
 
 {
 
-                if (event === 'setup' && direction == 2)
+                if (event === 'setup' && direction == 2 && incall != 1 )
 
                 {
 
@@ -1182,15 +1189,16 @@ $.ajax({
 
                     url:"{{ route('entrees.detectnom')}}",
                     method:"POST",
-                    data:'_token='+_token+'&peerdisplayname='+peerdisplayname,
+                    data:'_token='+_token+'&peerdisplayname='+peername,
                     success:function(data)
                     {
-                         $(".modal-body #nomencoursrecep").val(data );
+if(incall != 1){
+                         $(".modal-body #nomencoursrecep").val(data );}
                     }
                 });  
 
                 }  
- if (event === 'connected' && direction == 2)
+ if (event === 'connected' && direction == 2 )
 
                 {
 var minutesLabel1 = document.getElementById("minutes1");
@@ -1269,23 +1277,29 @@ document.getElementById('mettreenattenteenv').style.display = 'inline-block';
 document.getElementById('transferappenv').style.display = 'inline-block';
 document.getElementById('status_callenv').innerHTML="Appel en cours";
  } 
-if (event === 'disconnected' && direction == 2)
+if (event === 'disconnected' && direction == 2  && webphone_api.isincall()!=true )
 {
+
+incall = 0;
+//alert(webphone_api.isincall ());
 $('#appelinterfacerecep').modal('hide');
-$('#appelinterfaceenvoi').modal('hide');
+
+
  //location.reload();
 
 } 
-if (event === 'disconnected' && direction == 1)
+if (event === 'disconnected' && direction == 1 )
 {
 // location.reload();
-$('#appelinterfaceenvoi2').modal('hide');}
+$('#appelinterfaceenvoi2').modal('hide');
+$('#appelinterfaceenvoi').modal('hide');}
 
  //$("#dossiercrlibre").select2();
 });
 
 webphone_api.onCdr(function (caller, called, connecttime, duration, direction, peerdisplayname, reason, line)
 {
+
 
 if (direction == 1)
 {
@@ -1337,6 +1351,7 @@ var durationInt = parseInt(duration,10);
 var durationSec = Math.floor((durationInt+500)/1000);
 var _token = $('input[name="_token"]').val();
 var natureappelrecu= $('#natureappelrecu').val();
+   var iduser=document.getElementById('iduser').value;
 //alert(natureappelrecu);
 
 
@@ -1347,11 +1362,16 @@ $.ajax({
                     data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu,
                     success:function(data)
                     {
-                      if(natureappelrecu==="librerecu")
+                      if(natureappelrecu==="librerecu" && incall !=1 )
                       {
 
                         //alert(data);
-                         document.getElementById('idenvoyetelrecu').value=data;  
+if(document.getElementById('idenvoyetelrecu').value==='')
+
+                        { 
+
+document.getElementById('idenvoyetelrecu').value=data;  }
+
                          $("#appelinterfacerecep").modal('hide');
                          $('#crenduappelrecu').modal({show:true});
 
@@ -1369,12 +1389,15 @@ $.ajax({
       function Hangup()
         {
             webphone_api.hangup();
+
+incall = 0;
             
         }
 function accept()
         {
             document.getElementById('natureappelrecu').value='librerecu';  
             webphone_api.accept();
+incall = 1;
             
         }
     function transfer()
@@ -1543,9 +1566,10 @@ document.getElementById('coupersonenv2').style.display = 'inline-block';}
         }); 
 
 $('#ajoutcompterappelrecu').click(function() {
-           
+            var iduser=document.getElementById('iduser').value;
+
             var envoyetel = document.getElementById('idenvoyetelrecu').value;
-            
+          
            var _token=$('input[name="_token"]').val();
             var contenu = document.getElementById('contenucrrecu').value;
             var sujet = document.getElementById('sujetcrrecu').value;
