@@ -111,7 +111,8 @@ Use App\USer;
                     </div>
                 </div>
                 <?php
-              $adressecomm=Adresse::where("champ",$entree['emetteur'])->first();
+$emetteur= explode(' ', $entree['emetteur']);
+              $adressecomm=Adresse::where("champ",$emetteur)->first();
               $usercom=User::where("id",$entree['par'])->first();
               ?>
                 <div class="row" style="font-size:12px;">

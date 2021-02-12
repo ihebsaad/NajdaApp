@@ -132,7 +132,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body">
               <?php
-              $adressecomm=Adresse::where("champ",$entree['emetteur'])->first();
+ $emetteur= explode(' ', $entree['emetteur']);
+              $adressecomm=Adresse::where("champ",$emetteur)->first();
               $usercom=User::where("id",$entree['par'])->first();
               ?>
                 <div class="row" style="font-size:12px;">
