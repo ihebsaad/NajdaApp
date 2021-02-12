@@ -116,6 +116,7 @@ Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving'
 Route::post('/entrees/entreetel','EntreesController@entreetel')->name('entrees.entreetel');
 Route::post('/entrees/ajoutcompterappelrecu','EntreesController@ajoutcompterappelrecu')->name('entrees.ajoutcompterappelrecu');
 Route::post('/entrees/detectnom','EntreesController@detectnom')->name('entrees.detectnom');
+Route::post('/entrees/numaccept','EntreesController@numaccept')->name('entrees.numaccept');
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/enregistrements','EntreesController@enregistrements')->name('entrees.enregistrements');
 Route::get('/entrees/enregistrementsnondispatch','EntreesController@enregistrementsnondispatch')->name('entrees.enregistrementsnondispatch');
@@ -648,6 +649,8 @@ Route::get('/users/view/{id}', 'UsersController@view');
 Route::get('/users/stats/{id}', 'UsersController@stats');
 Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
 Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('users.createuserrole');
+Route::post('/users/incall', 'UsersController@incall')->name('users.incall');
+Route::post('/users/iscallend', 'UsersController@iscallend')->name('users.iscallend');
 Route::post('/users/removeuserrole', 'UsersController@removeuserrole')->name('users.removeuserrole');
 Route::post('/users/sessionroles', 'UsersController@sessionroles')->name('users.sessionroles');
 Route::post('/changestatut', 'UsersController@changestatut')->name('users.changestatut');
