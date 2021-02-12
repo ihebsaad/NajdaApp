@@ -2,7 +2,7 @@
 <header class="header">
   <input id="natureappel" name="natureappel" type="hidden" value="" />
    <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />
-<script>var incall = 0 ;</script>
+<script>var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
    
     <?php
 use App\Dossier;
@@ -727,7 +727,38 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             </div>
         </div>
     </div>
+<!-- Modal appels recus-->
+<div class="modal fade" id="modalappels"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="appels" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModal2">Appels reçus</h4>
 
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                  
+                    <table class="table table-striped" id="tableappels" style="width:100%;margin-top:15px;">
+                            <thead>
+                            <tr id="headtable">
+                                <th style="">Numéro</th>
+                                <th style="">Actions</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="fermerhis"type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     @media  (max-width: 1280px)  /*** 150 % ***/  {
@@ -962,11 +993,57 @@ webphone_api.parameters['voicerecupload'] = 'ftp://ftpmizuuser:Najda2020@192.168
 webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
 
 {
+if( tabcall.includes(peername)===true)
+{
+i=i+1;
+if (i==3){
+//alert("ko");
+//alert(tabcall);
+$('table#tableappels tr#'+peername).remove();
+var index = tabcall.indexOf(peername);
+if (index >= 0) {
+  tabcall.splice( index, 1 );
+}
+//alert(tabcall);
+i=0;
+}
 
+}
                 if (event === 'setup' && direction == 2 && incall != 1 )
 
                 {
-                  document.getElementById('natureappelrecu').value='librerecu';    
+tabcall.push(peername);
+//alert(tabcall);
+aurlf="<button  style='color:green' href='#' onclick='accept4(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
+aurlf1="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
+$('#modalappels').modal({show: true});
+ $("#tableappels tbody").append("<tr id='"+peername+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
+if(acceptvar===peername)
+{
+alert(acceptvar);
+var _token = $('input[name="_token"]').val();
+$.ajax({
+
+                    url:"{{ route('entrees.numaccept')}}",
+                    method:"POST",
+                    data:'_token='+_token+'&peername='+peername,
+                    success:function(data)
+                    {
+                      
+//alert('test');
+$('table#tableappels tr#'+data).remove();
+
+                    }
+                });
+}
+                 
+
+                }  
+ if (event === 'connected' && direction == 2  )
+
+                {
+$('#modalappels').modal('hide');
+ document.getElementById('natureappelrecu').value='librerecu';    
 $('#appelinterfacerecep').modal({show: true});
             $(".modal-body #numencoursrecep").val(peerdisplayname );
 var _token = $('input[name="_token"]').val();
@@ -977,15 +1054,10 @@ $.ajax({
                     data:'_token='+_token+'&peerdisplayname='+peername,
                     success:function(data)
                     {
-if(incall != 1){
+//if(incall != 1){
                          $(".modal-body #nomencoursrecep").val(data );}
-                    }
+                    //}
                 });  
-
-                }  
- if (event === 'connected' && direction == 2  )
-
-                {
 var minutesLabel1 = document.getElementById("minutes1");
 var secondsLabel1 = document.getElementById("seconds1");
 var totalSeconds1 = 0;
@@ -1040,7 +1112,17 @@ document.getElementById('transferappenv2').style.display = 'inline-block';
 document.getElementById('status_callenv2').innerHTML="Appel en cours"; }  
 if (event === 'disconnected' && direction == 2 && webphone_api.isincall()!=true)
 {
+//webphone_api.setline(peername);
+           //webphone_api.hangup(true);
+$('table#tableappels tr#'+peername).remove();
+
 incall = 0;
+var Countappelsrecus = $('#tableappels tr').length;
+//alert(Countappelsrecus);
+if(Countappelsrecus===1)
+{
+$('#modalappels').modal('hide');
+}
 $('#appelinterfacerecep').modal('hide');
 
 
@@ -1131,11 +1213,29 @@ document.getElementById('idenvoyetelrecu').value=data;  }
 incall = 0;
             
         }
+function disappel(peername)
+        {
+          webphone_api.setline(peername);
+          webphone_api.hangup(true);
+incall = 0;
+            
+        }
 function accept()
         {
             document.getElementById('natureappelrecu').value='librerecu';  
             webphone_api.accept();
 incall = 1;
+            
+        }
+function accept4(peername)
+        {
+
+
+            document.getElementById('natureappelrecu').value='librerecu';  
+webphone_api.setline(peername);
+            webphone_api.accept(true);
+incall = 1;
+acceptvar = peername ;
             
         }
     function transfer()

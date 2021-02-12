@@ -3,7 +3,7 @@
 <header class="header">
   <script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
-<script>var incall = 0 ;</script>
+<script>var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
 <?php
     use App\Entree;
     use App\User;
@@ -1206,25 +1206,66 @@ var extensiontel = $('#extensiontel').val();
        //webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED_DATETIME.wav'; 
 webphone_api.parameters['voicerecupload'] = 'ftp://ftpmizuuser:Najda2020@192.168.1.249/voice_CALLER_CALLED_DATETIME.wav'; 
  webphone_api.start();
-webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
+webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname,line)
 
 {
+if( tabcall.includes(peername)===true)
+{
+i=i+1;
+if (i==3){
+//alert("ko");
+//alert(tabcall);
+$('table#tableappels tr#'+peername).remove();
+var index = tabcall.indexOf(peername);
+if (index >= 0) {
+  tabcall.splice( index, 1 );
+}
+//alert(tabcall);
+i=0;
+}
+
+}
+
+
 
                 if (event === 'setup' && direction == 2 && incall != 1 )
 
                 {
-
+tabcall.push(peername);
+//alert(tabcall);
 aurlf="<button  style='color:green' href='#' onclick='accept4(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
 aurlf1="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
 $('#modalappels').modal({show: true});
  $("#tableappels tbody").append("<tr id='"+peername+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
+if(acceptvar===peername)
+{
+alert(acceptvar);
+var _token = $('input[name="_token"]').val();
+$.ajax({
+
+                    url:"{{ route('entrees.numaccept')}}",
+                    method:"POST",
+                    data:'_token='+_token+'&peername='+peername,
+                    success:function(data)
+                    {
+                      
+//alert('test');
+$('table#tableappels tr#'+data).remove();
+
+                    }
+                });
+}
               
   
 
-                }  
+                }
+
+ 
  if (event === 'connected' && direction == 2 )
 
                 {
+
+//alert('testconnect');
 $('#modalappels').modal('hide');
 $('#appelinterfacerecep').modal({show: true});
             $(".modal-body #numencoursrecep").val(peerdisplayname );
@@ -1236,9 +1277,9 @@ $.ajax({
                     data:'_token='+_token+'&peerdisplayname='+peername,
                     success:function(data)
                     {
-if(incall != 1){
+//if(incall != 1){
                          $(".modal-body #nomencoursrecep").val(data );}
-                    }
+                   // }
                 });
 var minutesLabel1 = document.getElementById("minutes1");
 var secondsLabel1 = document.getElementById("seconds1");
@@ -1458,11 +1499,13 @@ incall = 1;
         }
 function accept4(peername)
         {
-$('table#tableappels tr#'+peername).remove();
+
+
             document.getElementById('natureappelrecu').value='librerecu';  
 webphone_api.setline(peername);
             webphone_api.accept(true);
 incall = 1;
+acceptvar = peername ;
             
         }
     function transfer()
