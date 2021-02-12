@@ -942,6 +942,11 @@ $iddossier= $dossierrecu['id'];
 
         ));
     }
+public function numaccept(Request $request)
+    {
+
+     return $request->get('peername');
+    }
 
 
 }
