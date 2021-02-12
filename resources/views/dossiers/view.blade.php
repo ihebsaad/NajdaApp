@@ -363,7 +363,8 @@ $garanties=DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)
                                         	if($communin['type']=="tel") {
 
 
-$adressecomm=Adresse::where("champ",$communin['emetteur'])->first();
+$emetteur= explode(' ', $communin['emetteur']);
+$adressecomm=Adresse::where("champ",$emetteur)->first();
                                          echo '<span class="commsujet" style="font-size:12px"><B>Emetteur: </B>'. $communin['emetteur']."(".$adressecomm['prenom']." ".$adressecomm['nom'].")".'</span>';
 
                                        echo '<span class="cd-date">'.
