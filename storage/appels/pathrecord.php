@@ -74,7 +74,7 @@ $dif1 = str_replace("_", "-", $dif);
 $emet=$difs[1];
 $emet1=$difs[1].' -RG-Najda_assistance';
 $emet2=$difs[1].' -RG-Najda_TPA';
-$emet3=$difs[1].' -RG-Najda_Xpress';
+$emet3=$difs[1].' -RG-Xpress';
 $emet4=$difs[1].' -RG-Najda_International';
 $dest=$difs[2];
 echo($difs[1]);
