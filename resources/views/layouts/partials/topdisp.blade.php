@@ -995,17 +995,21 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
 {
 if( tabcall.includes(peername)===true)
 {
-i=i+1;
-if (i==3){
+var index = tabcall.indexOf(peername);
+if (index >= 0) {
+  tabcall[index+1]=tabcall[index+1]+1;
+}
+if (tabcall[index+1]==2){
 //alert("ko");
 //alert(tabcall);
 $('table#tableappels tr#'+peername).remove();
 var index = tabcall.indexOf(peername);
 if (index >= 0) {
+tabcall.splice( index+1, 1 );
   tabcall.splice( index, 1 );
 }
 //alert(tabcall);
-i=0;
+
 }
 
 }
@@ -1013,6 +1017,7 @@ i=0;
 
                 {
 tabcall.push(peername);
+tabcall.push(0);
 //alert(tabcall);
 aurlf="<button  style='color:green' href='#' onclick='accept4(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
 aurlf1="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
