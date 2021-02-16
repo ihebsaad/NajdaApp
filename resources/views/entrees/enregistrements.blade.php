@@ -66,7 +66,8 @@ Use App\USer;
                 ?>
 
                  <?php
-              $adressecomm=Adresse::where("champ",$enreg->emetteur)->first();
+$emetteur= explode(' ',$enreg->emetteur);
+              $adressecomm=Adresse::where("champ",$emetteur)->first();
               $usercom=User::where("id",$enreg->par)->first();
               ?>
                 <tr> 
