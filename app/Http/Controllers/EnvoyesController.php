@@ -459,12 +459,38 @@ $voice="voice_".$envoye['emetteur']."_".$envoye['destinataire'];
        $userpar = auth()->user();
        if($userpar->user_type==="admin")
        {
-        $enregs =  DB::table('envoyes')->where('type','tel')->orderBy('id', 'desc')->get();
+        $enregs2 =  DB::table('envoyes')->where('type','tel')->orderBy('id', 'desc')->get()->toArray();
+
+foreach ($enregs2 as $enreg )
+{
+$enreg->typeappels='émis';
+}
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNotNull('par')->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs1 as $enreg )
+{
+$enreg->typeappels='reçu';
+}
+ // $enregsenv=array_merge($enregs->toArray(),['typeappels'=>'emis']);
+$enregs = array_merge($enregs2,$enregs1);
+ $columns = array_column($enregs, 'created_at');
+array_multisort($columns, SORT_DESC, $enregs);
         return view('envoyes.enregistrements',['enregs' => $enregs] );
       }
       else
       {
-        $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get();
+        $enregs2 =  DB::table('envoyes')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs2 as $enreg )
+{
+$enreg->typeappels='émis';
+}
+ $enregs1 =  DB::table('entrees')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs1 as $enreg )
+{
+$enreg->typeappels='reçu';
+}
+$enregs = array_merge($enregs2,$enregs1);
+$columns = array_column($enregs, 'created_at');
+array_multisort($columns, SORT_DESC, $enregs);
         return view('envoyes.enregistrements',['enregs' => $enregs] );
       }
 
@@ -475,12 +501,37 @@ $voice="voice_".$envoye['emetteur']."_".$envoye['destinataire'];
          $userpar = auth()->user();
          if($userpar->user_type==="admin")
        {
-        $enregs =  DB::table('envoyes')->where('type','tel')->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+ $enregs2 =  DB::table('envoyes')->where('type','tel')->whereNotNull('dossier')->orderBy('id', 'desc')->get()->toArray();
+
+foreach ($enregs2 as $enreg )
+{
+$enreg->typeappels='émis';
+}
+$enregs1 =  DB::table('entrees')->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs1 as $enreg )
+{
+$enreg->typeappels='reçu';
+}
+$enregs = array_merge($enregs2,$enregs1);
+      $columns = array_column($enregs, 'created_at');
+array_multisort($columns, SORT_DESC, $enregs); 
         return view('envoyes.enregistrements',['enregs' => $enregs] );
          }
       else
       {
-$enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNotNull('dossier')->orderBy('id', 'desc')->get();
+$enregs2 =  DB::table('envoyes')->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs2 as $enreg )
+{
+$enreg->typeappels='émis';
+}
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs1 as $enreg )
+{
+$enreg->typeappels='reçu';
+}
+$enregs = array_merge($enregs2,$enregs1);
+$columns = array_column($enregs, 'created_at');
+array_multisort($columns, SORT_DESC, $enregs);
         return view('envoyes.enregistrements',['enregs' => $enregs] );
       }
     }
@@ -490,13 +541,40 @@ $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereN
          $userpar = auth()->user();
          if($userpar->user_type==="admin")
        {
-        $enregs =  DB::table('envoyes')->where('type','tel')->whereNull('dossier')->orderBy('id', 'desc')->get();
+  $enregs2 =  DB::table('envoyes')->where('type','tel')->whereNull('dossier')->orderBy('id', 'desc')->get()->toArray();
+
+foreach ($enregs2 as $enreg )
+{
+$enreg->typeappels='émis';
+}
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNull('dossier')->whereNotNull('par')->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs1 as $enreg )
+{
+$enreg->typeappels='reçu';
+}
+ // $enregsenv=array_merge($enregs->toArray(),['typeappels'=>'emis']);
+$enregs = array_merge($enregs2,$enregs1);
+ $columns = array_column($enregs, 'created_at');
+array_multisort($columns, SORT_DESC, $enregs);     
         return view('envoyes.enregistrements',['enregs' => $enregs] );
 
       }
        else
       {
- $enregs =  DB::table('envoyes')->where('type','tel')->where('par', $par)->whereNull('dossier')->orderBy('id', 'desc')->get();
+$enregs2 =  DB::table('envoyes')->where('type','tel')->whereNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs2 as $enreg )
+{
+$enreg->typeappels='émis';
+}
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+foreach ($enregs1 as $enreg )
+{
+$enreg->typeappels='reçu';
+}
+$enregs = array_merge($enregs2,$enregs1);
+$columns = array_column($enregs, 'created_at');
+array_multisort($columns, SORT_DESC, $enregs);
+
         return view('envoyes.enregistrements',['enregs' => $enregs] );
       }
     }
