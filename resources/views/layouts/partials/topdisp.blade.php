@@ -1,4 +1,4 @@
-<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+<script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
 <header class="header">
   <input id="natureappel" name="natureappel" type="hidden" value="" />
    <input id="natureappelrecu" name="natureappelrecu" type="hidden" value="" />

@@ -3,7 +3,7 @@
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+<script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
 <script>var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
 <?php
 use App\Dossier;

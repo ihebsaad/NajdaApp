@@ -1,7 +1,7 @@
 
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 <header class="header">
-  <script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+  <script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <script>var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
 <?php
