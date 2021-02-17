@@ -182,18 +182,10 @@ $seance =  DB::table('seance')
                 <span class="fa fa-lg fa-fw fa-phone"></span>
                 <br>
 
-Appels émis         
+Appels Téléphoniques         
 </a>
         </div>
-        <div class="col-sm-2">
-           <a href="{{ route('entrees.enregistrements') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-                <span class="fa fa-lg fa-fw fa-phone"></span>
-                <br>
-
-Appels reçus
-
-</a>
-        </div>
+      
          
 
     </div>
