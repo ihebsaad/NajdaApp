@@ -41,6 +41,7 @@ Use App\USer;
                 <th style="font-size:10px;width:15%;;max-width:30px">Durée</th>
                <!-- <th style="width:8%;;max-width:80px ">Dossier</th>!-->
                <th style="font-size:10px;width:10%;;max-width:30px">Sujet</th>
+<th style="font-size:10px;width:10%;;max-width:30px">type</th>
                 <th  class="no-sort" style="font-size:10px;width:10%;max-width:30px"></th>
              </tr>
             <tr>
@@ -52,6 +53,7 @@ Use App\USer;
                 <th style="font-size:10px;width:15%;;max-width:30px;">Durée</th>
                <!-- <th style="width:8%;;max-width:80px; ">Dossier</th>!-->
                  <th style="font-size:10px;width:10%;;max-width:30px">Sujet</th>
+ <th style="font-size:10px;width:10%;;max-width:30px">type</th>
                 <th id="colmn6" class="no-sort" style="width:10%;;max-width:30px"></th>
              </tr>
             </thead>
@@ -67,13 +69,24 @@ Use App\USer;
 
                  <?php
 $destinataire= explode(' ',$enreg->destinataire);
+$emetteur= explode(' ',$enreg->emetteur);
+if ($enreg->typeappels==='émis')
+{
               $adressecomm=Adresse::where("champ",$destinataire)->first();
+$adressecommname=$adressecomm['prenom']." ".$adressecomm['nom'];
               $usercom=User::where("id",$enreg->par)->first();
+$usercomname=$usercom['name']." ".$usercom['lastname'];}
+if ($enreg->typeappels==='reçu')
+{
+              $adressecomm=User::where("id",$enreg->par)->first();
+$adressecommname=$adressecomm['name']." ".$adressecomm['lastname'];
+              $usercom=Adresse::where("champ",$emetteur)->first();
+$usercomname=$usercom['prenom']." ".$usercom['nom'];}
               ?>
                 <tr> 
                      <td style="width:10%;font-size:10px;width:10%;max-width:80px"><?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></td>
-                    <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercom['name']." ".$usercom['lastname'].")"; ?></td>
-                      <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecomm['prenom']." ".$adressecomm['nom'].")"; ?></td>
+                    <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercomname.")"; ?></td>
+                      <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecommname.")"; ?></td>
 
                    <td  style="width:5px;font-size:10px;max-width:2px;float:left    "         >
          <audio style="width:15px;"controls>
@@ -83,8 +96,9 @@ $destinataire= explode(' ',$enreg->destinataire);
                   
                     <td  style="width:8%;font-size:10px;max-width:80px   "  ><?php    echo convert($enreg->duration) ; ?></a></td>
                     <!--<td  style="width:8%;font-size:12px;;max-width:80px "><?php // echo DossiersController::RefDossierById($enreg['dossier']).' - '.DossiersController::FullnameAbnDossierById($enreg['dossier']);?></td>!-->
-                     <td  style="width:8%;font-size:10px;max-width:80px   "  ><a   href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>"  >
+                     <td  style="width:8%;font-size:10px;max-width:80px   "  ><a <?php if ($enreg->typeappels==='émis') {  ?>  href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>" <?php } if ($enreg->typeappels==='reçu'){   if ($enreg->dossier!='') { ?>  href="<?php echo $urlapp.'/entrees/show/',$enreg->id?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$enreg->id?>"    <?php }} ?>   >
                         <?php    echo $enreg->sujet ; ?></a></td>
+ <td style="width:10%;font-size:10px;width:10%;max-width:80px"><?php  echo $enreg->typeappels ; ?></td>
                     <td stle=";max-width:60px">
                         @can('isAdmin')
                             <a  href="" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
