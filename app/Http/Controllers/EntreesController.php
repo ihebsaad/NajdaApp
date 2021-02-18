@@ -899,7 +899,8 @@ public function entreetel(Request $request)
     {
 $date=NOW();
  $counttel=Entree::where('type','tel')->count();
-
+ $dossierrecu=Dossier::where('reference_medic',$request->get('dossier'))->first();
+$iddossier= $dossierrecu['id'];
 if($request->get('natureappelrecu')==='librerecu')
 {
 
@@ -908,18 +909,21 @@ if($request->get('natureappelrecu')==='librerecu')
                     'destinataire' => $request->get('called'),
                     'mailid'=>'tel-'.$counttel,
                     'emetteur' => $request->get('caller'),
-                    'sujet' => "",
-                    'contenutxt'=> "",
-                    'contenu' => "",
+                    
                     'reception' =>$date,
                     'duration' =>$request->get('duration'),
                     'type' => 'tel',
-                    'dossier' => "",
-                    'dossierid' => 0
+                    
+                      'contenu'=> trim ($request->get('contenu')),
+            'par'=> $request->get('iduser'),
+            'sujet'=>trim ($request->get('sujet')),
+            'dossier' => $request->get('dossier'),
+            'dossierid'=> $iddossier,
+            'commentaire'=> trim ($request->get('description'))
 
                 ]);
 $entree->save();
-return $entree->id;
+return $entree;
 }
     }
 

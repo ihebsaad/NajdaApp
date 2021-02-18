@@ -369,37 +369,46 @@ if($request->get('natureappel')==='dossier')
                     'destinataire' => $request->get('called'),
                     
                     'emetteur' => $request->get('caller'),
-                    'sujet' => "",
+
                     
-                    'contenu' => "",
+
                     'reception' =>$date,
                     'duration' =>$request->get('duration'),
                     'type' => 'tel',
                     
                     'dossier' => $request->get('refdossier'),
+    'contenu'=> trim ($request->get('contenu')),
+            'par'=> $request->get('iduser'),
+            'sujet'=>trim ($request->get('sujet')),
+           
+            'description'=> trim ($request->get('description'))
 
                 ]);
 
 $envoye->save();
 
- return $envoye->id;}
+ return $envoye;}
 if($request->get('natureappel')==='libre')
         {$envoye = new Envoye([
                     'destinataire' => $request->get('called'),
                     
                     'emetteur' => $request->get('caller'),
-                    'sujet' => "",
                     
-                    'contenu' => "",
+                    
+                    
                     'reception' =>$date,
                     'duration' =>$request->get('duration'),
                     'type' => 'tel',
                     
-                    'dossier' => '',
+                    'contenu'=> trim ($request->get('contenu')),
+            'par'=> $request->get('iduser'),
+            'sujet'=>trim ($request->get('sujet')),
+            'dossier' => $request->get('dossier'),
+            'description'=> trim ($request->get('description'))
 
                 ]);
 $envoye->save();
- return $envoye->id;}
+ return $envoye;}
 
     }
     public function ajoutcompterappel(Request $request)
