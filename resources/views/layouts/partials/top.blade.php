@@ -515,7 +515,7 @@ else
                             {{ csrf_field() }}
 
                             <form id="appelinterfacerecep" novalidate="novalidate">
-  <div id="call_duration">&nbsp;</div>
+  
             <div style="font-size: 30px;">
 
 <label style="color:green;font-size: 30px;"id="status_call"></label>
@@ -529,6 +529,38 @@ else
  <div>
 <input id="numencoursrecep" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
+ <div id='compterendurecuencours' style="display:none"><label style="color:green;font-size: 30px;">Dispatch et Compte rendu</label>
+ <div class="form-group">
+                            <label for="dossiercrrecuencours">Dossier :</label>
+                            <select   id="dossiercrrecuencours"  style="width:100%;"  name="dossiercrrecuencours"     >
+                                <option></option>
+                                <?php 
+
+                                foreach($listedossiers as $ds)
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  
+                                ?>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sujetcrrecuencours">Sujet :</label>
+                            <input type="text"    id="sujetcrrecuencours"   class="form-control" name="sujetcrrecuencours"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncrrecuencours">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrrecuencours"   class="form-control" name="descriptioncrrecuencours"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucrrecuencours">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrrecuencours"   class="form-control" name="contenucrrecuencours"    ></textarea>
+
+                        </div>
+  </div>
 
                             </form>
 
@@ -704,7 +736,38 @@ else
  <div>
 <input id="numencours2" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
-        
+<div id='compterenduencours' style="display:none"><label style="color:green;font-size: 30px;">Dispatch et Compte rendu</label>
+        <div class="form-group">
+                            <label for="dossiercrlibreencours">Dossier :</label>
+                            <select   id="dossiercrlibreencours"  style="width:100%;"  name="dossiercrlibreencours"     >
+                                <option></option>
+                                <?php 
+
+                                foreach($listedossiers as $ds)
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  
+                                ?>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sujetcrlibreencours">Sujet :</label>
+                            <input type="text"    id="sujetcrlibreencours"   class="form-control" name="sujetcrlibreencours"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncrlibreencours">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrlibreencours"   class="form-control" name="descriptioncrlibreencours"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucrlibreencours">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrlibreencours"   class="form-control" name="contenucrlibreencours"    ></textarea>
+
+                        </div>
+</div>
 
                             </form>
 
@@ -1192,8 +1255,8 @@ $iduser=$user->id; ?>
 
 <script>
 $(document).ready(function() {
-  /*$("#dossiercrlibre").select2();*/
-
+  $("#dossiercrlibreencours").select2();
+ $("#dossiercrrecuencours").select2();
 var countrecep=1;
 var extensiontel = $('#extensiontel').val();
  var motdepassetel = $('#motdepassetel').val();
@@ -1202,11 +1265,11 @@ var extensiontel = $('#extensiontel').val();
         webphone_api.parameters['password'] = motdepassetel;      // SIP account password (see the "Parameters encryption" in the documentation)        
         webphone_api.parameters['callto'] = '';        // destination number to call
         webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
-        webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
+        webphone_api.parameters['autostart'] = 1;     // start the webphone only when button is clicked
        //webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED_DATETIME.wav'; 
  webphone_api.parameters['transfertype'] = 1;
 webphone_api.parameters['voicerecupload'] = 'ftp://ftpmizuuser:Najda2020@192.168.1.249/voice_CALLER_CALLED_DATETIME.wav'; 
- webphone_api.start();
+ //webphone_api.start();
 webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname,line)
 
 {
@@ -1307,6 +1370,7 @@ function pad1(val1) {
     return valString1;
   }
 }
+document.getElementById('compterendurecuencours').style.display = 'block';
 document.getElementById('mettreenattente').style.display = 'inline-block';
  document.getElementById('couperson').style.display = 'inline-block'; 
 document.getElementById('transferapp').style.display = 'inline-block';
@@ -1336,6 +1400,7 @@ function pad(val) {
   }
 }
 
+document.getElementById('compterenduencours').style.display = 'block';
 document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
  document.getElementById('coupersonenv2').style.display = 'inline-block'; 
 document.getElementById('transferappenv2').style.display = 'inline-block';
@@ -1359,6 +1424,8 @@ function pad2(val2) {
     return valString2;
   }
 }
+
+document.getElementById('compterendudossierencours').style.display = 'block';
 document.getElementById('mettreenattenteenv').style.display = 'inline-block';
  document.getElementById('coupersonenv').style.display = 'inline-block'; 
 document.getElementById('transferappenv').style.display = 'inline-block';
@@ -1405,20 +1472,40 @@ var durationSec = Math.floor((durationInt+500)/1000);
 var _token = $('input[name="_token"]').val();
 var refdossier = $('#refdossier').val();
 var natureappel = $('#natureappel').val();
+if(natureappel==='libre')
+{
+ var contenu = document.getElementById('contenucrlibreencours').value;
+            var sujet = document.getElementById('sujetcrlibreencours').value;
+            var description = document.getElementById('descriptioncrlibreencours').value;
+            var dossier = $('#dossiercrlibreencours').val();
+            var iduser=document.getElementById('iduser').value;}
+if(natureappel==='dossier')
+{
+var contenu = document.getElementById('contenucrteldossierencours').value;
+            var sujet = document.getElementById('sujetcrteldossierencours').value;
+            var description = document.getElementById('descriptioncrteldossierencours').value;
+            var dossier = $('#dossiercrteldossierencours').val();
+            var iduser=document.getElementById('iduser').value;
+}
+          
 
 $.ajax({
 
                     url:"{{ route('envoyes.envoyetel')}}",
                     method:"POST",
 
-                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&refdossier='+refdossier+'&natureappel='+natureappel,
+                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&refdossier='+refdossier+'&natureappel='+natureappel+'&contenu='+contenu+'&sujet='+sujet+'&description='+description+'&dossier='+dossier+'&iduser='+iduser,
                     success:function(data)
                     {
                       if(natureappel==="dossier")
                       {
 
                         //alert(data);
-                         document.getElementById('idenvoyetel').value=data;  
+                         document.getElementById('idenvoyetel').value=data['id'];  
+document.getElementById('contenucrtel').value=data['contenu'];
+document.getElementById('sujetcrtel').value=data['sujet'];   
+document.getElementById('descriptioncrtel').value=data['description']; 
+$('#dossiercrtel').val(data['dossier']); 
                          $("#appelinterfaceenvoi").modal('hide');
                          $('#crenduappel').modal({show:true});
 
@@ -1427,7 +1514,11 @@ $.ajax({
                       {
 
                         //alert(data);
-                         document.getElementById('idenvoyetellibre').value=data;  
+                         document.getElementById('idenvoyetellibre').value=data['id'];  
+document.getElementById('contenucrlibre').value=data['contenu'];
+document.getElementById('sujetcrlibre').value=data['sujet'];   
+document.getElementById('descriptioncrlibre').value=data['description']; 
+$('#dossiercrlibre').val(data['dossier']); 
                          $("#appelinterfaceenvoi2").modal('hide');
                          $('#crenduappellibre').modal({show:true});
                          //$("#dossiercrlibre").select2();
@@ -1447,7 +1538,11 @@ var durationInt = parseInt(duration,10);
 var durationSec = Math.floor((durationInt+500)/1000);
 var _token = $('input[name="_token"]').val();
 var natureappelrecu= $('#natureappelrecu').val();
-   var iduser=document.getElementById('iduser').value;
+   var contenu = document.getElementById('contenucrrecuencours').value;
+            var sujet = document.getElementById('sujetcrrecuencours').value;
+            var description = document.getElementById('descriptioncrrecuencours').value;
+            var dossier = $('#dossiercrrecuencours').val();
+            var iduser=document.getElementById('iduser').value;
 //alert(natureappelrecu);
 
 
@@ -1455,7 +1550,8 @@ $.ajax({
 
                     url:"{{ route('entrees.entreetel')}}",
                     method:"POST",
-                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu,
+                    data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu+'&contenu='+contenu+'&sujet='+sujet+'&description='+description+'&dossier='+dossier+'&iduser='+iduser,
+                  
                     success:function(data)
                     {
                       if(natureappelrecu==="librerecu" && incall !=1 )
@@ -1466,7 +1562,14 @@ if(document.getElementById('idenvoyetelrecu').value==='')
 
                         { 
 
-document.getElementById('idenvoyetelrecu').value=data;  }
+document.getElementById('idenvoyetelrecu').value=data['id'];
+document.getElementById('contenucrrecu').value=data['contenu'];
+document.getElementById('sujetcrrecu').value=data['sujet'];   
+document.getElementById('descriptioncrrecu').value=data['commentaire']; 
+$('#dossiercrrecu').val(data['dossier']); 
+
+
+  }
 
                          $("#appelinterfacerecep").modal('hide');
                          $('#crenduappelrecu').modal({show:true});
