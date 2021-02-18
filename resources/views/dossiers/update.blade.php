@@ -20,7 +20,7 @@ use  \App\Http\Controllers\PrestatairesController;
 <!--select css-->
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
-<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+<script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
 @section('content')
     <?php
     $users=UsersController::ListeUsers();
@@ -2549,21 +2549,21 @@ $message=str_replace('Najda', $entite, $message);
                                 <?php foreach($phonesDossier   as $phone)
                                 {
 $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
-                                    echo '<option class="telsassures" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+                                    echo '<option class="telsassures" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.')</option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesCl   as $phone)
                                 {
 $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
-                                    echo '<option class="telsclients" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'   '.$phone->nom.' '.$phone->prenom.' </option>';
+                                    echo '<option class="telsclients" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.') </option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesInt   as $phone)
                                 {
 $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
-                                    echo '<option class="telsintervs" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+                                    echo '<option class="telsintervs" title="'.$title.'" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.')</option>';
 
                                 }
                                 ?>
@@ -2679,7 +2679,25 @@ else
  <div>
 <input id="numencours" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
+<div id='compterendudossierencours' style="display:none"><label style="color:green;font-size: 30px;">Compte rendu</label>
+    <div class="form-group">
+                            <label for="sujetcrteldossierencours">Sujet :</label>
+                            <input type="text"    id="sujetcrteldossierencours"   class="form-control" name="sujetcrteldossierencours"    />
 
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncrteldossierencours">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrteldossierencours"   class="form-control" name="descriptioncrteldossierencours"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucrteldossierencours">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrteldossierencours"   class="form-control" name="contenucrteldossierencours"    ></textarea>
+
+                        </div>      
+ </div> 
                             </form>
 
                         </div>

@@ -21,7 +21,7 @@ use App\Http\Controllers\DossiersController;
 <!--select css-->
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
-<script src="{{ asset('public/najda_app/najdaapp/webphone/webphone_api.js') }}"></script>
+<script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
 @section('content')
     <?php
     $users=UsersController::ListeUsers();
@@ -2868,7 +2868,25 @@ else
  <div>
 <input id="numencours" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
-         
+         <div id='compterendudossierencours' style="display:none"><label style="color:green;font-size: 30px;">Compte rendu</label>
+    <div class="form-group">
+                            <label for="sujetcrteldossierencours">Sujet :</label>
+                            <input type="text"    id="sujetcrteldossierencours"   class="form-control" name="sujetcrteldossierencours"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncrteldossierencours">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrteldossierencours"   class="form-control" name="descriptioncrteldossierencours"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucrteldossierencours">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrteldossierencours"   class="form-control" name="contenucrteldossierencours"    ></textarea>
+
+                        </div>      
+ </div> 
 
                             </form>
 
