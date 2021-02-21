@@ -3269,6 +3269,51 @@ else
         </div>
 
     </div>
+<!--Modal Tel conference-->
+
+    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numaconference1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="numaconference1">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Saisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="numaconference1" novalidate="novalidate">
+
+                                <input id="numaconf1" name="numaconf1" type="text" value="" />
+                                   
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+<?php
+
+?>
+
+                    <button type="button"  class="btn btn-primary"  onclick="Conference5();">Conférence
+</button>
+           <button type="button"  class="btn btn-primary"  onclick="Conference6();">Confirmer la Conférence
+</button>
+  <button type="button"  class="btn btn-primary"  onclick="Conference7();">Annuler la Conférence
+</button>
+   
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 <!--Modal Tel 2-->
 
     <div class="modal fade" id="appelinterfaceenvoi"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" data-backdrop="static"  data-keyboard="false" >
@@ -3330,11 +3375,13 @@ else
 
                    
  <button id="racc" type="button"  class="btn btn-primary"  onclick="Hangup1();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
- <div id="mettreenattenteenv" style="display:none;"><button type="button"  class="btn btn-primary" onclick="hold1(true);" ><i class="fas fa-pause"></i> Mettre en attente</button></div>
+ <div id="mettreenattenteenv" style="display:none;"><button type="button"  class="btn btn-primary" onclick="hold1(true);" ><i class="fas fa-pause"></i> En attente</button></div>
  <div id="reprendreappelenv" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="hold1(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
- <div id="coupersonenv" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute1(true,0);" ><i class="fas fa-microphone-slash"></i> Couper le son</button></div>
- <div id="reactivesonenv" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute1(false,0);"><i class="fas fa-microphone"></i> Réactiver son</button></div>
+ <div id="coupersonenv" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute1(true,0);" ><i class="fas fa-microphone-slash"></i> Couper </button></div>
+ <div id="reactivesonenv" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute1(false,0);"><i class="fas fa-microphone"></i> Réactiver </button></div>
  <button id="transferappenv" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer1"><i class="fas fa-reply-all"></i> Transférer</button>
+ <button id="conferenceappenv" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference1"><i class="fas fa-user-friends"></i> Conférence</button>
+
 <button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
@@ -6418,7 +6465,14 @@ $(".modal-body #nomencours").val(nom );
 
            function Hangup1()
         {
+           if(webphone_api.isincall())
+{webphone_api.setline(-2);
             webphone_api.hangup();
+              conference = 0;   }
+else
+{conference = 0;
+$('#appelinterfaceenvoi').modal('hide');
+location.reload();}
             
         }
     function transfer1()
@@ -6427,6 +6481,46 @@ numtrans=$('#numatrans1').val();
 //numtrans.toString();
 //alert(numtrans);
             webphone_api.transfer(numtrans);
+        }
+function Conference5()
+        {
+conference=1;
+numtrans=$('#numaconf1').val();
+numtrans.toString();
+//alert(numtrans);
+webphone_api.setline(1);
+            webphone_api.hold(true);
+webphone_api.setline(2);
+            webphone_api.call(numtrans);
+
+//alert("OK");
+        }
+ function Conference6()
+        {
+
+//numtrans=$('#numaconf2').val();
+
+webphone_api.setline(1);
+            webphone_api.hold(false);
+            webphone_api.conference(numtrans);
+$('#numaconference1').modal('hide');
+
+//alert("OK");
+        }
+ function Conference7()
+        {
+
+//numtrans=$('#numaconf2').val();
+
+webphone_api.setline(1);
+            webphone_api.hold(false);
+           webphone_api.setline(2);
+if(webphone_api.isincall!=true)
+{
+            webphone_api.hangup();}
+$('#numaconference1').modal('hide');
+
+//alert("OK");
         }
   function hold1(state)
         {
