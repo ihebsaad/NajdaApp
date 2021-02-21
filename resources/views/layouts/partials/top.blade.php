@@ -1477,6 +1477,7 @@ document.getElementById('compterendudossierencours').style.display = 'block';
 document.getElementById('mettreenattenteenv').style.display = 'inline-block';
  document.getElementById('coupersonenv').style.display = 'inline-block'; 
 document.getElementById('transferappenv').style.display = 'inline-block';
+document.getElementById('conferenceappenv').style.display = 'inline-block';
 document.getElementById('status_callenv').innerHTML="Appel en cours";
  } 
 if (event === 'disconnected' && direction == 2  && webphone_api.isincall()!=true )
@@ -1520,6 +1521,7 @@ if(duration==0  && conference==1)
 webphone_api.setline(caller);
 webphone_api.hold(false);
 $('#numaconference2').modal('hide');
+$('#numaconference1').modal('hide');
 }
 
 if (direction == 1  )
@@ -1556,7 +1558,7 @@ $.ajax({
                     data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&refdossier='+refdossier+'&natureappel='+natureappel+'&contenu='+contenu+'&sujet='+sujet+'&description='+description+'&dossier='+dossier+'&iduser='+iduser,
                     success:function(data)
                     {
-                      if(natureappel==="dossier")
+                      if(natureappel==="dossier" && conference!=1)
                       {
 
                         //alert(data);
