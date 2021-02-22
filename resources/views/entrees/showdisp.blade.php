@@ -73,10 +73,14 @@ Use App\USer;
                                     <!--<a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
                                         <span class="fas fa-exclamation-triangle"></span> SPAM
                                     </a>-->
+<?php if ($entree['type']!=="tel" ){?>
 
+                             
                                         <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('EntreesController@destroy2', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                             <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                         </a>
+
+<?php } ?>
                             </div>
                         </div>
 
