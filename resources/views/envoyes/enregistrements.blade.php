@@ -101,9 +101,15 @@ $usercomname=$usercom['prenom']." ".$usercom['nom'];}
  <td style="width:10%;font-size:10px;width:10%;max-width:80px"><?php  echo $enreg->typeappels ; ?></td>
                     <td stle=";max-width:60px">
                         @can('isAdmin')
-                            <a  href="" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+<?php if ($enreg->typeappels==='émis') { ?>
+                            <a   class="btn btn-danger btn-sm btn-responsive "  href="{{action('EnvoyesController@destroy1', $enreg->id)}}" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span>
                             </a>
+<?php } else { ?>
+ <a   class="btn btn-danger btn-sm btn-responsive "  href="{{action('EntreesController@destroy4', $enreg->id)}}" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                <span class="fa fa-fw fa-trash-alt"></span>
+                            </a>
+<?php } ?>
                         @endcan
 
                     </td>
