@@ -130,6 +130,7 @@ Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/destroy2/{id}', 'EntreesController@destroy2');
 Route::get('/entrees/destroy3/{id}', 'EntreesController@destroy3');
+Route::get('/entrees/destroy4/{id}', 'EntreesController@destroy4');
 Route::get('/entrees/spam/{id}', 'EntreesController@spam');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/traiter/{id}', 'EntreesController@traiter');
@@ -221,6 +222,7 @@ Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
 Route::get('/envoyes/destroy/{id}', 'EnvoyesController@destroy');
+Route::get('/envoyes/destroy1/{id}', 'EnvoyesController@destroy1');
 Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes.brouillons');
 Route::get('/envoyes/tous', 'EnvoyesController@tous')->name('envoyes.tous');
 Route::get('/mails/automatiques', 'EnvoyesController@mailsAutomatiques')->name('mails.automatiques');
