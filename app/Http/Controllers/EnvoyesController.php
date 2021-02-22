@@ -294,6 +294,13 @@ else
 
         return redirect('/envoyes')->with('success', '  Supprimé avec succès');    }
 
+ public function destroy1($id)
+    {
+        $envoye = Envoye::find($id);
+        $envoye->delete();
+
+        return redirect('/envoyes/enregistrements')->with('success', '  Supprimé avec succès');    }
+
 
 
     public static function countbrouillons()

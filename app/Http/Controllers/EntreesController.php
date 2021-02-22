@@ -472,6 +472,14 @@ else
 
         return redirect('/entrees')->with('success', '  Supprimé');
     }
+ public function destroy4($id)
+    {
+        $entree = Entree::find($id);
+        $entree->delete();
+
+      
+        return redirect('/envoyes/enregistrements')->with('success', '  Supprimé');
+    }
 
     public static function countarchives()
     {
