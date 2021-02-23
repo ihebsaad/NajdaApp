@@ -1370,7 +1370,7 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
 
 {
 
-alert('sirine');
+//alert('sirine');
 if( tabcall.includes(peername)===true)
 {
 var index = tabcall.indexOf(peername);
@@ -1904,7 +1904,6 @@ webphone_api.setline(1);
             webphone_api.hold(false);
 webphone_api.setline(2);
   webphone_api.hangup();
-
 webphone_api.setline(1);
             webphone_api.transfer(numtrans);
 $('#numatransfer2').modal('hide');}
