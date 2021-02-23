@@ -697,6 +697,10 @@ else
 ?>
 
                     <button type="button"  class="btn btn-primary"  onclick="transfer2();">Transférer</button>
+<button type="button"  class="btn btn-primary"  onclick="transfer3();">Confirmer le transfert
+</button>
+  <button type="button"  class="btn btn-primary"  onclick="transfer4();">Annuler le transfert
+</button>
    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 
@@ -1365,7 +1369,8 @@ webphone_api.parameters['conferencetype'] = 4;
 webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname,line)
 
 {
-//alert(i);
+
+alert('sirine');
 if( tabcall.includes(peername)===true)
 {
 var index = tabcall.indexOf(peername);
@@ -1704,6 +1709,7 @@ $('#dossiercrrecu').val(data['dossier']);
 
 }}
 });
+
 });
       function Hangup()
         {
@@ -1880,12 +1886,37 @@ location.reload();}
    
     function transfer2()
         {
+conference=1;
+
 numtrans=$('#numatrans2').val();
 //numtrans.toString();
 //alert(numtrans);
-            webphone_api.transfer(numtrans);
+webphone_api.setline(1);
+            webphone_api.hold(true);
+webphone_api.setline(2);
+            webphone_api.call(numtrans);
 //alert("OK");
         }
+function transfer3()
+{
+conference =0;
+webphone_api.setline(1);
+            webphone_api.hold(false);
+webphone_api.setline(2);
+  webphone_api.hangup();
+
+webphone_api.setline(1);
+            webphone_api.transfer(numtrans);
+$('#numatransfer2').modal('hide');}
+function transfer4()
+{
+webphone_api.setline(1);
+            webphone_api.hold(false);
+           webphone_api.setline(2);
+   webphone_api.hangup();
+
+$('#numatransfer2').modal('hide');
+}
  function Conference2()
         {
 conference=1;
