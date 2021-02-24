@@ -1575,6 +1575,7 @@ $('#numaconference2').modal('hide');
 $('#numaconference1').modal('hide');
 $('#numaconference').modal('hide');
 $('#numatransfer2').modal('hide');
+$('#numatransfer1').modal('hide');
 }
 
 if (direction == 1  )
