@@ -696,10 +696,10 @@ else
 
 ?>
 
-                    <button type="button"  class="btn btn-primary"  onclick="transfer2();">Transférer</button>
-<button type="button"  class="btn btn-primary"  onclick="transfer3();">Confirmer le transfert
+                    <button type="button"  class="btn btn-primary"  onclick="transfer2();">Appeler avant le transfert</button>
+<button type="button"  class="btn btn-primary"  onclick="transfer4();">Raccrocher avant le transfert
 </button>
-  <button type="button"  class="btn btn-primary"  onclick="transfer4();">Annuler le transfert
+  <button type="button"  class="btn btn-primary"  onclick="transfer3();"> Transférer
 </button>
    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -1574,6 +1574,7 @@ webphone_api.hold(false);
 $('#numaconference2').modal('hide');
 $('#numaconference1').modal('hide');
 $('#numaconference').modal('hide');
+$('#numatransfer2').modal('hide');
 }
 
 if (direction == 1  )
@@ -1897,25 +1898,22 @@ webphone_api.setline(2);
             webphone_api.call(numtrans);
 //alert("OK");
         }
-function transfer3()
-{
-conference =0;
-webphone_api.setline(1);
-            webphone_api.hold(false);
-webphone_api.setline(2);
-  webphone_api.hangup();
-webphone_api.setline(1);
-            webphone_api.transfer(numtrans);
-$('#numatransfer2').modal('hide');}
 function transfer4()
 {
 webphone_api.setline(1);
             webphone_api.hold(false);
            webphone_api.setline(2);
    webphone_api.hangup();
-
-$('#numatransfer2').modal('hide');
 }
+function transfer3()
+{
+conference =0;
+
+
+webphone_api.setline(1);
+            webphone_api.transfer(numtrans);
+$('#numatransfer2').modal('hide');}
+
  function Conference2()
         {
 conference=1;
