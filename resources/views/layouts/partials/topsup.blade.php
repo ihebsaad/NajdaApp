@@ -431,7 +431,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 ?>
 
-                    <button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>
+                        <button type="button"  class="btn btn-primary"  onclick="transfer();">Appeler avant le transfert</button>
+<button type="button"  class="btn btn-primary"  onclick="transfer7();">Raccrocher avant le transfert
+</button>
+  <button type="button"  class="btn btn-primary"  onclick="transfer8();"> Transférer
+</button>
+   
    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 
@@ -1482,6 +1487,7 @@ $('#numaconference2').modal('hide');
 
 $('#numaconference').modal('hide');
 $('#numatransfer2').modal('hide');
+$('#numatransfer').modal('hide');
 }
 if ( direction == 1)
 {
@@ -1626,11 +1632,33 @@ acceptvar = peername ;
         }
     function transfer()
         {
+natureappelconf='libre';
+conference=1;
+
 numtrans=$('#numatrans').val();
 //numtrans.toString();
 //alert(numtrans);
-            webphone_api.transfer(numtrans);
+webphone_api.setline(1);
+            webphone_api.hold(true);
+webphone_api.setline(2);
+            webphone_api.call(numtrans);
+//alert("OK");
         }
+function transfer7()
+{
+webphone_api.setline(1);
+            webphone_api.hold(false);
+           webphone_api.setline(2);
+   webphone_api.hangup();
+}
+function transfer8()
+{
+conference =0;
+
+
+webphone_api.setline(1);
+            webphone_api.transfer(numtrans);
+$('#numatransfer').modal('hide');}
 function Conference8()
         {
 natureappelconf='libre';
