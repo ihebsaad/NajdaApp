@@ -2827,7 +2827,12 @@ else
 
 ?>
 
-                    <button type="button"  class="btn btn-primary"  onclick="transfer1();">Transférer</button>
+                        <button type="button"  class="btn btn-primary"  onclick="transfer1();">Appeler avant le transfert</button>
+<button type="button"  class="btn btn-primary"  onclick="transfer5();">Raccrocher avant le transfert
+</button>
+  <button type="button"  class="btn btn-primary"  onclick="transfer6();"> Transférer
+</button>
+   
    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 
@@ -3684,13 +3689,33 @@ $('#appelinterfaceenvoi').modal('hide');
 location.reload();}
             
         }
-    function transfer1()
+   function transfer1()
         {
+conference=1;
+
 numtrans=$('#numatrans1').val();
 //numtrans.toString();
 //alert(numtrans);
-            webphone_api.transfer(numtrans);
+webphone_api.setline(1);
+            webphone_api.hold(true);
+webphone_api.setline(2);
+            webphone_api.call(numtrans);
         }
+function transfer5()
+{
+webphone_api.setline(1);
+            webphone_api.hold(false);
+           webphone_api.setline(2);
+   webphone_api.hangup();
+}
+function transfer6()
+{
+conference =0;
+
+
+webphone_api.setline(1);
+            webphone_api.transfer(numtrans);
+$('#numatransfer1').modal('hide');}
 function Conference5()
         {
 conference=1;
