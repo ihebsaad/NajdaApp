@@ -12,7 +12,7 @@ use App\ActionEC;
 use App\Demande;
 use App\Historique;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -40,6 +40,9 @@ class LoginController extends Controller
         /*if ( $user->isAdmin() ) {
             return redirect()->route('dashboard');
         }*/
+
+	Session::put('telephonie', 'false');
+//dd(Session::get('telephonie'));
         $user = auth()->user();
         $iduser = $user->id;
         $type = $user->user_type;
