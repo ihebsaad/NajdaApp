@@ -202,7 +202,7 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 Route::get('/boites/',  'BoitesController@index')->name('boites');
 Route::get('/boites/show/{id}', 'BoitesController@show');
 
-
+Route::post('/telephonie/updating','UsersController@updatingsession')->name('telephonie.updating');
 
 /*** Envoyes : Email envoyées et brouillons  **/
 //Route::resource('/envoyes',  'EnvoyesController');
