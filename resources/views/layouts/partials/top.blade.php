@@ -1,7 +1,15 @@
 
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+<script> var testphone=0; </script>
 <header class="header">
+<?php   $testphoneaff=0; if (Session::get('telephonie')=='false') { ?>
+<?php $testphoneaff=1; Session::put('telephonie', 'true'); ?>
+<script> testphone=1; </script>
+
   <script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
+
+<?php } ?>
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <script>var natureappelconf='';var conference=0; var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
 <?php
@@ -325,13 +333,20 @@ else
            {{ csrf_field() }}
           </form>
         </div>
+<?php    if ($testphoneaff==1) { ?>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+
           <a  data-toggle="modal" data-target="#faireappel1" id="phonebtn" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button"  data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
         </div>
-
-		 <?php
+<?php   } else {  ?>
+ <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+ <a  id="phonebtn10" href="#" class="btn  btn-lg phone" role="button"   style="color:white;background-color:red; margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
+              <span class="fa fa-fw fa-phone-slash fa-2x"></span>
+          </a> 
+ </div>
+	<?php   } ?>	 <?php
 
         $disp=$seance->dispatcheur ;
 
@@ -1351,8 +1366,27 @@ $iduser=$user->id; ?>
 
 
 </script>
-
 <script>
+if(testphone==1)
+{
+$(window).bind('beforeunload', function(){
+
+var val ='false';
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('telephonie.updating') }}",
+            method: "POST",
+            data: {val:val, _token: _token},
+            success: function (data) {
+//alert(data);
+            }
+        });
+    return null;
+});}
+    </script>
+<?php    if ($testphoneaff==1) { ?>
+<script>
+
 $(document).ready(function() {
   $("#dossiercrlibreencours").select2();
  $("#dossiercrrecuencours").select2();
@@ -2085,6 +2119,184 @@ $('.reloadclass').click(function(){
  
                             window.location.reload();
 });
+ 
+        function ButtonOnclick()
+        {
+document.getElementById('natureappel').value='dossier';
 
+                     $('#appelinterfaceenvoi').modal({show:true});
+
+
+     num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+nom=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].title;
+
+     $(".modal-body #numencours").val( num );
+
+//alert(nom);
+$(".modal-body #nomencours").val(nom );
+  $("#faireappel").modal('hide');
+                
+ 
+  /**Configuration parameters*/
+ /*var extensiontel = $('#extensiontel').val();
+ var motdepassetel = $('#motdepassetel').val();
+//alert(extensiontel);
+        webphone_api.parameters['username'] = extensiontel;      // SIP account username
+        webphone_api.parameters['password'] = motdepassetel;      // SIP account password (see the "Parameters encryption" in the documentation)        
+        webphone_api.parameters['callto'] = '';        // destination number to call
+        webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
+        webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
+  webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
+ webphone_api.start();*/
+            num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+//alert(webphone_api.getstatus());
+//document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
+                webphone_api.call(num);
+
+//testiscall();
+
+
+}
+
+           function Hangup1()
+        {
+           if(webphone_api.isincall())
+{webphone_api.setline(-2);
+            webphone_api.hangup();
+              conference = 0;   }
+else
+{conference = 0;
+$('#appelinterfaceenvoi').modal('hide');
+location.reload();}
+            
+        }
+    function transfer1()
+        {
+conference=1;
+
+numtrans=$('#numatrans1').val();
+//numtrans.toString();
+//alert(numtrans);
+webphone_api.setline(1);
+            webphone_api.hold(true);
+webphone_api.setline(2);
+            webphone_api.call(numtrans);
+        }
+function transfer5()
+{
+webphone_api.setline(1);
+            webphone_api.hold(false);
+           webphone_api.setline(2);
+   webphone_api.hangup();
+}
+function transfer6()
+{
+conference =0;
+
+
+webphone_api.setline(1);
+            webphone_api.transfer(numtrans);
+$('#numatransfer1').modal('hide');}
+function Conference5()
+        {
+conference=1;
+numtrans=$('#numaconf1').val();
+numtrans.toString();
+//alert(numtrans);
+webphone_api.setline(1);
+            webphone_api.hold(true);
+webphone_api.setline(2);
+            webphone_api.call(numtrans);
+
+//alert("OK");
+        }
+ function Conference6()
+        {
+
+//numtrans=$('#numaconf2').val();
+
+webphone_api.setline(1);
+            webphone_api.hold(false);
+            webphone_api.conference(numtrans);
+$('#numaconference1').modal('hide');
+
+//alert("OK");
+        }
+ function Conference7()
+        {
+
+//numtrans=$('#numaconf2').val();
+
+webphone_api.setline(1);
+            webphone_api.hold(false);
+           webphone_api.setline(2);
+if(webphone_api.isincall!=true)
+{
+            webphone_api.hangup();}
+$('#numaconference1').modal('hide');
+
+//alert("OK");
+        }
+  function hold1(state)
+        {
+//alert('state');
+if(state===true)
+
+         {  
+
+ webphone_api.hold(state);
+document.getElementById('mettreenattenteenv').style.display = 'none';
+document.getElementById('reprendreappelenv').style.display = 'inline-block';}
+if(state===false)
+
+         {   webphone_api.hold(state);
+document.getElementById('reprendreappelenv').style.display = 'none';
+document.getElementById('mettreenattenteenv').style.display = 'inline-block';}
+
+        }
+function mute1(state,direction)
+        {
+if(state===true)
+
+         {   webphone_api.mute(state,direction);
+document.getElementById('coupersonenv').style.display = 'none';
+document.getElementById('reactivesonenv').style.display = 'inline-block';}
+if(state===false)
+
+         {   webphone_api.mute(state,direction);
+document.getElementById('reactivesonenv').style.display = 'none';
+document.getElementById('coupersonenv').style.display = 'inline-block';}
+
+        }
+   
+/*webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname, line, callid)
+        {
+console.log("sirine"+event+direction+peername);
+           
+            
+            // end of a call, even if it wasn't successfull
+         
+});
+/*function testiscall()
+{
+event='test';
+while (  event!=='setup')
+ {
+
+          
+ document.getElementById('status_call').innerHTML ="appel en attente";
+              
+               
+            }
+            
+            // end of a call, even if it wasn't successfull
+         
+
+
+document.getElementById('status_call').innerHTML ="appel en cours";
+
+    }*/
 
 </script>
+<?php    } ?>
+

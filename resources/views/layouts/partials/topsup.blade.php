@@ -3,7 +3,13 @@
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
+<?php   $testphoneaff=0; if (Session::get('telephonie')=='false') { ?>
+<?php $testphoneaff=1; Session::put('telephonie', 'true'); ?>
+<script> testphone=1; </script>
+
+  <script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
+
+<?php } ?>
 <script>var natureappelconf='';var conference=0;var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
 <?php
 use App\Dossier;
@@ -280,11 +286,19 @@ else
            {{ csrf_field() }}
           </form>
         </div>
+<?php    if ($testphoneaff==1) { ?>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
           <a   data-toggle="modal" data-target="#faireappel1" id="phonebtn"  class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:-5px ">
               <span class="fas fa-fw fas fa-phone fa-2x"></span>
           </a> 
         </div>
+<?php   } else {  ?>
+ <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+ <a  id="phonebtn10" href="#" class="btn  btn-lg phone" role="button"   style="color:white;background-color:red; margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
+              <span class="fa fa-fw fa-phone-slash fa-2x"></span>
+          </a> 
+ </div>
+	<?php   } ?>	
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 
 			  <a href="{{ route('entrees.dispatching') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
@@ -1301,7 +1315,25 @@ $('.reloadclass').click(function(){
 
 
 </script>
+<script>
+if(testphone==1)
+{
+$(window).bind('beforeunload', function(){
 
+var val ='false';
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('telephonie.updating') }}",
+            method: "POST",
+            data: {val:val, _token: _token},
+            success: function (data) {
+//alert(data);
+            }
+        });
+    return null;
+});}
+    </script>
+<?php    if ($testphoneaff==1) { ?>
 <script>
 $(document).ready(function() {
 $("#dossiercrlibreencours").select2();
@@ -1924,3 +1956,4 @@ document.getElementById('coupersonenv2').style.display = 'inline-block';}
         }); 
 
 </script>
+<?php    } ?>
