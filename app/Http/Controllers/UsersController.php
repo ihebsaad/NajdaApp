@@ -48,6 +48,22 @@ class UsersController extends Controller
         }
 
      }
+    public function incall(Request $request)
+    {
+      
+	User::where('extension',$request->get('extension'))->update(['incall'=>1]);
+
+
+
+    }
+    public function iscallend(Request $request)
+    {
+      
+	User::where('extension',$request->get('extension'))->update(['incall'=>0]);
+
+
+
+    }
 
  
   public function mails()
@@ -872,6 +888,12 @@ class UsersController extends Controller
 		->where('affiche',0)->count();
 
         return $number;
+    }
+ public function updatingsession(Request $request)
+    {
+        Session::put('telephonie', $request->get('val'));
+return Session::get('telephonie');
+
     }
 
  }
