@@ -1330,7 +1330,7 @@ var val ='false';
 //alert(data);
             }
         });
-    return null;
+    return undefined;
 });}
     </script>
 <?php    if ($testphoneaff==1) { ?>
