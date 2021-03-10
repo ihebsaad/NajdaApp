@@ -120,7 +120,7 @@ else if($iduser===1)
 
 <?php
 }
-else if($iduser===32)
+else if($iduser===41)
 
 {
 
@@ -598,7 +598,7 @@ else
  <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
  <button id="conferenceapp" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference"><i class="fas fa-user-friends"></i> Conférence</button>
 
-<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
+<!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
 
 
 
@@ -900,7 +900,7 @@ else
  <div id="reactivesonenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute2(false,0);"><i class="fas fa-microphone"></i> Réactiver </button></div>
  <button id="transferappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer2"><i class="fas fa-reply-all"></i> Transférer</button>
  <button id="conferenceappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference2"><i class="fas fa-user-friends"></i> Conférence</button>
-<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
+<!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -1123,6 +1123,25 @@ else
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script>
+if(testphone==1)
+{
+//alert('test');
+$(window).bind('beforeunload', function(){
+
+var val ='false';
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('telephonie.updating') }}",
+            method: "POST",
+            data: {val:val, _token: _token},
+            success: function (data) {
+//alert(data);
+            }
+        });
+    return undefined;
+});}
+    </script>
 <script>
 
 $(document).ready(function() {
@@ -1366,24 +1385,7 @@ $iduser=$user->id; ?>
 
 
 </script>
-<script>
-if(testphone==1)
-{
-$(window).bind('beforeunload', function(){
 
-var val ='false';
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('telephonie.updating') }}",
-            method: "POST",
-            data: {val:val, _token: _token},
-            success: function (data) {
-//alert(data);
-            }
-        });
-    return undefined;
-});}
-    </script>
 <?php    if ($testphoneaff==1) { ?>
 <script>
 

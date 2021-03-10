@@ -105,7 +105,7 @@ else if($iduser===1)
 
 <?php
 }
-else if($iduser===32)
+else if($iduser===41)
 
 {
 
@@ -543,7 +543,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
  <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver</button></div>
  <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
 <button id="conferenceapp" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference"><i class="fas fa-user-friends"></i> Conférence</button>
-<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
+<!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -807,7 +807,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
  <div id="reactivesonenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute2(false,0);"><i class="fas fa-microphone"></i> Réactiver </button></div>
  <button id="transferappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer2"><i class="fas fa-reply-all"></i> Transférer</button>
 <button id="conferenceappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference2"><i class="fas fa-user-friends"></i> Conférence</button>
-<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
+<!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -1008,7 +1008,24 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     }
 </style>
 
+<script>
+if(testphone==1)
+{
+$(window).bind('beforeunload', function(){
 
+var val ='false';
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('telephonie.updating') }}",
+            method: "POST",
+            data: {val:val, _token: _token},
+            success: function (data) {
+//alert(data);
+            }
+        });
+    return undefined;
+});}
+    </script>
 
 <script>
 $('.reloadclass').click(function(){
@@ -1315,24 +1332,7 @@ $('.reloadclass').click(function(){
 
 
 </script>
-<script>
-if(testphone==1)
-{
-$(window).bind('beforeunload', function(){
 
-var val ='false';
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('telephonie.updating') }}",
-            method: "POST",
-            data: {val:val, _token: _token},
-            success: function (data) {
-//alert(data);
-            }
-        });
-    return undefined;
-});}
-    </script>
 <?php    if ($testphoneaff==1) { ?>
 <script>
 $(document).ready(function() {
