@@ -87,13 +87,20 @@ $usercomname=$usercom['prenom']." ".$usercom['nom'];}
                      <td style="width:10%;font-size:10px;width:10%;max-width:80px"><?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></td>
                     <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercomname.")"; ?></td>
                       <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecommname.")"; ?></td>
+<?php
+if ($enreg->duration==0)
+{?>
+                
+   <td  style="width:10px;font-size:10px;max-width:2px;float:left    "         >
+        Non répondu</td>  
+<?php } else { ?>
 
-                   <td  style="width:5px;font-size:10px;max-width:2px;float:left    "         >
+               <td  style="width:5px;font-size:10px;max-width:2px;float:left    "         >
          <audio style="width:15px;"controls>
   <source src="<?php   echo  $enreg->path ; ?>" type="audio/wav">
  Your browser does not support the audio element.
 </audio></td>
-                  
+    <?php }  ?>
                     <td  style="width:8%;font-size:10px;max-width:80px   "  ><?php    echo convert($enreg->duration) ; ?></a></td>
                     <!--<td  style="width:8%;font-size:12px;;max-width:80px "><?php // echo DossiersController::RefDossierById($enreg['dossier']).' - '.DossiersController::FullnameAbnDossierById($enreg['dossier']);?></td>!-->
                      <td  style="width:8%;font-size:10px;max-width:80px   "  ><a <?php if ($enreg->typeappels==='émis') {  ?>  href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>" <?php } if ($enreg->typeappels==='reçu'){   if ($enreg->dossier!='') { ?>  href="<?php echo $urlapp.'/entrees/show/',$enreg->id?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$enreg->id?>"    <?php }} ?>   >
