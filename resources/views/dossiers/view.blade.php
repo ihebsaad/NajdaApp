@@ -3385,7 +3385,7 @@ else
  <button id="transferappenv" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer1"><i class="fas fa-reply-all"></i> Transférer</button>
  <button id="conferenceappenv" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference1"><i class="fas fa-user-friends"></i> Conférence</button>
 
-<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>
+<!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
