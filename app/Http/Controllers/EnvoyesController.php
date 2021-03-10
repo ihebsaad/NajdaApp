@@ -475,13 +475,13 @@ $voice="voice_".$envoye['emetteur']."_".$envoye['destinataire'];
        $userpar = auth()->user();
        if($userpar->user_type==="admin")
        {
-        $enregs2 =  DB::table('envoyes')->where('duration','<>',0)->where('type','tel')->orderBy('id', 'desc')->get()->toArray();
+        $enregs2 =  DB::table('envoyes')->where('type','tel')->orderBy('id', 'desc')->get()->toArray();
 
 foreach ($enregs2 as $enreg )
 {
 $enreg->typeappels='émis';
 }
- $enregs1 =  DB::table('entrees')->where('duration','<>',0)->where('type','tel')->whereNotNull('par')->orderBy('id', 'desc')->get()->toArray();
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNotNull('par')->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs1 as $enreg )
 {
 $enreg->typeappels='reçu';
@@ -494,12 +494,12 @@ array_multisort($columns, SORT_DESC, $enregs);
       }
       else
       {
-        $enregs2 =  DB::table('envoyes')->where('duration','<>',0)->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+        $enregs2 =  DB::table('envoyes')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs2 as $enreg )
 {
 $enreg->typeappels='émis';
 }
- $enregs1 =  DB::table('entrees')->where('duration','<>',0)->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+ $enregs1 =  DB::table('entrees')->where('type','tel')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs1 as $enreg )
 {
 $enreg->typeappels='reçu';
@@ -517,13 +517,13 @@ array_multisort($columns, SORT_DESC, $enregs);
          $userpar = auth()->user();
          if($userpar->user_type==="admin")
        {
- $enregs2 =  DB::table('envoyes')->where('duration','<>',0)->where('type','tel')->whereNotNull('dossier')->orderBy('id', 'desc')->get()->toArray();
+ $enregs2 =  DB::table('envoyes')->where('type','tel')->whereNotNull('dossier')->orderBy('id', 'desc')->get()->toArray();
 
 foreach ($enregs2 as $enreg )
 {
 $enreg->typeappels='émis';
 }
-$enregs1 =  DB::table('entrees')->where('duration','<>',0)->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+$enregs1 =  DB::table('entrees')->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs1 as $enreg )
 {
 $enreg->typeappels='reçu';
@@ -535,12 +535,12 @@ array_multisort($columns, SORT_DESC, $enregs);
          }
       else
       {
-$enregs2 =  DB::table('envoyes')->where('duration','<>',0)->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+$enregs2 =  DB::table('envoyes')->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs2 as $enreg )
 {
 $enreg->typeappels='émis';
 }
- $enregs1 =  DB::table('entrees')->where('duration','<>',0)->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNotNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs1 as $enreg )
 {
 $enreg->typeappels='reçu';
@@ -557,13 +557,13 @@ array_multisort($columns, SORT_DESC, $enregs);
          $userpar = auth()->user();
          if($userpar->user_type==="admin")
        {
-  $enregs2 =  DB::table('envoyes')->where('duration','<>',0)->where('type','tel')->whereNull('dossier')->orderBy('id', 'desc')->get()->toArray();
+  $enregs2 =  DB::table('envoyes')->where('type','tel')->whereNull('dossier')->orderBy('id', 'desc')->get()->toArray();
 
 foreach ($enregs2 as $enreg )
 {
 $enreg->typeappels='émis';
 }
- $enregs1 =  DB::table('entrees')->where('duration','<>',0)->where('type','tel')->whereNull('dossier')->whereNotNull('par')->orderBy('id', 'desc')->get()->toArray();
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNull('dossier')->whereNotNull('par')->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs1 as $enreg )
 {
 $enreg->typeappels='reçu';
@@ -577,12 +577,12 @@ array_multisort($columns, SORT_DESC, $enregs);
       }
        else
       {
-$enregs2 =  DB::table('envoyes')->where('duration','<>',0)->where('type','tel')->whereNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+$enregs2 =  DB::table('envoyes')->where('type','tel')->whereNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs2 as $enreg )
 {
 $enreg->typeappels='émis';
 }
- $enregs1 =  DB::table('entrees')->where('duration','<>',0)->where('type','tel')->whereNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
+ $enregs1 =  DB::table('entrees')->where('type','tel')->whereNull('dossier')->where('par', $par)->orderBy('id', 'desc')->get()->toArray();
 foreach ($enregs1 as $enreg )
 {
 $enreg->typeappels='reçu';
