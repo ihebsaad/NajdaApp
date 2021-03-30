@@ -3197,26 +3197,7 @@ $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
                 </div>
 
                 <div class="modal-footer">
-<?php
-$idagent=$dossier->user_id;
-         $CurrentUser = auth()->user();
-         $iduser=$CurrentUser->id;
 
-if($iduser===32)
-{
-?>
-                        <input id="extensiontel" name="extensiontel" type="hidden" value="2000">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="3862oOPD3F">
-<?php
-}
-else
-{
-?>
- <input id="extensiontel" name="extensiontel" type="hidden" value="2001">
-                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="z6Hm&FqQF2G@S3">
-<?php
-}
-?>
 
                     <button type="button"  class="btn btn-primary"  onclick="ButtonOnclick();">Appeler</button>
    
@@ -3319,7 +3300,7 @@ else
     </div>
 <!--Modal Tel 2-->
 
-    <div class="modal fade" id="appelinterfaceenvoi"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" data-backdrop="static"  data-keyboard="false" >
+    <div class="modal fade" id="appelinterfaceenvoi"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" data-backdrop="static"  data-keyboard="false" style="z-index:10000!important;" >
         <div class="modal-dialog" role="telenvoi"  sytle="width:20px;height:10px">
             <div class="modal-content">
                 <div class="modal-header">
@@ -3347,7 +3328,7 @@ else
  <div>
 <input id="numencours" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
-<div id='compterendudossierencours' style="display:none"><label style="color:green;font-size: 30px;">Compte rendu</label>
+<div  id='compterendudossierencours' style="display:none"><label style="color:green;font-size: 30px;"style="left: 20px;">Compte rendu</label>
     <div class="form-group">
                             <label for="sujetcrteldossierencours">Sujet :</label>
                             <input type="text"    id="sujetcrteldossierencours"   class="form-control" name="sujetcrteldossierencours"    />
