@@ -75,7 +75,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                                     $iduser=Auth::id();
                                   //  if ($iduser==$disp) { ?>
-                                    <?php if($entree['type']!=="tel") {?>
+                                    <?php if($entree['type']!=="tel" || $entree['par']===null ) {?>
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" style="color:black" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
