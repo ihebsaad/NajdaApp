@@ -340,6 +340,7 @@ else
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
         </div>
+
 <?php   } else {  ?>
  <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
  <a  id="phonebtn10" href="#" class="btn  btn-lg phone" role="button"   style="color:white;background-color:red; margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
@@ -910,7 +911,7 @@ else
         </div>
 
     </div>
-    <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappel" data-backdrop="static"  data-keyboard="false" >
+    <div class="modal  " style=" z-index: 1000000!important;left: 20px;"  id="crenduappel" data-backdrop="static"  data-keyboard="false" >
         <div class="modal-dialog" >
             <div class="modal-content">
                 <div class="modal-header">
@@ -1388,6 +1389,15 @@ $iduser=$user->id; ?>
 
 <?php    if ($testphoneaff==1) { ?>
 <script>
+$('#phonebtn1').on('click', function(event) {
+                           
+                         
+                                window.open('http://192.168.1.249/najdatest/public/webphone/najdaapp/webphone/samples/mobile.html');
+
+                               
+
+
+                        });
 
 $(document).ready(function() {
   $("#dossiercrlibreencours").select2();
@@ -1518,6 +1528,7 @@ document.getElementById('repondre').style.display = 'none';
 if (event === 'connected' && direction == 1 && conference!=1 )
 
                 {
+//alert(peername);
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
@@ -1593,6 +1604,7 @@ $('#appelinterfacerecep').modal('hide');
 } 
 if (event === 'disconnected' && direction == 1  && conference!=1    )
 {
+//alert(peername);
 // location.reload();
 $('#appelinterfaceenvoi2').modal('hide');
 $('#appelinterfaceenvoi').modal('hide');}
@@ -1607,6 +1619,8 @@ if(duration==0  && conference==1)
 {
 if(direction==1)
 {
+//alert(caller);
+//alert(caller);
  var caller=document.getElementById('numtel1').value;}
 
 webphone_api.setline(caller);
@@ -2151,6 +2165,46 @@ $(".modal-body #nomencours").val(nom );
   webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
  webphone_api.start();*/
             num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+//alert(webphone_api.getstatus());
+//document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
+                webphone_api.call(num);
+
+//testiscall();
+
+
+}
+ function ButtonOnclick3(num,nom)
+        {
+//alert(num);
+
+document.getElementById('natureappel').value='dossier';
+
+                     $('#appelinterfaceenvoi').modal({show:true});
+
+
+     
+
+     $(".modal-body #numencours").val( num );
+
+//alert(nom);
+$(".modal-body #nomencours").val(nom);
+  $("#faireappel").modal('hide');
+                
+ 
+  /**Configuration parameters*/
+ /*var extensiontel = $('#extensiontel').val();
+ var motdepassetel = $('#motdepassetel').val();
+//alert(extensiontel);
+        webphone_api.parameters['username'] = extensiontel;      // SIP account username
+        webphone_api.parameters['password'] = motdepassetel;      // SIP account password (see the "Parameters encryption" in the documentation)        
+        webphone_api.parameters['callto'] = '';        // destination number to call
+        webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
+        webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
+
+  webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
+
+ webphone_api.start();*/
+            ////num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
 //alert(webphone_api.getstatus());
 //document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
                 webphone_api.call(num);
