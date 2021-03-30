@@ -84,7 +84,9 @@ $adressecommname=$adressecomm['name']." ".$adressecomm['lastname'];
 $usercomname=$usercom['prenom']." ".$usercom['nom'];}
               ?>
                 <tr> 
-                     <td style="width:10%;font-size:10px;width:10%;max-width:80px"><?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></td>
+                     <td style="width:10%;font-size:10px;width:10%;max-width:80px"><a <?php if ($enreg->typeappels==='émis') {  ?>  href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>" <?php } if ($enreg->typeappels==='reçu'){   if ($enreg->dossier!='') { ?>  href="<?php echo $urlapp.'/entrees/show/',$enreg->id?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$enreg->id?>"    <?php }} ?>   >
+
+                        <?php  echo  date('d/m/Y H:i', strtotime($enreg->reception)) ; ?></a></td>
                     <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->emetteur." (".$usercomname.")"; ?></td>
                       <td  style="width:10%;font-size:10px;max-width:100px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $enreg->destinataire." (".$adressecommname.")"; ?></td>
 <?php
@@ -103,8 +105,8 @@ if ($enreg->duration==0)
     <?php }  ?>
                     <td  style="width:8%;font-size:10px;max-width:80px   "  ><?php    echo convert($enreg->duration) ; ?></a></td>
                     <!--<td  style="width:8%;font-size:12px;;max-width:80px "><?php // echo DossiersController::RefDossierById($enreg['dossier']).' - '.DossiersController::FullnameAbnDossierById($enreg['dossier']);?></td>!-->
-                     <td  style="width:8%;font-size:10px;max-width:80px   "  ><a <?php if ($enreg->typeappels==='émis') {  ?>  href="<?php echo $urlapp.'/envoyes/view/',$enreg->id?>" <?php } if ($enreg->typeappels==='reçu'){   if ($enreg->dossier!='') { ?>  href="<?php echo $urlapp.'/entrees/show/',$enreg->id?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$enreg->id?>"    <?php }} ?>   >
-                        <?php    echo $enreg->sujet ; ?></a></td>
+                     <td  style="width:8%;font-size:10px;max-width:80px   "  >
+                        <?php    echo $enreg->sujet ; ?></td>
  <td style="width:10%;font-size:10px;width:10%;max-width:80px"><?php  echo $enreg->typeappels ; ?></td>
                     <td stle=";max-width:60px">
                         @can('isAdmin')
