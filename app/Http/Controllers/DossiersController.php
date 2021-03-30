@@ -2421,9 +2421,16 @@ $hist->save();
 
 
           foreach ($tels as $tel) {
+$nom= $tel->nom.' '.$tel->prenom.' ( '.$tel->remarque .' ) ';
+$nom1="'".$nom."'";
+$num=$tel->champ;
               $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>'; ?>
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>'; 
+$output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer"  ><i class="fas fa-phone"></i> Appeler </a></td>';
+?>
+
+
               <?php if ($tel->typetel == 'Mobile') {
                   $output .= '<td><a onclick="setTel(this);" class="' . $tel->champ . '" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
               } else {
@@ -2499,9 +2506,10 @@ $hist->save();
           $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
 
 
-          $tels =   Adresse::where('nature', 'tel')
-              ->where('parent',$prestataire)
+           $tels = Adresse::where('nature', 'telinterv')
+              ->where('parent', $prestataire)
               ->get();
+
 
           $output .= '  <div id="item'.$c . '-m" style="display:none;;padding: 20px 20px 20px 20px; border:3px dotted #4fc1e9">
                                                                                    
@@ -2520,11 +2528,19 @@ $hist->save();
 
 
           foreach ($tels as $tel) {
+
+$nom= $tel->nom.' '.$tel->prenom.' ( '.$tel->remarque .' ) ';
+$nom1="'".$nom."'";
+$num=$tel->champ;
               $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';?>
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';
+
+$output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer"  ><i class="fas fa-phone"></i> Appeler </a></td>';
+?>
 <?php if($tel->typetel=='Mobile') {
                   $output .= '<td><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
+
                     } else
                       { $output .= '<td></td>';}
 
