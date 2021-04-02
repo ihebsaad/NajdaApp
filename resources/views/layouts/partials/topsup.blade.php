@@ -543,9 +543,77 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
  <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver</button></div>
  <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
 <button id="conferenceapp" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference"><i class="fas fa-user-friends"></i> Conférence</button>
+<button id="calvier3" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#clavier3"><i class="fas fa-keyboard"></i> Clavier</button>
 <!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+<!--Modal Tel clavier-->
+
+    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="clavier3"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="clavier">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Taper le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="clavier3" novalidate="novalidate">
+
+                               
+             <div class="btn-group-vertical ml-4 mt-4" role="group" aria-label="Basic example">
+    <div class="btn-group">
+        <input class="text-center form-control-lg mb-2" id="code3">
+    </div>
+<br> <br>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '1';">1</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '2';">2</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '3';">3</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '4';">4</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '5';">5</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '6';">6</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '7';">7</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '8';">8</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '9';">9</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '*';">*</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '0';">0</button>
+    <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code3').value=document.getElementById('code3').value + '#';">#</button>
+    </div>
+</div>  
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+<?php
+
+?>
+
+                    <button type="button"  class="btn btn-primary" onclick="dtmfmessage3();">Envoyer
+</button>
+      
+   
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 
                 </div>
             </div>
@@ -807,8 +875,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
  <div id="reactivesonenv2" style="display:none;"><button type="button"  class="btn btn-primary"  onclick="mute2(false,0);"><i class="fas fa-microphone"></i> Réactiver </button></div>
  <button id="transferappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numatransfer2"><i class="fas fa-reply-all"></i> Transférer</button>
 <button id="conferenceappenv2" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference2"><i class="fas fa-user-friends"></i> Conférence</button>
+<button id="calvier" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#clavier"><i class="fas fa-keyboard"></i> Clavier</button>
 <!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
+
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
                 </div>
@@ -959,6 +1029,73 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         </div>
     </div>
 </div>
+<!--Modal Tel clavier-->
+
+    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="clavier"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="clavier">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Taper le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="clavier" novalidate="novalidate">
+
+                               
+             <div class="btn-group-vertical ml-4 mt-4" role="group" aria-label="Basic example">
+    <div class="btn-group">
+        <input class="text-center form-control-lg mb-2" id="code">
+    </div>
+<br> <br>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '1';">1</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '2';">2</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '3';">3</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '4';">4</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '5';">5</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '6';">6</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '7';">7</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '8';">8</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '9';">9</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '*';">*</button>
+        <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '0';">0</button>
+    <button type="button" class="btn btn-outline-secondary py-3" onclick="document.getElementById('code').value=document.getElementById('code').value + '#';">#</button>
+    </div>
+</div>  
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+<?php
+
+?>
+
+                    <button type="button"  class="btn btn-primary" onclick="dtmfmessage();">Envoyer
+</button>
+      
+   
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
 <style>
     @media  (max-width: 1280px)  /*** 150 % ***/  {
@@ -1450,6 +1587,7 @@ document.getElementById('mettreenattente').style.display = 'inline-block';
  document.getElementById('couperson').style.display = 'inline-block'; 
 document.getElementById('transferapp').style.display = 'inline-block';
 document.getElementById('conferenceapp').style.display = 'inline-block';
+document.getElementById('calvier3').style.display = 'inline-block';
 document.getElementById('status_call').innerHTML="Appel en cours"; 
 document.getElementById('repondre').style.display = 'none';
              }  
@@ -1480,7 +1618,8 @@ document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
  document.getElementById('coupersonenv2').style.display = 'inline-block'; 
 document.getElementById('transferappenv2').style.display = 'inline-block';
 document.getElementById('conferenceappenv2').style.display = 'inline-block';
-document.getElementById('status_callenv2').innerHTML="Appel en cours"; } 
+document.getElementById('status_callenv2').innerHTML="Appel en cours";
+document.getElementById('calvier').style.display = 'inline-block'; } 
 if (event === 'disconnected' && direction == 2 && webphone_api.isincall()!=true && conference!=1)
 {
 //webphone_api.setline(peername);
@@ -1822,6 +1961,22 @@ webphone_api.setline(2);
             webphone_api.call(numtrans);
 //alert("OK");
         }
+function dtmfmessage()
+{
+
+msg=document.getElementById('code').value.toString();
+alert(msg);
+webphone_api.dtmf(-2,msg);
+alert('succes');
+}
+function dtmfmessage3()
+{
+
+msg=document.getElementById('code3').value.toString();
+alert(msg);
+webphone_api.dtmf(-2,msg);
+alert('succes');
+}
 function transfer4()
 {
 webphone_api.setline(1);
