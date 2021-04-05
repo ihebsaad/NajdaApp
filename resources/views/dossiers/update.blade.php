@@ -191,6 +191,10 @@ use  \App\Http\Controllers\PrestatairesController;
                         <a data-toggle="modal" data-target="#faireappel" onclick="ShowNumsAss();" style="font-size:17px;height:30px;margin-bottom:5px;">
                             À l'assuré   </a>
                     </li>
+<li>
+                        <a data-toggle="modal" data-target="#faireappellibre"  style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Libre  </a>
+                    </li>
 
                 </ul>
             </div>
@@ -2596,6 +2600,46 @@ $idagent=$dossier->user_id;
     </div>
 
 </div>
+<div class="modal fade" id="faireappellibre"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="tel">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Choisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="faireappellibre" novalidate="novalidate">
+
+                                <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}" />
+                                     <label for="emaildoss">Numéro</label>
+
+                                	<input class="form-control" id="numtel20" name="numtel20" type="text"  value="" placeholder="Enter Numéro">
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+
+                    <button type="button"  class="btn btn-primary"  onclick="ButtonOnclick4();">Appeler</button>
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 <!--Modal Tel-->
 
     <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
