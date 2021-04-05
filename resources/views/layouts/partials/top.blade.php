@@ -339,6 +339,11 @@ else
           <a  data-toggle="modal" data-target="#faireappel1" id="phonebtn" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button"  data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
+  </div>
+<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;padding-left:5px;padding-right:150px;">
+ <button  id="reacttel" href="#" class="btn btn-primary btn-lg btn-responsive phone">
+            Réactiver
+          </button> 
         </div>
 
 <?php   } else {  ?>
@@ -347,6 +352,11 @@ else
               <span class="fa fa-fw fa-phone-slash fa-2x"></span>
           </a> 
  </div>
+<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;padding-left:5px;padding-right:150px;">
+ <button  id="reacttel" href="#" class="btn btn-primary btn-lg btn-responsive phone">
+            Réactiver
+          </button> 
+        </div>
 	<?php   } ?>	 <?php
 
         $disp=$seance->dispatcheur ;
@@ -1104,7 +1114,7 @@ else
                 <div class="modal-header">
                     <h5 class="modal-title" style="text-align:center"  id=""><center>Dispatch et Compte Rendu </center> </h5>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow:hidden;">
                     <div class="card-body">
 <input type="hidden"    id="idenvoyetellibre"   class="form-control" name="idenvoyetellibre" />
                       
@@ -1153,7 +1163,7 @@ else
             </div>
         </div>
     </div>
-     <div class="modal  " style="z-index:10000!important;left: 20px;"  id="crenduappelrecu"  data-backdrop="static"  data-keyboard="false">
+     <div class="modal  " style="left: 20px;"  id="crenduappelrecu"  data-backdrop="static"  data-keyboard="false">
         <div class="modal-dialog" >
             <div class="modal-content">
                 <div class="modal-header">
@@ -1259,6 +1269,21 @@ else
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script>
+$('#reacttel').click(function() {
+
+var val ='false';
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('telephonie.updating') }}",
+            method: "POST",
+            data: {val:val, _token: _token},
+            success: function (data) {
+location.reload();
+//alert(data);
+            }
+        });
+    return undefined;
+});
 if(testphone==1)
 {
 //alert('test');
@@ -1275,7 +1300,9 @@ var val ='false';
             }
         });
     return undefined;
-});}
+});
+
+}
     </script>
 <script>
 
@@ -1535,6 +1562,8 @@ $('#phonebtn1').on('click', function(event) {
 
 $(document).ready(function() {
   $("#dossiercrlibreencours").select2();
+$("#dossiercrlibre").select2();
+ $("#dossiercrrecu").select2();
  $("#dossiercrrecuencours").select2();
 var countrecep=1;
 var extensiontel = $('#extensiontel').val();
@@ -2336,6 +2365,44 @@ $(".modal-body #nomencours").val(nom );
 
 
 }
+function ButtonOnclick4()
+        {
+
+document.getElementById('natureappel').value='dossier';
+
+                     $('#appelinterfaceenvoi').modal({show:true});
+
+
+      var num=document.getElementById('numtel20').value;
+//alert(num);
+     $(".modal-body #numencours").val( num );
+
+//alert(nom);
+
+  $("#faireappellibre").modal('hide');
+                
+ 
+  /**Configuration parameters*/
+ /*var extensiontel = $('#extensiontel').val();
+ var motdepassetel = $('#motdepassetel').val();
+//alert(extensiontel);
+        webphone_api.parameters['username'] = extensiontel;      // SIP account username
+        webphone_api.parameters['password'] = motdepassetel;      // SIP account password (see the "Parameters encryption" in the documentation)        
+        webphone_api.parameters['callto'] = '';        // destination number to call
+        webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
+        webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
+  webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
+ webphone_api.start();*/
+           
+//alert(webphone_api.getstatus());
+//document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
+                webphone_api.call(num);
+
+//testiscall();
+
+
+}
+
  function ButtonOnclick3(num,nom)
         {
 //alert(num);

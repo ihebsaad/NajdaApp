@@ -292,12 +292,22 @@ else
               <span class="fas fa-fw fas fa-phone fa-2x"></span>
           </a> 
         </div>
+<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;padding-left:5px;padding-right:150px;">
+ <button  id="reacttel" href="#" class="btn btn-primary btn-lg btn-responsive phone">
+            Réactiver
+          </button> 
+        </div>
 <?php   } else {  ?>
  <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
  <a  id="phonebtn10" href="#" class="btn  btn-lg phone" role="button"   style="color:white;background-color:red; margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
               <span class="fa fa-fw fa-phone-slash fa-2x"></span>
           </a> 
  </div>
+<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;padding-left:5px;padding-right:150px;">
+ <button  id="reacttel" href="#" class="btn btn-primary btn-lg btn-responsive phone">
+            Réactiver
+          </button> 
+        </div>
 	<?php   } ?>	
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 
@@ -1146,6 +1156,21 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 </style>
 
 <script>
+$('#reacttel').click(function() {
+
+var val ='false';
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('telephonie.updating') }}",
+            method: "POST",
+            data: {val:val, _token: _token},
+            success: function (data) {
+location.reload();
+//alert(data);
+            }
+        });
+    return undefined;
+});
 if(testphone==1)
 {
 $(window).bind('beforeunload', function(){
