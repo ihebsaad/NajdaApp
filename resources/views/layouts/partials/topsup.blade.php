@@ -10,14 +10,13 @@
   <script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
 
 <?php } ?>
-<script>var natureappelconf='';var conference=0;var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
+<script>var incall2=0; var natureappelconf='';var conference=0;var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
 <?php
 use App\Dossier;
      $listedossiersappel= Dossier::where('current_status','<>','Cloture')->orderby('id','desc')
              ->get();
     $CurrentUser = auth()->user();
          $iduser=$CurrentUser->id;
-
 
 if($iduser===49)
 {
@@ -135,6 +134,7 @@ else
 }
 
 ?>
+
 
 
 <header class="header">
@@ -472,7 +472,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     </div>
 <!--Modal Tel 2-->
 
-    <div class="modal fade" id="appelinterfacerecep"    role="dialog" aria-labelledby="basicModal" aria-hidden="true" data-backdrop="static"  data-keyboard="false" >
+    <div style="overflow-y:scroll;"class="modal fade" id="appelinterfacerecep"    role="dialog" aria-labelledby="basicModal" aria-hidden="true" data-backdrop="static"  data-keyboard="false">
  <div class="modal-dialog modal-lg" role="telrecep"  sytle="width:200px;height:30px">
             <div class="modal-content">
                 <div class="modal-header">
@@ -484,11 +484,22 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                         <div class="form-group">
                             {{ csrf_field() }}
-
+<div id="divtableappels1" style="display:none;">
                             <form id="appelinterfacerecep" novalidate="novalidate">
- 
-            
-                <div style="font-size: 30px;">
+<table class="table table-striped" id="tableappels1" style="width:100%;margin-top:15px;">
+                            <thead>
+                            <tr id="headtable">
+                                <th style="">Numéro</th>
+                                <th style="">Actions</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+</div>
+  
+            <div style="font-size: 30px;">
 
 <label style="color:green;font-size: 30px;"id="status_call"></label>
 
@@ -501,14 +512,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
  <div>
 <input id="numencoursrecep" name="numencours" type="text" readonly value="" style="font-size: 30px;border: none;">
 </div>
-<div id='compterendurecuencours' style="display:none"><label style="color:green;font-size: 30px;">Dispatch et Compte rendu</label>
+ <div id='compterendurecuencours' style="display:none"><label style="color:green;font-size: 30px;">Dispatch et Compte rendu</label>
  <div class="form-group">
                             <label for="dossiercrrecuencours">Dossier :</label>
                             <select   id="dossiercrrecuencours"  style="width:100%;"  name="dossiercrrecuencours"     >
                                 <option></option>
                                 <?php 
 
-                                foreach($listedossiersappel as $ds)
+                                foreach($listedossiers as $ds)
                                 {
                                 echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  
                                 ?>
@@ -532,8 +543,66 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             <textarea style="height:100px;" id="contenucrrecuencours"   class="form-control" name="contenucrrecuencours"    ></textarea>
 
                         </div>
+<button id="repondre" type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
+ <button id="racc2" type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher </button>
+ <div id="mettreenattente" style="display :none;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> En attente</button></div>
+ <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
+ <div id="couperson" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper</button></div>
+ <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver</button></div>
+ <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
+ <button id="conferenceapp" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference"><i class="fas fa-user-friends"></i> Conférence</button>
+<button id="calvier3" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#clavier3"><i class="fas fa-keyboard"></i> Clavier</button>
+<button style="display :none;" id="pass2" type="button"  class="btn btn-primary"  onclick="pass21();"><i class="fas fa-phone-volume"></i>deuxiéme appel</button> 
   </div>
+ <div style="font-size: 30px;">
 
+<label style="color:green;font-size: 30px;"id="status_call12"></label>
+
+
+<label style="margin-left:180px;font-size: 30px;"id="minutes12"></label>
+<label style="font-size:30px;" id="seconds12"></label>
+
+</div>
+<input id="nomencoursrecep12" name="nomencours12" type="text" readonly value="" style="font-size: 30px;border: none;">
+ <div>
+<input id="numencoursrecep12" name="numencours12" type="text" readonly value="" style="font-size: 30px;border: none;">
+</div>
+ <div id='compterendurecuencours12' style="display:none"><label style="color:green;font-size: 30px;">Dispatch et Compte rendu</label>
+ <div class="form-group">
+                            <label for="dossiercrrecuencours12">Dossier :</label>
+                            <select   id="dossiercrrecuencours12"  style="width:100%;"  name="dossiercrrecuencours12"     >
+                                <option></option>
+                                <?php 
+
+                                foreach($listedossiers as $ds)
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  
+                                ?>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sujetcrrecuencours12">Sujet :</label>
+                            <input type="text"    id="sujetcrrecuencours12"   class="form-control" name="sujetcrrecuencours12"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descriptioncrrecuencours12">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncrrecuencours12"   class="form-control" name="descriptioncrrecuencours12"    />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenucrrecuencours12">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucrrecuencours12"   class="form-control" name="contenucrrecuencours12"    ></textarea>
+
+                        </div>
+<input type="hidden" value="" id="cr1">
+<input type="hidden" value="" id="cr2">
+  </div>
+            
+ 
 
                             </form>
 
@@ -543,18 +612,19 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 </div>
 
                 <div class="modal-footer">
-
-
-<button id="repondre" type="button"  class="btn btn-primary"  onclick="accept();"><i class="fas fa-phone-volume"></i> Répondre</button>              
- <button type="button"  class="btn btn-primary"  onclick="Hangup();"><i class="fas fa-phone-slash"></i> Raccrocher</button>
- <div id="mettreenattente" style="display :none;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i>En attente</button></div>
- <div id="reprendreappel" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
- <div id="couperson" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper</button></div>
- <div id="reactiveson" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver</button></div>
- <button id="transferapp" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
-<button id="conferenceapp" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference"><i class="fas fa-user-friends"></i> Conférence</button>
-<button id="calvier3" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#clavier3"><i class="fas fa-keyboard"></i> Clavier</button>
+<button id="racc12" type="button" style="display :none;"  class="btn btn-primary"  onclick="Hangup21();"><i class="fas fa-phone-slash"></i> Raccrocher </button>
+ <div id="mettreenattente12" style="display :none;"><button type="button"  class="btn btn-primary" onclick="hold(true);" ><i class="fas fa-pause"></i> En attente</button></div>
+ <div id="reprendreappel12" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="hold(false);"><i class="fas fa-phone"></i> Reprendre</button></div>
+ <div id="couperson12" style="display :none;"><button type="button"  class="btn btn-primary" onclick="mute(true,0);" ><i class="fas fa-microphone-slash"></i> Couper</button></div>
+ <div id="reactiveson12" style="display :none;"><button type="button"  class="btn btn-primary"  onclick="mute(false,0);"><i class="fas fa-microphone"></i> Réactiver</button></div>
+ <button id="transferapp12" type="button"  style="display :none;" class="btn btn-primary" data-toggle="modal" data-target="#numatransfer"><i class="fas fa-reply-all"></i> Transférer</button>
+ <button id="conferenceapp12" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#numaconference"><i class="fas fa-user-friends"></i> Conférence</button>
+<button id="calvier12" style="display:none;" type="button"  class="btn btn-primary" data-toggle="modal" data-target="#clavier3"><i class="fas fa-keyboard"></i> Clavier</button>
+<button id="pass1" style="display :none;"  type="button"  class="btn btn-primary"  onclick="pass();"><i class="fas fa-phone-volume"></i>premier appel</button> 
 <!--<button type="button" class="btn btn-secondary reloadclass" data-dismiss="modal">Fermer</button>!-->
+
+
+
               <!--<button type="button"  class="btn btn-primary"  onclick="transfer();">Transférer</button>    
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>!-->
 
@@ -1526,6 +1596,7 @@ if (tabcall[index+1]==2){
 //alert("ko");
 //alert(tabcall);
 $('table#tableappels tr#'+peername).remove();
+$('table#tableappels1 tr#'+peername).remove();
 var index = tabcall.indexOf(peername);
 if (index >= 0) {
 tabcall.splice( index+1, 1 );
@@ -1541,11 +1612,22 @@ tabcall.splice( index+1, 1 );
                 {
 tabcall.push(peername);
 tabcall.push(0);
-//alert(tabcall);
 aurlf="<button  style='color:green' href='#' onclick='accept4(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
 aurlf1="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
+aurlf2="<button  style='color:green' href='#' onclick='accept5(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
+aurlf3="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
+
+
+document.getElementById('divtableappels1').style.display = 'block';
+ $("#tableappels1 tbody").append("<tr id='"+peername+"'><td>"+peerdisplayname+"</td><td>"+aurlf2+'  '+aurlf3+"</td></tr>");
+
+
+if(incall!=1)
+{
+
 $('#modalappels').modal({show: true});
  $("#tableappels tbody").append("<tr id='"+peername+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
+
 if(acceptvar===peername)
 {
 alert(acceptvar);
@@ -1560,20 +1642,28 @@ $.ajax({
                       
 //alert('test');
 $('table#tableappels tr#'+data).remove();
-
+$('table#tableappels1 tr#'+data).remove();
                     }
                 });
-}
+}}
               
   
 
-               
-                }  
+                }
+  
  if (event === 'connected' && direction == 2  && conference!=1 )
 
                 {
+if (incall2==1){
+document.getElementById("cr2").value=peername;
+}else {
+document.getElementById("cr1").value=peername;
+}
+
+if(incall2!=1)
+{
+//alert('testconnect');
 $('#modalappels').modal('hide');
-   document.getElementById('natureappelrecu').value='librerecu';    
 $('#appelinterfacerecep').modal({show: true});
             $(".modal-body #numencoursrecep").val(peerdisplayname );
 var _token = $('input[name="_token"]').val();
@@ -1584,10 +1674,10 @@ $.ajax({
                     data:'_token='+_token+'&peerdisplayname='+peername,
                     success:function(data)
                     {
-                         $(".modal-body #nomencoursrecep").val(data );
-                    }
-                });  
-
+//if(incall != 1){
+                         $(".modal-body #nomencoursrecep").val(data );}
+                   // }
+                });
 var minutesLabel1 = document.getElementById("minutes1");
 var secondsLabel1 = document.getElementById("seconds1");
 var totalSeconds1 = 0;
@@ -1613,8 +1703,59 @@ document.getElementById('mettreenattente').style.display = 'inline-block';
 document.getElementById('transferapp').style.display = 'inline-block';
 document.getElementById('conferenceapp').style.display = 'inline-block';
 document.getElementById('calvier3').style.display = 'inline-block';
-document.getElementById('status_call').innerHTML="Appel en cours"; 
+document.getElementById('status_call').innerHTML="Appel en cours";
 document.getElementById('repondre').style.display = 'none';
+document.getElementById('pass2').style.display = 'inline-block';
+}
+else
+{
+document.getElementById('divtableappels1').style.display = 'none';
+    $(".modal-body #numencoursrecep12").val(peerdisplayname );
+var _token = $('input[name="_token"]').val();
+$.ajax({
+
+                    url:"{{ route('entrees.detectnom')}}",
+                    method:"POST",
+                    data:'_token='+_token+'&peerdisplayname='+peername,
+                    success:function(data)
+                    {
+//if(incall != 1){
+                         $(".modal-body #nomencoursrecep12").val(data );}
+                   // }
+                });
+var minutesLabel12 = document.getElementById("minutes12");
+var secondsLabel12 = document.getElementById("seconds12");
+var totalSeconds12 = 0;
+setInterval(setTime12, 1000);
+
+function setTime12() {
+  ++totalSeconds12;
+  secondsLabel12.innerHTML = pad12(totalSeconds12 % 60);
+  minutesLabel12.innerHTML = pad12(parseInt(totalSeconds12 / 60))+":";
+}
+
+function pad12(val12) {
+  var valString12 = val12 + "";
+  if (valString12.length < 2) {
+    return "0" + valString12;
+  } else {
+    return valString12;
+  }
+}
+
+document.getElementById('compterendurecuencours12').style.display = 'block';
+document.getElementById('racc12').style.display = 'inline-block';
+document.getElementById('mettreenattente12').style.display = 'inline-block';
+ document.getElementById('couperson12').style.display = 'inline-block'; 
+document.getElementById('transferapp12').style.display = 'inline-block';
+document.getElementById('conferenceapp12').style.display = 'inline-block';
+document.getElementById('calvier12').style.display = 'inline-block';
+document.getElementById('status_call12').innerHTML="Appel en cours";
+
+document.getElementById('pass1').style.display = 'inline-block';
+
+
+}
              }  
 if (event === 'connected' && direction == 1 && conference!=1)
 
@@ -1651,6 +1792,7 @@ if (event === 'disconnected' && direction == 2 && webphone_api.isincall()!=true 
            //webphone_api.hangup(true);
 $('table#tableappels tr#'+peername).remove();
 
+
 incall = 0;
 var Countappelsrecus = $('#tableappels tr').length;
 //alert(Countappelsrecus);
@@ -1658,7 +1800,11 @@ if(Countappelsrecus===1)
 {
 $('#modalappels').modal('hide');
 }
+//alert(webphone_api.isincall ());
 $('#appelinterfacerecep').modal('hide');
+
+
+ //location.reload();
 
 
 } 
@@ -1746,20 +1892,56 @@ var durationSec = Math.floor((durationInt+500)/1000);
 var _token = $('input[name="_token"]').val();
 
 var natureappelrecu = $('#natureappelrecu').val();
-var contenu = document.getElementById('contenucrrecuencours').value;
+ var contenu1 = document.getElementById('contenucrrecuencours12').value;
+            var sujet1 = document.getElementById('sujetcrrecuencours12').value;
+             var description1 = document.getElementById('descriptioncrrecuencours12').value;
+           var dossier1 = $('#dossiercrrecuencours12').val();
+
+
+var cr1=document.getElementById("cr1").value;
+var cr2=document.getElementById("cr2").value;
+
+  var contenu = document.getElementById('contenucrrecuencours').value;
             var sujet = document.getElementById('sujetcrrecuencours').value;
             var description = document.getElementById('descriptioncrrecuencours').value;
-            var dossier = $('#dossiercrrecuencours').val();
+             var dossier = $('#dossiercrrecuencours').val();
+
+
             var iduser=document.getElementById('iduser').value;
 
 $.ajax({
 
                     url:"{{ route('entrees.entreetel')}}",
                     method:"POST",
-              data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu+'&contenu='+contenu+'&sujet='+sujet+'&description='+description+'&dossier='+dossier+'&iduser='+iduser,
+              data:'_token='+_token+'&caller='+caller+'&called='+called+'&duration='+durationSec+'&natureappelrecu='+natureappelrecu+'&contenu='+contenu+'&sujet='+sujet+'&description='+description+'&dossier='+dossier+'&iduser='+iduser+'&contenu1='+contenu1+'&sujet1='+sujet1+'&description1='+description1+'&dossier1='+dossier1+'&incall2='+incall2+'&cr1='+cr1+'&cr2='+cr2,
                   
                     success:function(data)
                     {
+if((data['emetteur'].split(' -'))[0]==document.getElementById('cr1').value)
+{incall2=-1;
+
+
+document.getElementById('descriptioncrrecuencours').value='';
+document.getElementById('sujetcrrecuencours').value='';
+  document.getElementById('dossiercrrecuencours').value='';
+  //document.getElementById('dossiercrrecuencours').value='';
+ document.getElementById('contenucrrecuencours').value=''; 
+$(".modal-body #nomencoursrecep").val('');   
+$(".modal-body #numencoursrecep").val(''); 
+document.getElementById("minutes1").innerHTML='';
+ document.getElementById("seconds1").innerHTML='';
+}
+else
+{incall2=0;
+
+document.getElementById('sujetcrrecuencours12').value='';
+document.getElementById('descriptioncrrecuencours12').value='';
+  document.getElementById('dossiercrrecuencours12').value='';
+ document.getElementById('contenucrrecuencours12').value=''; 
+$(".modal-body #nomencoursrecep12").val('');   
+$(".modal-body #numencoursrecep12").val(''); 
+document.getElementById("minutes12").innerHTML='';
+ document.getElementById("seconds12").innerHTML='';}
                     if(natureappelrecu==="librerecu" && incall != 1 && conference!=1)
                       {
 
@@ -1786,9 +1968,16 @@ $('#dossiercrrecu').val(data['dossier']);  }
 }}
 });
 });
-      function Hangup()
+    function Hangup()
         {
-   if(webphone_api.isincall())
+    
+if(incall2===1)
+{
+ webphone_api.hangup();
+}
+else
+{
+if(webphone_api.isincall())
 {webphone_api.setline(-2);
             webphone_api.hangup();
               conference = 0; 
@@ -1797,10 +1986,55 @@ else
 {conference = 0;
 incall = 0;
 $('#appelinterfacerecep').modal('hide');
-location.reload();}
+location.reload();}}
        
-            
         }
+  function Hangup21()
+        {
+    
+if(incall2===1)
+{
+webphone_api.setline(2);
+ webphone_api.hangup();
+}
+else
+{
+if(webphone_api.isincall())
+{webphone_api.setline(2);
+            webphone_api.hangup();
+              conference = 0; 
+incall = 0;  }
+else
+{conference = 0;
+incall = 0;
+$('#appelinterfacerecep').modal('hide');
+location.reload();}}
+       
+        }
+function pass()
+{
+
+webphone_api.setline(1);
+webphone_api.hold(false);
+
+webphone_api.setline(2);
+webphone_api.hold(true);
+
+
+
+}
+function pass21()
+{
+
+webphone_api.setline(2);
+webphone_api.hold(false);
+
+webphone_api.setline(1);
+webphone_api.hold(true);
+
+
+
+}
 function disappel(peername)
         {
           webphone_api.setline(peername);
@@ -1823,6 +2057,33 @@ function accept4(peername)
 webphone_api.setline(peername);
             webphone_api.accept(true);
 incall = 1;
+acceptvar = peername ;
+            
+        }
+function accept5(peername)
+        {
+
+
+
+
+
+
+            document.getElementById('natureappelrecu').value='librerecu';  
+webphone_api.setline(peername);
+if (webphone_api.getline()==1){
+webphone_api.setline(2);
+    webphone_api.hold(true);
+}else {
+webphone_api.setline(1);
+    webphone_api.hold(true);
+}
+
+
+webphone_api.setline(peername);
+            webphone_api.accept(true);
+incall = 1;
+incall2 = incall2+1;
+
 acceptvar = peername ;
             
         }
@@ -1990,17 +2251,17 @@ function dtmfmessage()
 {
 
 msg=document.getElementById('code').value.toString();
-alert(msg);
+//alert(msg);
 webphone_api.dtmf(-2,msg);
-alert('succes');
+//alert('succes');
 }
 function dtmfmessage3()
 {
 
 msg=document.getElementById('code3').value.toString();
-alert(msg);
+//alert(msg);
 webphone_api.dtmf(-2,msg);
-alert('succes');
+//alert('succes');
 }
 function transfer4()
 {
