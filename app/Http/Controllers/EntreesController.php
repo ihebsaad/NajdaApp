@@ -911,9 +911,36 @@ $date=NOW();
 $iddossier= $dossierrecu['id'];
 if($request->get('natureappelrecu')==='librerecu')
 {
+$num= explode(' -', $request->get('caller'));
+$num1=$num[0];
+//dd($num1);
+if($request->get('cr2')===$num1)
+{
+$dossierrecu1=Dossier::where('reference_medic',$request->get('dossier1'))->first();
+$iddossier1= $dossierrecu1['id'];
+$entree1 = new Entree([
+                    'destinataire' => $request->get('called'),
+                    'mailid'=>'tel-'.$counttel,
+                    'emetteur' => $request->get('caller'),
+                    
+                    'reception' =>$date,
+                    'duration' =>$request->get('duration'),
+                    'type' => 'tel',
+                    
+                      'contenu'=> trim ($request->get('contenu1')),
+            'par'=> $request->get('iduser'),
+            'sujet'=>trim ($request->get('sujet1')),
+            'dossier' => $request->get('dossier1'),
+            'dossierid'=> $iddossier1,
+            'commentaire'=> trim ($request->get('description1'))
 
-       
-         $entree = new Entree([
+                ]);
+$entree1->save();
+return $entree1;}
+
+if($request->get('cr1')===$num1)
+
+    {     $entree = new Entree([
                     'destinataire' => $request->get('called'),
                     'mailid'=>'tel-'.$counttel,
                     'emetteur' => $request->get('caller'),
@@ -931,9 +958,9 @@ if($request->get('natureappelrecu')==='librerecu')
 
                 ]);
 $entree->save();
-return $entree;
-}
-    }
+return $entree;}}
+
+   } 
 
 public function ajoutcompterappelrecu(Request $request)
     {
