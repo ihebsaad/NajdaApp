@@ -25,6 +25,35 @@ if($iduser===49)
                         <input id="motdepassetel" name="motdepassetel" type="hidden" value="oM2Uv*2010">
 <?php
 }
+else if($iduser===50)
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2012">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="KQqytY2012">
+<?php
+}
+else if($iduser===52)
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2016">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="i2M4N@2016">
+<?php
+}
+else if($iduser===54)
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2025">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="9W7U_t2025">
+<?php
+}
+else if($iduser===55)
+{
+?>
+ <input id="extensiontel" name="extensiontel" type="hidden" value="2010">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="oM2Uv*2010">
+
+<?php
+}
 else if($iduser===3)
 {
 ?>
@@ -134,8 +163,6 @@ else
 }
 
 ?>
-
-
 
 <header class="header">
    <input id="iduser" name="iduser" type="hidden" value="{{$iduser}}" />   
@@ -1586,18 +1613,22 @@ webphone_api.parameters['conferencetype'] = 4;
 webphone_api.onCallStateChange(function (event, direction, peername, peerdisplayname)
 
 {
-if( tabcall.includes(peername)===true)
+peername1=peername;
+peername1.replace('+', '');
+peername1.replace(' ', '');
+if( tabcall.includes(peername1)===true)
 {
-var index = tabcall.indexOf(peername);
+var index = tabcall.indexOf(peername1);
 if (index >= 0) {
   tabcall[index+1]=tabcall[index+1]+1;
 }
 if (tabcall[index+1]==2){
 //alert("ko");
 //alert(tabcall);
-$('table#tableappels tr#'+peername).remove();
-$('table#tableappels1 tr#'+peername).remove();
-var index = tabcall.indexOf(peername);
+;
+$('table#tableappels tr#'+peername1).remove();
+$('table#tableappels1 tr#'+peername1).remove();
+var index = tabcall.indexOf(peername1);
 if (index >= 0) {
 tabcall.splice( index+1, 1 );
   tabcall.splice( index, 1 );
@@ -1610,23 +1641,25 @@ tabcall.splice( index+1, 1 );
                 if (event === 'setup' && direction == 2 && incall != 1)
 
                 {
-tabcall.push(peername);
+tabcall.push(peername1);
 tabcall.push(0);
 aurlf="<button  style='color:green' href='#' onclick='accept4(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
 aurlf1="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
 aurlf2="<button  style='color:green' href='#' onclick='accept5(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
 aurlf3="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
 
-
+peername1=peername;
+peername1.replace('+', '');
+peername1.replace(' ', '');
 document.getElementById('divtableappels1').style.display = 'block';
- $("#tableappels1 tbody").append("<tr id='"+peername+"'><td>"+peerdisplayname+"</td><td>"+aurlf2+'  '+aurlf3+"</td></tr>");
+ $("#tableappels1 tbody").append("<tr id='"+peername1+"'><td>"+peerdisplayname+"</td><td>"+aurlf2+'  '+aurlf3+"</td></tr>");
 
 
 if(incall!=1)
 {
 
 $('#modalappels').modal({show: true});
- $("#tableappels tbody").append("<tr id='"+peername+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
+ $("#tableappels tbody").append("<tr id='"+peername1+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
 
 if(acceptvar===peername)
 {
@@ -1790,7 +1823,10 @@ if (event === 'disconnected' && direction == 2 && webphone_api.isincall()!=true 
 {
 //webphone_api.setline(peername);
            //webphone_api.hangup(true);
-$('table#tableappels tr#'+peername).remove();
+peername1=peername;
+peername1.replace('+', '');
+peername1.replace(' ', '');
+$('table#tableappels tr#'+peername1).remove();
 
 
 incall = 0;
