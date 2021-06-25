@@ -121,6 +121,7 @@ class UsersController extends Controller
             'email' => $data['email'],
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
+'extension' =>$data['extension'],
         ]);
 		
         return redirect('/users')->with('success', ' ajouté avec succès');
@@ -135,7 +136,7 @@ class UsersController extends Controller
                 'username' => $request->get('username'),
                'user_type'=> $request->get('user_type'),
                'password'=>  bcrypt($request->get('password')),
-
+ 'extension'=>  $request->get('extension'),
         ]);
 
         $user->save();
@@ -896,4 +897,13 @@ return Session::get('telephonie');
 
     }
 
+ public function existextension(Request $request)
+    {
+       $extension= $request->get('extension');
+ $users = User::where('extension',$extension)->where('actif',1)
+		->count();
+
+return $users;
+
+    }
  }

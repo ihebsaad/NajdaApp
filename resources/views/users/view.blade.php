@@ -47,6 +47,13 @@
             <td class="text-primary">Email Boite</td>
             <td> <input id="boite" autocomplete="off" onchange="changing(this)"  type="email" class="form-control" name="boite" id="boite" value="{{ $user->boite }}" />                  </td>
         </tr>
+<tr>
+            <td class="text-primary">Extension </td>
+            <td>
+                <input id="extension" onchange="changing(this)" type="text" class="form-control" name="extension"  value="{{ $user->extension }}" />
+                </td>
+        </tr>
+      
         <tr>
             <td class="text-primary">Mote de passe boite</td>
             <td> <input id="passboite" autocomplete="off" onchange="changing(this)"   type="password" class="form-control" name="passboite"  id="passboite" value="" />

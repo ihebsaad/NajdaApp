@@ -80,7 +80,15 @@
                             </div>
                         </div>
 
+  <div class="form-group">
+                            <label for="extension" class="col-md-4 control-label">Extension</label>
 
+                            <div class="col-md-6">
+                                <input  autocomplete="off"  id="extension" type="text" class="form-control" name="extension" value="{{ old('extension') }}" required  onchange="existextension();" >
+
+                               
+                            </div>
+                        </div>
                       <!--  <div class="form-group">
                             <label for="Role" class="col-md-4 control-label">Rôle</label>
 
@@ -111,3 +119,32 @@
 
 
 </style>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+function existextension() {
+             var extension = document.getElementById("extension").value;
+alert(extension);
+  var _token = $('input[name="_token"]').val();
+$.ajax({
+            url: "{{ route('users.existextension') }}",
+            method: "POST",
+            data: {extension: extension, _token: _token},
+            success: function (data) {
+if(data!=0)
+{
+ Swal.fire({
+                            type: 'Error',
+                            title: 'Existe...',
+                            text:'Extension déjà utilisée'
+                        });
+
+}
+               
+
+            }
+        });
+     
+         }
+
+</script>
