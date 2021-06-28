@@ -658,6 +658,7 @@ Route::post('/users/sessionroles', 'UsersController@sessionroles')->name('users.
 Route::post('/changestatut', 'UsersController@changestatut')->name('users.changestatut');
 Route::get('/users/mails', 'UsersController@mails')->name('users.mails');
 Route::post('/users/existextension', 'UsersController@existextension')->name('users.existextension');
+Route::post('/users/existextensionview', 'UsersController@existextensionview')->name('users.existextensionview');
 Route::get('/users/destroy/{id}', 'UsersController@destroy');
 //Route::get('/edit/{id}','UsersController@edit');
 Route::post('/edit/{id}','UsersController@update');

@@ -53,6 +53,12 @@
                 <input id="extension" onchange="changing(this)" type="text" class="form-control" name="extension"  value="{{ $user->extension }}" />
                 </td>
         </tr>
+<tr>
+            <td class="text-primary">Mot de passe pour l'extension </td>
+            <td>
+                <input id="motdepasseextension" onchange="changing(this)" type="text" class="form-control" name="motdepasseextension"  value="{{ $user->motdepasseextension }}" />
+                </td>
+        </tr>
       
         <tr>
             <td class="text-primary">Mote de passe boite</td>
@@ -346,6 +352,27 @@ function checkEmail(email) {
          
          
         };
+   var extension = document.getElementById("extension").value;
+var id = document.getElementById("iduser").value;
+  var _token = $('input[name="_token"]').val();
+$.ajax({
+            url: "{{ route('users.existextensionview') }}",
+            method: "POST",
+            data: {extension: extension,id:id, _token: _token},
+            success: function (data) {
+if(data!=0)
+{
+ Swal.fire({
+                            type: 'Error',
+                            title: 'Existe...',
+                            text:'Extension déjà utilisée'
+                        });
+ $('#extension').val('');
+}
+               
+
+            }
+        });
         var val = document.getElementById(champ).value;
 
         var user = $('#iduser').val();
@@ -397,5 +424,6 @@ function checkEmail(email) {
 
         // }
     }
+
 
 </script>

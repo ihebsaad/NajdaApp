@@ -137,6 +137,7 @@ class UsersController extends Controller
                'user_type'=> $request->get('user_type'),
                'password'=>  bcrypt($request->get('password')),
  'extension'=>  $request->get('extension'),
+ 'motdepasseextension'=>  $request->get('motdepasseextension'),
         ]);
 
         $user->save();
@@ -901,6 +902,16 @@ return Session::get('telephonie');
     {
        $extension= $request->get('extension');
  $users = User::where('extension',$extension)->where('actif',1)
+		->count();
+
+return $users;
+
+    }
+ public function existextensionview(Request $request)
+    {
+       $extension= $request->get('extension');
+$userid=$request->get('id');
+ $users = User::where('extension',$extension)->where('id', '!=' ,$userid)->where('actif',1)
 		->count();
 
 return $users;

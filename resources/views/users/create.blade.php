@@ -89,6 +89,15 @@
                                
                             </div>
                         </div>
+  <div class="form-group">
+                            <label for="extension" class="col-md-4 control-label">Mot de passe pour l'extension</label>
+
+                            <div class="col-md-6">
+                                <input  autocomplete="off"  id="motdepasseextension" type="text" class="form-control" name="motdepasseextension" value="{{ old('motdepasseextension') }}" required  >
+
+                               
+                            </div>
+                        </div>
                       <!--  <div class="form-group">
                             <label for="Role" class="col-md-4 control-label">Rôle</label>
 
@@ -124,7 +133,6 @@
 <script>
 function existextension() {
              var extension = document.getElementById("extension").value;
-alert(extension);
   var _token = $('input[name="_token"]').val();
 $.ajax({
             url: "{{ route('users.existextension') }}",
@@ -138,7 +146,7 @@ if(data!=0)
                             title: 'Existe...',
                             text:'Extension déjà utilisée'
                         });
-
+ $('#extension').val('');
 }
                
 
