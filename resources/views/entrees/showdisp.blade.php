@@ -48,8 +48,12 @@ Use App\USer;
                     </div>
                  <div class="row" style="padding-right: 10px;margin-top:10px;" id="emailbuttons">
                             <div class="pull-right" style="margin-top: 0px;">
+<?php
+ $dossier = Dossier::where('reference_medic','=',$entree['dossier'])->first();
+ $dossierid=$dossier['id'];
+?>
                                 @if (!empty($entree->dossier))
-                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
+                                <a   class="btn btn-md btn-info"   href="{{route('dossiers.view',['id'=> $dossierid]) }}"  > <b>REF: {{ $entree['dossier']   }}</b></a>
                                 @endif
                                 @if (($entree->type)!=="tel")
                                 @if (empty($entree->dossier))
