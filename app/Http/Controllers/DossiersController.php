@@ -3695,9 +3695,10 @@ $hist->save();
    public function historiqueAffectation ($id)
    {
 
-         $hisaffec=AffectDossHis::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
+         $hisaffec1=AffectDossHis::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
+         $hisaffec2=AffectDoss::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
          //dd($hisaffec);
-
+         $hisaffec =  $hisaffec1->merge($hisaffec2);
       $output='';
 
 
@@ -3707,7 +3708,7 @@ $hist->save();
 
        // dd('jjjjjj');
 
-        $dossiera=Dossier::where('id',$id)->first(['reference_medic','current_status','user_id','sub_status',]); 
+        $dossiera=Dossier::where('id',$id)->first(['reference_medic','current_status','user_id','sub_status','created_at']); 
                    $output='<h4><b>Historique d\'affectation de dossier : '. $dossiera->reference_medic.'</b></h4><br>';
                    
               

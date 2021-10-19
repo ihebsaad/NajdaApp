@@ -236,7 +236,7 @@
                     </td>
                     <td style="width:20%"> <?php if($statut=='Cloture'){echo 'Clôturé';} else {
                     if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">en cours – Affectation automatique </span>';}else {
-                        echo 'En cours <br> Affecté à : '. app('App\Http\Controllers\UsersController')->ChampById('name', $affecte);
+                        echo 'En cours <br> Affecté à : '. app('App\Http\Controllers\UsersController')->ChampById('name', $affecte).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname', $affecte) ;
                     }
                     }
                      ?> </td>

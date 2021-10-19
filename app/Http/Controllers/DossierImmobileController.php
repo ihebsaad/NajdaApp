@@ -14,6 +14,12 @@ use DB;
 use Mail;
 use App\Parametre; 
 
+use App\OMAmbulance;
+use App\AppOMMedicEquipement;
+use App\OMMedicInternational;
+use App\OMRemorquage;
+use App\OMTaxi;
+use App\Document;
 
 
 class DossierImmobileController extends Controller
@@ -474,6 +480,158 @@ And the rest of the entity signature*/
 
     }
 
+    public static function checkImmobile3Daysv2($date, $refdoss)
+    {
+        $format = "Y-m-d H:i:s";
+        $dernier_date_envoi_mail=Envoye::where('dossier','like','%'.$refdoss.'%')->orderBy('created_at','desc')->first();
+        $dernier_date_envoi_mail=$dernier_date_envoi_mail->created_at;
+        $dernier_date_recep_mail=Entree::where('dossier','like','%'.$refdoss.'%')->orderBy('created_at','desc')->first();
+        $dernier_date_recep_mail=$dernier_date_recep_mail->created_at;
+
+        $dernier_date_envoi_mail=\DateTime::createFromFormat($format, $dernier_date_envoi_mail);
+        $dernier_date_recep_mail=\DateTime::createFromFormat($format, $dernier_date_recep_mail);
+
+        
+     //   $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+        // voir les dates des oms et les docs dans un dossier
+        /* use App\OMAmbulance;
+        use App\AppOMMedicEquipement;
+        use App\OMMedicInternational;
+        use App\OMRemorquage;
+        use App\OMTaxi;
+        use App\Document;*/
+
+        $date_om_taxi='';
+        $date_om_amb='';
+        $date_om_rem='';
+        $date_om_me='';
+        $date_om_mi='';
+        $date_doc='';
+
+        $iddoss = Dossier::where('reference_medic','like','%'.$refdoss.'%')->first()->id; 
+
+         $date_om_taxi=OMTaxi::where('dossier',$iddoss)->orderBy('updated_at','desc')->first();
+         if($date_om_taxi)
+         {
+           $date_om_taxi=\DateTime::createFromFormat($format, $date_om_taxi);
+         }
+
+         $date_om_amb=OMAmbulance::where('dossier',$iddoss)->orderBy('updated_at','desc')->first();
+         if($date_om_amb)
+         {
+         $date_om_amb=\DateTime::createFromFormat($format, $date_om_amb);
+         }
+
+         $date_om_rem=OMRemorquage::where('dossier',$iddoss)->orderBy('updated_at','desc')->first();
+         if($date_om_rem)
+         {
+         $date_om_rem=\DateTime::createFromFormat($format, $date_om_rem);         
+         }
+
+       $date_om_me=AppOMMedicEquipement::where('dossier',$iddoss)->orderBy('updated_at','desc')->first();
+       if($date_om_me)
+       {
+       $date_om_me=\DateTime::createFromFormat($format, $date_om_me);
+       }
+
+       $date_om_mi=OMMedicInternational::where('dossier',$iddoss)->orderBy('updated_at','desc')->first();
+       if($date_om_mi)
+         {
+         $date_om_mi=\DateTime::createFromFormat($format, $date_om_mi);
+         }
+
+         $date_doc=Document::where('dossier',$iddoss)->orderBy('updated_at','desc')->first();
+         if($date_doc)
+         {
+         $date_doc=\DateTime::createFromFormat($format, $date_doc);
+         }
+
+
+        // fin dates oms et les docs dans un dossier
+
+
+        $dtc = (new \DateTime())->modify('-3 days')->format($format);
+
+        $dateSys = \DateTime::createFromFormat($format, $dtc);
+
+
+        $dateDoss = (\DateTime::createFromFormat($format, $date) );
+
+        if($dateDoss <= $dateSys)
+        {
+        	return true;
+        }
+        if($dernier_date_envoi_mail <= $dateSys)
+        {
+        	return true;
+        }
+
+        if($dernier_date_recep_mail <= $dateSys)
+        {
+        	return true;
+        }
+
+        if($date_doc)
+        {
+    	  if($date_doc <= $dateSys)
+            {
+    	     return true;
+            }
+        }
+
+         if($date_om_mi)
+        {
+    	  if($date_om_mi <= $dateSys)
+            {
+    	     return true;
+            }
+        }
+        if($date_om_me)
+        {
+    	  if($date_om_me <= $dateSys)
+            {
+    	     return true;
+            }
+        }
+        if($date_om_rem)
+        {
+    	  if($date_om_rem <= $dateSys)
+            {
+    	     return true;
+            }
+        }
+
+        if($date_om_taxi)
+        {
+    	  if($date_om_taxi <= $dateSys)
+            {
+    	     return true;
+            }
+        }
+        if($date_om_amb)
+        {
+    	  if($date_om_amb <= $dateSys)
+            {
+    	     return true;
+            }
+        }
+
+
+      return false; 
+
+
+
+
+        /*if($dateDoss <= $dateSys && $dernier_date_envoi_mail <= $dateSys && $dernier_date_recep_mail <= $dateSys )
+        {
+            return true;
+        }else{
+            return false ;
+          }*/
+
+
+    }
+
 
 
     public static function checkImmobile4Days($date)
@@ -512,7 +670,7 @@ And the rest of the entity signature*/
             ->whereNotNull('created_at')
             ->where('created_at','>=', $dtc)
             ->get();
-
+         $dossiers = Dossier::where('id',41389 )->orWhere('id',41388)->get();
         // dossier immobile depuis 3 jours 
 
     $dossimm=array();
@@ -521,7 +679,10 @@ And the rest of the entity signature*/
         //dd($dossierTous);
         //$somme=array_merge($dossierDormants,$dossierActifs);
        // $dossierImmobiles=array_diff($dossierTous,$somme);
-
+        // test pluck
+         //$arrayeml=Adresse::where('parent', 2)->where('nature','email')->pluck('champ')->toArray();
+         //dd($arrayeml);
+         // fin test 
     foreach($dossiers as $dossier)
         {
          if( !in_array($dossier->id,$dossierTous))            
@@ -533,9 +694,47 @@ And the rest of the entity signature*/
 
                  //dd($dossier->customer_id.' '.$dossier->id.' '.$dossier->reference_medic);
                 $cli=Client::where('id', $dossier->customer_id)->first();
+             $arrayeml=null;
+             if(trim($dossier->type_dossier)=="Medical" || trim($dossier->type_dossier)=="Transport")
+             {
+              $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->where('type','like', '%medical%')->pluck('champ')->toArray();
+             }
 
-              $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->pluck('champ')->toArray();
-              $arrayemails=array();
+             if(trim($dossier->type_dossier)=="Technique")
+             {
+              $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->where('type','like', '%technique%')->pluck('champ')->toArray();
+             }
+
+             if(trim($dossier->type_dossier)=="Mixte")
+             {
+              $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->where('type','like', '%commun%')->pluck('champ')->toArray();
+
+               if(! $arrayeml || count($arrayeml)==0 )
+               {
+
+                  $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->where(function($q) {                             
+                               $q->where('type','like', '%technique%')->orWhere('type','like', '%medical%');
+                                })->pluck('champ')->toArray();
+               }
+             }
+            // dd($arrayeml);
+             for($i=0; $i<count($arrayeml); $i++)
+             {
+                 if(stripos($arrayeml[$i],'@')==false)
+                 {
+                    unset($arrayeml[$i]);                    
+                 }
+
+             }
+             $adresseStock= implode(" ", $arrayeml);
+            // dd($adresseStock);
+              //dd($arrayeml);
+
+             // $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->pluck('champ')->toArray();
+              //$adr=$arraykbs->latest()->first();
+
+             // ancien version decodage mail
+             /* $arrayemails=array();
               $arraykbs=array();
               if(count($arrayeml)>0)
               {
@@ -547,11 +746,10 @@ And the rest of the entity signature*/
                 }
                   
               }
-                //$adr=$arraykbs->latest()->first();
+                            
               usort($arraykbs, function($a, $b) {
                 return $a['id'] <=> $b['id'];
                });
-             //dd($arraykbs);
               $adresseStock='';
               if($arraykbs && count($arraykbs)>0)
               {
@@ -561,8 +759,11 @@ And the rest of the entity signature*/
              $destinataires = str_replace(' ', '', $destinataires);
              $dests = explode(";", $destinataires); 
               }
-            // dd($dests);
+*/
+             // fin ancien version 
 
+            // dd($dests);
+              
 
                /*$adr=Envoye::where('type','email')->where('dossier',$dossier->reference_medic)->whereIn('destinataire',$arrayemails)->orderBy('id', 'DESC')->first();*/
              //$adr=Envoye::where('type','email')->whereIn('destinataire',$arrayemails)->get();
@@ -667,7 +868,7 @@ And the rest of the entity signature*/
            }
 
       }
-
+//dd(" ok ");
         // pour chaque dossier immobile dont le client n'a pas reçu un email ; envoyer un email
 
         $dossim=DossierImmobile::get();
@@ -953,9 +1154,9 @@ And the rest of the entity signature*/
              {
 
               $destinataires=$dm->client_adresse ;
-              $destinataires = str_replace(array( '(', ')' ), '', $destinataires);
-              $destinataires = str_replace(' ', '', $destinataires);
-              $dests = explode(";", $destinataires); 
+              //$destinataires = str_replace(array( '(', ')' ), '', $destinataires);
+              //$destinataires = str_replace(' ', '', $destinataires);
+              $dests = explode(" ", $destinataires); 
 
              }
 
@@ -996,7 +1197,7 @@ And the rest of the entity signature*/
   
                //$cc=null; 
              }
-           // dd($bcc);
+           dd($bcc);
            $swiftMailer = new Swift_Mailer($swiftTransport);
                 Mail::setSwiftMailer($swiftMailer);      
                 Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
