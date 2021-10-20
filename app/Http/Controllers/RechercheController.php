@@ -976,7 +976,9 @@ public function pageRechercheAvancee(Request $request )
   {
 
 
-                    $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
+      //  $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
+
+     $datasearch=Dossier::where('reference_medic','like','%'.$request->get('reference_medic1').'%')->get();
 
 
 

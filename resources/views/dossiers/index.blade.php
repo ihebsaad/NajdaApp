@@ -53,23 +53,32 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="inputError" class="control-label" >Référence Dossier</label>
-                                <!--<input type="text" id="reference_medic1" name="reference_medic1" class="form-control" placeholder="Référence....">-->
+                                <input list="reference_medic" id="reference_medic1" name="reference_medic1" class="form-control" placeholder="Référence...."  >
 
-                               
-                                        <select id="reference_medic1" name="reference_medic1" class="form-control select2" >
-                                            <option value="">Sélectionner</option>
-                                            <?php  $dtc = (new \DateTime())->format('2018-12-31 00:00:00');
-                                                  $ccc= App\Dossier::whereNotNull('created_at')->where('created_at','>=', $dtc)->orderBy('id','DESC')->get();
+                                <datalist id="reference_medic">
+                                    <?php  $dtc = (new \DateTime())->format('2018-12-31 00:00:00');
+                                      $ccc= App\Dossier::whereNotNull('created_at')->where('created_at','>=', $dtc)->orderBy('id','DESC')->get();
                                              ?>
-                                             @foreach( $ccc as $c)
+                                   @foreach( $ccc as $c)
+                                   <option value="{{$c->reference_medic}}"/>
+                                   @endforeach              
+                                        
+                                </datalist>
+
+                               <!--old block select-->
+                                       <!--  <select id="reference_medic1" name="reference_medic1" class="form-control select2" >
+                                            <option value="">Sélectionner</option> -->
+                                            <?php // $dtc = (new \DateTime())->format('2018-12-31 00:00:00');
+                                                 // $ccc= App\Dossier::whereNotNull('created_at')->where('created_at','>=', $dtc)->orderBy('id','DESC')->get();
+                                             ?>
+                                            {{-- @foreach( $ccc as $c)
 
                                                 <option value="{{$c->reference_medic}}">{{$c->reference_medic}}</option>
 
-                                              @endforeach
+                                              @endforeach --}} 
 
-
-
-                                        </select>
+                                        <!-- </select> -->
+                            <!--fin old block select-->
                             </div>
                         </div>
 
@@ -104,10 +113,20 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Assuré </label>
+                            <label>Assuré (Tapez nom ou prénom ou matricule)</label>
                             <!--<input class="form-control" name="nom_benef_search" id="nom_benef_search">-->
+                            <input list="nom_benef_searchd" id="nom_benef_search" name="nom_benef_search" class="form-control" placeholder="Assuré...."  >
 
-                            <select id="nom_benef_search" name="nom_benef_search" class="form-control select2" >
+                                <datalist id="nom_benef_searchd">
+                                   @foreach(App\Dossier::distinct()->whereNotNull('subscriber_name')->orderBy('subscriber_name')->get(['subscriber_name' , 'subscriber_lastname' , 'vehicule_immatriculation' ]) as $c) 
+
+                                <option value="{{$c->subscriber_name}} {{$c->subscriber_lastname}} {{$c->vehicule_immatriculation}}" />
+
+                                    @endforeach             
+                                        
+                                </datalist>
+                        <!-- old select -->
+                           {{--<select id="nom_benef_search" name="nom_benef_search" class="form-control select2" >
                                             <option value="">Sélectionner</option>
                                     @foreach(App\Dossier::distinct()->whereNotNull('subscriber_name')->orderBy('subscriber_name')->get(['subscriber_name' , 'subscriber_lastname' , 'vehicule_immatriculation' ]) as $c) 
 
@@ -115,7 +134,8 @@
 
                                     @endforeach
 
-                             </select>
+                             </select>--}}
+                        <!-- old select -->
                         </div>
                         <div class="col-md-4">
                             <label>Prestataire </label>
@@ -596,8 +616,8 @@
 
 <script>
  $(document).ready(function() {
-    $("#reference_medic1").select2();
-    $("#nom_benef_search").select2();
+   /* $("#reference_medic1").select2();
+    $("#nom_benef_search").select2();*/
     $("#pres_id_search").select2();
     $("#customer_id_search").select2();
     $("#current_status").select2();
