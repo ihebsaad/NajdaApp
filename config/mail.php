@@ -64,7 +64,7 @@ return [
     ],*/
 
     'from' => [
-        'address' => '24ops@najda-assistance.com',
+        'address' => 'faxnajdassist@najda-assistance.com',
         'name' => 'Najda Assistance',
     ],
 
@@ -94,7 +94,7 @@ return [
     */
 
   //  'username' => env('MAIL_USERNAME','faxnajdassist@najda-assistance.com'),
-    'username' =>  '24ops@najda-assistance.com' ,
+    'username' =>  'faxnajdassist@najda-assistance.com' ,
 
  //   'password' => env('MAIL_PASSWORD','e-solutions2019'),
     'password' =>  'e-solutions2019' ,
