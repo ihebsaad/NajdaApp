@@ -1,3 +1,6 @@
+<?php
+use App\OMRemorquage; 
+?>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <body><div class="row" style="margin-bottom: -150px;padding-bottom: 10px">
@@ -127,6 +130,18 @@ if (isset($_POST['clientIMA'])) { ?>
 <p style="margin-top:-40px!important; margin-left:2.85pt; margin-bottom:2px; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#000000">Le présent ordre de mission fait office de prise en charge et copie doit être adressée avec votre facture
 </span></p>
 <?php }} ?>
+<?php 
+
+ if( isset($_POST['remplaceetannule']) && $_POST['remplaceetannule']==true ) { ?>
+
+<p style="color:red">Cet ordre de mission  remplace le précédent ordre de mission en date du : <?php 
+
+$omremor=OMRemorquage::where('id',$_POST['parent'])->first();
+
+
+echo  $omremor['created_at']; ?></p>
+
+<?php } ?>
 <div class="row" style=" margin-left: 0px;">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span>

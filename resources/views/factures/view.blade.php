@@ -31,6 +31,7 @@
      <?php use App\Dossier;use App\Http\Controllers\DossiersController;
     use \App\Http\Controllers\UsersController;
     use \App\Http\Controllers\ClientsController;
+	use \App\Facture;
      $users=UsersController::ListeUsers();
 
     $CurrentUser = auth()->user();
@@ -112,7 +113,7 @@ $mois=substr ( $date_arrive , 3  ,2 );
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Assistance</label>
-                                <select  name="client" id="client" class="form-control js-example-placeholder-single" >
+                                <select   onchange="changing(this)" name="client" id="client" class="form-control js-example-placeholder-single" >
                                     <option value=""></option>
                                     @foreach($clients as $cl  )
                                         <option
@@ -323,7 +324,14 @@ $mois=substr ( $date_arrive , 3  ,2 );
         </div>
         <?php use \App\Http\Controllers\PrestationsController; ?>
 
-        <?php $prestations = App\Prestation::where('dossier_id',$iddossier)->get();?>
+        <?php 
+		//$prestations = App\Prestation::where('dossier_id',$iddossier)->get();
+		$prestations_affectes_meme_doss=Facture::where('id','!=',$facture->id)->where('iddossier',$iddossier)->whereNotNull('prestation')->pluck('prestation')->toArray();
+		
+		$prestations = App\Prestation::where('dossier_id',$iddossier)->whereNotIn('id', $prestations_affectes_meme_doss)->get();
+		  
+		
+		?>
 
         <div class="row" style="margin-top:20px;margin-left:40px">
             <div class="form-group">

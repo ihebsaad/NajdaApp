@@ -35,16 +35,47 @@ Use App\USer;
   @endif
         <div class="panel-heading" style="">
                     <div class="row">
+<input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
-                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
+ <?php if($entree['type']=="tel" && $entree['par']!==null ) { ?>
+                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Interlocuteur :</label> 
+<span id="hiding" class="pull-right">
+         <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
+            </span>
+ <?php $sujet=$entree['sujet'];
 
                             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
                                     $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
                                 }
 
+                          
+
+
+
+
+
+?>
+<span class="pull-center">
+ <input onchange="changing(this)" id="sujet" type="text" class="form-control" name="sujet" required value="<?php  echo ($sujet);  ?>"/>
+</span>
+</h4>                       
+ <?php  } 
+else {?>
+      <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
+
+                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+
+                                    $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+
+                                }
+
+
                             echo ($sujet); ?><span id="hiding" class="pull-right">
          <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
-            </span></h4>                        </div>
+            </span></h4> 
+   <?php  } ?>  
+
+ </div>
                     </div>
                  <div class="row" style="padding-right: 10px;margin-top:10px;" id="emailbuttons">
                             <div class="pull-right" style="margin-top: 0px;">
@@ -202,8 +233,11 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
                                     }
                                   
 
-                                   echo '<b style="margin-left:60px;">      Description : </b>'. $entree['commentaire'].'<br>';
-                                   }
+                                   echo '<b style="margin-left:60px;">      Description : </b>'?>
+
+ <input style="margin-left:60px;width:600px;" onchange="changing(this)" id="commentaire" type="text" class="form-control" name="commentaire" required value="<?php  echo $entree['commentaire'];  ?>"/>
+<br>
+                                  <?php }
 
                                   ?>
 </div>
@@ -223,7 +257,7 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
         </div>
 	  <?php
       // get attachements info from DB
-    $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
+    $attachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->get();
     $nbattachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->count();
 
 
@@ -232,6 +266,7 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
         <div class="panel-body" id="emailnpj">
             <div class="row">
                 <ul class="nav nav-pills">
+
                     <li class="<?php if($entree['contenu']!=null){echo 'active ';} ?>" >
                         <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php } }?>
                     </li>
@@ -268,7 +303,20 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
                        ?>
                 </ul>
 
+<?php 
+ if($entree['type']== "tel" && $entree['par']!== null)
+                                   {
+                                       
+?>
+ <textarea style="width:800px;height:400px;" onchange="changing(this)" id="contenu"  class="form-control" name="contenu"> 
+
+<?php echo $entree['contenu']; ?>
+</textarea>
+<?php 
+ }
+?>
                 <div id="myTabContent" class="tab-content" style="background: #ffffff">
+
                     <?php if ( $entree['type']!='fax') { ?>
                     <div class="tab-pane fade <?php if($entree['contenu']!=null){echo 'active in';} ?> " id="mailcorps" style="">
                        <section> <p  id="mailtext" style=" line-height: 25px;"><?php
@@ -280,7 +328,21 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                             <?php  $cont=  str_replace($search,$replace, $content); ?>
-                            <?php  echo $cont; ?></p>
+                           
+
+
+
+
+<?php 
+if($entree['type']!= "tel" || $entree['par']== null )
+{
+
+echo $cont; }
+
+
+
+
+?></p>
                        </section>
                         <?php } ?>
 
@@ -885,6 +947,32 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         }
 
     });
+function changing(elm) {
+        var champ = elm.id;
+
+        var val = document.getElementById(champ).value;
+
+        var entree = $('#entreeid').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('entrees.updating') }}",
+            method: "POST",
+            data: {entree: entree, champ: champ, val: val, _token: _token},
+            success: function (data) {
+                $('#' + champ).animate({
+                    opacity: '0.3',
+                });
+                $('#' + champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+        // } else {
+
+        // }
+    }
 
 </script>
 

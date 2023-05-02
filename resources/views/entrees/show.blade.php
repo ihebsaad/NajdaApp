@@ -7,7 +7,8 @@
 use App\Http\Controllers\DossiersController;use App\Tag ;
 use App\Dossier ;
 use App\Notification ;
-$dossiers = Dossier::get();
+
+use Illuminate\Support\Facades\DB;
 
 use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
@@ -46,7 +47,21 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         <div class="panel-heading" style=""   >
                      <div class="row">
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
-                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
+ <?php if($entree['type']=="tel" && $entree['par']!==null ) {?>
+                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Interlocuteur :</label>  <?php $sujet=$entree['sujet'];
+
+                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                                    $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+                                }
+                               
+                            ?>
+
+<input onchange="changing(this)" id="sujet" type="text" class="form-control" name="sujet" required value="<?php  echo ($sujet);  ?>"/>
+<span id="hiding" class="pull-right">
+         <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
+            </span></h4>
+ <?php  } else {?>
+      <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
 
                             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
                                     $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
@@ -55,10 +70,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             ?><span id="hiding" class="pull-right">
          <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
             </span></h4>
-                        </div>
+                    <?php  } ?>    </div>
                     </div>
+<?php
+$dosssir=Dossier::where('reference_medic',$entree['dossier'])->first();
+$iddossier=$dosssir['id'];
+?>
                         <div class="row" style="padding-right: 10px;margin-top:10px" id="emailbuttons">
-                            <div class="pull-right" style="margin-top: 0px;"><?php $iddossier=$entree['dossierid'] ; ?>
+                            <div class="pull-right" style="margin-top: 0px;">
                                 @if (!empty($entree->dossier))
                                     <button class="btn btn-sm btn-default"><b><a style="color:black" href="<?php echo $urlapp.'/dossiers/view/'.$iddossier;?>">REF: {{ $entree['dossier']   }} - <?php echo  DossiersController::FullnameAbnDossierById($iddossier); ?></a></b></button>
                                 @endif
@@ -217,7 +236,8 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
         </div>
   <?php
                                             // get attachements info from DB
-    $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
+     //$attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
+$attachs = DB::table('attachements')->where('parent', '=', $entree['id'] )->where('boite','0')->get()->toArray();
     $nbattachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->count();
 
                                                                                       ?>
@@ -249,7 +269,7 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
 
        
        ?>
-                                <li data-type="piecejointe" data-identreeattach="<?php echo $att['id'] ?>">
+                                <li data-type="piecejointe" data-identreeattach="<?php echo $att->id; ?>">
                                     <a  class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                                 </li>
                       
@@ -260,7 +280,25 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
              } //tel
              ?>
                     </ul>
-                    
+                    <?php 
+ if($entree['type']== "tel" && $entree['par']!== null)
+                                   {
+                                       
+?>
+ <textarea style="width:800px;height:400px;" onchange="changing(this)" id="contenu"  class="form-control" name="contenu"> 
+
+<?php echo $entree['contenu']; ?>
+</textarea>
+
+<br>
+<?php 
+ echo '<b>Description : </b>';
+?>
+<input style="margin-left:0px;width:600px;" onchange="changing(this)" id="commentaire" type="text" class="form-control" name="commentaire"  value="<?php  echo $entree['commentaire'];  ?>"/>
+
+<?php 
+ }
+?>
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
                        <?php if ( $entree['type']!='fax') { ?>
                            <div class="tab-pane fade <?php if($entree['contenu']!=null){echo 'active in';} ?> " id="mailcorps" style="">
@@ -275,8 +313,10 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
 
                                             <?php  $cont=  str_replace($search,$replace, $content); ?>
                                    <?php
+if($entree['type']!= "tel" || $entree['par']== null )
+{
 
-                                   echo $cont.'<br><br>';
+                                   echo $cont.'<br><br>';}
 
                                    if($entree['type']== "tel")
                                    {
@@ -289,15 +329,19 @@ else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }
 </audio><br><br><br>
                                   <?php  }
                                     else{
-                                       echo '<b>Média : </b>'. $entree['contenutxt'].'<br><br><br>';
+                                       echo '<br><br> <b>Média : </b>'. $entree['contenutxt'].'<br><br><br>';
 
                                     }
                                   
 
-                                   echo '<b>Description : </b>'. $entree['commentaire'].'<br>';
+                                  
                                    }
 
-                                  ?></p>
+                                  ?>
+
+     
+
+</p>
                                </section>
 
                            <?php } ?>
@@ -523,7 +567,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
         {{ csrf_field() }}
 
         <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$dossier->id}}" />
-        <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
+        <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" required/>
         <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
         <input id="accuse" type="hidden" class="form-control" name="accuse"  value="1" />
         <input id="identree" type="hidden" class="form-control" name="entree"  value="<?php echo $entree['id'] ; ?>" />
@@ -859,7 +903,7 @@ if(isset($_GET['openmodal']) )
             });
     function checkForm(form) // Submit button clicked
     {
-
+alert("okok");
         form.myButton.disabled = true;
         form.myButton.value = "Please wait...";
         return true;
@@ -914,14 +958,14 @@ if(isset($_GET['openmodal']) )
             var brsaved = $('#brsaved').val();
 
             if ( (brsaved==0) )
-            { //alert('create br');
+            { alert('create br');
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('envoyes.savingbr') }}",
                     method:"POST",
                     data:{description:description,destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
                     success:function(data){
-                        //   alert('Brouillon enregistré ');
+                           alert('Brouillon enregistré ');
 
                         document.getElementById('envoye').value=data;
                         document.getElementById('brsaved').value=1;
@@ -933,7 +977,7 @@ if(isset($_GET['openmodal']) )
                 if ( description!='' )
                 {             var envoye = $('#envoye').val();
 
-                    //  alert('update br');
+                      alert(envoye);
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url:"{{ route('envoyes.updatingbr') }}",
@@ -1396,6 +1440,32 @@ function ferme()
 //alert(queryParams);
 queryParams.set("openmodal", '0');
 history.replaceState(null, null, "?"+queryParams.toString());
+    }
+function changing(elm) {
+        var champ = elm.id;
+
+        var val = document.getElementById(champ).value;
+
+        var entree = $('#entreeid').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('entrees.updating') }}",
+            method: "POST",
+            data: {entree: entree, champ: champ, val: val, _token: _token},
+            success: function (data) {
+                $('#' + champ).animate({
+                    opacity: '0.3',
+                });
+                $('#' + champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+        // } else {
+
+        // }
     }
 
 </script>

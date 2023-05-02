@@ -1,18 +1,36 @@
 
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 
-<script> var incall2=0;var testphone=0; var line=1;</script>
+<script> var incall2=0;var testphone=0; var line=1; var s=0;var s1=0;
+
+if(window.localStorage.getItem('telephonie')!='true')
+{
+window.localStorage.setItem('telephonie', 'false');}
+//alert(window.localStorage.getItem('telephonie'));
+//alert(testphone);
+
+</script>
 <header class="header">
-<?php   $testphoneaff=0; if (Session::get('telephonie')=='false') { ?>
-<?php $testphoneaff=1; Session::put('telephonie', 'true'); ?>
-<script> testphone=1; </script>
+<?php   $testphoneaff=0;
+/*while (true) {
+   print_r(Session::get('telephonie'));
+    sleep(5*60);
+}*/
+ ?>
+ <script> if (window.localStorage.getItem('telephonie')=='false') { 
 
-  <script src="{{ asset('public/webphone/najdaapp/webphone/webphone_api.js') }}"></script>
+ window.localStorage.setItem('telephonie', 'true');  testphone=1;
 
-<?php } ?>
+ 
+
+ } 
+//alert(testphone); </script>
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <script>var natureappelconf='';var conference=0; var incall = 0 ; var acceptvar=0;var tabcall =[]; var i=0;</script>
+
+
 <?php
+
     use App\Entree;
     use App\User;
 use App\Dossier;
@@ -37,8 +55,8 @@ $extensionuser=$CurrentUser->extension;
 
 
 ?>
-                        <input id="extensiontel" name="extensiontel" type="text" value="<?php echo $extensionusers;  ?>">
-                        <input id="motdepassetel" name="motdepassetel" type="text" value="<?php echo $motdepasseextensionusers;  ?>">
+                        <input id="extensiontel" name="extensiontel" type="hidden" value="<?php echo $extensionusers;  ?>">
+                        <input id="motdepassetel" name="motdepassetel" type="hidden" value="<?php echo $motdepasseextensionusers;  ?>">
 
 
 
@@ -224,33 +242,10 @@ $extensionuser=$CurrentUser->extension;
            {{ csrf_field() }}
           </form>
         </div>
-<?php    if ($testphoneaff==1) { ?>
-        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+	 <div id="divbtntel">
 
-          <a  data-toggle="modal" data-target="#faireappel1" id="phonebtn" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button"  data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
-              <span class="fa fa-fw fa-phone fa-2x"></span>
-          </a> 
-  </div>
-<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;padding-left:5px;padding-right:150px;">
- <button  id="reacttel" href="#" class="btn btn-primary btn-lg btn-responsive phone">
-            Réactiver
-          </button> 
-
-        </div>
-
-<?php   } else {  ?>
- <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
- <a  id="phonebtn10" href="#" class="btn  btn-lg phone" role="button"   style="color:white;background-color:red; margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
-              <span class="fa fa-fw fa-phone-slash fa-2x"></span>
-          </a> 
- </div>
-<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;padding-left:5px;padding-right:150px;">
- <button  id="reacttel" href="#" class="btn btn-primary btn-lg btn-responsive phone">
-            Réactiver
-          </button> 
-
-        </div>
-	<?php   } ?>	 <?php
+	</div>
+<?php
 
         $disp=$seance->dispatcheur ;
 
@@ -270,10 +265,22 @@ $extensionuser=$CurrentUser->extension;
               <a href="{{ route('entrees.finances') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte Finances" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:10px">
                   <span class="fa fa-fw fa-dollar fa-2x"></span>
               </a>
+
                <?php    }  else{   ?>
           <a href="{{ route('entrees.dispatching') }}" class="btn <?php echo $color; ?> btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotific" class="label label-warning" style="color:black"><?php echo $count;?></span><?php } else{ ?><span id="countnotific" class="label " style="color:black"><?php echo $count;?></span> <?php } ?>
           </a>
+
+               <?php    }    ?>
+          </div>
+<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+           <?php  if( $user_type=='financier' || $user_type=='bureau') {  ?>
+              
+ <a href="{{ route('envoyes.finances') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte Finances" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:10px">
+                  <span class="fa fa-fw fa-send fa-2x"></span>
+              </a>
+               <?php    }  else{   ?>
+          
 
                <?php    }    ?>
           </div>
@@ -479,7 +486,7 @@ $extensionuser=$CurrentUser->extension;
                         </div>
                         
                         <div class="form-group">
-                            <label for="sujetcrrecuencours">Sujet :</label>
+                            <label for="sujetcrrecuencours">Interlocuteur :</label>
                             <input type="text"    id="sujetcrrecuencours"   class="form-control" name="sujetcrrecuencours"    />
 
                         </div>
@@ -534,7 +541,7 @@ $extensionuser=$CurrentUser->extension;
                         </div>
                         
                         <div class="form-group">
-                            <label for="sujetcrrecuencours12">Sujet :</label>
+                            <label for="sujetcrrecuencours12">Interlocuteur :</label>
                             <input type="text"    id="sujetcrrecuencours12"   class="form-control" name="sujetcrrecuencours12"    />
 
                         </div>
@@ -973,7 +980,7 @@ $extensionuser=$CurrentUser->extension;
                         </div>
                         
                         <div class="form-group">
-                            <label for="sujetcrlibreencours">Sujet :</label>
+                            <label for="sujetcrlibreencours">Interlocuteur :</label>
                             <input type="text"    id="sujetcrlibreencours"   class="form-control" name="sujetcrlibreencours"    />
 
                         </div>
@@ -1041,7 +1048,7 @@ $extensionuser=$CurrentUser->extension;
                         </div>
                         -->
                         <div class="form-group">
-                            <label for="sujetcr">Sujet :</label>
+                            <label for="sujetcr">Interlocuteur :</label>
                             <input type="text"    id="sujetcrtel"   class="form-control" name="sujetcrtel"    />
 
                         </div>
@@ -1066,7 +1073,7 @@ $extensionuser=$CurrentUser->extension;
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappel"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button  type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button  type="button" class="btn btn-secondary reloadclass1" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -1097,7 +1104,7 @@ $extensionuser=$CurrentUser->extension;
                         </div>
                         
                         <div class="form-group">
-                            <label for="sujetcrlibre">Sujet :</label>
+                            <label for="sujetcrlibre">Interlocuteur :</label>
                             <input type="text"    id="sujetcrlibre"   class="form-control" name="sujetcrlibre"    />
 
                         </div>
@@ -1152,7 +1159,7 @@ $extensionuser=$CurrentUser->extension;
                         </div>
                         
                         <div class="form-group">
-                            <label for="sujetcrrecu">Sujet :</label>
+                            <label for="sujetcrrecu">Interlocuteur :</label>
                             <input type="text"    id="sujetcrrecu"   class="form-control" name="sujetcrrecu"    />
 
                         </div>
@@ -1177,7 +1184,7 @@ $extensionuser=$CurrentUser->extension;
                 </div>
                 <div class="modal-footer">
                     <a id="ajoutcompterappelrecu"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                    <button  type="button" class="btn btn-secondary reloadclass" data-dismiss="modal" style="width:100px">Annuler</button>
+                    <button  type="button" class="btn btn-secondary reloadclass2" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
@@ -1233,38 +1240,16 @@ $extensionuser=$CurrentUser->extension;
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script>
-$('#reacttel').click(function() {
-test=1;
-var val ='false';
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('telephonie.updating') }}",
-            method: "POST",
-            data: {val:val, _token: _token},
-            success: function (data) {
-location.reload();
-//alert(data);
-            }
-        });
-    return undefined;
-});
+
 
 if(testphone===1)
 {
 
+
 //alert('test');
 $(window).bind('beforeunload', function(){
 
-var val ='false';
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('telephonie.updating') }}",
-            method: "POST",
-            data: {val:val, _token: _token},
-            success: function (data) {
-//alert(data);
-            }
-        });
+window.localStorage.setItem('telephonie', 'false');
     return undefined;
 });
 
@@ -1273,8 +1258,19 @@ var val ='false';
 <script>
 
 $(document).ready(function() {
+if(testphone==1)
+{
+
+$("#divbtntel").html('<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;"><a  data-toggle="modal" data-target="#faireappel1" id="phonebtn"  href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button"  data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; "><span class="fa fa-fw fa-phone fa-2x"></span></a>   </div>');
+}
+else
+{
+$("#divbtntel").html('<div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;"><a  id="phonebtn10" href="#" class="btn  btn-lg phone" role="button"   style="color:white;background-color:red; margin-left:-5px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; "><span class="fa fa-fw fa-phone-slash fa-2x"></span></a></div><div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;"> <button  id="reacttel" onclick="reactTelFun()" href="#" class="btn btn-primary btn-lg btn-responsive phone">Réactiver</button> </div>');
+}
+
     
   });
+
     function colorerSeq(string,qy) {
         if(qy!='')
         {
@@ -1446,6 +1442,13 @@ $iduser=$user->id; ?>
 
 
 <script>
+function reactTelFun(){
+//alert('test');
+
+window.localStorage.setItem('telephonie', 'false');
+   
+location.reload();
+}
 
     $('#dpause').click(function() {
 
@@ -1514,8 +1517,22 @@ $iduser=$user->id; ?>
 
 </script>
 
-<?php    if ($testphoneaff==1) { ?>
+<?php     ?>
+<script> if (testphone==1) { </script>
+ <script src=""></script>
+<script> } </script>
 <script>
+if (testphone==1) {
+var head = document.getElementsByTagName('head')[0];
+var script = document.createElement('script');
+script.type = 'text/javascript';
+
+    script.src = 'http://192.168.1.249/najdatest/public/webphone/najdaapp/webphone/webphone_api.js';
+
+head.appendChild(script);
+
+
+
 $('#phonebtn1').on('click', function(event) {
                            
                          
@@ -1552,23 +1569,24 @@ webphone_api.onCallStateChange(function (event, direction, peername, peerdisplay
 {
 //alert(peername);
 peername1=peername;
-peername1.replace('+', '');
-peername1.replace(' ', '');
-//alert(peername1);
+
+peername2=peername1.replace('+', '');
+peername3=peername2.replace(' ', '');
+
 //alert('sirine');
-if( tabcall.includes(peername1)===true)
+if( tabcall.includes(peername3)===true)
 {
-var index = tabcall.indexOf(peername1);
+var index = tabcall.indexOf(peername3);
 if (index >= 0) {
   tabcall[index+1]=tabcall[index+1]+1;
 }
 if (tabcall[index+1]==2){
 //alert("ko");
 //alert(tabcall);
-
-$('table#tableappels tr#'+peername1).remove();
-$('table#tableappels1 tr#'+peername1).remove();
-var index = tabcall.indexOf(peername1);
+//alert('table#tableappels tr#'+peername1);
+$('table#tableappels tr#'+peername3).remove();
+$('table#tableappels1 tr#'+peername3).remove();
+var index = tabcall.indexOf(peername3);
 if (index >= 0) {
 tabcall.splice( index+1, 1 );
   tabcall.splice( index, 1 );
@@ -1586,7 +1604,7 @@ tabcall.splice( index+1, 1 );
                 {
 
 
-tabcall.push(peername1);
+tabcall.push(peername3);
 tabcall.push(0);
 //alert(tabcall);
 aurlf="<button  style='color:green' href='#' onclick='accept4(\""+peername+"\");'><i class='fas fa-phone-volume'></i>Accepter</button>";
@@ -1595,17 +1613,17 @@ aurlf2="<button  style='color:green' href='#' onclick='accept5(\""+peername+"\")
 aurlf3="<button  style='color:red' href='#' onclick='disappel(\""+peername+"\");'><i class='fas fa-phone-slash'></i>Rejeter</button>";
 
 peername1=peername;
-peername1.replace('+', '');
-peername1.replace(' ', '');
+peername2=peername1.replace('+', '');
+peername3=peername2.replace(' ', '');
 document.getElementById('divtableappels1').style.display = 'block';
- $("#tableappels1 tbody").append("<tr id='"+peername1+"'><td>"+peerdisplayname+"</td><td>"+aurlf2+'  '+aurlf3+"</td></tr>");
+ $("#tableappels1 tbody").append("<tr id='"+peername3+"'><td>"+peerdisplayname+"</td><td>"+aurlf2+'  '+aurlf3+"</td></tr>");
 
 
 if(incall!=1)
 {
 
 $('#modalappels').modal({show: true});
- $("#tableappels tbody").append("<tr id='"+peername1+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
+ $("#tableappels tbody").append("<tr id='"+peername3+"'><td>"+peerdisplayname+"</td><td>"+aurlf+'  '+aurlf1+"</td></tr>");
 
 if(acceptvar===peername)
 {
@@ -1659,7 +1677,7 @@ $.ajax({
                          $(".modal-body #nomencoursrecep").val(data );}
                    // }
                 });
-var minutesLabel1 = document.getElementById("minutes1");
+/*var minutesLabel1 = document.getElementById("minutes1");
 var secondsLabel1 = document.getElementById("seconds1");
 var totalSeconds1 = 0;
 setInterval(setTime1, 1000);
@@ -1677,7 +1695,7 @@ function pad1(val1) {
   } else {
     return valString1;
   }
-}
+}*/
 document.getElementById('compterendurecuencours').style.display = 'block';
 document.getElementById('mettreenattente').style.display = 'inline-block';
  document.getElementById('couperson').style.display = 'inline-block'; 
@@ -1704,7 +1722,7 @@ $.ajax({
                          $(".modal-body #nomencoursrecep12").val(data );}
                    // }
                 });
-var minutesLabel12 = document.getElementById("minutes12");
+/*var minutesLabel12 = document.getElementById("minutes12");
 var secondsLabel12 = document.getElementById("seconds12");
 var totalSeconds12 = 0;
 setInterval(setTime12, 1000);
@@ -1722,7 +1740,7 @@ function pad12(val12) {
   } else {
     return valString12;
   }
-}
+}*/
 
 document.getElementById('compterendurecuencours12').style.display = 'block';
 document.getElementById('racc12').style.display = 'inline-block';
@@ -1742,7 +1760,7 @@ if (event === 'connected' && direction == 1 && conference!=1 )
 
                 {
 //alert(peername);
-var minutesLabel = document.getElementById("minutes");
+/*var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
 setInterval(setTime, 1000);
@@ -1760,7 +1778,7 @@ function pad(val) {
   } else {
     return valString;
   }
-}
+}*/
 
 document.getElementById('compterenduencours').style.display = 'block';
 document.getElementById('mettreenattenteenv2').style.display = 'inline-block';
@@ -1769,7 +1787,7 @@ document.getElementById('transferappenv2').style.display = 'inline-block';
 document.getElementById('conferenceappenv2').style.display = 'inline-block';
 document.getElementById('status_callenv2').innerHTML="Appel en cours";
 document.getElementById('calvier').style.display = 'inline-block';
-var minutesLabel2 = document.getElementById("min2");
+/*var minutesLabel2 = document.getElementById("min2");
 var secondsLabel2 = document.getElementById("sec2");
 var totalSeconds2 = 0;
 setInterval(setTime2, 1000);
@@ -1787,7 +1805,7 @@ function pad2(val2) {
   } else {
     return valString2;
   }
-}
+}*/
 
 document.getElementById('compterendudossierencours').style.display = 'block';
 document.getElementById('mettreenattenteenv').style.display = 'inline-block';
@@ -1803,9 +1821,9 @@ if (event === 'disconnected' && direction == 2  && webphone_api.isincall()!=true
  //webphone_api.setline(peername);
            //webphone_api.hangup(true);
 peername1=peername;
-peername1.replace('+', '');
-peername1.replace(' ', '');
-$('table#tableappels tr#'+peername1).remove();
+peername2=peername1.replace('+', '');
+peername3=peername2.replace(' ', '');
+$('table#tableappels tr#'+peername3).remove();
 
 
 incall = 0;
@@ -2064,7 +2082,27 @@ else
 {conference = 0;
 incall = 0;
 $('#appelinterfacerecep').modal('hide');
-location.reload();}}
+
+document.getElementById('compterendurecuencours').style.display = 'none';
+document.getElementById('mettreenattente').style.display = 'none';
+ document.getElementById('couperson').style.display = 'none'; 
+document.getElementById('transferapp').style.display = 'none';
+document.getElementById('conferenceapp').style.display = 'none';
+document.getElementById('status_call').innerHTML="";
+document.getElementById('calvier3').style.display = 'none';
+
+
+
+document.getElementById('contenucrrecuencours').value='';
+      document.getElementById('sujetcrrecuencours').value='';
+            document.getElementById('descriptioncrrecuencours').value='';
+document.getElementById('contenucrrecu').value='';
+      document.getElementById('sujetcrrecu').value='';
+            document.getElementById('descriptioncrrecu').value='';
+
+document.getElementById('numatrans').value='';
+document.getElementById('numaconf').value='';
+document.getElementById('code3').value='';}}
        
         }
   function Hangup21()
@@ -2086,7 +2124,29 @@ else
 {conference = 0;
 incall = 0;
 $('#appelinterfacerecep').modal('hide');
-location.reload();}}
+document.getElementById('compterendurecuencours12').style.display = 'none';
+document.getElementById('mettreenattente12').style.display = 'none';
+ document.getElementById('couperson12').style.display = 'none'; 
+document.getElementById('transferapp12').style.display = 'none';
+document.getElementById('conferenceapp12').style.display = 'none';
+document.getElementById('status_call12').innerHTML="";
+document.getElementById('calvier12').style.display = 'none';
+document.getElementById('racc12').style.display = 'none';
+document.getElementById('pass1').style.display = 'none';
+
+
+document.getElementById('contenucrrecuencours12').value='';
+      document.getElementById('sujetcrrecuencours12').value='';
+            document.getElementById('descriptioncrrecuencours12').value='';
+document.getElementById('contenucrrecu').value='';
+      document.getElementById('sujetcrrecu').value='';
+            document.getElementById('descriptioncrrecu').value='';
+
+document.getElementById('numatrans').value='';
+document.getElementById('numaconf').value='';
+document.getElementById('code3').value='';
+
+}}
        
         }
 function disappel(peername)
@@ -2113,7 +2173,7 @@ webphone_api.setline(peername);
             webphone_api.accept(true);
 incall = 1;
 acceptvar = peername ;
-            alert(acceptvar);
+           // alert(acceptvar);
         }
 function accept5(peername)
         {
@@ -2155,6 +2215,45 @@ webphone_api.setline(1);
             webphone_api.hold(true);
 webphone_api.setline(2);
             webphone_api.call(numtrans);
+webphone_api.onEvent( function (type, message)
+{
+
+if (type === 'event')
+{
+var evtarray = message.split(','); //parameters are separated by comma (,)
+//alert(message);
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'Ringing')
+{
+
+alert("l'appel au numéro "+evtarray[3]+' sonne')
+
+}
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallConnect')
+{
+
+alert("l'appel au numéro "+evtarray[3]+' est connecté')
+
+}
+
+
+
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallDisconnect')
+{
+if(s1==1)
+{
+alert("l'appel au numéro "+evtarray[3]+' est raccroché')
+}
+else
+{
+alert("l'appel au numéro "+evtarray[3]+' est deconnecté')
+}
+s1=0;
+}
+
+
+
+}
+});
 //alert("OK");
         }
 function transfer7()
@@ -2184,6 +2283,46 @@ webphone_api.setline(1);
 webphone_api.setline(2);
             webphone_api.call(numtrans);
 
+webphone_api.onEvent( function (type, message)
+{
+
+if (type === 'event')
+{
+var evtarray = message.split(','); //parameters are separated by comma (,)
+//alert(message);
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'Ringing')
+{
+
+alert("l'appel au numéro "+evtarray[3]+' sonne')
+
+}
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallConnect')
+{
+s1=1;
+alert("l'appel au numéro "+evtarray[3]+' est connecté')
+
+}
+
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallDisconnect')
+{
+if(s1==1)
+{
+alert("l'appel au numéro "+evtarray[3]+' est raccroché')
+}
+else
+{
+alert("l'appel au numéro "+evtarray[3]+' est deconnecté')
+}
+s1=0;
+}
+
+
+
+}
+});
+
+
+
 //alert("OK");
         }
  function Conference9()
@@ -2210,6 +2349,7 @@ if(webphone_api.isincall!=true)
 {
             webphone_api.hangup();}
 $('#numaconference').modal('hide');
+
 
 //alert("OK");
         }
@@ -2314,7 +2454,7 @@ $.ajax({
 
   $("#faireappel1").modal('hide');
                 
- 
+ //alert(peerdisplayname);
  
                 webphone_api.call(peerdisplayname);}
 
@@ -2334,7 +2474,28 @@ if(webphone_api.isincall())
 else
 {conference = 0;
 $('#appelinterfaceenvoi2').modal('hide');
-location.reload();}
+document.getElementById('compterenduencours').style.display = 'none';
+document.getElementById('mettreenattenteenv2').style.display = 'none';
+ document.getElementById('coupersonenv2').style.display = 'none'; 
+document.getElementById('transferappenv2').style.display = 'none';
+document.getElementById('conferenceappenv2').style.display = 'none';
+document.getElementById('status_callenv2').innerHTML="";
+document.getElementById('calvier').style.display = 'none';
+ totalSeconds = 0;
+document.getElementById("minutes").innerHTML='';
+
+ document.getElementById("seconds").innerHTML='';
+
+
+
+
+document.getElementById('contenucrlibreencours').value='';
+      document.getElementById('sujetcrlibreencours').value='';
+            document.getElementById('descriptioncrlibreencours').value='';
+document.getElementById('numtel1').value='';
+document.getElementById('numatrans2').value='';
+document.getElementById('numaconf2').value='';
+document.getElementById('code').value='';}
         }
 function pass()
 {
@@ -2365,8 +2526,10 @@ function dtmfmessage()
 {
 
 msg=document.getElementById('code').value.toString();
-
+var mystringvariable =webphone_api.getparameter('dtmfmode');
+alert("msg: "+msg);
 webphone_api.dtmf(-2,msg);
+document.getElementById('code').value='';
 
 }
 function dtmfmessage2()
@@ -2376,6 +2539,7 @@ msg=document.getElementById('code2').value.toString();
 //alert(msg);
 webphone_api.dtmf(-2,msg);
 //alert('succes');
+document.getElementById('code2').value='';
 }
 function dtmfmessage3()
 {
@@ -2384,6 +2548,7 @@ msg=document.getElementById('code3').value.toString();
 //alert(msg);
 webphone_api.dtmf(-2,msg);
 //alert('succes');
+document.getElementById('code3').value='';
 }
    
     function transfer2()
@@ -2397,6 +2562,43 @@ webphone_api.setline(1);
             webphone_api.hold(true);
 webphone_api.setline(2);
             webphone_api.call(numtrans);
+webphone_api.onEvent( function (type, message)
+{
+
+if (type === 'event')
+{
+var evtarray = message.split(','); //parameters are separated by comma (,)
+//alert(message);
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'Ringing')
+{
+
+alert("l'appel au numéro "+evtarray[3]+' sonne')
+
+}
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallConnect')
+{
+s=1;
+alert("l'appel au numéro "+evtarray[3]+' est connecté')
+
+}
+
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallDisconnect')
+{
+if(s==1)
+{
+alert("l'appel au numéro "+evtarray[3]+' est raccroché')
+}
+else
+{
+alert("l'appel au numéro "+evtarray[3]+' est deconnecté')
+}
+s=0;
+}
+
+}
+});
+
+
 //alert("OK");
         }
 function transfer4()
@@ -2417,6 +2619,7 @@ $('#numatransfer2').modal('hide');}
 
  function Conference2()
         {
+
 conference=1;
 numtrans=$('#numaconf2').val();
 numtrans.toString();
@@ -2425,6 +2628,44 @@ webphone_api.setline(1);
             webphone_api.hold(true);
 webphone_api.setline(2);
             webphone_api.call(numtrans);
+webphone_api.onEvent( function (type, message)
+{
+
+if (type === 'event')
+{
+var evtarray = message.split(','); //parameters are separated by comma (,)
+//alert(message);
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'Ringing')
+{
+
+alert("l'appel au numéro "+evtarray[3]+' sonne')
+
+}
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallConnect')
+{
+s=1;
+alert("l'appel au numéro "+evtarray[3]+' est connecté')
+
+}
+
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallDisconnect')
+{
+if(s==1)
+{
+alert("l'appel au numéro "+evtarray[3]+' est raccroché')
+}
+else
+{
+alert("l'appel au numéro "+evtarray[3]+' est deconnecté')
+}
+s=0;
+}
+
+
+
+}
+});
+
 
 //alert("OK");
         }
@@ -2500,7 +2741,27 @@ document.getElementById('coupersonenv2').style.display = 'inline-block';}
                     method: "POST",
                     data: { envoyetel:envoyetel,contenu:contenu, sujet:sujet,description:description,iduser:iduser, _token: _token},
                     success: function (data) {
-                     location.reload();
+$("#crenduappel").modal('hide');
+document.getElementById('compterendudossierencours').style.display = 'none';
+document.getElementById('mettreenattenteenv').style.display = 'none';
+ document.getElementById('coupersonenv').style.display = 'none'; 
+document.getElementById('transferappenv').style.display = 'none';
+document.getElementById('conferenceappenv').style.display = 'none';
+document.getElementById('status_callenv').innerHTML="";
+document.getElementById('calvier2').style.display = 'none';
+
+
+
+
+document.getElementById('sujetcrteldossierencours').value='';
+      document.getElementById('descriptioncrteldossierencours').value='';
+            document.getElementById('contenucrteldossierencours').value='';
+document.getElementById('numtel').value='';
+document.getElementById('numtelint').value='';
+document.getElementById('numtel20').value='';
+document.getElementById('numatrans1').value='';
+document.getElementById('numaconf1').value='';
+document.getElementById('code2').value='';
                     }
                 });
             }else{
@@ -2523,7 +2784,29 @@ document.getElementById('coupersonenv2').style.display = 'inline-block';}
                     method: "POST",
                     data: { envoyetel:envoyetel,contenu:contenu, sujet:sujet,description:description,iduser:iduser,dossier:dossier, _token: _token},
                     success: function (data) {
-                     location.reload();
+                    // location.reload(); 
+  $("#crenduappellibre").modal('hide');
+document.getElementById('compterenduencours').style.display = 'none';
+document.getElementById('mettreenattenteenv2').style.display = 'none';
+ document.getElementById('coupersonenv2').style.display = 'none'; 
+document.getElementById('transferappenv2').style.display = 'none';
+document.getElementById('conferenceappenv2').style.display = 'none';
+document.getElementById('status_callenv2').innerHTML="";
+document.getElementById('calvier').style.display = 'none';
+ totalSeconds = 0;
+document.getElementById("minutes").innerHTML='';
+
+ document.getElementById("seconds").innerHTML='';
+
+
+
+document.getElementById('contenucrlibreencours').value='';
+      document.getElementById('sujetcrlibreencours').value='';
+            document.getElementById('descriptioncrlibreencours').value='';
+document.getElementById('numtel1').value='';
+document.getElementById('numatrans2').value='';
+document.getElementById('numaconf2').value='';
+document.getElementById('code').value='';
                     }
                 });
             }else{
@@ -2548,7 +2831,40 @@ $('#ajoutcompterappelrecu').click(function() {
                     method: "POST",
                     data: { envoyetel:envoyetel,contenu:contenu, sujet:sujet,description:description,iduser:iduser,dossier:dossier, _token: _token},
                     success: function (data) {
-                     location.reload();
+                      $("#crenduappelrecu").modal('hide');
+document.getElementById('compterendurecuencours').style.display = 'none';
+document.getElementById('mettreenattente').style.display = 'none';
+ document.getElementById('couperson').style.display = 'none'; 
+document.getElementById('transferapp').style.display = 'none';
+document.getElementById('conferenceapp').style.display = 'none';
+document.getElementById('status_call').innerHTML="";
+document.getElementById('calvier3').style.display = 'none';
+
+
+
+document.getElementById('contenucrrecuencours').value='';
+      document.getElementById('sujetcrrecuencours').value='';
+            document.getElementById('descriptioncrrecuencours').value='';
+document.getElementById('contenucrrecu').value='';
+      document.getElementById('sujetcrrecu').value='';
+            document.getElementById('descriptioncrrecu').value='';
+
+document.getElementById('numatrans').value='';
+document.getElementById('numaconf').value='';
+document.getElementById('code3').value='';
+document.getElementById('compterendurecuencours12').style.display = 'none';
+document.getElementById('mettreenattente12').style.display = 'none';
+ document.getElementById('couperson12').style.display = 'none'; 
+document.getElementById('transferapp12').style.display = 'none';
+document.getElementById('conferenceapp12').style.display = 'none';
+document.getElementById('status_call12').innerHTML="";
+document.getElementById('calvier12').style.display = 'none';
+document.getElementById('racc12').style.display = 'none';
+document.getElementById('pass1').style.display = 'none';
+
+document.getElementById('contenucrrecuencours12').value='';
+      document.getElementById('sujetcrrecuencours12').value='';
+            document.getElementById('descriptioncrrecuencours12').value='';
                     }
                 });
             }else{
@@ -2557,7 +2873,94 @@ $('#ajoutcompterappelrecu').click(function() {
         }); 
 $('.reloadclass').click(function(){
  
-                            window.location.reload();
+document.getElementById('compterenduencours').style.display = 'none';
+document.getElementById('mettreenattenteenv2').style.display = 'none';
+ document.getElementById('coupersonenv2').style.display = 'none'; 
+document.getElementById('transferappenv2').style.display = 'none';
+document.getElementById('conferenceappenv2').style.display = 'none';
+document.getElementById('status_callenv2').innerHTML="";
+document.getElementById('calvier').style.display = 'none';
+ totalSeconds = 0;
+document.getElementById("minutes").innerHTML='';
+
+ document.getElementById("seconds").innerHTML='';
+
+
+
+document.getElementById('contenucrlibreencours').value='';
+      document.getElementById('sujetcrlibreencours').value='';
+            document.getElementById('descriptioncrlibreencours').value='';
+document.getElementById('numtel1').value='';
+document.getElementById('numatrans2').value='';
+document.getElementById('numaconf2').value='';
+document.getElementById('code').value='';
+
+
+
+
+});
+$('.reloadclass1').click(function(){
+
+document.getElementById('compterendudossierencours').style.display = 'none';
+document.getElementById('mettreenattenteenv').style.display = 'none';
+ document.getElementById('coupersonenv').style.display = 'none'; 
+document.getElementById('transferappenv').style.display = 'none';
+document.getElementById('conferenceappenv').style.display = 'none';
+document.getElementById('status_callenv').innerHTML="";
+document.getElementById('calvier2').style.display = 'none';
+
+
+
+
+document.getElementById('sujetcrteldossierencours').value='';
+      document.getElementById('descriptioncrteldossierencours').value='';
+            document.getElementById('contenucrteldossierencours').value='';
+document.getElementById('numtel').value='';
+document.getElementById('numtelint').value='';
+document.getElementById('numtel20').value='';
+document.getElementById('numatrans1').value='';
+document.getElementById('numaconf1').value='';
+document.getElementById('code2').value='';
+
+
+
+});
+$('.reloadclass2').click(function(){
+document.getElementById('compterendurecuencours').style.display = 'none';
+document.getElementById('mettreenattente').style.display = 'none';
+ document.getElementById('couperson').style.display = 'none'; 
+document.getElementById('transferapp').style.display = 'none';
+document.getElementById('conferenceapp').style.display = 'none';
+document.getElementById('status_call').innerHTML="";
+document.getElementById('calvier3').style.display = 'none';
+
+
+
+document.getElementById('contenucrrecuencours').value='';
+      document.getElementById('sujetcrrecuencours').value='';
+            document.getElementById('descriptioncrrecuencours').value='';
+document.getElementById('contenucrrecu').value='';
+      document.getElementById('sujetcrrecu').value='';
+            document.getElementById('descriptioncrrecu').value='';
+
+document.getElementById('numatrans').value='';
+document.getElementById('numaconf').value='';
+document.getElementById('code3').value='';
+document.getElementById('compterendurecuencours12').style.display = 'none';
+document.getElementById('mettreenattente12').style.display = 'none';
+ document.getElementById('couperson12').style.display = 'none'; 
+document.getElementById('transferapp12').style.display = 'none';
+document.getElementById('conferenceapp12').style.display = 'none';
+document.getElementById('status_call12').innerHTML="";
+document.getElementById('calvier12').style.display = 'none';
+
+
+
+document.getElementById('contenucrrecuencours12').value='';
+      document.getElementById('sujetcrrecuencours12').value='';
+            document.getElementById('descriptioncrrecuencours12').value='';
+document.getElementById('racc12').style.display = 'none';
+document.getElementById('pass1').style.display = 'none';
 });
  
         function ButtonOnclick()
@@ -2575,8 +2978,7 @@ nom=document.getElementById('numtel').options[document.getElementById('numtel').
 //alert(nom);
 $(".modal-body #nomencours").val(nom );
   $("#faireappel").modal('hide');
-                
- 
+$("#faireappelint").modal('hide'); 
   /**Configuration parameters*/
  /*var extensiontel = $('#extensiontel').val();
  var motdepassetel = $('#motdepassetel').val();
@@ -2589,6 +2991,44 @@ $(".modal-body #nomencours").val(nom );
   webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
  webphone_api.start();*/
             num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+//alert(num);
+//alert(webphone_api.getstatus());
+//document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
+                webphone_api.call(num);
+
+//testiscall();
+
+
+}
+ function ButtonOnclickinter()
+        {
+document.getElementById('natureappel').value='dossier';
+
+                     $('#appelinterfaceenvoi').modal({show:true});
+
+
+     
+num=document.getElementById('numtelint').options[document.getElementById('numtelint').selectedIndex].value;
+nom=document.getElementById('numtelint').options[document.getElementById('numtelint').selectedIndex].title;
+
+     $(".modal-body #numencours").val( num );
+
+//alert(nom);
+$(".modal-body #nomencours").val(nom );
+  $("#faireappel").modal('hide');
+$("#faireappelint").modal('hide'); 
+  /**Configuration parameters*/
+ /*var extensiontel = $('#extensiontel').val();
+ var motdepassetel = $('#motdepassetel').val();
+//alert(extensiontel);
+        webphone_api.parameters['username'] = extensiontel;      // SIP account username
+        webphone_api.parameters['password'] = motdepassetel;      // SIP account password (see the "Parameters encryption" in the documentation)        
+        webphone_api.parameters['callto'] = '';        // destination number to call
+        webphone_api.parameters['autoaction'] = 0;     // 0=nothing (default), 1=call, 2=chat, 3=video call
+        webphone_api.parameters['autostart'] = 0;     // start the webphone only when button is clicked
+  webphone_api.parameters['voicerecupload'] = 'ftp://mizutest:NajdaApp2020!@host.enterpriseesolutions.com/voice_CALLER_CALLED.wav'; 
+ webphone_api.start();*/
+            num=document.getElementById('numtelint').options[document.getElementById('numtelint').selectedIndex].value;
 //alert(webphone_api.getstatus());
 //document.getElementById("status_call").innerHTML= webphone_api.parameters.getstatus();
                 webphone_api.call(num);
@@ -2685,7 +3125,27 @@ $(".modal-body #nomencours").val(nom);
 else
 {conference = 0;
 $('#appelinterfaceenvoi').modal('hide');
-location.reload();}
+document.getElementById('compterendudossierencours').style.display = 'none';
+document.getElementById('mettreenattenteenv').style.display = 'none';
+ document.getElementById('coupersonenv').style.display = 'none'; 
+document.getElementById('transferappenv').style.display = 'none';
+document.getElementById('conferenceappenv').style.display = 'none';
+document.getElementById('status_callenv').innerHTML="";
+document.getElementById('calvier2').style.display = 'none';
+
+
+
+
+document.getElementById('sujetcrteldossierencours').value='';
+      document.getElementById('descriptioncrteldossierencours').value='';
+            document.getElementById('contenucrteldossierencours').value='';
+document.getElementById('numtel').value='';
+document.getElementById('numtelint').value='';
+document.getElementById('numtel20').value='';
+document.getElementById('numatrans1').value='';
+document.getElementById('numaconf1').value='';
+document.getElementById('code2').value='';
+}
             
         }
     function transfer1()
@@ -2699,6 +3159,43 @@ webphone_api.setline(1);
             webphone_api.hold(true);
 webphone_api.setline(2);
             webphone_api.call(numtrans);
+webphone_api.onEvent( function (type, message)
+{
+
+if (type === 'event')
+{
+var evtarray = message.split(','); //parameters are separated by comma (,)
+//alert(message);
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'Ringing')
+{
+
+alert("l'appel au numéro "+evtarray[3]+' sonne')
+
+}
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallConnect')
+{
+s=1;
+alert("l'appel au numéro "+evtarray[3]+' est connecté')
+
+}
+
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallDisconnect')
+{
+if(s==1)
+{
+alert("l'appel au numéro "+evtarray[3]+' est raccroché')
+}
+else
+{
+alert("l'appel au numéro "+evtarray[3]+' est deconnecté')
+}
+s=0;
+}
+
+
+
+}
+});
         }
 function transfer5()
 {
@@ -2725,6 +3222,43 @@ webphone_api.setline(1);
             webphone_api.hold(true);
 webphone_api.setline(2);
             webphone_api.call(numtrans);
+webphone_api.onEvent( function (type, message)
+{
+
+if (type === 'event')
+{
+var evtarray = message.split(','); //parameters are separated by comma (,)
+//alert(message);
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'Ringing')
+{
+
+alert("l'appel au numéro "+evtarray[3]+' sonne')
+
+}
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallConnect')
+{
+s=1;
+alert("l'appel au numéro "+evtarray[3]+' est connecté')
+
+}
+
+if (evtarray[0] === 'STATUS' && evtarray[1] === '2' && evtarray[2] === 'CallDisconnect')
+{
+if(s==1)
+{
+alert("l'appel au numéro "+evtarray[3]+' est raccroché')
+}
+else
+{
+alert("l'appel au numéro "+evtarray[3]+' est deconnecté')
+}
+s=0;
+}
+
+
+
+}
+});
 
 //alert("OK");
         }
@@ -2814,7 +3348,7 @@ while (  event!=='setup')
 document.getElementById('status_call').innerHTML ="appel en cours";
 
     }*/
-
+}
 </script>
-<?php    } ?>
+
 

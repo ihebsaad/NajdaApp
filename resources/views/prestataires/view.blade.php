@@ -114,13 +114,15 @@ $user = auth()->user();
                  <label>Type de prestations</label>
                  <div class="row">
                      <select class="itemName form-control col-lg-6" style="width:100%" name="itemName"  multiple  id="typeprest" >
-                          <?php if ( count($relations) > 0 ) { ?>
-
+                          <?php  if ( count($relations) > 0 ) { ?>
+                                <?php $relationslist = array();  ?>
                          @foreach($relations as $prest  )
+                         <?php array_push($relationslist,$prest->type_prestation_id ); ?>
+                          @endforeach
                              @foreach($typesprestations as $aKey)
-                                 <option  <?php if($prest->type_prestation_id==$aKey->id){echo 'selected="selected"';}?>    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                 <option  <?php if(in_array($aKey->id, $relationslist)){echo 'selected="selected"';}?>    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
                              @endforeach
-                         @endforeach
+                        
 
                          <?php
                          } else { ?>
@@ -143,12 +145,17 @@ $user = auth()->user();
                   <select class="form-control  col-lg-12 itemName " style="width:100%" name="specialite"  multiple  id="specialite"  >
 
                       <?php if ( count($relations2) > 0 ) { ?>
+                        <?php $relations2list = array();  ?>
+                         @foreach($relations2 as $rel  )
+                         <?php array_push($relations2list,$rel->specialite ); ?>
+                          @endforeach
 
-                     @foreach($relations2 as $rel  )
+
+
                          @foreach($specialites2 as $sp)
-                             <option  @if($rel->specialite==$sp->id)selected="selected"@endif    onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                             <option  <?php if(in_array($sp->id, $relations2list)){echo 'selected="selected"';}?>    onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                          @endforeach
-                     @endforeach
+                     
 
                      <?php
 
@@ -184,12 +191,15 @@ $user = auth()->user();
                                         <option></option>
 
                                         <?php if ( count($relationsgv) > 0 ) {?>
+                                                <?php $relationsgvlist = array();  ?>
+                     @foreach($relationsgv as $Rgv  )
+                     <?php array_push($relationsgvlist,$Rgv->citie_id ); ?>
+                      @endforeach
 
-                                    @foreach($relationsgv as $Rgv  )
                                             @foreach($gouvernorats as $aKeyG)
-                                                <option  @if($Rgv->citie_id==$aKeyG->id)selected="selected"@endif    value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                                <option <?php if(in_array($aKeyG->id, $relationsgvlist)){echo 'selected="selected"';}?>   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
                                             @endforeach
-                                        @endforeach
+                                        
 
                                         <?php
                                         } else { ?>
@@ -206,32 +216,17 @@ $user = auth()->user();
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Ville du siège social</label><br> 
+<input list="villes" onchange="changing(this)" type="text" class="form-control input" name="ville" id="ville" value="{{ $prestataire->ville }}" style="width:290px">
 
-                                <input onchange="changing(this)" type="text" class="form-control input" name="ville" id="ville" value="{{ $prestataire->ville }}">
+<datalist id="villes">
+     <option value="">Selectionner</option>
+                                         
+                                         @foreach($villes as $pres)
 
-                            <?php
-                                if ($prestataire->ville==''){
-                                if ($prestataire->ville_id >0)
-                                    {
-
-                                        $villeid=intval($prestataire['ville_id']);
-                                        if (isset($villes[$villeid]['name']) ){$nomv=$villes[$villeid-1]['name'];}
-                                        else{$nomv=$prestataire['ville'];}
-
-                                        echo '<label style="font-weight:bold">'. $nomv .'</label>';
-
-                                        ?>
-
-                                 <?php    }  }?>
-
-
-                                <script>
-                                    var placesAutocomplete = places({
-                                        appId: 'plCFMZRCP0KR',
-                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                        container: document.querySelector('#ville')
-                                    });
-                                </script>
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+</datalist>
+                              
                              </div>
                         </div>
 
@@ -564,7 +559,7 @@ $user = auth()->user();
 
 
             <div id="tab03" class="tab-pane fade    " style="padding-top:30px">
-  <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>      
+  <?php   if(($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome') && ($prestataire->annule==0)  ){ ?>      
 
 
                 <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Priorité</b></button>
@@ -965,23 +960,18 @@ echo "['Non ',    ".$count_retour_non."] ";
                                 <div class="form-group ">
                                     <label>Ville</label>
                                     <div class="row">
-                                        <input class="form-control col-lg-6" style="padding-left:5px;" type="text"  id="villepr" />
-                                        <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecode" />
+                                       <select autocomplete class="select2 form-control  col-lg-12 " style="width:400px" name="villepr"    id="villepr">
+                                         <option value="toutes">Selectionner</option>
+                                         <option value="toutes">toutes</option>
+                                         @foreach($villes as $pres)
+
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+
+                                     </select>
 
                                     </div>
-                                <script>
-                                    (function() {
-                                        var placesAutocomplete2 = places({
-                                            appId: 'plCFMZRCP0KR',
-                                            apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                            container: document.querySelector('#villepr'),
-
-                                        });
-                                        placesAutocomplete2.on('change', function resultSelected(e) {
-                                              document.querySelector('#villecode').value = e.suggestion.postcode || '';
-                                        });
-                                    })();
-                                    </script>
+                                
                                 </div>
                                 <div class="form-group ">
                                     <label>Priorité *</label>
@@ -1273,7 +1263,7 @@ echo "['Non ',    ".$count_retour_non."] ";
 
                             <div class="form-group">
                                 <label for="contenu">Message:</label>
-                                <textarea  type="text" class="form-control" name="lemessage"></textarea>
+                                <textarea id="lemessagel" type="text" class="form-control" name="lemessage"></textarea>
                             </div>
                         {{--  {!! NoCaptcha::renderJs() !!}     --}}
                         <!--  <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
@@ -1675,7 +1665,7 @@ else
     function changingAddress(id,champ,elm) {
 
         var champid=elm.id;
-        if (champid.slice(0, 5)=="email") {
+        if (champid.slice(0, 11)=="email-champ") {
             
      
          var email = document.getElementById(champid).value;
@@ -1775,6 +1765,7 @@ else{
 
     $(function () {
         $('#envoisms').click(function(){
+
             var description = $('#ladescription').val();
             var destinataire = $('#ledestinataire').val();
             var message = $('#lemessagel').val();
@@ -1784,15 +1775,17 @@ else{
             if ((message != '') &&(destinataire!='')&&(description!=''))
             {
                 var _token = $('input[name="_token"]').val();
+//alert("ok");
                 $.ajax({
-                    url:"{{ route('emails.sendsmsxml') }}",
-                    method:"POST",
+                    url:"{{ route('emails.sendsmsxmlAjax') }}",
+                    method:"get",
                     data:{description:description,destinataire:destinataire,message:message,dossier:dossier, _token:_token},
                     success:function(data){
+///alert(data);
 
                         alert('SMS Envoyé !');
-                         //window.location =data;
- location.reload();
+                         window.location =data;
+ //location.reload();
                         $("#sendsms").modal('hide');
 
                     }
@@ -1913,6 +1906,7 @@ else{
             }
 
         });
+$('#villepr').select2();
 
         var $topo5 = $('#typeprest');
 
@@ -2097,7 +2091,10 @@ else{
             var gouvernorat = $('#gouvpr').val();
             var priorite = $('#prior').val();
             var ville = $('#villepr').val();
-            var postal = $('#villecode').val();
+if(ville=='toutes')
+{  var postal = 1;}
+else
+{var postal = 2;}
          //   var disponibilite = $('#disp').val();
            // var evaluation = $('#note').val();
             var specialite = $('#specialite2').val();

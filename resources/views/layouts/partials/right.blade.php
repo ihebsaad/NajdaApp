@@ -146,6 +146,7 @@ use App\Attachement ;
 
                             ?>
                   @if ($Missions || $MissionsDC )
+
 <!--  début tab -+----------------------------------------------------------------------------------------->
                         <ul id="actiontabs" class="nav nav-tabs" style="margin-bottom: 15px;">
                             <li class="<?php if ( ! \Request::is('entrees/show/*')) {echo ' class="active" ';} ?> ">
@@ -193,7 +194,9 @@ use App\Attachement ;
                                     
                                     <div class="accordion panel-group" id="accordion">
 
+
                                  @if ($Missions || $MissionsDC )
+
 
                                   <div class="row">
 
@@ -231,7 +234,12 @@ use App\Attachement ;
                                            <h4 class="panel-title">
                                               <a href="{{action('DossiersController@view',$Missidc->dossier->id)}}"> {{$Missidc->dossier->reference_medic}}&nbsp;-&nbsp;{{$Missidc->dossier-> subscriber_name}} {{$Missidc->dossier->subscriber_lastname}}</a>
                                              <br>
+
                                                 {{$Missidc->typeMission->nom_type_Mission}}
+   <br>
+
+{{$Missidc->commentaire}}
+
                                                <a data-toggle="collapse" href="#collapse{{$Missidc->id}}">&nbsp; --</a>@if ($Missidc->assistant_id != NULL && $Missidc->emetteur_id != NULL && $Missidc->emetteur_id != $Missidc->assistant_id && $Missidc->emetteur_id!= $Missidc->user_id && $Missidc->statut_courant =='deleguee')
                                          <span style="color:#151515"> &nbsp;(déléguée par {{$Missidc-> emetteur->name}}&nbsp {{$Missidc->emetteur->lastname}} ) </span> @endif
 
@@ -300,6 +308,9 @@ use App\Attachement ;
                                               <a href="{{action('DossiersController@view',$Mission->dossier->id)}}"> {{$Mission->dossier->reference_medic}}&nbsp;-&nbsp;{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}}</a>
                                              <br>
                                                 {{$Mission->typeMission->nom_type_Mission}}
+   <br>
+
+{{$Mission->commentaire}}
                                                <a data-toggle="collapse" href="#collapse{{$Mission->id}}">&nbsp; --</a>@if ($Mission->assistant_id != NULL && $Mission->emetteur_id != NULL && $Mission->emetteur_id != $Mission->assistant_id && $Mission->emetteur_id!= $Mission->user_id && $Mission->statut_courant =='deleguee')
                                          <span style="color:#151515"> &nbsp;(déléguée par {{$Mission-> emetteur->name}}&nbsp {{$Mission->emetteur->lastname}} ) </span> @endif
 

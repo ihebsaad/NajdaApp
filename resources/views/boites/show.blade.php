@@ -184,8 +184,9 @@ $users=UsersController::ListeUsers();
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
-  $param= App\Parametre::find(1);$env=$param->env;
+ $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
 ?>
 <script>
 

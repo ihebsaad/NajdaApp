@@ -165,13 +165,21 @@ function convert($seconds) {
                 </div>
                 <?php }?>
 
+<?php if ( $envoye->type == 'tel' ) {?>
+                <div class="form-group">
+                    <label for="sujet">Interlocuteur :</label>
+                    <input onchange="changing(this)" id="sujet" type="text" class="form-control" name="sujet" required value="{{ $envoye->sujet }}"/>
+                </div>
 
+<?php } ?>
                 <?php if ( $envoye->type != 'fax' ) {?>
 				<div class="form-group">
                     <label for="description">Description :</label>
                     <input onchange="changing(this)" id="description" type="text" class="form-control" name="description" required value="{{ $envoye->description }}" />
                 </div>
+<?php if ( $envoye->type != 'tel' ) {?>
                 <div class="form-group ">
+
                     <label for="contenu">contenu:</label>
                 <div class="form-control" style="overflow:scroll;min-height:200px">
                   <?php $contenu= $envoye['contenu'];
@@ -179,9 +187,19 @@ function convert($seconds) {
 
                 </div>
 
+
+                </div>
+<?php } else { ?>
+<div class="form-group ">
+
+                    <label for="contenu">contenu:</label>
+                 <textarea onchange="changing(this)" id="contenu"  class="form-control" name="contenu" required> <?php $contenu= $envoye['contenu'];
+                  echo $contenu;?></textarea>
+
+
                 </div>
 
-                <?php } ?>
+                <?php }} ?>
                <?php if ( $envoye->type == 'tel' ) {?>
                   <div class="form-group ">
                     <label for="media">Média:</label>

@@ -74,6 +74,9 @@ use \App\Http\Controllers\DossiersController;
     $FaxsSentUser=   DossiersController::countFaxsSentUserDate2 ($id,$debut,$fin,$hdebut,$hfin);			
    // nombre des sms envoyés par un agent
     $SmsSentUser=   DossiersController::countSmsSentUserDate2 ($id,$debut,$fin,$hdebut,$hfin);	
+ $AppelsSentUser=   DossiersController::countAppelsSentUserDate2 ($id,$debut,$fin,$hdebut,$hfin);
+$dureesSentUser=   DossiersController::countcommunictationsSentUserDate2 ($id,$debut,$fin,$hdebut,$hfin);
+ $pauses=   DossiersController::countpausesUserDate2 ($id,$debut,$fin,$hdebut,$hfin);
 	 // nombre des compte rendus par un agent
     // $RendusUser=   DossiersController::countRendusUserDate2 ($id,$debut,$fin,$hdebut,$hfin);	
 	  // mission agent
@@ -101,6 +104,9 @@ use \App\Http\Controllers\DossiersController;
                <tr><td  style="width:300px"><span><i class="fa fa-envelope"></i>  Emails envoyés </span></td><td><b><?php echo $EmailsSentUser;?></b></td></tr>
              <tr><td  style="width:300px"><span><i class="fa fa-fax"></i>  Fax envoyés </span></td><td><b><?php echo $FaxsSentUser;?></b></td></tr>
              <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS envoyés </span></td><td><b><?php echo $SmsSentUser;?></b></td></tr>
+ <tr><td  style="width:300px"><span><i class="fas fa-phone"></i>  Appels envoyés </span></td><td><b><?php echo $AppelsSentUser;?></b></td></tr>
+<tr><td  style="width:300px"><span><i class="fas fa-phone"></i> Durée de communications (en secondes) </span></td><td><b><?php echo $dureesSentUser;?></b></td></tr>
+ <tr><td  style="width:300px"><span><i class="fas fa-pause"></i>  Pauses </span></td><td><b><?php echo $pauses;?></b></td></tr>
         <!--   <tr><td  style="width:300px"><span><i class="fa fa-comment-dots"></i>  Compte rendus  </span></td><td><b><?php // echo $RendusUser;?></b></td></tr> -->
              <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions créées  </span></td><td><b><?php echo $missionsUsCreees;?></b></td></tr>
             <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions couramment affectées  </span></td><td><b><?php echo $missionsUsCourAff;?></b></td></tr>

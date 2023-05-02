@@ -43,7 +43,7 @@
         </div>
 
 
-        <input type="hidden" id="id" class="form-control"   value="{{ $intervenant->id }}" >
+        <input type="hidden" id="id" class="form-control"   value={{ $intervenant->id }}>
     </form>
       </div>
 
@@ -53,7 +53,7 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<?php if ( Gate::check('isAdmin') || Gate::check('isSupervisor') ){?> 
+
 <script>
 
     function changing(elm) {
@@ -113,5 +113,3 @@
     }
 
 </script>
-
-<?php  } ?>

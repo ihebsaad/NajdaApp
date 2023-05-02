@@ -215,7 +215,9 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                     <?php
                      if($user_type=='financier' ){
 
-                         $alertes= Alerte::orderBy('id', 'desc')->where('traite',0)->get( );
+                         //$alertes= Alerte::orderBy('id', 'desc')->where('traite',0)->get( );
+						 // $dtc = (new \DateTime())->format('2023-04-01 00:00:00');
+                      // $alertes= Alerte::where('created_at','>=', $dtc)->where('traite',0)->orderBy('id', 'desc')->get();
                         foreach($alertes as $al){
 
                             $dossier=  \App\Dossier::where('id',$al->id_dossier)->first();

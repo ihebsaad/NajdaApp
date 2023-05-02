@@ -1,9 +1,6 @@
 
 <?php
 use App\Entree ;
-Use App\Common;
-
-
 ?>
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify-bootstrap.css') }}">
@@ -48,7 +45,7 @@ Use App\Common;
         background-color: #3e8e41;
     }
 </style>
-<?php   $param= App\Parametre::find(1);$env=$param->env;
+<?php  $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 ?>
 
@@ -68,18 +65,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 			$c=0;
 			foreach($Entrees as $Entree)
 			{$c++;
-    $sujet=$Entree['sujet'];
-    if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
-        $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
-    }
-
 			if(($c % 2 )==0){$bg='background-color:#EDEDE9';}else{$bg='background-color:#F9F9F8';}$date=$Entree['reception'];$newDate = date("d/m/Y H:i", strtotime($date));
             if (isset($entree['id'] ) &&($entree['id']==$Entree->id)&&($view_name == 'entrees-showdisp')){ if($entree['id']>0){$bg='background-color:#5d9cec!important;color: white!important;';$col='color:white';}}else{$col='color:black';}
     $type=$Entree['type'];
 			 echo '<li  class="overme" style=";padding-left:6px;margin-bottom:15px;'.$bg.'" >';
 
 			  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
-             <a <?php if($Entree['viewed']==false) {echo 'style="font-weight:800;font-size:16px;letter-spacing:1px"' ;}else{ echo'style="font-size:12px;"';} ?>  href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><small style="<?php echo $col;?>"><?php echo /*iconv_mime_decode(*/ $sujet /*)*/ ; ?></small></a><br>
+             <a <?php if($Entree['viewed']==false) {echo 'style="font-weight:800;font-size:16px;letter-spacing:1px"' ;}else{ echo'style="font-size:12px;"';} ?>  href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><small style="<?php echo $col;?>"><?php echo /*iconv_mime_decode(*/ $Entree['sujet']/*)*/ ; ?></small></a><br>
              <label style="font-size:11px"><a style="<?php echo $col;?>" href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><?php echo $Entree['emetteur'];?></a></label><br>
 <?php echo '<label style="font-size:12px;'.$col.'">'.$newDate.'</label>';  ?>
 			<?php echo '</li>';

@@ -1,6 +1,3 @@
-
-
-
 <html lang="fr">
 <head>
 
@@ -289,7 +286,9 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
 
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheur); ?>
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label  <?php if (! ($seance->dispatcheur === $iduser)){ ?>  title="demander ce rôle"  onclick="demande('Dispatcheur Emails','<?php echo $seance->dispatcheur; ?>')"  <?php } ?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Dispatcheur <b>( <?php echo $nomagent; ?>  )</b></label><label class="demande" id="labeldispatcheur"></label></div>
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label  <?php if (! ($seance->dispatcheur === $iduser)){ ?>  title="demander ce rôle"  onclick="demande('Dispatcheur Emails','<?php echo $seance->dispatcheur; ?>' ,'dispatcheur')"  <?php } ?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Dispatcheur <b>( <?php echo $nomagent; ?>  )</b></label><label class="demande" id="labeldispatcheur"><?php if (Session::get('variableTestdispatcheur')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div><input type="hidden" value="{{Session::get('variableTestdispatcheur')}}" id="vardispatcheur" name="">
       <?php  }
       //  }
         ?>
@@ -333,7 +332,10 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
 
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurmedic); ?>
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (! ($seance->superviseurmedic === $iduser)){ ?>  title="demander ce rôle"  onclick="demande('Superviseur Médical','<?php echo $seance->superviseurmedic; ?>')"  <?php }?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Superviseur Médical <b>( <?php echo $nomagent; ?>  )</b></label>  <label  class="demande" id="labelsuperviseurmedic"></label></div>
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (! ($seance->superviseurmedic === $iduser)){ ?>  title="demander ce rôle"  onclick="demande('Superviseur Médical','<?php echo $seance->superviseurmedic; ?>','superviseurmedic')"  <?php }?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Superviseur Médical <b>( <?php echo $nomagent; ?>  )</b></label>  <label  class="demande" id="labelsuperviseurmedic"><?php if (Session::get('variableTestsuperviseurmedic')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div>        <input type="hidden" value="{{Session::get('variableTestsuperviseurmedic')}}" id="varsuperviseurmedic" name="">
+
      <?php   }
        }
         ?>
@@ -375,7 +377,11 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
 
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurtech).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurtech); ?>
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (!( $seance->superviseurtech === $iduser)){ ?> title="demander ce rôle"  onclick="demande('Superviseur Technique','<?php echo $seance->superviseurtech; ?>')"  <?php  } ?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Superviseur Technique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurtech"></label></div>
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (!( $seance->superviseurtech === $iduser)){ ?> title="demander ce rôle"  onclick="demande('Superviseur Technique','<?php echo $seance->superviseurtech; ?>' , 'superviseurtech')"  <?php  } ?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Superviseur Technique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurtech"><?php if (Session::get('variableTestsuperviseurtech')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div>
+        <input type="hidden" value="{{Session::get('variableTestsuperviseurtech')}}" id="varsuperviseurtech" name="">
+
       <?php  }
         }
 
@@ -421,7 +427,11 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
 
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->chargetransport); ?>
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (! ($seance->chargetransport === $iduser)){ ?> title="demander ce rôle"  onclick="demande('Chargé de Transport','<?php echo $seance->chargetransport; ?>')"  <?php } ?>  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Chargé de Transport <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelchargetransport"></label></div>
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (! ($seance->chargetransport === $iduser)){ ?> title="demander ce rôle"  onclick="demande('Chargé de Transport','<?php echo $seance->chargetransport; ?>' , 'chargetransport')"  <?php } ?>  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Chargé de Transport <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelchargetransport"><?php if (Session::get('variableTestchargetransport')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div>
+        <input type="hidden" value="{{Session::get('variableTestchargetransport')}}" id="varchargetransport" name="">
+
         <?php }
     //    }
         ?>
@@ -462,7 +472,11 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
         {
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheurtel); ?>
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique','<?php echo $seance->dispatcheurtel; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel"></label></div>
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique','<?php echo $seance->dispatcheurtel; ?>','dispatcheurtel')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel"><?php if (Session::get('variableTestdispatcheurtel')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div>
+        <input type="hidden" value="{{Session::get('variableTestdispatcheurtel')}}" id="vardispatcheurtel" name="">
+
         <?php }
    //     }
         ?>
@@ -504,7 +518,11 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
         {
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel2).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheurtel2); ?>
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique 2 ','<?php echo $seance->dispatcheurtel2; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique 2<b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel2"></label></div>
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique 2 ','<?php echo $seance->dispatcheurtel2; ?>' , 'dispatcheurtel2')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique 2<b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel2"><?php if (Session::get('variableTestdispatcheurtel2')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div>
+        <input type="hidden" value="{{Session::get('variableTestdispatcheurtel2')}}" id="vardispatcheurtel2" name="">
+
         <?php }
         //     }
         ?>
@@ -546,7 +564,11 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
         {
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel3).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheurtel3); ?>
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique 3 ','<?php echo $seance->dispatcheurtel3; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique 3<b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel3"></label></div>
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique 3 ','<?php echo $seance->dispatcheurtel3; ?>','dispatcheurtel3')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique 3<b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel3"><?php if (Session::get('variableTestdispatcheurtel3')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div>
+        <input type="hidden" value="{{Session::get('variableTestdispatcheurtel3')}}" id="vardispatcheurtel3" name="">
+
         <?php }
         //     }
         ?>
@@ -595,7 +617,11 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
         {
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->veilleur).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->veilleur); ?>
 
-            <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Veilleur de Nuit','<?php echo $seance->veilleur; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Veilleur de nuit <b>( <?php echo $nomagent; ?> )</b></label><label  class="demande" id="labelveilleur"></label></div>
+            <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Veilleur de Nuit','<?php echo $seance->veilleur; ?>','veilleur')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Veilleur de nuit <b>( <?php echo $nomagent; ?> )</b></label><label  class="demande" id="labelveilleur"><?php if (Session::get('variableTestveilleur')==1) {
+            echo "(Demande Envoyée)";
+        } ?></label></div>
+            <input type="hidden" value="{{Session::get('variableTestveilleur')}}" id="var" name="">
+
       <?php  }
 
 
@@ -680,7 +706,7 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
 }
 		</style>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br>	
-	<h4 style="margin-left:-160px;">Nous sommes le <br><br><b id="jour" style="color:red;font-size:38px;"><?php echo $sd1; ?></b></h4>	
+	<h4 style="margin-left:-200px;">Nous sommes le <br><br><b id="jour" style="color:red;font-size:38px;"><?php echo $sd1; ?></b></h4>	
 		
 </div>  
   
@@ -809,8 +835,16 @@ if($typeuser!=="financier" && $typeuser!=="bureau" )
 window.location = '{{route('home')}}';
 }
 
- function demande(role,vers) {
-
+ function demande(role,vers,rol) {
+    var vartest = $('#var'+rol).val();
+    if (vartest==1) {
+    Swal.fire({
+                         type: 'error',
+                         title: 'Demande deja envoyée',
+                         text: ""
+                     });
+} else {  
+  
      $('#modalconfirm').modal({show:true});
 
 
@@ -854,9 +888,9 @@ window.location = '{{route('home')}}';
              $.ajax({
                  url: "{{ route('home.demande') }}",
                  method: "POST",
-                 data: {role: role, vers: vers, par: par, _token: _token},
+                 data: {role: role, vers: vers, par: par,rol:rol , _token: _token},
                  success: function (data) {
-
+                    $('#var'+rol).val(1);
                     // alert('Demande envoyée');
                      Swal.fire({
                          type: 'success',
@@ -876,6 +910,7 @@ window.location = '{{route('home')}}';
          }
 
      }); //end click
+}
  }
      <?php
   $param= App\Parametre::find(1);$env=$param->env;
@@ -1321,14 +1356,16 @@ catch (Exception $e) {
 
 try {
 //\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures_version3();
-   // \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile_version2();
+//dd('ok'); 
+ // \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile_version2();
+  //dd('finft');
 }
 catch (Exception $e) {
     echo 'Erreur lors de l envoi des emails automatique de factures : ',  $e->getMessage(), "\n";
 }
 //dd(' ');
 //dd("envoi alertes factures exécuté");
-
+//dd($deb_seance_1);
 if($dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3)
  {
 
@@ -1336,7 +1373,7 @@ if($dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3)
 try {
 
 $datespe = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierImmobileController::getDatecalcul());
-//dd($dtc);
+//dd($dtc2);
 if($datespe->format('Y-m-d')!=$dtc2)
 {
     //dd('calcul dossier immobile');
@@ -1348,10 +1385,11 @@ if($datespe->format('Y-m-d')!=$dtc2)
         //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
         
        
-      // \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile_version2();
-      // \App\Http\Controllers\FacturesController::envoi_mail_automatique_factures_version3();
+      \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile_version2();
+      \App\Http\Controllers\FacturesController::envoi_mail_automatique_factures_version3();
        
         /// dd('calcul dossier immobile');
+		echo 'Envoi des emails automatiques de dossiers immobiles  ';
 
     }
 }
@@ -1366,6 +1404,8 @@ else
       //dd("meme date ; non  calcul ; mettre à jour  set calculdoss");
     }
 }
+
+
 
 }
 catch (Exception $e) {

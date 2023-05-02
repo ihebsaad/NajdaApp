@@ -2377,7 +2377,7 @@ if ($entree['contenu']== null){
             <?php
                 echo '<br>Attachements :<br>';
 
-            $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
+            $attachs = Attachement::where('entree_id', '=', $entree['id'] )->get();
 
             ?>
 

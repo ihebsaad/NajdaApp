@@ -18,6 +18,7 @@
     use \App\Http\Controllers\UsersController;
     use \App\Http\Controllers\ClientsController;
     use \App\Http\Controllers\PrestationsController;
+	use \App\Prestation;
     $users=UsersController::ListeUsers();
 
     $CurrentUser = auth()->user();
@@ -55,6 +56,8 @@ date_default_timezone_set('Africa/Tunis');
                 <th style="width:10%">Arrivé</th>
                 <th style="width:10%">Délai Email</th>
                 <th style="width:10%">Délai Poste</th>
+				  <th style="width:7%">Réglée</th>
+				<th style="width:7%">Parvenu</th>
 
 				<th class="no-sort" style="width:4%">Actions</th>
               </tr>
@@ -67,7 +70,8 @@ date_default_timezone_set('Africa/Tunis');
                 <th style="width:10%">Arrivé</th>
                 <th style="width:10%">Délai Email</th>
                 <th style="width:10%">Délai Poste</th>
-
+               <th  class="no-sort" style="width:7%">Réglée</th>
+				<th class="no-sort" style="width:7%">Parvenu</th>
                 <th class="no-sort" style="width:4%">Actions</th>
             </tr>
             </thead>
@@ -144,10 +148,8 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                     </td>
                       <td style="width:15%">
                         <?php
-                       if(isset($facture->iddossier)){   $client =   $Folder['customer_id'] ;
-						  echo   ClientsController::ClientChampById('name',$client);
-						  }
-						  ?>  
+                            $client =   $Folder['customer_id'] ;
+                            echo   ClientsController::ClientChampById('name',$client);?>
                     </td>
                       <td style="width:15%">
                         <?php $prest=  $facture->prestataire; ?>
@@ -158,7 +160,22 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                     <td  style="width:10%">{{$facture->date_arrive}}</td>
                     <td style="width:10%"  ><?php if($date_valid !='' && $dateemail!='' && $diffEmail!=''){  echo  $diffEmail->format("%R%a ").' jours'; } ?></td>
                     <td style="width:10%"  > <?php if($date_valid !='' && $dateposte!='' && $diffPoste!=''){   echo      $diffPoste->format("%R%a ").' jours'; } ?> </td>
- 					<td style="width:4%" class="no-print no-sort"  >
+ 					<td style="width:7%" >
+					<span class="checked"><input onchange="changingCheckReglee(this);" type="checkbox"  id="regle{{$facture->id}}"  style="font-weight: bold;" <?php if($facture->regle==1) {echo "checked" ; }?> ></span>
+					</td> 
+					<td style="width:7%" >
+					<?php 
+					 if ($facture->honoraire !==1) {
+					$i=0; if($facture->prestation) { ?>
+				   <?php $prestation=Prestation::where('id',$facture->prestation)->first();  ?>
+					<span class="checked"><input onchange="changingCheckParvenu(this);" type="checkbox"  id="parvenu{{$prestation->id}}"  style="font-weight: bold;" <?php if($prestation->parvenu==1) {echo "checked" ; }?> ></span>
+					<?php }else {?>
+					<span class="checked"><input onchange="changingCheckParvenu(this);" type="checkbox"  id="parvenu0{{$i}}"  style="font-weight: bold;"  ></span>
+					
+					 <?php $i++; }  } ?>
+					</td> 
+
+					<td style="width:4%" class="no-print no-sort"  >
                              <a  href="{{action('FacturesController@destroy', $facture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span>
                             </a>
@@ -389,7 +406,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                 var date_arrive = $('#date_arrive').val();
                 var reference = $('#reference').val();
                 var dossier = $('#iddossier').val();
-                if ((date_arrive != '' ) && (dossier != '' )   )
+                if ((date_arrive != '' ) || (reference != '' )   )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
@@ -403,11 +420,107 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                         }
                     });
                 }else{
-                    alert('insérer la date et le dossier ');
+                    // alert('ERROR');
                 }
             });
 
         });
+		
+		function changingCheckParvenu(elm) {
+        var champ=elm.id;
+        var val =null;
+        if($('#'+champ).is(":checked"))
+        {
+          // alert('checked');
+          val=1;
+        }
+        else
+        {
+           //alert('is not checked');
+           val=0;
+
+        }
+
+
+        //  var type = $('#type').val();
+        var prestation = champ;
+		idprestation=prestation.substring(7);
+		//alert('id prestation : '+idprestation);
+		
+		if(idprestation[0]=='0')
+		{
+			$('#'+champ).prop('checked', false);
+			alert('Vous devez remplir la prestation de facture en question ! ');
+		}
+		else{
+			
+			 var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('factures.updatingParvenuPrestation') }}",
+            method: "POST",
+            data: {prestation: idprestation , val:val, _token: _token},
+            success: function (data) {
+				
+				alert("la mise à jour est effectuée avec succès");
+				
+                $('#textregle').animate({
+                    opacity: '0.3',
+                });
+                $('#textregle').animate({
+                    opacity: '1',
+                });
+              
+            }
+        });
+			
+			
+		}
+             
+
+        
+    }
+	
+	function changingCheckReglee(elm) {
+        var champ=elm.id;
+        var val =null;
+        if($('#'+champ).is(":checked"))
+        {
+           //alert('checked');
+          val=1;
+        }
+        else
+        {
+          // alert('is not checked');
+           val=0;
+
+        }
+
+
+        //  var type = $('#type').val();
+        var facture =champ;
+		idfacture = facture.substring(5);
+		//alert("id facture : "+idfacture);
+         //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('factures.updatingReglefacture') }}",
+            method: "POST",
+            data: {facture: idfacture , valReg:val, _token: _token},
+            success: function (data) {
+				alert("la mise à jour est effectuée avec succès");
+                $('#textregle').animate({
+                    opacity: '0.3',
+                });
+                $('#textregle').animate({
+                    opacity: '1',
+                });
+              
+            }
+        });
+
+        
+    }
+
 
     </script>
 @stop

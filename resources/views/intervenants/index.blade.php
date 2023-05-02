@@ -43,7 +43,9 @@
             </thead>
             <tbody>
             @foreach($intervenants as $intervenant)
-                   <tr>
+   
+
+                <tr>
                     <td  >{{$intervenant->id}}</td>
                     <td  ><a href="{{action('IntervenantsController@view', $intervenant['id'])}}" ><?php echo $intervenant->nom .' '.$intervenant->prenom ;?> </a></td>
 					<td    ><?php echo $intervenant->specialite ; ?> </td>

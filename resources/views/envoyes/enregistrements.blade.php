@@ -40,7 +40,7 @@ Use App\USer;
              <!--   <th style="width:45%;max-width:250px;">Contenu</th>!-->
                 <th style="font-size:10px;width:15%;;max-width:30px">Durée</th>
                <!-- <th style="width:8%;;max-width:80px ">Dossier</th>!-->
-               <th style="font-size:10px;width:10%;;max-width:30px">Sujet</th>
+               <th style="font-size:10px;width:10%;;max-width:30px">Interlocuteur</th>
 <th style="font-size:10px;width:10%;;max-width:30px">type</th>
                 <th  class="no-sort" style="font-size:10px;width:10%;max-width:30px"></th>
              </tr>
@@ -52,7 +52,7 @@ Use App\USer;
                 <!--<th id="colmn3" style="width:30%;;max-width:150px;">Contenu</th>!-->
                 <th style="font-size:10px;width:15%;;max-width:30px;">Durée</th>
                <!-- <th style="width:8%;;max-width:80px; ">Dossier</th>!-->
-                 <th style="font-size:10px;width:10%;;max-width:30px">Sujet</th>
+                 <th style="font-size:10px;width:10%;;max-width:30px">Interlocuteur</th>
  <th style="font-size:10px;width:10%;;max-width:30px">type</th>
                 <th id="colmn6" class="no-sort" style="width:10%;;max-width:30px"></th>
              </tr>

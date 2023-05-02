@@ -278,8 +278,8 @@ $(document).ready(function()
 
                 <div class="form-group ">
                     <label for="contenu">Contenu:</label>
-                    <div class="editor" >
-                        <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  ></textarea>
+                    <div  class="editor" >
+                        <textarea  style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  ></textarea>
                     </div>
                 </div>
                 <div class="form-group form-group-default">
@@ -392,7 +392,8 @@ $(document).ready(function()
         <div class="modal-dialog" role="document">
             <div class="modal-content"   style="width:800px">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModal001">Liste des emails du client </h5>
+                    <h5 class="modal-title" id="exampleModal001">Liste 
+ emails du client </h5>
 
                 </div>
                 <?php
@@ -572,6 +573,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             else
             {divPrecedent.style.display='none';     }
         }
+
 
         $(document).ready(function(){
 
@@ -921,6 +923,38 @@ $("#prest").change(function(){
        verrou=false;
                  //alert(values);
             })
+
+$("#contenu").on("change", function(e) {
+  var des = $('#destinataire').val();  
+
+if(des=='')
+{
+alert('test');
+
+}
+})
+
+
+$("#contenu").on("summernote.mouseup", function (e, mouseEvent) {
+    var des = $('#destinataire').val();  
+//alert (des);
+	if ((des=='')||(des==null))
+	{
+Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: 'Veuillez sélectionner votre destinataire et les adresses désirés avant de rédiger votre email',
+                    });
+		
+
+	}
+})
+
+ function verifdestinataire()
+        {
+
+        
+        }
 </script>
 <!--
     <script type="text/javascript">

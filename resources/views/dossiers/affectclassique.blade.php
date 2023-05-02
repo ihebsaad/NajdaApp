@@ -142,7 +142,7 @@
 
                         @foreach(App\User::get() as $u)
 
-                          <?php  if($u->statut== 1 &&  $u->user_type!= 'financier'   && $u->user_type!= 'bureau' && $u->id!= 2  ) {  ?> <option value="{{$u->id}}">{{$u->name}} {{$u->lastname}} </option> <?php } ?>
+                          <?php  if($u->statut== 1 &&  $u->user_type!= 'financier' &&  $u->user_type!= 'admin' && $u->user_type!= 'bureau' && $u->id!= 2  ) {  ?> <option value="{{$u->id}}">{{$u->name}} {{$u->lastname}} </option> <?php } ?>
 
                         @endforeach
                     </select>

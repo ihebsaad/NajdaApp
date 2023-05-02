@@ -468,18 +468,22 @@ use  \App\Http\Controllers\DocsController;
                                                                 <label for="inputError" class="control-label">Ville</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input    type="text" autocomplete="off" id="ville" name="ville" class="form-control"    >
-                                                                </div>
-                                                                <script>
-                                                                    var placesAutocomplete = places({
-                                                                        appId: 'plCFMZRCP0KR',
-                                                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                                                        container: document.querySelector('#ville')
-                                                                    });
-                                                                </script>
+                                                                                      <select autocomplete class="select2 form-control  " id="ville" name="ville"   >
+                                         <option value="Select">Selectionner</option>
+
+
+                                         @foreach($villes as $pres)
+
+?>
+ <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+
+
+                                         @endforeach
+
+                                     </select>
                                                             </div>
                                                         </div>
-
+ </div>
                                                         <div class="col-md-4">
 
 
@@ -996,18 +1000,21 @@ use  \App\Http\Controllers\DocsController;
                                                         <label for="inputError" class="control-label"> Ville / localité</label>
 
                                                         <div class="input-group-control">
-                                                            <input   type="text" id="vehicule_address" name="vehicule_address" class="form-control"    >
-                                                        </div>
-                                                        <script>
-                                                            var placesAutocomplete = places({
-                                                                appId: 'plCFMZRCP0KR',
-                                                                apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                                                container: document.querySelector('#vehicule_address')
-                                                            });
-                                                        </script>
+                                                                              <select autocomplete class="select2 form-control  " id="vehicule_address" name="vehicule_address"   >
+                                         <option value="Select">Selectionner</option>
+
+
+                                         @foreach($villes as $pres)
+
+ <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+
+
+                                         @endforeach
+
+                                     </select>
                                                     </div>
                                                 </div>
-
+ </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label for="inputError" class="control-label">De (Date)</label>
@@ -1396,7 +1403,8 @@ use  \App\Http\Controllers\DocsController;
         $("#hotel").select2();
         $("#vehicule_marque").select2();
         $("#empalcement").select2();
-
+$("#vehicule_address").select2();
+$("#ville").select2();
         $('.radio1').click(function() {
 
             var   el1=document.getElementById('montantfr');

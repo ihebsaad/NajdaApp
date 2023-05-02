@@ -4,6 +4,15 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/buttons.bootstrap.css') }}" />
 <!--   <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/colReorder.bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.jqueryui.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.jqueryui.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
+
+<!--   <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/colReorder.bootstrap.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
+
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
  <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
@@ -11,6 +20,8 @@
 
 @section('content')
     <?php use \App\Http\Controllers\PrestatairesController;
+use \App\Prestataire;
+use \App\Adresse;
 $user = auth()->user();
  $user_type=$user->user_type;
     //echo json_encode($villes);
@@ -111,28 +122,27 @@ $user = auth()->user();
                              <div class="row">
 
                           
-                        <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.1"></script>
+
 
                         <div class="col-md-4">
+ <label>Ville </label>
                             <div class="form-group"> 
-                                <label>Ville </label>
-                                <div class="row" style=";margin-bottom:0px;"><style>.algolia-places{width:100%;}</style></div>
-                                 <input class="form-control" style="padding-left:5px" type="text" name="ville_id_search"  id="ville_id_search" />
+                               
+                                <select autocomplete class="select2 form-control  col-lg-12 " style="width:400px" name="ville_id_search"    id="ville_id_search">
+                                         <option value="">Selectionner</option>
+                                         <option value="toutes">toutes</option>
+                                         @foreach($villes as $pres)
+
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+
+                                     </select>
+                                
                                  
                              
                             </div>
 
-                        <script>
-                        (function() {
-                            var placesAutocomplete2 = places({ 
-                                appId: 'plCFMZRCP0KR',
-                                apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                container: document.querySelector('#ville_id_search'),
-                            });
-                             
-                            
-                        })();
-                        </script>
+                        
                         </div>
 
                         <div class="col-md-4">
@@ -186,8 +196,25 @@ $user = auth()->user();
                <th style="width:20%;font-size:14px;">Type de prestations</th>
                 <th style="width:15%">Gouvernorats</th>
                 <th style="width:10%">Ville</th>
+ <?php if($user_type=='admin')
+{ 
+?>
+<th style="width:15%">Adresse</th>
+<?php
+}
+?>
                 <th style="width:15%">Spécialités</th>
+ <?php if($user_type=='admin')
+{ 
+?>
+<th style="width:15%">Téléphones</th>
+<th style="width:15%">fax</th>
+<th style="width:15%">Adresses mail</th>
+
+ <?php } 
+?>
 <th style="width:15%">Statut</th>
+
                 <th style="width:10%">Actions</th>
              </tr>
             <tr style="font-size:14px;">
@@ -195,8 +222,26 @@ $user = auth()->user();
                 <th style="width:20%">Type de prestation</th>
                 <th style="width:20%">Gouvernorats</th>
                 <th style="width:10%">Ville</th>
+ <?php if($user_type=='admin')
+{ 
+?>
+<th style="width:15%">Adresse</th>
+<?php
+}
+?>
                 <th style="width:20%">Spécialités</th>
 <th style="width:15%">Statut</th>
+  <?php if($user_type=='admin')
+{ 
+?>
+
+
+<th style="width:15%">Téléphones</th>
+<th style="width:15%">fax</th>
+<th style="width:15%">Adresses mail</th>
+
+ <?php }
+?>
                 <th style="width:10%"> </th>
 
             </tr>
@@ -217,6 +262,11 @@ $user = auth()->user();
                 $gouvs=  PrestatairesController::PrestataireGouvs($id);
                 $typesp=  PrestatairesController::PrestataireTypesP($id);
                 $specs=  PrestatairesController::PrestataireSpecs($id);
+ $tels=  Adresse::where('nature','telinterv')->where('parent',$id)->get();
+                $faxs=  Adresse::where('nature','faxinterv')->where('parent',$id)->get();
+$emails=  Adresse::where('nature','emailinterv')->where('parent',$id)->get();
+                $specs=  PrestatairesController::PrestataireSpecs($id);
+$Prestataire=  Prestataire::where('id',$id)->first();
                 ?>
 
                 <tr>
@@ -224,10 +274,22 @@ $user = auth()->user();
                     <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
                     <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                     <td style="font-size:12px;width:10%"><?php echo $prestataire->ville; ?></td>
+  @can('isAdmin')
+<td style="font-size:12px;width:15%"  ><?php echo $Prestataire->adresse   ?></td>
+@endcan
                     <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+  @can('isAdmin')
+<td style="font-size:12px;width:15%"  ><?php  foreach($tels as $tel){echo $tel->champ.',  ' ;}?></td>
+<td style="font-size:12px;width:15%" ><?php  foreach($faxs as $fax){echo $fax->champ.',  ' ;}?></td>
+<td style="font-size:12px;width:15%"  ><?php  foreach($emails as $email){echo $email->champ.',  ' ;}?></td>
+@endcan
  <td  ><?php if ($prestataire->annule ==0){echo 'Actif';}else{echo 'Désactivé';} ?></td>
+
+ 
+
                     <td style="font-size:13px;width:10%">
                         @can('isAdmin')
+
     <?php 
     $count1= \App\Facture::where('prestataire',$prestataire['id'])->count();
     //$count2= \App\Intervenant::where('prestataire_id',$prestataire['id'])->count();
@@ -262,7 +324,9 @@ $user = auth()->user();
 
     $iduser=$CurrentUser->id;
 
+
     ?>
+ <input type="hidden" value="<?php echo $user_type ?>" id="usertype" name="usertype" />
 
 
 
@@ -293,21 +357,62 @@ $user = auth()->user();
     <script type="text/javascript">
         $(document).ready(function() {
 
-
+var usertype=document.getElementById('usertype').value;  
+//alert(usertype);
+if(usertype=="admin"){
             $('#mytable thead tr:eq(1) th').each( function () {
-                var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
+     
+
+var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
                 $(this).html( '<input class="searchfield" type="text"   />' );
             } );
 
             var table = $('#mytable').DataTable({
                 orderCellsTop: true,
                           order:[],
- dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+ /*dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
 
                     'csv', 'excel', 'pdf', 'print'
-                ],
+                ],*/
+ dom: 'lBfrtip',
+     
+                responsive:true,
+
+				
+			
+
+
+buttons: [						 
+                  
+				 {
+                    extend: 'excel',
+                    text: '  Excel',
+  title: 'liste de prestataires',
+					className : 'fa fa-file-excel-o',
+                    exportOptions: {
+                    columns: [ 0,1,2,3,4,5,6,7,8]
+               	}
+                    },				
+				
+					/*,
+				 {
+                    extend: 'copy',
+                    text: '  Copier',
+					className : 'fa fa-copy',					 
+                    exportOptions: {
+                    columns: [ 0,1,2,3,4,5 ]
+                	}
+                  },
+		   		{
+                    extend: 'colvis',
+                    text: '  Colonnes',
+					className : 'fa fa-hand-o-up',	
+				}
+*/
+                ], 
+
                 "columnDefs": [ {
                     "targets": 'no-sort',
                     "orderable": false,
@@ -340,7 +445,66 @@ $user = auth()->user();
                     }
 
             });
+}
+else
+{
+$('#mytable thead tr:eq(1) th').each( function () {
+     
 
+var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
+                $(this).html( '<input class="searchfield" type="text"   />' );
+            } );
+
+            var table = $('#mytable').DataTable({
+                orderCellsTop: true,
+                          order:[],
+ dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+                responsive:true,
+                buttons: [
+
+                    'csv', 'excel', 'pdf', 'print'
+                ],
+
+     
+                responsive:true,
+				
+			
+
+
+
+                "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+                ,
+                "language":
+                    {
+                        "decimal":        "",
+                        "emptyTable":     "Pas de données",
+                        "info":           "affichage de  _START_ à _END_ de _TOTAL_ entrées",
+                        "infoEmpty":      "affichage 0 à 0 de 0 entrées",
+                        "infoFiltered":   "(Filtrer de _MAX_ total d`entrées)",
+                        "infoPostFix":    "",
+                        "thousands":      ",",
+                        "lengthMenu":     "affichage de _MENU_ entrées",
+                        "loadingRecords": "chargement...",
+                        "processing":     "chargement ...",
+                        "search":         "Recherche:",
+                        "zeroRecords":    "Pas de résultats",
+                        "paginate": {
+                            "first":      "Premier",
+                            "last":       "Dernier",
+                            "next":       "Suivant",
+                            "previous":   "Précédent"
+                        },
+                        "aria": {
+                            "sortAscending":  ": activer pour un tri ascendant",
+                            "sortDescending": ": activer pour un tri descendant"
+                        }
+                    }
+
+            });
+}
 // Apply the search
             function delay(callback, ms) {
                 var timer = 0;
@@ -488,7 +652,7 @@ $user = auth()->user();
 <script>
     $('#presid').on('input', function() {
         const value = $(this).val();
-        alert(value);
+        //alert(value);
         const data_value = $('#pres_search [value="' + value + '"]').data('value');
         document.getElementById("pres_id_search_hidden").value = data_value;
       });

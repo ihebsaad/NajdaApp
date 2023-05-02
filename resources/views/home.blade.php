@@ -16,8 +16,18 @@ display: block;
         <br><br>
         <h1> Bienvenue</h1>
     </div>
-     <?php  if ($type == 'financier' || $type == 'bureau' || $type == 'admin' ) {   ?>
-            <div class="row  pull-right">
+     <?php  if ($type == 'financier' || $type == 'bureau'   ) {   ?>
+            <div class="row  ">
+			<div class="col-sm-2">
+            <a href="{{ route('archives_factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span  class="fas fa-lg fa-file-invoice"></span>
+                <br>
+            Archive
+            </a>
+              </div>
+			  	<div class="col-sm-6">
+				&nbsp;
+				</div>
              <div class="col-sm-2">
             <a href="{{ route('factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                 <span  class="fas fa-lg fa-file-invoice"></span>
@@ -144,7 +154,7 @@ display: block;
              </div>
          </div>
      </div> 
-    <?php   } // fin if admin financier,,,
+    <?php   } // fin if   financier,,,
          ?>
 
 

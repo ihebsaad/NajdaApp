@@ -39,7 +39,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
     <div id="addclientform">
         <div class="portlet box grey">
-            <div class="modal-header"><h4>Client</h4></div>
+            <div class="modal-header"><h4>Client : <?php echo $client->name; ?></h4></div>
         </div>
         <div class="modal-body">
            <!-- <div class="row"  style="margin-bottom:30px">
@@ -2432,7 +2432,8 @@ if(parsed['nature']=='emaildoss' || parsed['nature']=='teldoss' || parsed['natur
 
     function changingAddress(id,champ,elm) {
         var champid=elm.id;
-        if (champid.slice(0, 5)=="email") {
+
+        if (champid.slice(0, 11)=="email-champ") {
             
      
          var email = document.getElementById(champid).value;

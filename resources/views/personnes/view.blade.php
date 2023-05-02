@@ -5,6 +5,7 @@
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 
+
 @section('content')
 <div class="form-group">
      {{ csrf_field() }}
@@ -137,7 +138,7 @@ if ($personne->tel!=''){
 
 
 <!-- Modal SMS -->
-<div class="modal fade" id="sendsms" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+<div class="modal fade" id="sendsms"  role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,9 +156,10 @@ if ($personne->tel!=''){
                             <label for="description">Dossier:</label>
 
                             <div class="form-group">
-           <select id ="dossier"  class="form-control" style="width: 120px">
+                                 <select id ="dossier"  class="form-control " style="width: 120px">
                                     <option></option>
                                     <?php foreach($dossiers as $ds)
+
                                     {
                                         echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
                                 </select>
@@ -274,12 +276,12 @@ $('#dossier').select2({
 
         });
 </script>
+
 @endsection
 
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
 
 <script>
 
@@ -294,9 +296,10 @@ function checkEmail(email) {
              var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
              return re.test(email);
          };
+
     function changing(elm) {
         var champ=elm.id;
-        if (champ=="email") {
+ if (champ=="email") {
             
      
          var email = document.getElementById("email").value;
@@ -313,6 +316,7 @@ function checkEmail(email) {
          
          
         };
+
         var val =document.getElementById(champ).value;
         //  var type = $('#type').val();
         var personne = $('#id').val();

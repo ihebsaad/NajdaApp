@@ -275,3 +275,4 @@ $seance =  DB::table('seance')
 <style>
     .menu-item{background-color: #4fc1e9!important;color:white!important;min-width:165px!important;margin-bottom:5px;margin-top:5px;}
 </style>
+

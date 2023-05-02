@@ -125,7 +125,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     @if ($entree['nb_attach']  > 0)
                         <?php
                         // get attachements info from DB
-                        $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('entree_id', '=', $entree['id'] );
+                         $attachs = Attachement::where('parent', '=', $entree['id'] )->where('entree_id', '=', $entree['id'] )->get();
 
                         ?>
                         @if (!empty($attachs) )

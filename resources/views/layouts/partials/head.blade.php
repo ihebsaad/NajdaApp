@@ -204,6 +204,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 url: "<?php echo $urlapp; ?>/emails/checksmsxml",
                 success:function(data)
                 {
+
                     //console.log the response
                     console.log('check boite 1 : '+data);
                     //Send another request in n seconds.
@@ -221,6 +222,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 url: "<?php echo $urlapp; ?>/emails/checkboite1",
                 success:function(data)
                 {
+
                     //console.log the response
                     console.log('check boite 1 : '+data);
                     //Send another request in n seconds.
@@ -676,9 +678,9 @@ $seance =  DB::table('seance')
   if( ($seance->superviseurmedic==$iduser)  || ($seance->superviseurtech==$iduser) || ($seance->veilleur==$iduser)  ) {  
 
 ?>
-           checkemails();	//test
+        //   checkemails();	//test
           checkfinances();	//Finances
-     /*   checkemails1();  // 24ops
+       checkemails1();  // 24ops
         checkemails2();  // VAT
         checkemails3(); //MEDIC
         checkemails4();  //TM
@@ -688,7 +690,7 @@ $seance =  DB::table('seance')
         checkemails8();   //TN
         checkemails9();  //XPRESS
         checksms();
-         checkfax();*/
+         checkfax();
  		
 <?php
 

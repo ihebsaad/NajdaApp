@@ -65,16 +65,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             <div class="form-group">
                                 <label>Ville du siège social</label><br>
 
+<input list="villes" name="ville" id="ville" style="width:290px">
 
-                                <input   type="text" class="form-control input" name="ville" id="ville"  >
+<datalist id="villes">
+     <option value="Select">Selectionner</option>
+                                         
+                                         @foreach($villes as $pres)
 
-                                <script>
-                                    var placesAutocomplete = places({
-                                        appId: 'plCFMZRCP0KR',
-                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                        container: document.querySelector('#ville')
-                                    });
-                                </script>
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+</datalist>
 
                             </div>
                         </div>
@@ -135,7 +135,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
 <script>
-
+ $(document).ready(function() {
+   
+ $("#ville").select2();
+});
     function checkexiste( ) {
 
         var val =document.getElementById('name').value;

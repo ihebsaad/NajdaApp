@@ -13,6 +13,8 @@ use App\Http\Controllers\DossiersController;
  use \App\Http\Controllers\PrestationsController;
  use  \App\Http\Controllers\PrestatairesController;
  use  \App\Http\Controllers\DocsController;
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 ?>
 <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
@@ -190,7 +192,7 @@ use App\Http\Controllers\DossiersController;
                             Au Client  </a>
                     </li>
                     <li>
-                        <a data-toggle="modal" data-target="#faireappel" onclick="ShowNumsInt();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a data-toggle="modal" data-target="#faireappelint" onclick="ShowNumsInt();" style="font-size:17px;height:30px;margin-bottom:5px;">
                             À l'intervenant </a>
                     </li>
                     <li>
@@ -971,15 +973,31 @@ $rubrique = \App\Rubrique::where('id',$rb->rubrique)->first();
                                                                             <label for="inputError" class="control-label">Ville</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)"  type="text" autocomplete="off" id="ville" name="ville" class="form-control"   value="{{ $dossier->ville }}" >
+                                                                              <select autocomplete class="select2 form-control  " id="ville" name="ville"  onchange="changing(this);" >
+                                         <option value="Select">Selectionner</option>
+
+
+                                         @foreach($villes as $pres)
+<?php
+if($pres->ville==$dossier->ville)
+{
+?>
+                                             <option selected  value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+
+<?php
+} else
+{
+?>
+ <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+
+<?php
+}
+?>
+                                         @endforeach
+
+                                     </select>
                                                                             </div>
-                                                                            <script>
-                                                                                var placesAutocomplete = places({
-                                                                                    appId: 'plCFMZRCP0KR',
-                                                                                    apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                                                                    container: document.querySelector('#ville')
-                                                                                });
-                                                                            </script>
+                                                                          
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1726,15 +1744,32 @@ if (strcasecmp(trim($dossier->hospital_address), trim(PrestatairesController::Ch
                                                                 <label for="inputError" class="control-label"> Ville / localité</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="<?php echo $dossier->vehicule_address ; ?>" onchange="changing(this);" >
+                                                                 
+<select autocomplete class="select2 form-control  " id="vehicule_address" name="vehicule_address"   value="<?php echo $dossier->vehicule_address ; ?>" onchange="changing(this);" >
+                                         <option value="Select">Selectionner</option>
+
+
+                                         @foreach($villes as $pres)
+<?php
+if($pres->ville==$dossier->vehicule_address)
+{
+?>
+                                             <option selected  value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+
+<?php
+} else
+{
+?>
+ <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+
+<?php
+}
+?>
+                                         @endforeach
+
+                                     </select>
                                                                 </div>
-                                                                <script>
-                                                                    var placesAutocomplete = places({
-                                                                        appId: 'plCFMZRCP0KR',
-                                                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                                                        container: document.querySelector('#vehicule_address')
-                                                                    });
-                                                                </script>
+                                                                
                                                             </div>
                                                         </div>
 
@@ -2713,7 +2748,62 @@ $message=str_replace('Najda', $entite, $message);
 </div>
 
 
+<!--Modal Tel-->
 
+    <div class="modal fade" id="faireappelint"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="tel">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Choisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="faireappelint" novalidate="novalidate">
+
+                                <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}" />
+
+                                     <label for="emaildoss">Destinataire</label>
+
+<select class="form-control" onclick='test();' id="prest"   >
+                           <option> </option>
+                            @foreach($prestataires1 as $prestat)
+                                <option  value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat); ;?>  <?php   echo PrestatairesController::ChampById('prenom',$prestat); ;?></option>
+                            @endforeach
+                        </select>
+
+<label for="emaildoss">Numéro</label>
+                                <select  class="form-control" id="numtelint" name="numtelint"   >
+                                 
+                                
+
+                                 </select>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+
+                    <button type="button"  class="btn btn-primary"  onclick="ButtonOnclickinter();">Appeler</button>
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 <!--Modal Tel-->
 
 <div class="modal fade" id="faireappel"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
@@ -2897,7 +2987,7 @@ $idagent=$dossier->user_id;
     </div>
  <!--Modal Tel-->
 
-    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" style="z-index:100000!important;left: 20px;" id="numatransfer1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="numatransfer1">
             <div class="modal-content">
                 <div class="modal-header">
@@ -2941,7 +3031,7 @@ $idagent=$dossier->user_id;
     </div>
 <!--Modal Tel conference-->
 
-    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numaconference1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" style="z-index:100000!important;left: 20px;" id="numaconference1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="numaconference1">
             <div class="modal-content">
                 <div class="modal-header">
@@ -3017,7 +3107,7 @@ $idagent=$dossier->user_id;
 </div>
          <div id='compterendudossierencours' style="display:none"><label style="color:green;font-size: 30px;">Compte rendu</label>
     <div class="form-group">
-                            <label for="sujetcrteldossierencours">Sujet :</label>
+                            <label for="sujetcrteldossierencours">Interlocuteur :</label>
                             <input type="text"    id="sujetcrteldossierencours"   class="form-control" name="sujetcrteldossierencours"    />
 
                         </div>
@@ -3480,6 +3570,8 @@ function disabling(elm) {
         $("#medecin_traitant").select2();
         $("#hospital_address").select2();
         $("#hotel").select2();
+$("#vehicule_address").select2();
+$("#ville").select2();
         $("#vehicule_marque").select2();
         $("#empalcement").select2();
         $("#garanties").select2();
@@ -3883,7 +3975,7 @@ function disabling(elm) {
             success: function (data) {
 
                 if(data!=''){
-                    parsed = JSON.parse(data);
+                     parsed = JSON.parse(data);
                     string='Existe deja ! ';
                     if(parsed['nom']!=null){string+='Nom : '+parsed['nom']+ ' - '; }
                     if(parsed['prenom']!=null){string+='Prénom : '+parsed['prenom']+ ' - '; }
@@ -3892,7 +3984,29 @@ function disabling(elm) {
                     if(parsed['type']!=null){string+='Type : '+parsed['type']+ ' '; }
                     if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
 
-                    alert(string);
+                    if(parsed['nature']=='email' || parsed['nature']=='tel' || parsed['nature']=='fax' )
+                    {  // client
+                        string+='<br>   lien : <a href="<?php echo $urlapp.'/clients/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Client</a>';
+                    }else{
+                        // intervenant
+                        if(parsed['nature']=='emailinterv' || parsed['nature']=='telinterv' || parsed['nature']=='faxinterv' )
+                        {  // client
+                            string+='<br>   lien : <a href="<?php echo $urlapp.'/prestataires/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Prestataire</a>';
+
+                        }
+if(parsed['nature']=='emaildoss' || parsed['nature']=='teldoss' || parsed['nature']=='faxdoss' )
+                        {  // client
+                            string+='<br>   lien : <a href="<?php echo $urlapp.'/dossiers/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche dossier</a>';
+
+                        }
+                    }
+                    // alert(string);
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Existant...',
+                        html: string
+                    });
+
                     document.getElementById(id).style.background='#FD9883';
                     document.getElementById(id).style.color='white';
                 } else{
@@ -4567,6 +4681,45 @@ function disabling(elm) {
         document.getElementById('destinataire').value=parseInt(num);
 
     }
+function test()
+{
+var select = document.getElementById('prest');
+var value = select.options[select.selectedIndex].value;
+ var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('dossiers.numints') }}",
+                        method:"POST",
+                        dataType: 'json',
+                        data:{value:value, _token:_token},
+                        success:function(data){
+$("#numtelint").empty();
+                        var len = data.length;
+
+                        if (len >= 1)
+                        {    $("<option />", {
+                                        val: "",
+                                        text: "Sélectionner",
+title:'',
+                                        
+                                    }).appendTo("#numtelint");
+                            
+                                for(var i=0; i<len; i++){
+telnom=data[i]['champ']+'  ('+data[i]['nom']+' '+data[i]['prenom']+'  | '+data[i]['remarque']+')';
+teltitre=data[i]['nom']+' '+data[i]['prenom']+'  ( '+data[i]['remarque']+')';
+                                    //alert(output[i].name);
+                                    $("<option />", {
+                                        val: data[i]['champ'],
+                                        text: telnom,
+title:teltitre,
+                                       
+                                    }).appendTo("#numtelint");
+                                }}
+
+                        }
+                    });
+                
+
+}
 
 </script>
 <style>.headtable{background-color: grey!important;color:white;}

@@ -215,7 +215,7 @@ $garanties=DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)
                             Au Client  </a>
                     </li>
                     <li>
-                        <a data-toggle="modal" data-target="#faireappel" onclick="ShowNumsInt();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a data-toggle="modal" data-target="#faireappelint" onclick="ShowNumsInt();" style="font-size:17px;height:30px;margin-bottom:5px;">
                             À l'intervenant </a>
                     </li>
                     <li>
@@ -528,27 +528,24 @@ $adressecomm=Adresse::where("champ",$emetteur)->first();
                     </div>
 
                     <div class="form-group ">
+   <label>Ville</label>
                         <div class="row">
-                            <label>Ville</label>
+                         
+<select autocomplete class="select2 form-control  col-lg-12 " style="width:400px" name="villepr2"    id="villepr2">
+                                         <option value="">Selectionner</option>
+                                         <option value="toutes">toutes</option>
+                                         @foreach($villes as $pres)
+
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+
+                                     </select>
                         </div>
-                        <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
-                        </div>
-                        <input class="form-control" value="<?php echo $ville; ?>" style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr2" />
-                        <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode2" />
+                       
+                       
 
                     </div>
-                    <script>
-                        (function() {
-                            var placesAutocomplete3 = places({
-                                appId: 'plCFMZRCP0KR',
-                                apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                container: document.querySelector('#villepr2'),
-                            });
-                            placesAutocomplete3.on('change', function resultSelected(e) {
-                                document.querySelector('#villecode2').value = e.suggestion.postcode || '';
-                            });
-                        })();
-                    </script>
+                   
 
     <input type="hidden" name="dossier" value="<?php echo $dossier->id; ?>"/>
 
@@ -576,9 +573,7 @@ $adressecomm=Adresse::where("champ",$emetteur)->first();
         $prestataire = Prestataire::find($id);
         if($prestataire != null)
         {
-        $villeid=intval($do['ville_id']);
-        if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
-        else{$ville=$do['ville'];}
+        $ville=$do['ville'];
         $gouvs=  PrestatairesController::PrestataireGouvs($id);
         $typesp=  PrestatairesController::PrestataireTypesP($id);
         $specs=  PrestatairesController::PrestataireSpecs($id);
@@ -694,32 +689,29 @@ $adressecomm=Adresse::where("champ",$emetteur)->first();
                              </div>
 
                              <div class="form-group ">
-                                 <div class="row">
+                                
                                      <label>Ville</label>
-                                 </div>
-                                 <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style></div>
-                                 <input class="form-control" style="padding-left:5px" type="text"  id="villepr"  placeholder="toutes"/>
-                                 <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecode" />
+                                
+                                 <div class="row">
+  <select autocomplete class="select2 form-control  col-lg-12 " style="width:400px" name="villepr"    id="villepr">
+                                         <option value="">Selectionner</option>
+                                         <option value="toutes">toutes</option>
+                                         @foreach($villes as $pres)
+
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+
+                                     </select>
+                        
 
                              </div>
-                             <script>
-                                 (function() {
-                                     var placesAutocomplete2 = places({
-                                         appId: 'plCFMZRCP0KR',
-                                         apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                         container: document.querySelector('#villepr'),
-                                     });
-                                     placesAutocomplete2.on('change', function resultSelected(e) {
-                                         document.querySelector('#villecode').value = e.suggestion.postcode || '';
-                                     });
-                                 })();
-                             </script>
+                            </div>
 
 
                              <div class="form-group row" >
                                  <label class=" control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
                                  <div class="row">
-                                     <input style="width:200px;" value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default " name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
+                                     <input style="width:200px;" value='' class="form-control datepicker-default " name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
                                  </div>
                              </div>
 							<input type="hidden" value="1"  id="start" />
@@ -1191,20 +1183,24 @@ $Montanttag = $doc->montantgop;}
 
 if($dossier->type_affectation!=='Najda TPA' || empty($garanties) )
 {
-$ltag=Tag::where("id",$doc->idtaggop)->first();
+$ltag=Tag::where("id",$doc->idtaggop)->where("dernier",1)->orWhere("parent",$doc->idtaggop)->first();
 $count=0;
+
 }
 else
 {$ltag=Rubrique::where("id",$doc->idtaggop)->first();
-$count=1;}
+$count=1;
+}
 
  if ( $ltag['devise'] === "TND") 
+                                  if ( $ltag['devise'] === "TND") 
                                     {$Montanttag = $doc->montantgop;}
                                     if ( $ltag['devise'] === "EUR")
                                        { $Montanttag = intval($doc->montantgop) * floatval($paramapp['euro_achat']);}
                                     if ( $ltag['devise'] === "USD")
                                        { $Montanttag = intval($doc->montantgop) * floatval($paramapp['dollar_achat']);}
 ?>
+
 
                                                 <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo '0'; ?>,<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $Montanttag;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
                                             </button>
@@ -1305,26 +1301,23 @@ $null=null;
                              </div>
 
                              <div class="form-group ">
+<label>Ville</label>
                                  <div class="row">
-                                     <label>Ville</label>
+                                     
+<select autocomplete class="select2 form-control  col-lg-12 " style="width:400px" name="villeprm"    id="villeprm">
+                                         <option value="Select">Selectionner</option>
+                                         <option value="toutes">toutes</option>
+                                         @foreach($villes as $pres)
+
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+
+                                     </select>
                                  </div>
-                                 <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style></div>
-                                 <input class="form-control" style="padding-left:5px" type="text"  id="villeprm" />
-                                 <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecodem" />
+                       
 
                              </div>
-                             <script>
-                                 (function() {
-                                     var placesAutocomplete2 = places({
-                                         appId: 'plCFMZRCP0KR',
-                                         apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                         container: document.querySelector('#villeprm'),
-                                     });
-                                     placesAutocomplete2.on('change', function resultSelected(e) {
-                                         document.querySelector('#villecodem').value = e.suggestion.postcode || '';
-                                     });
-                                 })();
-                             </script>
+                            
 
 
                              <div class="form-group row" >
@@ -1438,12 +1431,24 @@ $null=null;
             </div>
             <textarea name="apercucomment" id="apercucomment" placeholder="Commentaire..." style="margin-left: 2%;margin-right: 2.5%;margin-bottom: 1%;width: 95%; background: #efefef;" readonly></textarea>
             <div class="modal-footer">
-                <button type="button" id="attachdoc" onclick="document.getElementById('attachdoc').disabled=true;" class="btn btn-primary" >Enregistrer</button>
+                <button type="button" id="attachdoc" onclick="document.getElementById('attachdoc').disabled=true;" class="btn btn-primary" >Enregistrer2</button>
                 <button type="button" id="fermedoc" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal Ouvrir Document-->
+<div class="modal fade" id="liste_notes"  style="z-index: 1600;"role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document" style="width:900px;height: 450px">
+        <div id="contenu_tab_notes" class="modal-content">
+          
+
+        </div>
+    </div>
+</div>
+
+<!-- fin modal for notes-->
             <div id="tab7" class="tab-pane fade">
                 <div style="">
                     <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addom" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generateom"><b><i class="fas fa-plus"></i> Créer un ordre de mission</b></button>
@@ -1465,9 +1470,9 @@ $null=null;
                     </thead>
                     <tbody style="font-size:13px;">
                        <?php
-$omtaxis = \App\OMTaxi::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut')->orderBy('created_at','desc')->get();
-        $omambs = \App\OMAmbulance::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut')->orderBy('created_at','desc')->get();
-        $omrem = \App\OMRemorquage::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut')->orderBy('created_at','desc')->get();
+$omtaxis = \App\OMTaxi::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut','dateheuredep')->orderBy('created_at','desc')->get();
+        $omambs = \App\OMAmbulance::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut','dateheuredep')->orderBy('created_at','desc')->get();
+        $omrem = \App\OMRemorquage::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut','dateheuredep')->orderBy('created_at','desc')->get();
 $omstot = array_merge($omtaxis->toArray(),$omambs->toArray(),$omrem->toArray() );
   function cmp($a, $b)
     {
@@ -1509,7 +1514,7 @@ if (stristr( $om['titre'],'ambulance')!== FALSE)
 { $types=2;}
 if (stristr( $om['titre'],'remorquage')!== FALSE)
 {$types=3;}
-if ($om['statut'] !="Validé" && $om['statut']!="Annulé" ) {
+if ($om['statut'] !="Validé" && $om['statut']!="Annulé" && $om['dateheuredep'] !=null) {
                                     echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$om['id'].','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
                                    
                                
@@ -1519,13 +1524,17 @@ if ($om['statut'] =="Validé"){
 echo "<span style='color:blue'>".$om['statut']."</span>";}
 if ($om['statut'] =="Annulé"){
 echo "<span style='color:black'>".$om['statut']."</span>";}
+if ($om['dateheuredep'] ==null && $om['statut'] !="Annulé"){
+echo "<span style='color:red'>".'Non Validé'."</span>";}
 }}
                                 else
                                 { if ($om['statut'] =="Validé" || $om['statut']=="Annulé" ) {
                                     if ($om['statut'] =="Validé"){
 echo "<span style='color:blue'>".$om['statut']."</span>";}
 if ($om['statut'] =="Annulé"){
-echo "<span style='color:black'>".$om['statut']."</span>";}}
+echo "<span style='color:black'>".$om['statut']."</span>";}
+if ($om['dateheuredep'] ==null && $om['statut'] !="Annulé"){
+echo "<span style='color:red'>".'Non Validé'."</span>";}}
 else {
 echo "<span style='color:red'> Non Validé </span>" ;
 }
@@ -2189,7 +2198,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                 <textarea name="doccomment" id="doccomment" placeholder="Commentaire..." style="margin-left: 2%;margin-right: 2.5%;margin-bottom: 1%;width: 95%; background: #efefef;"></textarea>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="gendochtml" class="btn btn-primary">Générer</button>
+                <button type="button" id="gendochtml" class="btn btn-primary" onclick="saveFun()">Générer</button>
             </div>
         </div>
     </div>
@@ -2858,7 +2867,10 @@ if(strstr($dossier['reference_medic'],"MI")){
                         <input type="hidden" id="selectedAttach"  />
                         <label ><b>Description :</b></label>
                         <center><textarea id="descAttach" onchange="updateDesc()" class="form-control" ></textarea> </center><br><br>
+<?php  if($type=='admin' ) { ?>	
+
                         <button onclick=" deleteattach()" type="button" class="btn btn-danger pull-right"><i class="fa fa-trash" ></i> Supprimer l'attachement</button>
+<?php } ?>	
                         <br><br>
                      </div>
 
@@ -3018,28 +3030,24 @@ if(strstr($dossier['reference_medic'],"MI")){
                         </div>
 
                         <div class="form-group ">
+   <label>Ville</label>
                             <div class="row">
-                                <label>Ville</label>
+                             <select autocomplete class="select2 form-control  col-lg-12 " style="width:400px" name="villepr3"    id="villepr3">
+                                         <option value="Select">Selectionner</option>
+                                         <option value="toutes">toutes</option>
+                                         @foreach($villes as $pres)
+
+                                             <option   value="<?php echo $pres->ville;?>"> <?php echo $pres->ville;?></option>
+                                         @endforeach
+
+                                     </select>
                             </div>
-                            <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
-                            </div>
-                            <input class="form-control"  style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr3" />
-                            <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode3" />
+                         
+                           
 
                         </div>
 
-                        <script>
-                            (function() {
-                                var placesAutocomplete4 = places({
-                                    appId: 'plCFMZRCP0KR',
-                                    apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                    container: document.querySelector('#villepr3'),
-                                });
-                                placesAutocomplete4.on('change', function resultSelected(e) {
-                                    document.querySelector('#villecode3').value = e.suggestion.postcode || '';
-                                });
-                            })();
-                        </script>
+                       
 
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
@@ -3213,6 +3221,62 @@ $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
         </div>
 
     </div>
+<!--Modal Tel-->
+
+    <div class="modal fade" id="faireappelint"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="tel">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Choisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" sytle="height:300px">
+
+                        
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="faireappelint" novalidate="novalidate">
+
+                                <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}" />
+
+                                     <label for="emaildoss">Destinataire</label>
+
+<select class="form-control" onclick='test();' id="prest"   >
+                           <option> </option>
+                            @foreach($prestataires1 as $prestat)
+                                <option  value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat); ;?>  <?php   echo PrestatairesController::ChampById('prenom',$prestat); ;?></option>
+                            @endforeach
+                        </select>
+
+<label for="emaildoss">Numéro</label>
+                                <select  class="form-control" id="numtelint" name="numtelint"   >
+                                 
+                                
+
+                                 </select>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+
+                    <button type="button"  class="btn btn-primary"  onclick="ButtonOnclickinter();">Appeler</button>
+   
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 <div class="modal fade" id="faireappellibre"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="tel">
             <div class="modal-content">
@@ -3255,7 +3319,7 @@ $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
     </div>
    <!--Modal Tel-->
 
-    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numatransfer1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" style="z-index:100000!important;left: 20px;" id="numatransfer1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="numatransfer1">
             <div class="modal-content">
                 <div class="modal-header">
@@ -3299,7 +3363,7 @@ $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
     </div>
 <!--Modal Tel conference-->
 
-    <div class="modal fade" style="z-index:10000!important;left: 20px;" id="numaconference1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" style="z-index:100000!important;left: 20px;" id="numaconference1"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="numaconference1">
             <div class="modal-content">
                 <div class="modal-header">
@@ -3441,7 +3505,7 @@ $title=$phone->nom.' '.$phone->prenom.' ( '.$phone->remarque .' ) ';
 </div>
 <div  id='compterendudossierencours' style="display:none"><label style="color:green;font-size: 30px;"style="left: 20px;">Compte rendu</label>
     <div class="form-group">
-                            <label for="sujetcrteldossierencours">Sujet :</label>
+                            <label for="sujetcrteldossierencours">Interlocuteur :</label>
                             <input type="text"    id="sujetcrteldossierencours"   class="form-control" name="sujetcrteldossierencours"    />
 
                         </div>
@@ -3783,6 +3847,51 @@ function completeom(id,affectea,verifc)
         
         $("#templatehtmlom").modal('show');
  }
+
+ function charge_aff_modal_notes(liste_id_notes)
+ {
+
+   // alert('function charge_aff_modal_notes');
+ 
+     $.ajax({
+        url:"{{ route('notes.getnotesom') }}",
+        method:"POST",
+        async: false,      
+        data:'_token='+$('input[name="_token"]').val()+'&liste_id_notes='+liste_id_notes,
+       
+        success:function(data){
+                      
+
+                 $("#contenu_tab_notes").html(data);
+                 $("#liste_notes").modal("show");
+               
+            
+        }
+    });
+
+ }
+
+ $(document).on('click','#submit_form_notes',function(){
+
+         $.ajax({
+                url:"{{ route('notes.managenotes') }}",
+                method:"post",
+                //'&_token='+_token
+                data:$("#form_notes").serialize()+'&_token='+$('input[name="_token"]').val(),
+                success:function(data){
+
+                        alert(data);
+                     
+                         $("#liste_notes").modal("hide");
+
+                     
+
+                       }
+                });
+
+
+ })
+
 function modalodoc(titre,emplacement,type=null,parent=null,commentaire=null,idutag=null,name=null,emp=null,existe=null)
 {
 
@@ -4333,6 +4442,10 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
 }
     $(document).ready(function() {
     $("#typeprest").select2();
+ $("#villepr").select2();
+$("#villepr2").select2();
+$("#villepr3").select2();
+$("#villeprm").select2();
     $("#typeprest2").select2();
    /* $("#specialite").select2();
     $("#specialite2").select2();*/
@@ -4435,7 +4548,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('emails.sendsms') }}",
+                    url:"{{ route('emails.sendsmsxml') }}",
                     method:"POST",
                     data:{description:description,destinataire:destinataire,message:message,dossier:dossier, _token:_token},
                     success:function(data){
@@ -4630,6 +4743,7 @@ $("#templateom").val("Select").change();
         var _token = $('input[name="_token"]').val();
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
+//alert(tempdoc);
         var comdoc = $("#doccomment").val();
 var modif = $("#modif").val()
         var idparent = '';
@@ -4890,7 +5004,22 @@ $("#affectationprest").val("Select").change();
                     {location.reload();}
                     else
                         {//alert(data['titre']);
- if(data['resultatNote']!='' && data['resultatNote']!=undefined ){alert(data['resultatNote']);}
+ if(data['resultatNote']!='' && data['resultatNote']!=undefined ){
+   //alert(data['resultatNote']);
+    rn=data['resultatNote'].split("_nnn_");
+    if(rn[0])
+    {
+      // alert(data['resultatNote']); 
+       alert(rn[0]);
+    }
+    if(rn.length >1)
+    {
+      //  alert(rn[1]);
+        charge_aff_modal_notes(rn[1]);
+    }
+  
+
+   }
 urlf="{{ URL::asset('storage'.'/OrdreMissions/') }}";
 //alert(urlf+"/"+dossier+"/"+data['titre']);
 $("#templatehtmlom").modal('hide');
@@ -5248,6 +5377,7 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
             var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
             var specialite = $('#specialitem').val();
+ var ville = $('#villeprm').val();
  if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4;}
@@ -5270,7 +5400,7 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
                     $.ajax({
                         url:"{{ route('prestations.saving') }}",
                         method:"POST",
-                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token,ville:ville},
                         success:function(data){
                             var prestation=parseInt(data);
                             // window.location =data;
@@ -5372,6 +5502,7 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
             var typeprest = $('#typeprest').val();
             var gouvernorat = $('#gouvcouv').val();
             var specialite = $('#specialite').val();
+            var  ville =document.getElementById('villepr').value;
             var date = $('#pres_date').val();
             //   gouvcouv
             if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
@@ -5380,7 +5511,7 @@ var firstsavedm= parseInt(  document.getElementById('firstsaved-m').value);
             $.ajax({
                 url:"{{ route('prestations.saving') }}",
                 method:"POST",
-                data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token,ville:ville},
                 success:function(data){
            var prestation=parseInt(data);
                /// window.location =data;
@@ -5486,6 +5617,7 @@ $('#add2-m').click(function(){
             var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
             var specialite = $('#specialitem').val();
+var ville = $('#villeprm').val()
  if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4;}
@@ -5508,7 +5640,7 @@ $('#add2-m').click(function(){
             $.ajax({
                 url:"{{ route('prestations.saving') }}",
                 method:"POST",
-                data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token,ville:ville},
                 success:function(data){
            var prestation=parseInt(data);
                /// window.location =data;
@@ -5611,18 +5743,19 @@ $('#showNext').prop('disabled', false);
             var  gouv =document.getElementById('gouvcouv').value;
             var  specialite =document.getElementById('specialite').value;
             var  ville =document.getElementById('villepr').value;
-            var  postal =document.getElementById('villecode').value;
+
+         //   var  postal =document.getElementById('villecode').value;
             if((type !="")&&(gouv !=""))
             {
                 var _token = $('input[name="_token"]').val();
                 document.getElementById('termine').style.display = 'none';
                 document.getElementById('add2').style.display = 'none';
                 document.getElementById('add2prest').style.display='none';
-               console.log('Gouv: '+gouv+' Type P: '+type+' Specialite: '+specialite+' Ville: '+ville+' Postal: '+postal) ;
+               console.log('Gouv: '+gouv+' Type P: '+type+' Specialite: '+specialite+' Ville: '+ville) ;
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",
                     method:"post",
-                    data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
+                    data:{gouv:gouv,type:type,specialite:specialite,ville:ville, _token:_token},
                     success:function(data){
                         $('#data').html(data);
                         //window.location =data;
@@ -5690,7 +5823,8 @@ $('#showNext-m').prop('disabled', false);
             var  gouv =document.getElementById('gouvcouvm').value;
             //var  specialite =document.getElementById('specialite').value;
             var  ville =document.getElementById('villeprm').value;
-            var  postal =document.getElementById('villecodem').value; 
+
+          //  var  postal =document.getElementById('villecodem').value; 
             if((type !="")&&(gouv !=""))
             {
                 var _token = $('input[name="_token"]').val();
@@ -5701,7 +5835,7 @@ $('#showNext-m').prop('disabled', false);
                 $.ajax({
                     url:"{{ route('dossiers.listepresm') }}",
                     method:"post",
-                    data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
+                    data:{gouv:gouv,type:type,specialite:specialite,ville:ville, _token:_token},
                     success:function(data){
                         $('#data-m').html(data);
                         console.log("success list prest");
@@ -5899,6 +6033,8 @@ $('#showNext-m').prop('disabled', true);
               var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
             var specialite = $('#specialitem').val();
+ var  ville =document.getElementById('villeprm').value;
+//alert(ville);
  if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4;}
@@ -5920,7 +6056,7 @@ $('#showNext-m').prop('disabled', true);
                     $.ajax({
                         url:"{{ route('prestations.saving') }}",
                         method:"POST",
-                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token,ville:ville},
                         success:function(data){
                             var prestation=parseInt(data);
                             // window.location =data;
@@ -6838,6 +6974,37 @@ $(document).ready(function(){
 
 
     <script type="text/javascript">
+function saveFun(){
+
+ var tempdoc =document.getElementById('templatedocument').value;
+//alert(tempdoc);
+if(tempdoc==32)
+{
+//anglais
+var result =  document.getElementById('templatefilled').contentWindow.document.getElementById('testr').value;
+$x=1400;
+while(result.length > $x){
+var result1 = result.slice(0,$x);
+var result2 = result.slice($x+1,result.length);
+result2 = result2.replace(" ", " \\par \\page ");
+var result = result1 + result2;
+$x=$x+2600;}
+}
+if(tempdoc==33 )
+{
+var result =  document.getElementById('templatefilled').contentWindow.document.getElementById('testr').value;
+$x=2400;
+while(result.length > $x){
+var result1 = result.slice(0,$x);
+var result2 = result.slice($x+1,result.length);
+result2 = result2.replace(" ", " \\par \\page ");
+var result = result1 + result2;
+$x=$x+3600;}
+}
+document.getElementById('templatefilled').contentWindow.document.getElementById('testr').value = result;
+//$("#testr").val(result);
+//alert("ok");
+}
         $(document).ready(function() {
             $('#mytable thead tr:eq(1) th').each( function () {
                 var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
@@ -7190,6 +7357,45 @@ document.getElementById('btnvalid').disabled=true
                                      location.reload();  }
  });
                                      }
+function test()
+{
+var select = document.getElementById('prest');
+var value = select.options[select.selectedIndex].value;
+ var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('dossiers.numints') }}",
+                        method:"POST",
+                        dataType: 'json',
+                        data:{value:value, _token:_token},
+                        success:function(data){
+$("#numtelint").empty();
+                        var len = data.length;
+
+                        if (len >= 1)
+                        {    $("<option />", {
+                                        val: "",
+                                        text: "Sélectionner",
+title:'',
+                                        
+                                    }).appendTo("#numtelint");
+                            
+                                for(var i=0; i<len; i++){
+telnom=data[i]['champ']+'  ('+data[i]['nom']+' '+data[i]['prenom']+'  | '+data[i]['remarque']+')';
+teltitre=data[i]['nom']+' '+data[i]['prenom']+'  ( '+data[i]['remarque']+')';
+                                    //alert(output[i].name);
+                                    $("<option />", {
+                                        val: data[i]['champ'],
+                                        text: telnom,
+title:teltitre,
+                                       
+                                    }).appendTo("#numtelint");
+                                }}
+
+                        }
+                    });
+                
+
+}
   </script>
 
 
