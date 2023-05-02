@@ -6,16 +6,53 @@ if (! isset($_GET['remplace']))
 }
 	
 
-if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
+/*if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
 if (isset($_GET['DB_DATABASE'])) {$dbname=$_GET['DB_DATABASE'];}
 if (isset($_GET['DB_USERNAME'])) {$dbuser=$_GET['DB_USERNAME'];}
-if (isset($_GET['DB_PASSWORD'])) {$dbpass=$_GET['DB_PASSWORD'];}
+if (isset($_GET['DB_PASSWORD'])) {$dbpass=$_GET['DB_PASSWORD'];}*/
 
 //recuperation iduser connecte
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 
 // Create connection
-$conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
+/*$conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");*/
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 
 // Check connection
 if (!$conn) {
@@ -144,14 +181,14 @@ if ($resulttp->num_rows > 0) {
     $array_prest = array();
     while($row = $resulttp->fetch_assoc()) {
         //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
-        if (intval($row["ville_id"]) > 0)
+        /*if (intval($row["ville_id"]) > 0)
         {
-        	$sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$row['ville_id'];
+       	$sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$row['ville_id'];
         	$resultvprest = $conn->query($sqlvilleprest);
         	$vprest = $resultvprest->fetch_assoc();
-        	$nnameprest = $row['name']." [".$vprest['name']."]";
-        }
-        elseif (! empty($row["ville"]))
+        	$nnameprest = $row['name']." [".$prest['ville']."]";
+        }*/
+      if (! empty($row["ville"]))
         {
 			$nnameprest = $row['name']." [".$row['ville']."]";
         }
@@ -202,14 +239,14 @@ if ($resulthch->num_rows > 0) {
 	    // output data of each row
 	    $array_prestap = array();
 	    while($rowap = $resultap->fetch_assoc()) {
-	        if (intval($rowap["ville_id"]) > 0)
+	      /*  if (intval($rowap["ville_id"]) > 0)
 	        {
 	        	$sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$rowap['ville_id'];
 	        	$resultvprest = $conn->query($sqlvilleprest);
 	        	$vprest = $resultvprest->fetch_assoc();
 	        	$nnameprest = $rowap['name']." [".$vprest['name']."]";
-	        }
-	        elseif (! empty($rowap["ville"]))
+	        }*/
+	        if (! empty($rowap["ville"]))
 	        {
 				$nnameprest = $rowap['name']." [".$rowap['ville']."]";
 	        }
@@ -455,8 +492,19 @@ if (isset($detailom))
 <input type="checkbox" name="CL_AllerRetour" id="CL_AllerRetour" value="oui">
 <?php } ?>						
 	</div>
+
 </div></br>
+
 <p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#000000">Le présent ordre de mission fait office de prise en charge et copie doit être adressée avec votre facture</span></p>
+<?php if($parentom!==Null ){  ?>
+<p style="color:red">
+<input type="checkbox" name="remplaceetannule" id="remplaceetannule" value="oui">	</input>
+Cet ordre de mission  remplace le précédent ordre de mission en date du : 
+<?php 
+echo $detailom['created_at'];
+ ?>
+</p>
+<?php } ?>
 <div class="row" style=" margin-left: 0px;margin-top: 20px ">
 <input type="hidden" name="parent" id="parent" value="<?php echo $parentom; ?>" />
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;
@@ -589,11 +637,10 @@ if (isset($detailom))
 </div>
 </div>
 			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
-<input type="text" id="lieuprest" list="CL_lieuprest_pc" name="CL_lieuprest_pc"  <?php if (isset($detailom)) { if (isset($detailom['CL_lieuprest_pc'])) {echo "value='".$detailom['CL_lieuprest_pc']."'";}} ?> />
+<input type="text" id="lieuprest" list="CL_lieuprest_pc" name="CL_lieuprest_pc" <?php if (isset($detailom)) { if (isset($detailom['CL_lieuprest_pc'])) {echo 'value="'.$detailom["CL_lieuprest_pc"].'"';}} ?> />
 <datalist id="CL_lieuprest_pc">
 <?php
 foreach ($array_prest as $prest) {
-
 $sqltel = "SELECT id,champ FROM adresses where nature='telinterv' and parent=".$prest['id'];
 	$resulttel = $conn->query($sqltel);
 	if ($resulttel->num_rows > 0) {
@@ -612,16 +659,15 @@ $tel='';
 else
 {$tel=$array_tel[0]['champ'];
 $array_tel=[];}
-	echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
-
+	//echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
+	echo '<option value="'.$prest["name"].'" telprest="'.$tel.'">'.$prest["name"].'</option>';
 }
-
 ?>
 </datalist>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
 <input name="CL_prestatairetel_pc" id="CL_prestatairetel_pc" placeholder="Téléphone du prestataire" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_prestatairetel_pc'])) {echo "value='".$detailom['CL_prestatairetel_pc']."'";}} ?> ></input>
 				<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:Wingdings; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span>
-<input type="text"  id="lieudecharge" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec"  <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo "value='".$detailom['CL_lieudecharge_dec']."'";}} ?> />
+<input type="text" id="lieudecharge" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec"  <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo 'value="'.$detailom["CL_lieudecharge_dec"].'"';}} ?> />
 <datalist id="CL_lieudecharge_dec">
 <?php
 foreach ($array_prest as $prest) {
@@ -643,7 +689,8 @@ $tel='';
 else
 {$tel=$array_tel[0]['champ'];
 $array_tel=[];}
-	echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
+	//echo "<option value='".$prest['name']."' telprest='".$tel."'>".$prest['name']."</option>";
+echo '<option value="'.$prest["name"].'" telprest="'.$tel.'">'.$prest["name"].'</option>';
 }
 ?>
 </datalist>
@@ -1021,10 +1068,10 @@ if (isset($signaturetype))
 
 
     $.ajax({url: 'VoituresDispoParDate.php',
-             data: {DB_HOST: '<?php echo $dbHost; ?>',
+             data: {DB_HOST: '<?php echo $hostname; ?>',
              DB_DATABASE: '<?php echo $dbname; ?>', 
-             DB_USERNAME: '<?php echo $dbuser; ?>',
-             DB_PASSWORD: '<?php echo $dbpass; ?>',
+             DB_USERNAME: '<?php echo $user; ?>',
+             DB_PASSWORD: '<?php echo $mdp; ?>',
              datedepmission: date1,
              datedispprev: date2,
              parent:parent,
@@ -1091,10 +1138,10 @@ if (isset($signaturetype))
     var parent = $("#parent").val(); 
 
     $.ajax({ url: 'PersonnelDispoParDate.php',
-             data: {DB_HOST: '<?php echo $dbHost; ?>',
+             data: {DB_HOST: '<?php echo $hostname; ?>',
              DB_DATABASE: '<?php echo $dbname; ?>', 
-             DB_USERNAME: '<?php echo $dbuser; ?>',
-             DB_PASSWORD: '<?php echo $dbpass; ?>',
+             DB_USERNAME: '<?php echo $user; ?>',
+             DB_PASSWORD: '<?php echo $mdp; ?>',
              datedepmission: date1,
              datedispprev: date2,
              typeom: 'taxi',

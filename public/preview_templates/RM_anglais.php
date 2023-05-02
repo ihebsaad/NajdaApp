@@ -12,6 +12,7 @@ if (isset($_GET['CL_age'])) {$CL_age=$_GET['CL_age'];}
 if (isset($_GET['reference_customer'])) {$reference_customer=$_GET['reference_customer']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_rapport'])) {$CL_rapport=$_GET['CL_rapport']; }
+
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 
 // Create connection
@@ -404,7 +405,32 @@ else
 ?>
 </span></p>
 <p class=rvps3><span class=rvts3><br></span></p>
-<p class=rvps7><span class=rvts7><textarea name="CL_rapport" rows="10" cols="90" form="formchamps" placeholder="" value=""><?php if(isset ($CL_rapport)) { $ligne = str_replace('\\', "\n", $CL_rapport); echo $ligne;} ?></textarea></span></p>
+<p class=rvps7><span class=rvts7><textarea name="CL_rapport" id="testr" rows="10" cols="90" form="formchamps" placeholder="" value=""><?php if(isset ($CL_rapport)) { $ligne = str_replace('\\', "\n", $CL_rapport); echo $ligne;} ?></textarea>
+</span></p>
 
 <h1 class=rvps6><span class=rvts0><span class=rvts12><br></span></span></h1>
+
+
+<script type="text/javascript">
+
+   function imposeMaxLength(Event, Object, MaxLen)
+{
+value = Object.value;
+
+    max = parseInt(MaxLen);
+    if(value.length >= max){
+//alert(value.length);
+        document.getElementById('CL_rapport2').style.display = "block";
+val = document.getElementById('CL_rapport2hidden').value ;
+document.getElementById('CL_rapport2').value = val;
+
+    } else {
+//alert(value.length);
+
+        document.getElementById('CL_rapport2').style.display = "none";
+document.getElementById('CL_rapport2').value = "";
+    }
+   //alert("ok");
+}
+</script>
 </body></html>

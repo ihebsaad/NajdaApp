@@ -1,15 +1,45 @@
 <?php
 
 	// conn DAtabase
-	if (isset($_POST['DB_HOST'])) {$dbHost=$_POST['DB_HOST'];}
+	/*if (isset($_POST['DB_HOST'])) {$dbHost=$_POST['DB_HOST'];}
 	if (isset($_POST['DB_DATABASE'])) {$dbname=$_POST['DB_DATABASE'];}
 	if (isset($_POST['DB_USERNAME'])) {$dbuser=$_POST['DB_USERNAME'];}
-	if (isset($_POST['DB_PASSWORD'])) {$dbpass=$_POST['DB_PASSWORD'];}
+	if (isset($_POST['DB_PASSWORD'])) {$dbpass=$_POST['DB_PASSWORD'];}*/
 
 	
 	// Create connection
-$conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
+/*$conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);*/
+$lines_array = file("../../.env");
 
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 	// Check connection
 	if ($conn) {
 	mysqli_query($conn,"set names 'utf8'");

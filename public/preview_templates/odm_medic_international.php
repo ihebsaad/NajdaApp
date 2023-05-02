@@ -14,7 +14,44 @@ if (isset($_GET['DB_PASSWORD'])) {$dbpass=$_GET['DB_PASSWORD'];}
 
 
 // Create connection
-$conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
+/*$conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");*/
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 
 // Check connection
 if (!$conn) {
@@ -305,7 +342,18 @@ if ($resulthch->num_rows > 0) {
 	} else {
     echo "0 results prestataires hch";
 	}
+// infos agent
+	
 
+	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$iduser;
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagtcomp = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 header("Content-Type: text/html;charset=UTF-8");
 ?>
 <html>
@@ -1343,9 +1391,8 @@ foreach ($array_adls as $adl) {
             <p><span class=rvts65>Bonne mission</span><span class=rvts2>.</span></p>
  <div class="row ">
       <p><span class=rvts65>Signé : </span><span class=rvts2>
-<span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name']." ".$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}}?> </span>
-<input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name']." ".$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}} ?>"></input>
-      </div>
+<span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagtcomp)) {echo $detailagtcomp['name']." ".$detailagtcomp['lastname']; } ?> </span>
+<input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagtcomp)) {echo $detailagtcomp['name']." ".$detailagtcomp['lastname']; } ?>"></input>
 </form>
 <script type="text/javascript">
 	
