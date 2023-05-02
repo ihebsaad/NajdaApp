@@ -14,12 +14,7 @@ use App\Template_doc ;
 
 Auth::routes();
 
- 
-Route::get('/logs', 'HomeController@logs')->name('logs');
-
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/archives_factures', 'HomeController@index_archives')->name('archives_factures');
-
 Route::get('/roles', 'HomeController@roles')->name('roles');
 Route::get('/pause', 'HomeController@pause')->name('pause');
 //Route::get('/changerroles', 'HomeController@changerroles')->name('changerroles');
@@ -27,14 +22,11 @@ Route::get('/parametres', 'HomeController@parametres')->name('parametres');
 Route::get('/supervision', 'HomeController@supervision')->name('supervision');
 Route::get('/affectations', 'HomeController@affectation')->name('affectation');
 Route::get('/affectations2', 'HomeController@affectation2')->name('affectation2');
-Route::get('/affectations3', 'HomeController@affectation3')->name('affectatFion3');
+Route::get('/affectations3', 'HomeController@affectation3')->name('affectation3');
 Route::get('/missions', 'HomeController@missions')->name('missions');
-Route::get('/Calendriermissions7', 'HomeController@Calendriermissions7')->name('Calendriermissions7');
-Route::get('/actionsactives30min', 'HomeController@actionsactives30min')->name('actionsactives30min');
 Route::get('/notifs', 'HomeController@notifs')->name('notifs');
 Route::get('/transport', 'HomeController@transport')->name('transport');
 Route::get('/transport2', 'HomeController@transport2')->name('transport2');
-Route::get('/transporth', 'HomeController@transporth')->name('transporth');
 Route::get('/transporttous', 'HomeController@transporttous')->name('transporttous');
 Route::get('/transportsemaine', 'HomeController@transportsemaine')->name('transportsemaine');
 Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');
@@ -42,7 +34,6 @@ Route::post('/parametring2', 'HomeController@parametring2')->name('home.parametr
 Route::post('/demande', 'HomeController@demande')->name('home.demande');
 Route::post('/demandepause', 'HomeController@demandepause')->name('home.demandepause');
 Route::post('/reponsepause', 'HomeController@reponsepause')->name('home.reponsepause');
-Route::post('/acceptpausesup', 'HomeController@acceptpausesup')->name('home.acceptpausesup');
 Route::post('/removereponse', 'HomeController@removereponse')->name('home.removereponse');
 Route::post('/removereponsepause', 'HomeController@removereponsepause')->name('home.removereponsepause');
 Route::post('/affecterrole', 'HomeController@affecterrole')->name('home.affecterrole');
@@ -107,25 +98,16 @@ Route::get('/getNotificationDeleguerMiss/{userConnect}', 'DeleguerMissionControl
 // delegation action
 Route::post('/deleguerAction/','DeleguerActionController@deleguerAction')->name('Deleguer.Action');
 Route::get('/getNotificationDeleguerAct/{userConnect}', 'DeleguerActionController@getNotificationDeleguerAct'); 
-/***attachements***/
 
-Route::post('/attachements/savecomment','AttachementsController@savecomment')->name('attachements.savecomment');
+
 /*** Entrees **/
 /* tous les emails (tous les entrees) dans la base */
 Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@boite'));
 Route::get('/entrees/',  'EntreesController@index')->name('entrees.index');
 Route::get('/entrees/finances',  'EntreesController@finances')->name('entrees.finances');
-Route::get('/envoyes/finances',  'EnvoyesController@finances')->name('envoyes.finances');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
-Route::post('/entrees/entreetel','EntreesController@entreetel')->name('entrees.entreetel');
-Route::post('/entrees/ajoutcompterappelrecu','EntreesController@ajoutcompterappelrecu')->name('entrees.ajoutcompterappelrecu');
-Route::post('/entrees/updating','EntreesController@updating')->name('entrees.updating');
-Route::post('/entrees/detectnom','EntreesController@detectnom')->name('entrees.detectnom');
-Route::post('/entrees/numaccept','EntreesController@numaccept')->name('entrees.numaccept');
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/enregistrements','EntreesController@enregistrements')->name('entrees.enregistrements');
-Route::get('/entrees/enregistrementsnondispatch','EntreesController@enregistrementsnondispatch')->name('entrees.enregistrementsnondispatch');
-Route::get('/entrees/enregistrementsdispatch','EntreesController@enregistrementsdispatch')->name('entrees.enregistrementsdispatch');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show')->name('entrees.show');
 Route::get('/entrees/showdisp/{id}', 'EntreesController@showdisp')->name('entrees.showdisp');
@@ -134,8 +116,6 @@ Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/destroy2/{id}', 'EntreesController@destroy2');
-Route::get('/entrees/destroy3/{id}', 'EntreesController@destroy3');
-Route::get('/entrees/destroy4/{id}', 'EntreesController@destroy4');
 Route::get('/entrees/spam/{id}', 'EntreesController@spam');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/traiter/{id}', 'EntreesController@traiter');
@@ -194,10 +174,7 @@ Route::post('/emails/createpdf', 'EmailController@export_pdf_send2')->name('emai
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/sms/{id}', 'EmailController@sms');
 Route::post('/emails/sendsms', 'EmailController@sendsms')->name('emails.sendsms');
-Route::get('/emails/sendsmsxml', 'EmailController@sendsmsxml')->name('emails.sendsmsxml');
 Route::post('/emails/sendsmsxml', 'EmailController@sendsmsxml')->name('emails.sendsmsxml');
-Route::get('/emails/sendsmsxmlAjax', 'EmailController@sendsmsxmlAjax')->name('emails.sendsmsxmlAjax');
-
 Route::post('/emails/sendfax', 'EmailController@sendfax')->name('emails.sendfax');
 Route::get('/emails/whatsapp', 'EmailController@whatsapp');
 Route::post('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
@@ -210,30 +187,19 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 Route::get('/boites/',  'BoitesController@index')->name('boites');
 Route::get('/boites/show/{id}', 'BoitesController@show');
 
-Route::post('/telephonie/updating','UsersController@updatingsession')->name('telephonie.updating');
+
 
 /*** Envoyes : Email envoyées et brouillons  **/
 //Route::resource('/envoyes',  'EnvoyesController');
 Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@index'));
-Route::get('/envoyes/enregistrements','EnvoyesController@enregistrements')->name('envoyes.enregistrements');
-Route::get('/envoyes/enregistrementsnondispatch','EnvoyesController@enregistrementsnondispatch')->name('envoyes.enregistrementsnondispatch');
-Route::get('/envoyes/enregistrementsdispatch','EnvoyesController@enregistrementsdispatch')->name('envoyes.enregistrementsdispatch');
-Route::post('/envoyes/dispatchf2','EnvoyesController@dispatchf2')->name('envoyes.dispatchf2');
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::post('/envoyes/savingbr','EnvoyesController@savingbr')->name('envoyes.savingbr');
-Route::post('/envoyes/envoyetel','EnvoyesController@envoyetel')->name('envoyes.envoyetel');
-Route::post('/envoyes/ajoutcompterappel','EnvoyesController@ajoutcompterappel')->name('envoyes.ajoutcompterappel');
-Route::post('/envoyes/ajoutcompterappellibre','EnvoyesController@ajoutcompterappellibre')->name('envoyes.ajoutcompterappellibre');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
-Route::post('/envoyes/updating','EnvoyesController@updating')->name('envoyes.updating');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
 Route::get('/envoyes/destroy/{id}', 'EnvoyesController@destroy');
-Route::get('/envoyes/destroy1/{id}', 'EnvoyesController@destroy1');
 Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes.brouillons');
-Route::get('/envoyes/tous', 'EnvoyesController@tous')->name('envoyes.tous');
-Route::get('/mails/automatiques', 'EnvoyesController@mailsAutomatiques')->name('mails.automatiques');
 
 
 /*** Dossiers **/
@@ -242,7 +208,6 @@ Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@i
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 
 Route::post('/dossiers/save','DossiersController@save')->name('dossiers.save');
-Route::post('/dossiers/numints','DossiersController@numints')->name('dossiers.numints');
 Route::post('/dossiers/sendaccuse','DossiersController@sendaccuse')->name('dossiers.sendaccuse');
 Route::get('/dossiers/create/{identree}','DossiersController@create')->name('dossiers.create');
 Route::get('/dossiers/add/','DossiersController@add')->name('dossiers.add');
@@ -250,6 +215,7 @@ Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.
 Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossiers.updating2');
 Route::post('/dossiers/updating3','DossiersController@updating3')->name('dossiers.updating3');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
+Route::get('/dossiers/details/{id}', 'DossiersController@details')->name('dossiers.details');
 Route::get('/dossiers/fiche/{id}', 'DossiersController@fiche')->name('dossiers.fiche');
 Route::get('/dossiers/update/{id}', 'DossiersController@update')->name('dossiers.update');
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
@@ -273,11 +239,7 @@ Route::get('/dossiers/affectclassique','DossiersController@affectclassique')->na
 Route::post('/ExternefileUpload/upload', 'DossiersController@uploadExterneFile')->name('Upload.ExterneFile');
 Route::get('/Dossier/historiqueaffectation/{id}', 'DossiersController@historiqueAffectation')->name('historique.affectation');
 Route::get('/dossiers/details/{id}', 'DossiersController@details')->name('dossiers.details');
-Route::get('/dossiers/details2', 'DossiersController@details2')->name('dossiers.details2');
-Route::get('/dossiers/fermeture/{id}', 'DossiersController@fermeture')->name('dossiers.fermeture');
 Route::get('/listeUsersDoss/{iddoss}', 'DossiersController@users_work_on_folder');
-Route::post('/addappel', 'DossiersController@addappel')->name('addappel');
-
 
 
 
@@ -292,8 +254,6 @@ Route::post('/clients/addressadd2','ClientsController@addressadd2')->name('clien
 Route::post('/clients/addressadd3','ClientsController@addressadd3')->name('clients.addressadd3');
 Route::post('/clients/updatingnature','ClientsController@updatingnature')->name('clients.updatingnature');
 Route::post('/clients/removenature','ClientsController@removenature')->name('clients.removenature');
-//Route::get('/clients/view/{id}', 'ClientsController@view');
-Route::get('/clients/view2', 'ClientsController@view2');
 Route::get('/clients/view/{id}', 'ClientsController@view');
 Route::get('/clients/destroy/{id}', 'ClientsController@destroy');
 Route::get('/clients/deleteaddress/{id}', 'ClientsController@deleteaddress')->name('clients.deleteaddress');
@@ -319,10 +279,6 @@ Route::post('/factures/saving','FacturesController@saving')->name('factures.savi
 Route::post('/factures/updating','FacturesController@updating')->name('factures.updating');
 Route::get('/factures/view/{id}', 'FacturesController@view');
 Route::get('/factures/destroy/{id}', 'FacturesController@destroy');
-Route::post('/factures/updatingCheck','FacturesController@updatingCheck')->name('factures.updatingCheck');
-Route::post('/factures/updatingReglefacture','FacturesController@updatingReglefacture')->name('factures.updatingReglefacture');
-Route::post('/factures/updatingParvenuPrestation','FacturesController@updatingParvenuPrestation')->name('factures.updatingParvenuPrestation');
-
 
 
 
@@ -364,7 +320,6 @@ Route::post('/personnes/saving','PersonnesController@saving')->name('personnes.s
 Route::post('/personnes/updating','PersonnesController@updating')->name('personnes.updating');
 Route::get('/personnes/view/{id}', 'PersonnesController@view');
 Route::get('/personnes/destroy/{id}', 'PersonnesController@destroy');
-Route::get('/personnes/mailspersonnes', 'PersonnesController@mailspersonnes')->name('personnes.mailspersonnes');
 
 
 /*** docs -> documents à signer   **/
@@ -385,11 +340,8 @@ Route::get('/docs/destroy/{id}', 'DocsController@destroy');
 Route::get('/contrats', array('as' => 'contrats','uses' => 'ContratsController@index'));
 Route::get('/contrats/add','ContratsController@add')->name('contrats.add');
 Route::post('/contrats/saving','ContratsController@saving')->name('contrats.saving');
-Route::post('/contrats/adding','ContratsController@adding')->name('contrats.adding');
 Route::post('/contrats/updating','ContratsController@updating')->name('contrats.updating');
-Route::post('/contrats/changing','ContratsController@changing')->name('contrats.changing');
 Route::get('/contrats/view/{id}', 'ContratsController@view');
-Route::get('/contrats/nature/{id}', 'ContratsController@nature');
 Route::post('/contrats/removespec','ContratsController@removespec')->name('contrats.removespec');
 Route::post('/contrats/createspec','ContratsController@createspec')->name('contrats.createspec');
 Route::post('/contrats/removedocdossier','ContratsController@removedocdossier')->name('contrats.removedocdossier');
@@ -412,21 +364,12 @@ Route::get('/clientgroupes/destroy/{id}', 'ClientGroupesController@destroy');
 /*** Garanties  **/
  Route::get('/garanties', array('as' => 'garanties','uses' => 'GarantiesController@index'));
 Route::post('/garanties/saving','GarantiesController@saving')->name('garanties.saving');
-Route::post('/garanties/savingRB','GarantiesController@savingRB')->name('garanties.savingRB');
 Route::post('/garanties/updating','GarantiesController@updating')->name('garanties.updating');
-Route::post('/garanties/updaterubrique','GarantiesController@updaterubrique')->name('garanties.updaterubrique');
 Route::get('/garanties/view/{id}', 'GarantiesController@view');
 Route::get('/garanties/destroy/{id}', 'GarantiesController@destroy');
-Route::get('/garanties/deleterubrique/{id}', 'GarantiesController@deleterubrique');
-Route::post('/garanties/addgr', 'GarantiesController@addgr')->name('garanties.addgr');
-Route::post('/garanties/removegr', 'GarantiesController@removegr')->name('garanties.removegr');
-Route::post('/garanties/inforubrique','GarantiesController@inforubrique')->name('garanties.inforubrique');
 
- Route::get('/rubriques', array('as' => 'rubriques','uses' => 'RubriquesController@index'));
-Route::post('/rubriques/saving','RubriquesController@saving')->name('rubriques.saving');
-Route::get('/rubriques/view/{id}', 'RubriquesController@view');
-Route::post('/rubriques/updating','RubriquesController@updating')->name('rubriques.updating');
-Route::get('/rubriques/destroy/{id}', 'RubriquesController@destroy');
+
+
 
 /*** Prestataires **/
 //Route::resource('/prestataires',  'PrestatairesController');
@@ -435,7 +378,6 @@ Route::get('/prestataires/mails','PrestatairesController@mails')->name('prestata
 Route::post('/prestataires/saving','PrestatairesController@saving')->name('prestataires.saving');
 Route::post('/prestataires/saving2','PrestatairesController@saving2')->name('prestataires.saving2');
 Route::post('/prestataires/updating','PrestatairesController@updating')->name('prestataires.updating');
-Route::post('/prestataires/updaterating','PrestatairesController@updaterating')->name('prestataires.updaterating');
 Route::post('/prestataires/removetypeprest','PrestatairesController@removetypeprest')->name('prestataires.removetypeprest');
 Route::post('/prestataires/createtypeprest','PrestatairesController@createtypeprest')->name('prestataires.createtypeprest');
 Route::post('/prestataires/removecitieprest','PrestatairesController@removecitieprest')->name('prestataires.removecitieprest');
@@ -443,9 +385,7 @@ Route::post('/prestataires/createcitieprest','PrestatairesController@createcitie
 Route::post('/prestataires/removespec','PrestatairesController@removespec')->name('prestataires.removespec');
 Route::post('/prestataires/createspec','PrestatairesController@createspec')->name('prestataires.createspec');
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
-Route::get('/ratings/view/{id}', 'PrestatairesController@view_rating');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
-Route::post('/prestataires/addrating','PrestatairesController@addrating')->name('prestataires.addrating');
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
 Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->name('prestataires.addressadd');
 Route::post('/prestataires/NomPrestatireById','PrestatairesController@NomPrestatireById')->name('prestataires.NomPrestatireById');
@@ -473,8 +413,6 @@ Route::get('/prestations/destroy/{id}', 'PrestationsController@destroy');
 Route::get('/prestations/deleteeval/{id}', 'PrestationsController@deleteeval');
 Route::post('/prestations/updatepriorite', 'PrestationsController@updatepriorite')->name('prestations.updatepriorite');
 Route::post('/prestations/updateevaluation', 'PrestationsController@updateevaluation')->name('prestations.updateevaluation');
-Route::post('/prestation/updatingParvenu','PrestationsController@updatingParvenu')->name('Prestation.updatingParvenu');
-
 
 
 
@@ -524,8 +462,6 @@ Route::get('/SupprimerNoteAjax/{id}','NotesController@SupprimerNoteAjax');
 Route::get('/SupprimerNote/{id}','NotesController@SupprimerNote');
 Route::get('/ReporterNote/{id}','NotesController@ReporterNote');
 Route::get('/notes/destroy/{id}', 'NotesController@destroy');
-Route::post('/notes/getnotesom','NotesController@getnotesom')->name('notes.getnotesom');
-Route::post('/notes/managenotesom','NotesController@managenotesom')->name('notes.managenotes');
 
 
  
@@ -561,10 +497,7 @@ Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossie
 Route::post('/Missions/storeMissionLieByAjax','MissionController@storeMissionLieByAjax')->name('Mission.StoreMissionLieByAjax');
 Route::get('/ReporterMission/','MissionController@ReporterMission')->name('Mission.ReporterMission');
 Route::get('/missions/calendrier','MissionController@calendrierMissions')->name('missions.calendriermissions');
-Route::get('/missions/statistiques','MissionController@missionsStatistiques')->name('missions.statistiques');
-Route::get('/missions/actionsstatistiques/{idmiss}','MissionController@actionsStatistiques')->name('actions.statistiques');
 
-Route::post('/missions/traiterPrestOmIntExt','MissionController@traiterPrestOmIntExt')->name('mission.traiterPrestOmIntExt');
 
 
 
@@ -651,7 +584,8 @@ Route::get('/prestataire/tousprestataires', 'RechercheController@touslesprestata
 
 Route::get('/Recherchemissions','RechercheController@RechercheMissions')->name('recherchemissions.avancee');
 
-  
+ 
+
 
 /*** Users **/
 
@@ -661,33 +595,24 @@ Route::get('/users/create','UsersController@create')->name('users.create');
 Route::post('/users/saving','UsersController@saving')->name('users.saving');
 Route::post('/users/updating','UsersController@updating')->name('users.updating');
 Route::get('/users/view/{id}', 'UsersController@view');
-Route::get('/users/stats/{id}', 'UsersController@stats');
 Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
 Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('users.createuserrole');
-Route::post('/users/incall', 'UsersController@incall')->name('users.incall');
-Route::post('/users/iscallend', 'UsersController@iscallend')->name('users.iscallend');
 Route::post('/users/removeuserrole', 'UsersController@removeuserrole')->name('users.removeuserrole');
 Route::post('/users/sessionroles', 'UsersController@sessionroles')->name('users.sessionroles');
 Route::post('/changestatut', 'UsersController@changestatut')->name('users.changestatut');
-Route::get('/users/mails', 'UsersController@mails')->name('users.mails');
-Route::post('/users/existextension', 'UsersController@existextension')->name('users.existextension');
-Route::post('/users/existextensionview', 'UsersController@existextensionview')->name('users.existextensionview');
+
 Route::get('/users/destroy/{id}', 'UsersController@destroy');
 //Route::get('/edit/{id}','UsersController@edit');
 Route::post('/edit/{id}','UsersController@update');
 
 
 /**** LOGS  ****/
-//Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
 
 /**** TAGS  ****/
 Route::post('/tags/addnew','TagsController@addnew')->name('tags.addnew');
 Route::post('/tags/deletetag','TagsController@deletetag')->name('tags.deletetag');
-Route::post('/tags/historique','TagsController@historique')->name('tags.historique');
-Route::post('/tags/entreetags','TagsController@entreetags')->name('tags.entreetags');
-Route::post('/tags/entreetags1','TagsController@entreetags1')->name('tags.entreetags1');
-Route::post('/tags/infotag','TagsController@infotag')->name('tags.infotag');
 
 /*** Generate doc ***/
 Route::get('docgen', function () {
@@ -728,7 +653,7 @@ Route::post('/documents/adddocument','DocumentsController@adddocument')->name('d
 Route::post('/documents/htmlfilled','DocumentsController@htmlfilled')->name('documents.htmlfilled');
 Route::post('/documents/historique','DocumentsController@historique')->name('documents.historique');
 Route::post('/documents/canceldoc','DocumentsController@canceldoc')->name('documents.canceldoc');
-Route::post('/documents/attachdocs','DocumentsController@attachdocument')->name('documents.attachdocs');
+
 
 /*** Ordre Missions  ***/
 
@@ -745,8 +670,7 @@ Route::get('/ordremissions/pdfodmremorquage','OrdreMissionsController@pdfodmremo
 Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@export_pdf_odmremorquage')->name('ordremissions.export_pdf_odmremorquage'); 
 Route::get('/ordremissions/pdfodmmedicinternationnal','OrdreMissionsController@pdfodmmedicinternationnal')->name('ordremissions.pdfodmmedicinternationnal');
 Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsController@export_pdf_odmmedicinternationnal')->name('ordremissions.export_pdf_odmmedicinternationnal');
-Route::post('/ordremissions/attachoms','OrdreMissionsController@attachordremission')->name('ordremissions.attachoms');
-Route::post('/ordremissions/verifdossiers','OrdreMissionsController@verifdossierexistant')->name('ordremissions.verifdossiers');
+
 
 
 Route::get('/update_time_miss', function () {
@@ -790,5 +714,4 @@ Route::get('/update_immobile_non', function () {
 
 
 	});
-
 

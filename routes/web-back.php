@@ -18,8 +18,6 @@ Auth::routes();
 Route::get('/logs', 'HomeController@logs')->name('logs');
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/archives_factures', 'HomeController@index_archives')->name('archives_factures');
-
 Route::get('/roles', 'HomeController@roles')->name('roles');
 Route::get('/pause', 'HomeController@pause')->name('pause');
 //Route::get('/changerroles', 'HomeController@changerroles')->name('changerroles');
@@ -115,7 +113,6 @@ Route::post('/attachements/savecomment','AttachementsController@savecomment')->n
 Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@boite'));
 Route::get('/entrees/',  'EntreesController@index')->name('entrees.index');
 Route::get('/entrees/finances',  'EntreesController@finances')->name('entrees.finances');
-Route::get('/envoyes/finances',  'EnvoyesController@finances')->name('envoyes.finances');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 Route::post('/entrees/entreetel','EntreesController@entreetel')->name('entrees.entreetel');
 Route::post('/entrees/ajoutcompterappelrecu','EntreesController@ajoutcompterappelrecu')->name('entrees.ajoutcompterappelrecu');
@@ -194,10 +191,7 @@ Route::post('/emails/createpdf', 'EmailController@export_pdf_send2')->name('emai
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/sms/{id}', 'EmailController@sms');
 Route::post('/emails/sendsms', 'EmailController@sendsms')->name('emails.sendsms');
-Route::get('/emails/sendsmsxml', 'EmailController@sendsmsxml')->name('emails.sendsmsxml');
 Route::post('/emails/sendsmsxml', 'EmailController@sendsmsxml')->name('emails.sendsmsxml');
-Route::get('/emails/sendsmsxmlAjax', 'EmailController@sendsmsxmlAjax')->name('emails.sendsmsxmlAjax');
-
 Route::post('/emails/sendfax', 'EmailController@sendfax')->name('emails.sendfax');
 Route::get('/emails/whatsapp', 'EmailController@whatsapp');
 Route::post('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
@@ -320,8 +314,6 @@ Route::post('/factures/updating','FacturesController@updating')->name('factures.
 Route::get('/factures/view/{id}', 'FacturesController@view');
 Route::get('/factures/destroy/{id}', 'FacturesController@destroy');
 Route::post('/factures/updatingCheck','FacturesController@updatingCheck')->name('factures.updatingCheck');
-Route::post('/factures/updatingReglefacture','FacturesController@updatingReglefacture')->name('factures.updatingReglefacture');
-Route::post('/factures/updatingParvenuPrestation','FacturesController@updatingParvenuPrestation')->name('factures.updatingParvenuPrestation');
 
 
 
@@ -524,8 +516,6 @@ Route::get('/SupprimerNoteAjax/{id}','NotesController@SupprimerNoteAjax');
 Route::get('/SupprimerNote/{id}','NotesController@SupprimerNote');
 Route::get('/ReporterNote/{id}','NotesController@ReporterNote');
 Route::get('/notes/destroy/{id}', 'NotesController@destroy');
-Route::post('/notes/getnotesom','NotesController@getnotesom')->name('notes.getnotesom');
-Route::post('/notes/managenotesom','NotesController@managenotesom')->name('notes.managenotes');
 
 
  
