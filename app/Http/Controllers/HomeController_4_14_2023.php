@@ -2721,37 +2721,11 @@ return redirect('roles');
         $type=$user->user_type;
 
         User::where('id', $iduser)->update(array('statut'=>'1'));
-		
-		 $dtc = (new \DateTime())->format('2023-03-01 00:00:00');
-       //$alertes= Alerte::where('created_at','>=', $dtc)->where('traite',0)->orderBy('id', 'desc')->get();
 
-
-       //$alertes= Alerte::orderBy('id', 'desc')->where('traite',0)->get( );
+       $alertes= Alerte::orderBy('id', 'desc')->where('traite',0)->get( );
 
         //   return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
-      // return view('home',['alertes'=>$alertes,'type'=>$type]  );
-	   
-	   return view('home',['type'=>$type]);
-     }
-	 
-	  public function index_archives()
-    {
-        $user = auth()->user();
-        $iduser=$user->id;
-        $type=$user->user_type;
-
-        User::where('id', $iduser)->update(array('statut'=>'1'));
-		
-		 $dtc = (new \DateTime())->format('2023-03-01 00:00:00');
-         $alertes_archives= Alerte::orderBy('id', 'desc')->get();
-
-
-       //$alertes= Alerte::orderBy('id', 'desc')->where('traite',0)->get( );
-
-        //   return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
-       return view('home_archive',['alertes_archives'=>$alertes_archives,'type'=>$type]  );
-	   
-	   //return view('home',['type'=>$type]);
+        return view('home',['alertes'=>$alertes,'type'=>$type]  );
      }
 
     public function deconnecter(Request $request)

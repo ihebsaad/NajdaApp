@@ -439,7 +439,7 @@ class ClientsController extends Controller
     public function destroy($id)
     {
         $client = Client::find($id);
-	Adresse::where('nature','tel')->where('parent',$id)->delete();
+Adresse::where('nature','tel')->where('parent',$id)->delete();
 	Adresse::where('nature','email')->where('parent',$id)->delete();
 	Adresse::where('nature','fax')->where('parent',$id)->delete();
         $client->delete();

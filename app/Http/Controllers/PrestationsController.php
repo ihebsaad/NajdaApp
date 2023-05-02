@@ -106,8 +106,58 @@ class PrestationsController extends Controller
     {
 
         $prestation = intval($request->get('prestation'));
-
+$prest= Prestation::where('id', $prestation)->first();
         Prestation::where('id', $prestation)->update(array('effectue' => 1));
+
+ $parametres =  DB::table('parametres')
+               ->where('id','=', 1 )->first();
+
+           $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+           $swiftTransport->setUsername('24ops@najda-assistance.com');
+           $swiftTransport->setPassword($parametres->pass_N);
+           $fromname="Najda Assistance";
+           $from='24ops@najda-assistance.com';
+
+           $swiftMailer = new Swift_Mailer($swiftTransport);
+$prestss=$prest->prestataire_id;
+           Mail::setSwiftMailer($swiftMailer);
+ $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestss) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestss) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestss);
+$user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+  $gouvernorat=    PrestatairesController::GouvByid($prest['gouvernorat']);
+        $Specialite=   PrestatairesController::SpecialiteByid( $prest['specialite']);
+        $TypePrest=  PrestatairesController::TypeprestationByid($prest['type_prestations_id']);
+$dossid=$prest['dossier_id'];
+$dossier=Dossier::where('id',$dossid)->first();
+$ref=$dossier['reference_medic'];
+$to=array( 'nejib.karoui18@gmail.com');
+//$to=array( 'hammalisirine120@gmail.com', 'hammalisirine95@gmail.com');
+       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        $sujet= 'ajout d\'une prestation pour un prestataire';
+         $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a ajouté une  prestaion pour le prestataire '.$nomprest.'<br>
+        Prestation : '.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '. $Specialite.' -  Gouvernorat : '. $gouvernorat. ' - Ville: '.$prest['ville'].'  
+            '.' -  Dossier : '. $ref.'  
+            ';
+$ccimails=array('nejib.karoui18@gmail.com');
+//$ccimails=array('hammalisirine120@gmail.com');
+
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname,$ccimails) {
+            $message
+                //->to($to ?: [])
+                ->to($to)
+
+             //   ->cc($cc ?: [])
+               ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+
+
+            /* foreach ($to as $t) {
+                 $message->to($t);
+             }
+*/
+        });
 			return redirect('/prestations/view/'.$prestation) ;
     }
 
@@ -143,7 +193,8 @@ $dossiersigent=Dossier::where('id',$iddoss)->first();
         $Specialite=   PrestatairesController::SpecialiteByid($spec);
         $TypePrest=  PrestatairesController::TypeprestationByid($typep);
 
-
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
         $prestation = new Prestation([
             'prestataire_id' => $prest,
             'dossier_id' => $iddoss,
@@ -152,42 +203,44 @@ $dossiersigent=Dossier::where('id',$iddoss)->first();
             'specialite' => $spec,
             'date_prestation' => $date,
             'details' => $details,
+'ville' => $request->get('ville'),
             'autorise' => $autorise,
             'effectue' => $effectue,
             'ville' => $ville,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
 
         ]);
 
         $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
-        $user = auth()->user();
-        $nomuser = $user->name . ' ' . $user->lastname;
+       
 
         if ($prestation->save()) {
 
             // Envoi de mail
            if ($autorise != '') {
-            $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+            $cc=array( 'nejib.karoui18@gmail.com');
             $sujet = 'Votre autorisation a été utilisée';
 
-             if($autorise ==''){$to='nejib.karoui@medicmultiservices.com';
-                 $cc=array( 'smq@medicmultiservices.com ');
+             if($autorise ==''){$to='nejib.karoui18@gmail.com';
+                 $cc=array( 'nejib.karoui18@gmail.com');
                 $mr='Dr Karoui';
 
              }
 
             // if($autorise =='procedure'){$to='ihebsaad@gmail.com';}
                  if($autorise =='procedure'){
-                 $to='nejib.karoui@medicmultiservices.com';
+                 $to='nejib.karoui18@gmail.com';
 //$to='hammalisirine120@gmail.com';
                  $mr='Dr Karoui';
-                $cc=array( 'smq@medicmultiservices.com ' );
+                $cc=array( 'nejib.karoui18@gmail.com' );
 //$cc=array( 'hammalisirine95@gmail.com' );
                 $sujet = "sélection manuelle d'un prestataire déjà engagé";
 
                  }
                 if($autorise =='nejib'){
-                     $to='nejib.karoui@gmail.com';
-                    $cc=array( 'smq@medicmultiservices.com ');
+                     $to='nejib.karoui18@gmail.com';
+                  //  $cc=array( 'Nejib.karoui18@gmail.com');
 //$to='hammalisirine120@gmail.com';
 //$cc=array( 'hammalisirine95@gmail.com' );
                     $mr='Dr Karoui';
@@ -307,7 +360,7 @@ $signatureentite=$parametres->signature4 ;
             $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
             $swiftTransport->setPassword($pass_TM);
 $from='ambulance.transp@medicmultiservices.com';
-$fromname="TRANSPORT MEDIC";
+$fromname="Transport Medic";
 
 }
 if($dossiersigent['type_affectation']==="Transport VAT")
@@ -333,7 +386,8 @@ $from='x-press1@najda-assistance.com';
  $fromname="X-Press remorquage";
 }
 
-
+$ccimails=array('nejib.karoui18@gmail.com');
+//$ccimails=array('hammalisirine120@gmail.com');
                 $swiftMailer = new Swift_Mailer($swiftTransport);
 
                 Mail::setSwiftMailer($swiftMailer);
@@ -351,13 +405,13 @@ $from='x-press1@najda-assistance.com';
 
                   // $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
 
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname,$ccimails) {
                     $message
                         //->to($to ?: [])
                           ->to($to)
 
                         ->cc($cc ?: [])
-                        //  ->bcc($ccimails ?: [])
+                        ->bcc($ccimails ?: [])
                         ->subject($sujet)
                         ->setBody($contenu, 'text/html')
                         ->setFrom([$from => $fromname]);
@@ -375,7 +429,58 @@ $from='x-press1@najda-assistance.com';
             'user' => $nomuser,
              'user_id'=>auth::user()->id,
         ]);	 $hist->save();
+if($prestation->effectue===1)
+{
 
+ $parametres =  DB::table('parametres')
+               ->where('id','=', 1 )->first();
+        $prest = $prestation->prestataire_id;
+           $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+           $swiftTransport->setUsername('24ops@najda-assistance.com');
+           $swiftTransport->setPassword($parametres->pass_N);
+           $fromname="Najda Assistance";
+           $from='24ops@najda-assistance.com';
+
+           $swiftMailer = new Swift_Mailer($swiftTransport);
+
+           Mail::setSwiftMailer($swiftMailer);
+ $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
+$user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+  $gouvernorat=    PrestatairesController::GouvByid($gouv);
+        $Specialite=   PrestatairesController::SpecialiteByid( $spec);
+        $TypePrest=  PrestatairesController::TypeprestationByid($typep);
+$dossid=$prestation['dossier_id'];
+$dossier=Dossier::where('id',$dossid)->first();
+$ref=$dossier['reference_medic'];
+$to=array( 'nejib.karoui18@gmail.com');
+//$to=array( 'hammalisirine120@gmail.com', 'hammalisirine95@gmail.com');
+       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        $sujet= 'ajout d\'une prestation pour un prestataire';
+       $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a ajouté une  prestaion pour le prestataire '.$nomprest.'<br>
+        Prestation : '.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '. $Specialite.' -  Gouvernorat : '. $gouvernorat. ' - Ville: '.$prestation['ville'].'  
+            '.' -  Dossier : '. $ref.'  
+            ';
+
+$ccimails=array('nejib.karoui18@gmail.com');
+//$ccimails=array('hammalisirine120@gmail.com');
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname,$ccimails) {
+            $message
+                //->to($to ?: [])
+                ->to($to)
+
+             //   ->cc($cc ?: [])
+                 ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+
+
+            /* foreach ($to as $t) {
+                 $message->to($t);
+             }
+*/
+        });}
             $id = $prestation->id;
             $date = date('Y-m-d H:i:s');
             //   $evaluation = Evaluation::find($prest);
@@ -447,13 +552,13 @@ $gouvprest=  PrestatairesController::GouvByid($gouv);
         $raison = '';
         $sujet = 'Demande de prestation échouée';
         if (trim($statut) == 'nonjoignable') {
-           $raison = '<b> Non Joignable </b> ';
+            $raison = '<b> Non Joignable </b> ';
         }
         if (trim($statut)  == 'nondisponible') {
-             $raison = '<b> Non Disponbile </b>';
+            $raison = '<b> Non Disponbile </b>';
         }
         if (trim($statut)  == 'autre') {
-             $raison = "<b>".$details."</b>";
+            $raison = "<b>".$details."</b>";
 
         }
         $now=date('d/m/Y H:i');
@@ -548,7 +653,7 @@ $signatureentite=$parametres->signature4 ;
             $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
             $swiftTransport->setPassword($pass_TM);
 $from='ambulance.transp@medicmultiservices.com';
-$fromname="TRANSPORT MEDIC";
+$fromname="Transport Medic";
 
 }
 if($dossiersigent['type_affectation']==="Transport VAT")
@@ -606,7 +711,9 @@ Avec tous nos remerciements pour votre collaboration.'. '<br><br><hr style="floa
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
         Mail::setSwiftMailer($swiftMailer);
-$cc2=array( 'nejib.karoui@medicmultiservices.com');
+$cc2=array( 'nejib.karoui18@gmail.com');
+//$ccimails=array('nejib.karoui18@gmail.com');
+//$cc2=array('hammalisirine120@gmail.com');
         // Mail au prestataire
         Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$cc2,$from,$fromname) {
             $message
@@ -614,7 +721,8 @@ $cc2=array( 'nejib.karoui@medicmultiservices.com');
                 // ->to()
 
               //  ->cc($cc ?: [])
-                ->bcc($cc2)
+               ->bcc($cc2)
+
                 ->subject($sujet)
                 ->setBody($contenu, 'text/html')
                 ->setFrom([$from => $fromname]);
@@ -629,16 +737,18 @@ $cc2=array( 'nejib.karoui@medicmultiservices.com');
 
         // Mail au SMQ Najda
 
-      // $cc2=array( 'hammalisirine95@gmail.com');
-     $cc2=array( 'nejib.karoui@medicmultiservices.com');
-        Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
+      //$cc2=array( 'hammalisirine95@gmail.com');
+     $cc2=array( 'nejib.karoui18@gmail.com');
+$ccimails=array('nejib.karoui18@gmail.com');
+//$ccimails=array('hammalisirine120@gmail.com');
+        Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname,$ccimails ) {
             $message
              //  ->to('hammalisirine120@gmail.com')
-                ->to('smq@medicmultiservices.com')
+                ->to('nejib.karoui18@gmail.com')
                 // ->to()
 
                 ->cc($cc2 ?: [])
-                //  ->bcc($ccimails ?: [])
+                ->bcc($ccimails ?: [])
                 ->subject($sujet)
                 ->setBody($contenu2, 'text/html');
             /*   if (isset($to)) {
@@ -729,15 +839,15 @@ foreach($telssms as $telsms)
         $gouvernorats = DB::table('cities')->get();
 
         $prestataire = $prestation->prestataire_id;
-        $emails = Adresse::where('nature', 'email')
+        $emails = Adresse::where('nature', 'emailinterv')
             ->where('parent', $prestataire)
             ->get();
 
-        $tels = Adresse::where('nature', 'tel')
+        $tels = Adresse::where('nature', 'telinterv')
             ->where('parent', $prestataire)
             ->get();
 
-        $faxs = Adresse::where('nature', 'fax')
+        $faxs = Adresse::where('nature', 'faxinterv')
             ->where('parent', $prestataire)
             ->get();
 
@@ -792,6 +902,50 @@ foreach($telssms as $telsms)
     public function destroy($id)
     {
         $prestation = Prestation::find($id);
+$parametres =  DB::table('parametres')
+               ->where('id','=', 1 )->first();
+
+           $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+           $swiftTransport->setUsername('24ops@najda-assistance.com');
+           $swiftTransport->setPassword($parametres->pass_N);
+           $fromname="Najda Assistance";
+           $from='24ops@najda-assistance.com';
+
+           $swiftMailer = new Swift_Mailer($swiftTransport);
+
+           Mail::setSwiftMailer($swiftMailer);
+ $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestation['prestataire_id']) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestation['prestataire_id']) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestation['prestataire_id']);
+$user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+  $gouvernorat=    PrestatairesController::GouvByid($prestation['gouvernorat']);
+        $Specialite=   PrestatairesController::SpecialiteByid( $prestation['specialite']);
+        $TypePrest=  PrestatairesController::TypeprestationByid($prestation['type_prestations_id']);
+$to=array('nejib.karoui18@gmail.com');
+       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        $sujet= 'suppression d\'une prestation pour un prestataire';
+        $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a supprimé la  prestaion pour le prestataire '.$nomprest.'<br>
+        Prestation : '.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '. $Specialite.' -  Gouvernorat : '. $gouvernorat. ' - Ville: '.$prestation['ville'].'  
+            ';
+
+$ccimails=array('nejib.karoui18@gmail.com');
+//$ccimails=array('hammalisirine120@gmail.com');
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname,$ccimails) {
+            $message
+                //->to($to ?: [])
+                ->to($to)
+
+             //   ->cc($cc ?: [])
+                ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+
+
+            /* foreach ($to as $t) {
+                 $message->to($t);
+             }
+*/
+        });
         $prestation->delete();
         return back();
 
@@ -800,6 +954,50 @@ foreach($telssms as $telsms)
     public function deleteeval($id)
     {
         $eval = Evaluation::find($id);
+  $parametres =  DB::table('parametres')
+               ->where('id','=', 1 )->first();
+
+           $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+           $swiftTransport->setUsername('24ops@najda-assistance.com');
+           $swiftTransport->setPassword($parametres->pass_N);
+           $fromname="Najda Assistance";
+           $from='24ops@najda-assistance.com';
+!
+           $swiftMailer = new Swift_Mailer($swiftTransport);
+
+           Mail::setSwiftMailer($swiftMailer);
+   $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $eval['prestataire']) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $eval['prestataire']) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $eval['prestataire']);
+$user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+  $gouvernorat=    PrestatairesController::GouvByid($eval['gouv']);
+        $Specialite=   PrestatairesController::SpecialiteByid( $eval['specialite']);
+        $TypePrest=  PrestatairesController::TypeprestationByid($eval['type_prest']);
+$to=array( 'nejib.karoui18@gmail.com');
+       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        $sujet= 'suppression d\'une priorité d\'un prestataire';
+        $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a supprimé une  priorité au prestataire '.$nomprest.'<br>
+        Priorité : '.$eval['priorite'].' - Type de prestation : '.$TypePrest. ' - Spécialité :  '. $Specialite.' -  Gouvernorat : '. $gouvernorat. ' - Ville: '.$eval['ville'].'  
+            ';
+
+$ccimails=array('nejib.karoui18@gmail.com');
+//$ccimails=array('hammalisirine120@gmail.com');
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname,$ccimails) {
+            $message
+                //->to($to ?: [])
+                ->to($to)
+
+             //   ->cc($cc ?: [])
+                ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+
+
+            /* foreach ($to as $t) {
+                 $message->to($t);
+             }
+*/
+        });
         $eval->delete();
         return back();
 
@@ -911,21 +1109,22 @@ $user = auth()->user();
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
-         $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+         $to=array( 'nejib.karoui18@gmail.com');
        // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
         $sujet= 'Modification de la priorité d\'un prestataire';
         $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a modifié la priorité du prestataire '.$nomprest.'<br>
         Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat. ' - Ville: '.$ville.'  
             ';
 
-
-        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname) {
+$ccimails=array('nejib.karoui18@gmail.com');
+//$ccimails=array('hammalisirine120@gmail.com');
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname,$ccimails) {
             $message
                 //->to($to ?: [])
                 ->to($to)
 
              //   ->cc($cc ?: [])
-                //  ->bcc($ccimails ?: [])
+                ->bcc($ccimails ?: [])
                 ->subject($sujet)
                 ->setBody($contenu, 'text/html')
                 ->setFrom([$from => $fromname]);

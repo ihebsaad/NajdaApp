@@ -33,6 +33,134 @@ class NotesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function managenotesom  (Request $req)
+    {
+
+     // dd($req->all());
+
+      if($req->get('id_notes'))
+      {
+
+       for($i=0; $i<count($req->get('id_notes')); $i++)
+       {
+
+         if($req->get('delete_notes')[$i]=="oui") // delete note
+         {
+            $note=Note::where('id',$req->get('id_notes')[$i])->first();
+            $note->delete();
+
+         }
+         else// update notes
+         {
+            $note=Note::where('id',$req->get('id_notes')[$i])->first();
+            $note->update([
+              'titre'=>$req->get('titre_notes')[$i],
+              'contenu'=>$req->get('contenu_notes')[$i],
+              'date_rappel'=>$req->get('dates_rappel_notes')[$i],
+               'user_id'=>$req->get('id_user_notes')[$i],
+               'villemission' =>$req->get('villemission')[$i],
+
+            ]);
+
+             $note->save();
+
+         }
+
+       }
+          return("La mise à jour est effectuée avec succès");
+
+      }
+
+       return("Erreur lors de la mise à jour de(s) note(s)");
+
+   
+
+    }
+
+    public function getnotesom (Request $req)
+    {
+     
+      $liste_id=trim($req->get('liste_id_notes'));
+      $liste_id=explode(',',$liste_id);
+      $output="";
+
+        $output=' <form id="form_notes"><div class="modal-header">
+                <h5 class="modal-title"  style="font-weight: bold"> Gestion de notes associées à l\'OM</h5>
+                <div style="position: absolute; right: 15px; top: 15px;"><button type="button" class="btn btn-default btn-xs" readonly disabled id=""><i class="fas fa-tag"></i></button></div>
+            </div>
+            <div  class="modal-body"><table id="idtablepd" class="table table-striped table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Nom note</th>  
+                                                    <th>Contenu note</th> 
+                                                    <th>Ville mission</th> 
+                                                    <th>Agent vers lequel la note est associée</th> 
+                                                    <th>date rappel</th>
+                                                    <th>Suppression de la note</th>                                                            
+                                                </tr>
+                                                </thead>
+                                                <tbody>';
+      $notes=Note::whereIn('id',$liste_id)->get();
+      $alluser=User::get();
+       $selected="";
+
+      foreach($notes as $note)
+      {
+
+      $t_rap=date('Y-m-d\TH:i', strtotime($note->date_rappel));
+
+      $user=User::where('id',$note->user_id)->first();
+      
+      $output.=' <tr>                                                 
+                <td><input type="hidden" name="id_notes[]" value="'. $note->id.'"style="width:90%"></td>
+                <td><input type="text" name="titre_notes[]" value="'. $note->titre.'" style="width:90%"></td>
+                <td><textarea  name="contenu_notes[]"  style="width:90%">'. $note->contenu.'</textarea></td> 
+                 <td><input type="text" name="villemission[]" value="'. $note->villemission.'" style="width:90%"></td> 
+                  <td> 
+                     <select name="id_user_notes[]" style="width:90%">';
+
+                     foreach ( $alluser as $u) {
+
+                      if($u->id==$note->user_id)
+                      {
+                        $selected="selected";
+                      }
+                      else
+                      {
+                        $selected="";
+                      }
+
+                  $output.='<option value="'.$u->id.'" '.$selected.' >'.$u->name.' '.$u->lastname.'</option>';
+
+                     }
+                    
+                    $output.=' </select> </td>                
+                   
+                    <td><input type="datetime-local" name="dates_rappel_notes[]" value="'.$t_rap.'" style="width:90%"></td>     
+                 <td><select name="delete_notes[]" style="width:90%"><option value="non" selected>non</option>  <option value="oui">oui</option> </select></td>                                                                    
+
+            </tr>';
+
+      }
+        /* <td><input type="text" name="user_notes[]" value="'.$user->name.' '.$user->lastname.'" style="width:90%" readonly="readonly"><input type="hidden" name="id_user_notes[]" value="'.$note->user_id.'" style="width:90%" ></td>*/
+
+        /*
+         
+        */
+     // <input type="checkbox" name="delete_notes[]" value="true" style="width:90%">
+
+    $output.='</tbody> </table>
+            </div>          
+            <div class="modal-footer">
+                <button type="button" id="submit_form_notes"  class="btn btn-primary" >Enregistrer</button>
+                <button type="button" id="" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div> </form>';
+
+      return $output;
+
+    }
+
      public function getNotesEnvoyeesAjax ()
     {
 

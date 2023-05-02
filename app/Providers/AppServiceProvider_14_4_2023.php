@@ -8,7 +8,6 @@ use App\Entree;
 use App\Observers\EntreeObserver;
 use DB;
 use App\Dossier ;
-use App\Alerte;
 use Illuminate\Support\Facades\Auth;
 use View;
 
@@ -28,17 +27,6 @@ class AppServiceProvider extends ServiceProvider
             $view_name = str_replace('.', '-', $view->getName());
             view()->share('view_name', $view_name);
         });
-		
-		view()->composer(['layouts.partials.left','home'], function($view){
-         //   $view_name = str_replace('.', '-', $view->getName());
-		 
-		 $dtc = (new \DateTime())->format('2023-03-01 00:00:00');
-         $alertes= Alerte::where('created_at','>=', $dtc)->where('traite',0)->orderBy('id', 'desc')->get();
-		 
-		    //$alertes=DB::table('alertes')->get();
-            view()->share('alertes', $alertes);
-        });
-	
 
         // definir les variables globales
          /*view()->composer('*', function ($view) {

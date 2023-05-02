@@ -1383,8 +1383,6 @@ $id=0;
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -1774,8 +1772,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -2153,8 +2149,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -2516,8 +2510,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -2889,8 +2881,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -3262,8 +3252,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -3638,8 +3626,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -4015,8 +4001,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -4388,8 +4372,6 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
 
                      //convertir un document nom pdf et non image en pdf et l'enregister
                     $this->convertir_document_entrant_en_pdf($type,$nom,$id);
@@ -4570,8 +4552,7 @@ if($type=='zip'&& strpos($nom, 'docx')!=false)
                     $nom = $oAttachment->getName();
 
                     $type=  $oAttachment->getExtension();
-if($type=='zip'&& strpos($nom, 'docx')!=false)
-{$type = pathinfo($nom, PATHINFO_EXTENSION);}
+
 
 
                     $path2= '/Boites/'.$id.'/'.$nom ;
@@ -5979,7 +5960,7 @@ if ($from=='finances@najda-assistance.com')
 
 if ($from=='faxnajda@najda-assistance.com')
 {
-    $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+    $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
     $swiftTransport->setUsername('faxnajda@najda-assistance.com');
     $swiftTransport->setPassword('Esolutions@2021');
 
@@ -5996,7 +5977,7 @@ if ($from=='faxnajda@najda-assistance.com')
         if ($from=='24ops@najda-assistance.com')
         {        $pass_N=$parametres->pass_N ;
             // $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('24ops@najda-assistance.com');
             $swiftTransport->setPassword($pass_N);
             $fromname="Najda Assistance";
@@ -6008,7 +5989,7 @@ if ($from=='faxnajda@najda-assistance.com')
         if ($from=='tpa@najda-assistance.com')
         {    $pass_TPA=$parametres->pass_TPA ;
           //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('tpa@najda-assistance.com');
             $swiftTransport->setPassword($pass_TPA);
             $fromname="Najda Assistance (TPA)";
@@ -6019,7 +6000,7 @@ if ($from=='faxnajda@najda-assistance.com')
         if ($from=='taxi@najda-assistance.com')
         {    $pass_TN=$parametres->pass_TN ;
           //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('taxi@najda-assistance.com');
             $swiftTransport->setPassword($pass_TN);
             $fromname="Najda Transport";
@@ -6028,7 +6009,7 @@ if ($from=='faxnajda@najda-assistance.com')
         }
         if ($from=='x-press@najda-assistance.com')
         {  $pass_XP=$parametres->pass_XP ;
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('x-press@najda-assistance.com');
             $swiftTransport->setPassword($pass_XP);
             $fromname="X-Press remorquage";
@@ -6038,7 +6019,7 @@ if ($from=='faxnajda@najda-assistance.com')
 if ($from=='x-press1@najda-assistance.com')
         {  
            $pass_XP=$parametres->pass_XP ;
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('x-press1@najda-assistance.com');
             $swiftTransport->setPassword($pass_XP);
             $fromname="X-Press remorquage";
@@ -6046,11 +6027,11 @@ if ($from=='x-press1@najda-assistance.com')
 
         }
 
-     if ($from=='hotels.vat@medicmultiservices.com')
+        if ($from=='hotels.vat@medicmultiservices.com')
 
         {  $from='hotels.vat@najda-assistance.com';
 $pass_VAT=$parametres->pass_VAT ;
-                $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+                $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('hotels.vat@najda-assistance.com');
             $swiftTransport->setPassword($pass_VAT);
             $fromname="VAT hôtels";
@@ -6063,7 +6044,7 @@ $pass_VAT=$parametres->pass_VAT ;
         {  
 $from='assistance@najda-assistance.com';
 $pass_MEDIC =$parametres->pass_MEDIC ;
-             $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+             $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('assistance@najda-assistance.com');
             $swiftTransport->setPassword($pass_MEDIC);
             $fromname="Medic' Multiservices";
@@ -6073,10 +6054,10 @@ $pass_MEDIC =$parametres->pass_MEDIC ;
 
         if ($from=='ambulance.transp@medicmultiservices.com')
         { 
-$from="ambulance.transp@medicmultiservices.com";
+$from="ambulance.transp@najda-assistance.com";
  $pass_TM=$parametres->pass_TM ;
           // $swiftTransport =  new \Swift_SmtpTransport( 'mail.bmail.tn', '25');
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('ambulance.transp@najda-assistance.com');
             $swiftTransport->setPassword($pass_TM);
             $fromname="Transport Medic";
@@ -6088,7 +6069,7 @@ $from="ambulance.transp@medicmultiservices.com";
 
         { $from="vat.transp@najda-assistance.com";
  $pass_TV=$parametres->pass_TV ;
-           $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+           $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('vat.transp@najda-assistance.com');
             $swiftTransport->setPassword($pass_TV);
             $fromname="Transport VAT";
@@ -6096,38 +6077,20 @@ $from="ambulance.transp@medicmultiservices.com";
 
         }
 
-
         if ($from=='operations@medicinternational.tn')
         {  $pass_MI=$parametres->pass_MI ;
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('operations@medicinternational.tn');
             $swiftTransport->setPassword($pass_MI);
             $fromname="Medic International";
             $signatureentite= $parametres->signature6 ;
 
         }
- DB::table('envoyes')->where('id', $envoyeid)->update(array(
- 
-               'emetteur' => $from));
 
-DB::table('envoyes')->where('id', $envoyeid)->update(array( 'cc'=> '',
-              'cci'=> '',
-               'statut'=> 1,
-               'type'=> 'email'));
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
 
         $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;"><br><br>'.$signatureentite;
-DB::table('envoyes')->where('id', $envoyeid)->update(array(
-'sujet'=> $sujet,
-             
-               'contenu'=> $contenu,
-               'description'=> $description
-));
- $dossier= $this->RefDossierById($doss);
- 
-DB::table('envoyes')->where('id', $envoyeid)->update(array(
- 'dossier'=> $dossier));
 
 
          //dd('pk');
@@ -6176,10 +6139,7 @@ DB::table('envoyes')->where('id', $envoyeid)->update(array(
                    $tos.= app('App\Http\Controllers\PrestatairesController')->NomByEmail( $to[0]) .' ('.$to[0].'); ';
 
                }
-	DB::table('envoyes')->where('id', $envoyeid)->update(array(
- 
-      //         'emetteur' => $from, //env('emailenvoi')
-                  'destinataire' => $tos));
+	 
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
 
@@ -6297,15 +6257,21 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
            /// $tos=    implode( ", ", $to );
 
                 //   $envoye
-          DB::table('envoyes')->where('id', $envoyeid)->update(array(
+           Envoye::where('id', $envoyeid)->update(array(
  
-      //         'emetteur' => $from, //env('emailenvoi')
-               
+               'emetteur' => $from, //env('emailenvoi')
+                  'destinataire' => $tos,
                  'par'=> $par,
-                 'client'=> $client,
+               'sujet'=> $sujet,
+               'client'=> $client,
+               'contenu'=> $contenu,
+               'description'=> $description,
                'nb_attach'=> $count,
-              
-             
+               'cc'=> '',
+              'cci'=> '',
+               'statut'=> 1,
+               'type'=> 'email',
+               'dossier'=> $dossier
  
            ));
  
@@ -6675,7 +6641,7 @@ $toreturn =$to;
         }
 
         // ajout de l'adresse de Mr Nejib en cci
-      array_push($ccimails, 'nejib.karoui18@gmail.com');
+      array_push($ccimails, 'nejib.karoui@medicmultiservices.com');
 
         $fromname = "";
         $signatureentite = '';
@@ -6798,7 +6764,7 @@ $toreturn =$to;
                        /* if ($counta == 0) {
                             $attachement = new Attachement([
 
-                                'type' => $file->getClientOriginalExtension(), 'path' => '/Envoyes/' . $envoyeid . '/' . $file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(), 'boite' => 1, 'dossier' => $doss, 'envoye_id' => $envoyeid, 'parent' => $envoyeid, 'user' => Auth::id(), 'filesize' => $filesize
+                                'type' => $file->getClientOriginalExtension(), 'path' => '/Envoyes/' . $envoyeid . '/' . $file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(), 'boite' => 1, 'dossier' => '', 'envoye_id' => $envoyeid, 'parent' => $envoyeid, 'user' => Auth::id(), 'filesize' => $filesize
                             ]);
                             $attachement->save();
 
@@ -7021,7 +6987,7 @@ $commentaire = $request->get('commentaire');
             'type'=> 'fax',
          //   'nb_attach'=> $count,
             'description'=> $description,
-           'dossier'=>$this->RefDossierById($dossier),
+            'dossier'=> $dossier,
  'commentaire'=> $commentaire,
             // 'reception'=> date('d/m/Y H:i:s'),
 
@@ -7569,8 +7535,8 @@ else
 {$smsuser= null;}
         $description = trim( $request->get('description'));
         $doss = trim( $request->get('dossier'));
-        //$dossier= $this->RefDossierById($doss);////; deja yraja3 fi ref
-	 $dossier =$doss;
+        $dossier= $this->RefDossierById($doss);////;
+
         $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
         <sms>
             <gsm>'.$num.'</gsm>
@@ -7584,7 +7550,7 @@ else
 
         //  $old = umask(0);
 
-       // echo file_put_contents($filepath,$xmlString,0);
+        echo file_put_contents($filepath,$xmlString,0);
         //    chmod($filepath, 0755);
 
         //  umask($old);
@@ -7615,13 +7581,10 @@ else
            'user' => $nomuser,
              'user_id'=>auth::user()->id,
         ]);	$hist->save();
-
-	$doss=Dossier::where('reference_medic',$dossier)->first(); //136
-
+		
+	$doss=Dossier::where('reference_medic',$dossier)->first();
 $dossid=$doss['id'];	
-//return $dossid ;
         $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-//return $urlapp ;
 $urlsending=$urlapp.'/dossiers/view/'.$dossid;
 if($smsper!==null)
                 {$urlsending=$urlapp.'/personnes/view/'.$smsper;}
@@ -7631,98 +7594,10 @@ if($smsper!==null)
 }
        
         //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
-        return $urlsending;
+        return redirect($urlsending)->with('success', '  Envoyé ! ');
 
     }
- function sendsmsxmlAjax(Request $request)
-    {
 
-        $num = trim($request->get('destinataire'));
-        $contenu = trim( $request->get('message'));
-        $contenu= str_replace ( '&' ,'' ,$contenu);
-        $contenu= str_replace ( '<' ,'' ,$contenu);
-        $contenu= str_replace ( '>' ,'' ,$contenu);
-if($request->get('smsper')!==null)
-{
-$smsper= trim( $request->get('smsper'));}
-else
-{$smsper= null;}
-if($request->get('smsuser')!==null)
-{
-
-$smsuser= trim( $request->get('smsuser'));
-}
-else
-{$smsuser= null;}
-        $description = trim( $request->get('description'));
-        $doss = trim( $request->get('dossier'));
-return $doss;
-//dd($doss);
-        //$dossier= $this->RefDossierById($doss);////; deja yraja3 fi ref
-	 $dossier =$doss;
-        $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
-        <sms>
-            <gsm>'.$num.'</gsm>
-            <texte>'.$contenu.'</texte>
-        </sms>';
-
-        $date=date('dmYHis');
-        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
-        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
-        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
-
-        //  $old = umask(0);
-
-       // echo file_put_contents($filepath,$xmlString,0);
-        //    chmod($filepath, 0755);
-
-        //  umask($old);
-
-        $user = auth()->user();
-        $nomuser=$user->name.' '.$user->lastname;
-        $from='sms najda '.$nomuser;
-        $par=Auth::id();
-
-        $envoye = new Envoye([
-            'emetteur' => $from,
-            'destinataire' => $num,
-            'sujet' => $description,
-            'description' => $description,
-            'contenu'=> $contenu,
-            'statut'=> 1,
-            'par'=> $par,
-            'dossier'=>$dossier,
-            'type'=>'sms'
-        ]);
-
-        $envoye->save();
- 
- 
-	  $desc='Envoi de SMS à '.$num;		
-	 $hist = new Historique([
-              'description' => $desc,
-           'user' => $nomuser,
-             'user_id'=>auth::user()->id,
-        ]);	$hist->save();
-
-	$doss=Dossier::where('reference_medic',$dossier)->first(); //136
-
-$dossid=$doss['id'];	
-//return $dossid ;
-        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-//return $urlapp ;
-$urlsending=$urlapp.'/dossiers/view/'.$dossid;
-if($smsper!==null)
-                {$urlsending=$urlapp.'/personnes/view/'.$smsper;}
- if($smsuser!==null)
-                {$urlsending=$urlapp.'/users/view/'.$smsuser;
-
-}
-       
-        //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
-        return $urlsending;
-
-    }
 
     function sendsms(Request $request)
     {

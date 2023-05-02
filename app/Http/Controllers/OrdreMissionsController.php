@@ -388,7 +388,9 @@ $idprestation=$omparent['idprestation'];
                 // cas exit 1
 if($affectea!="externe")
 {
-                $resultatNote=$this->retourner_notes_om_taxi($omtaxi); $resultatNote='';   }      
+                $resultatNote=$this->retourner_notes_om_taxi($omtaxi); 
+               // $resultatNote='';  
+                 }      
                 
                // return($resultatNote);
 header('Content-type: application/json');  
@@ -735,7 +737,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 
               // cas exit 2
                 $resultatNote=$this->retourner_notes_om_taxi($omtaxi);             
-                $resultatNote='';
+               // $resultatNote='';
                 //return($resultatNote);
 header('Content-type: application/json');  
 
@@ -811,13 +813,18 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=933;
         	}
-        			$prestation = new Prestation([
+        	 $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+
+		$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddossom,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
                     'date_prestation'  => $newformat,
-                    'oms_docs' =>$filename
+                    'oms_docs' =>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 
@@ -913,7 +920,7 @@ $desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$doss
 
                 // cas exit 3
                 $resultatNote=$this->retourner_notes_om_taxi($omtaxi);
-                $resultatNote='';              
+              //  $resultatNote='';              
              header('Content-type: application/json');  
 
    $om = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -1090,13 +1097,18 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=933;
         	}
-        			$prestation = new Prestation([
+        			
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
                     'date_prestation' =>$newformat,
-                     'oms_docs' =>$filename
+                     'oms_docs' =>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 if ($prestation->save()) {
@@ -1475,7 +1487,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 				       
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				            'type'=>'pdf','description'=>'OM généré','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
 				        ]);
 				        $attachement->save();
 if ($omtaxi2->save()) {
@@ -1559,13 +1571,17 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=933;
         	}
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
         			$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
                     'date_prestation' =>$newformat,
-                     'oms_docs' =>$filename
+                     'oms_docs' =>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 if ($prestation->save()) {
@@ -2304,7 +2320,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 				       
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				            'type'=>'pdf','description'=>'OM généré','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
 				        ]);
 				        $attachement->save();
 if ($omtaxi2->save()) {
@@ -2447,6 +2463,25 @@ return json_encode($omarray);
 
     }
 
+    public function ville_existe($string, $tableau)
+    {
+
+     // $string = 'my domain name is website3.com';
+        foreach ($tableau as $url) {
+            //if (strstr($string, $url)) { // mine version
+            // Yoshi version
+          if($url != 'Tunisie')
+          {
+            if (stripos($string, trim($url)) !== FALSE) { 
+              //  echo "Match found"; 
+                return true;
+            }
+          }
+        }
+       // echo "Not found!";
+        return false;
+    }
+
     public function retourner_notes_om_taxi($omtaxi)
     {
 
@@ -2458,6 +2493,8 @@ return json_encode($omarray);
                 $posFirst = stripos($string, $First);
                 $posSecond = stripos($string, $Second); 
                 $resultatNote='';
+                $idnotes='';
+                $note_existe=false;
 
               if($posFirst !== false && $posSecond !== false && $posFirst < $posSecond)
                 {
@@ -2469,9 +2506,12 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
-                
+                $output=$omtaxi->CL_lieudecharge_dec;
                 $format = "Y-m-d H:i:s";
                 $format2= "Y-m-d\TH:i";
+                $dtcn = (new \DateTime())->format('Y-m-d H:i');
+                $dateSysn = \DateTime::createFromFormat($format2, $dtcn);
+        
                // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
                 $dateom = \DateTime::createFromFormat($format2,$omtaxi->CL_heuredateRDV);
                 $datenote =false;
@@ -2481,21 +2521,50 @@ return json_encode($omarray);
                 foreach ($notes as $nt) {
                  if($output && !empty($output))
                    {
-                    if(stripos(substr($nt->villemission,0,11),$output) !== false )
+                    if($nt->villemission)
+                    {
+                       $tableau=explode(',',$nt->villemission);
+                    //  return substr($nt->villemission,0,11);
+                   // if(stripos(substr($nt->villemission,0,11),$output) !== false )
+                     //                   
+
+                   //  if(stripos($output,'Mahdia') !== false )   
+                    if($this->ville_existe($output,$tableau)) 
                      {
+                      // $resultatNote="ville oooookkkk";
                        $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
 
-                       if($datenote>=$dateom)
+                       if($datenote>=$dateom )
                        {
 
-                       $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission taxi dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************************; ' ;
+                       /*$resultatNote.= $resultatNote.' Il y a une note nommée '.$nt->titre.' qui indique qu\'il y a une mission taxi dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************************; ' ;*/
+                       $idnotes.=$idnotes.$nt->id.',';
+                       $note_existe=true;
                        }
                      }
+                    }
                    }
 
                  }
                }
-              
+
+               if($note_existe==true)
+               {
+                $resultatNote="Il existe une ou plusieurs notes dont la ville mission est identique ou proche de lieu  de décharge tapé dans l'OM que vous avez récemment crée. Cliquez sur le bouton Ok pour afficher le panneau de gestion de ce(s) note(s).";
+               }
+
+               if($idnotes)
+               {
+                $idnotes=rtrim($idnotes,',');
+                $idnotes=explode(',',$idnotes);
+                 $idnotes=array_unique($idnotes);
+                $idnotes=implode(',',$idnotes);
+               
+                $resultatNote=$resultatNote.'_nnn_ '.$idnotes;
+               }
+             
+             // $resultatNote= substr($nt->villemission,0,11);
+            //  $resultatNote= $output;
 
                return($resultatNote);
 
@@ -2513,6 +2582,8 @@ return json_encode($omarray);
                 $posFirst = stripos($string, $First);
                 $posSecond = stripos($string, $Second); 
                 $resultatNote='';
+                $idnotes='';
+                $note_existe=false;
 
               if($posFirst !== false && $posSecond !== false && $posFirst < $posSecond)
                 {
@@ -2524,8 +2595,12 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
+                $output=$omambulance->CL_lieudecharge_dec;
                  $format = "Y-m-d H:i:s";
                 $format2= "Y-m-d\TH:i";
+                $dtcn = (new \DateTime())->format('Y-m-d H:i');
+                $dateSysn = \DateTime::createFromFormat($format2, $dtcn);
+        
                // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
                 $dateom = \DateTime::createFromFormat($format2, $omambulance->CL_heuredateRDV);
 
@@ -2536,19 +2611,47 @@ return json_encode($omarray);
                 foreach ($notes as $nt) {
                  if($output && !empty($output))
                    {
-                    if(stripos(substr($nt->villemission,0,11),$output) !== false)
+                     if($nt->villemission)
+                    {
+                       $tableau=explode(',',$nt->villemission);
+                    //  return substr($nt->villemission,0,11);
+                   // if(stripos(substr($nt->villemission,0,11),$output) !== false )
+                    // if(stripos($output,'Mahdia') !== false )   
+                    //if(stripos(substr($nt->villemission,0,11),$output) !== false)
+                    if($this->ville_existe($output,$tableau))                   
                      {
+                                         
                        $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
 
-                       if($datenote>=$dateom)
+                       if($datenote>=$dateom && $dateom >= $dateSysn)
                        {
-                       $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission ambulance dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');******************************; ' ;
+                      /* $resultatNote.= $resultatNote.'Il y a une note nommée '.$nt->titre.' qui indique qu\'il y a une mission ambulance dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');******************************; ' ;*/
+                       $idnotes.=$idnotes.$nt->id.',';
+                       $note_existe=true;
                        }
                      }
+                    }
                    }
 
                  }
                }
+
+               if($note_existe==true)
+               {
+                $resultatNote="Il existe une ou plusieurs notes dont la ville mission est identique ou proche de lieu  de décharge tapé dans l'OM que vous avez récemment crée. Cliquez sur le bouton Ok pour afficher le panneau de gestion de ce(s) note(s).";
+               }
+
+                if($idnotes)
+               {
+                $idnotes=rtrim($idnotes,',');
+                $idnotes=explode(',',$idnotes);
+                 $idnotes=array_unique($idnotes);
+                $idnotes=implode(',',$idnotes);
+               
+                $resultatNote=$resultatNote.'_nnn_ '.$idnotes;
+               }
+
+              
 
                return($resultatNote);
 
@@ -2566,6 +2669,9 @@ return json_encode($omarray);
                 $posFirst = stripos($string, $First);
                 $posSecond = stripos($string, $Second); 
                 $resultatNote='';
+                $idnotes='';
+                $note_existe=false;
+
 
               if($posFirst !== false && $posSecond !== false && $posFirst < $posSecond)
                 {
@@ -2577,8 +2683,13 @@ return json_encode($omarray);
                     $output= $output[sizeof($output)-1];
                 }
 
+                 $output = $omremorquage->CL_lieudecharge_dec;
+
                  $format = "Y-m-d H:i:s";
                 $format2= "Y-m-d\TH:i";
+                $dtcn = (new \DateTime())->format('Y-m-d H:i');
+                $dateSysn = \DateTime::createFromFormat($format2, $dtcn);
+        
                // $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
                 $dateom = \DateTime::createFromFormat($format2,$omremorquage->CL_heuredateRDV);
                 $datenote=false;
@@ -2589,18 +2700,45 @@ return json_encode($omarray);
                 foreach ($notes as $nt) {
                  if($output && !empty($output))
                    {
-                    if(stripos(substr($nt->villemission,0,11),$output) !== false)
+                     if($nt->villemission)
+                    {
+                       $tableau=explode(',',$nt->villemission);
+                    //  return substr($nt->villemission,0,11);
+                   // if(stripos(substr($nt->villemission,0,11),$output) !== false )
+                    // if(stripos($output,'Mahdia') !== false )   
+                    //if(stripos(substr($nt->villemission,0,11),$output) !== false)
+                    if($this->ville_existe($output,$tableau))                      
                      {
                       $datenote = \DateTime::createFromFormat($format, $nt->date_rappel);
-                      if($datenote>=$dateom)
+                      if($datenote>=$dateom && $dateom >= $dateSysn)
                        {
-                       $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission remorquage dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************; ' ;
+                      /* $resultatNote.= $resultatNote.'Il y a une note nommée '.$nt->titre.' qui indique qu\'il y a une mission remorquage dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************; ' ;*/
+                       $idnotes.=$idnotes.$nt->id.',';
+                         $note_existe=true;
                        }
                      }
+                   }
                    }
 
                  }
                }
+
+               if($note_existe==true)
+               {
+                $resultatNote="Il existe une ou plusieurs notes dont la ville mission est identique ou proche de lieu  de décharge tapé dans l\'OM que vous avez récemment crée. Cliquez sur le bouton Ok pour afficher le panneau de gestion de ce(s) note(s).";
+               }
+
+               if($idnotes)
+               {
+                $idnotes=rtrim($idnotes,',');
+                $idnotes=explode(',',$idnotes);
+                 $idnotes=array_unique($idnotes);
+                $idnotes=implode(',',$idnotes);
+               
+                $resultatNote=$resultatNote.'_nnn_ '.$idnotes;
+               }
+
+               
                
                return($resultatNote);
 
@@ -3199,7 +3337,9 @@ $idprestation=$omparent['idprestation'];
 
                  // cas 1exit ambulance
 if($affectea!="externe")
-                 {$resultatNote=$this->retourner_notes_om_ambulance($omambulance);$resultatNote='';}             
+                 {$resultatNote=$this->retourner_notes_om_ambulance($omambulance);
+                //  $resultatNote='';
+                }             
                   
                  header('Content-type: application/json');  
 
@@ -3785,7 +3925,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['v
                 
                  // cas 2 exit ambulance
                  $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
-                  $resultatNote='';
+                //  $resultatNote='';
                    header('Content-type: application/json');  
 
    $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -3858,13 +3998,17 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=933;
         	}
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
         			$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddossom,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
                     'date_prestation' =>$newformat,
-                    'oms_docs'=>$filename
+                    'oms_docs'=>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 $idprestation=$prestation['id'];
@@ -3927,7 +4071,7 @@ $desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$doss
 
                   // cas 3 exit ambulance
                  $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
-                  $resultatNote='';
+                 // $resultatNote='';
                   header('Content-type: application/json');  
 
    $om = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -4114,13 +4258,17 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=933;
         	}
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
         			$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
                      'date_prestation' =>$newformat,
-                    'oms_docs' =>$filename
+                    'oms_docs' =>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 if ($prestation->save()) {
@@ -4720,7 +4868,7 @@ $iddnew=$dossnouveau['id'];
 				       
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				            'type'=>'pdf','description'=>'OM généré','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
 				        ]);
 				        $attachement->save();
 if ($omambulance2->save()) {
@@ -4775,13 +4923,17 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=933;
         	}
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
         			$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
                      'date_prestation' =>$newformat,
-                    'oms_docs' =>$filename
+                    'oms_docs' =>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 if ($prestation->save()) {
@@ -5742,7 +5894,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 				       
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				            'type'=>'pdf','description'=>'OM généré','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
 				        ]);
 				        $attachement->save();
 if ($omambulance2->save()) {
@@ -6235,7 +6387,9 @@ $idprestation=$omparent['idprestation'];
 	              
                     // cas 1 exit remorquage
 if($affectea!="externe")
-                 {$resultatNote=$this->retourner_notes_om_remorquage($omremorquage); $resultatNote='';}             
+                 {$resultatNote=$this->retourner_notes_om_remorquage($omremorquage); 
+                  //$resultatNote='';
+                }             
              
                    header('Content-type: application/json');  
 
@@ -6553,7 +6707,7 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
 
                  // cas 2 exit remorquage
                  $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
-                 $resultatNote='';
+                // $resultatNote='';
                  header('Content-type: application/json');  
 
    $om = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('titre', $name)->first();
@@ -6628,13 +6782,17 @@ $newformat = $_POST['CL_heuredateRDV'];
             {
                 $prest=1696;
             }
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
                     $prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddossom,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
                     'date_prestation' =>$newformat,
-                    'oms_docs'=>$filename
+                    'oms_docs'=>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
                     $prestation->save();
 $idprestation=$prestation['id'];
@@ -6698,7 +6856,7 @@ $desc='Generation Ordre de mission: '.$name.' affecté à même entité: '.$doss
 		        $attachement->save();*/
                  // cas 3 exit remorquage
                  $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
-                 $resultatNote='';
+                // $resultatNote='';
                            
              
                   header('Content-type: application/json');  
@@ -6838,13 +6996,17 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=1696;
         	}
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
         			$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
 'date_prestation' =>$newformat,
-'oms_docs'=>$filename
+'oms_docs'=>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 
@@ -7196,7 +7358,7 @@ $iddnew=$dossnouveau['id'];
 				       
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				            'type'=>'pdf','description'=>'OM généré','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
 				        ]);
 				        $attachement->save();
 if ($omremorquage2->save()) {
@@ -7253,13 +7415,17 @@ $newformat = $_POST['CL_heuredateRDV'];
         	{
         		$prest=1696;
         	}
+ $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
         			$prestation = new Prestation([
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
                     'effectue' => 1,
 'date_prestation' =>$newformat,
-'oms_docs'=>$filename
+'oms_docs'=>$filename,
+ 'user' => $nomuser,
+             'user_id'=>auth::user()->id,
             ]);
         			$prestation->save();
 
@@ -7977,7 +8143,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 				       
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
+				            'type'=>'pdf','description'=>'OM généré','path' => '/OrdreMissions/'.$iddossnew.'/'.$name.'.pdf', 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossnew,
 				        ]);
 				        $attachement->save();
 if ($omremorquage2->save()) {
@@ -8748,7 +8914,7 @@ $idprestation=$omparent['idprestation'];
 $filename='taxi_annulation-'.$parent;
 if(!empty($idprestation))
 {
-                Prestation::where('id', $idprestation)->update(['effectue' => 0,'statut' => "autre",'details' => "annulation",'oms_docs'=> $filename]);
+                Prestation::where('id', $idprestation)->update(['effectue' => 0,'statut' => "autre",'details' => "om annulé",'oms_docs'=> $filename,]);
 
 $par=Auth::id();
 $user = User::find($par);
@@ -8780,7 +8946,7 @@ $desc=' Annulation de prestation pour le dossier: ' .$omparent["reference_medic"
 	        	
 		        $attachement = new Attachement([
 
-		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		            'type'=>'pdf','description'=>'OM généré Annulé','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
 		        ]);
 		        $attachement->save();
    if(isset($omparent1['km_distance'])  && isset($omparent1['idvehic']))
@@ -9042,7 +9208,7 @@ $idprestation=$omparent['idprestation'];
  $filename='ambulance_annulation-'.$parent;
 if(!empty($idprestation))
 {
-                Prestation::where('id', $idprestation)->update(['effectue' => 0,'statut' => "autre",'details' => "annulation",'oms_docs'=> $filename]);
+                Prestation::where('id', $idprestation)->update(['effectue' => 0,'statut' => "autre",'details' => "om annulé",'oms_docs'=> $filename]);
 
 $par=Auth::id();
 $user = User::find($par);
@@ -9071,7 +9237,7 @@ $desc='Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]
 	        	
 		        $attachement = new Attachement([
 
-		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		            'type'=>'pdf','description'=>'OM généré Annulé','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
 		        ]);
 		        $attachement->save();
 		        // set km véhicule
@@ -9244,7 +9410,7 @@ $desc='Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]
 	        	
 		        $attachement = new Attachement([
 
-		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		            'type'=>'pdf','description'=>'OM généré Annulé','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
 		        ]);
 		        $attachement->save();
  // set km véhicule
@@ -9313,7 +9479,7 @@ $desc='Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans
             OMMedicInternational::where('id', $parent)->update(['dernier' => 0]);
 $filename='MI_annulation-'.$parent;
 	    $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $omparent1['id_prestataire'] ,'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation",'oms_docs'=>$filename]);
+              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "om annulé",'oms_docs'=>$filename]);
 
 $par=Auth::id();
 $user = User::find($par);
@@ -9362,7 +9528,7 @@ $desc='Annulation de prestation pour le dossier: ' .$omparent1["reference_medic"
 OMMedicEquipement::where('idom', $parent)->delete();
  $attachement = new Attachement([
 
-		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		            'type'=>'pdf','description'=>'OM généré Annulé','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
 		        ]);
 		        $attachement->save();
 if ($ommedic->save()) {
@@ -9418,7 +9584,7 @@ $omvalid=DB::table('validation_omtaxi')->where('idom', $idom)->first();
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				            'type'=>'pdf','description'=>'OM généré Validé','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
 				        $attachement->save();
                              $prestataireom= $omparent['prestataire_taxi'];
@@ -9667,7 +9833,7 @@ $omvalid=DB::table('validation_omambulance')->where('idom', $idom)->first();
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				            'type'=>'pdf','description'=>'OM généré Validé','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
 				        $attachement->save();
                              $prestataireom= $omparent['prestataire_ambulance'];
@@ -9856,6 +10022,7 @@ $desc=' Envoi de SMS à '.$num1 ;
 $lambulancier2=$omparent2['lambulancier2'];
 if(isset($omparent['idambulancier2']) && $omparent['idambulancier2']!="" && $omparent['lambulancier2']!=$lambulancier2)
 {
+//dd($omparent['idambulancier2']);
 $numm2= Personne::where('id', $omparent['idambulancier2'])->select('tel')->first();
 $num2=$numm2['tel'];
 $description2='Ordre de mission';
@@ -10168,7 +10335,7 @@ $omvalid=DB::table('validation_omremorquage')->where('idom', $idom)->first();
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				            'type'=>'pdf','description'=>'OM généré Validé','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
 				        ]);
 				        $attachement->save();
                               $prestataireom= $omparent['prestataire_remorquage'];
@@ -10423,7 +10590,7 @@ public function attachordremission(Request $request)
 				        $path2='/OrdreMissions/'.$dossier.'/'.$titre.'.pdf';
 				        $attachement = new Attachement([
 
-				            'type'=>'pdf','path' => $path2, 'nom' => $titre.'.pdf','boite'=>3,'dossier'=>$dossier,
+				            'type'=>'pdf','description'=>'OM généré','path' => $path2, 'nom' => $titre.'.pdf','boite'=>3,'dossier'=>$dossier,
 				        ]);
 				        $attachement->save();
 return;

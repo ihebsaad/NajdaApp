@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -9,55 +10,29 @@ use App\Tag ;
 use App\Dossier ;
 use App\Client ;
 use App\User ;
-use App\RubriqueInitial ;
 use App\Template_doc ;
 use App\Document;
 use App\Mission;
 use App\Prestation;
-use App\Rubrique;
 use App\Prestataire;
 use App\Parametre;
 use DB;
 use WordTemplate;
 use Breadlesscode\Office\Converter;
-use App\Historique;
 
 class DocumentsController extends Controller
 {
     public function adddocument(Request $request)
     {
-
         $dossier= $_POST['dossdoc'] ;
-$dossiertpa=Dossier::where('id',$dossier)->first();
-$garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assure'])->get()->toArray();
-
         $templateid = $_POST['templatedocument'] ;
-        $comment= $_POST['comdoc'] ;
         $parent =null;
         $valchamps="";
 
         $arrfile = Template_doc::where('id', $templateid)->first();
         $infodossier = Dossier::where('id', $dossier)->first();
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE)
-{if($dossiertpa['type_affectation']==="MEDIC")
-{
-        $file=public_path($arrfile['path_m']);}
-else
-{$file=public_path($arrfile['path']);}}
-else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
-{ if($dossiertpa['type_affectation']==="MEDIC")
-{
-        $file=public_path($arrfile['path_m']);}
-else if($dossiertpa['type_affectation']==="Medic International")
-{
-        $file=public_path($arrfile['path_mi']);}
-else
-{$file=public_path($arrfile['path']);}
 
-}
-else
-{$file=public_path($arrfile['path']);}
-
+        $file=public_path($arrfile['path']);
             
             $champsArray = explode(',', $arrfile['champs']);
 
@@ -75,88 +50,8 @@ else
                 Document::where('id', $parent)->update(['dernier' => 0]);
 
                 if (isset($_POST['annule']))
-                    {
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE  || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
-{if($dossiertpa['type_affectation']==="MEDIC")
-{
-       $file=public_path($arrfile['template_annulation_m']);}
-else
-{ $file=public_path($arrfile['template_annulation']);}}
-
-
-else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
-{ if($dossiertpa['type_affectation']==="MEDIC")
-{
-      $file=public_path($arrfile['template_annulation_m']);}
-else if($dossiertpa['type_affectation']==="Medic International")
-{
-        $file=public_path($arrfile['template_annulation_mi']);}
-else
-{$file=public_path($arrfile['template_annulation']);}
-
-}
-
-else
-{ $file=public_path($arrfile['template_annulation']);}
-
-
-
-
-
-}
-                else {
-if(isset($_POST['modif']) && $_POST['modif']=='0')
-{
-
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
-{if($dossiertpa['type_affectation']==="MEDIC")
-{
-       $file=public_path($arrfile['template_remplace_m']);}
-else
-{ $file=public_path($arrfile['template_remplace']);}}
-else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
-{ if($dossiertpa['type_affectation']==="MEDIC")
-{
-       $file=public_path($arrfile['template_remplace_m']);}
-else if($dossiertpa['type_affectation']==="Medic International")
-{
-        $file=public_path($arrfile['template_remplace_mi']);}
-else
-{$file=public_path($arrfile['template_remplace']);}
-
-}
-
-else
-{ $file=public_path($arrfile['template_remplace']);}
-
-}
-if(isset($_POST['modif']) && $_POST['modif']==='1')
-{
-
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE)
-{if($dossiertpa['type_affectation']==="MEDIC")
-{
-       $file=public_path($arrfile['template_modif_m']);}
-else
-{ $file=public_path($arrfile['template_modif']);}}
-else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
-{ if($dossiertpa['type_affectation']==="MEDIC")
-{
-       $file=public_path($arrfile['template_modif_m']);}
-else if($dossiertpa['type_affectation']==="Medic International")
-{
-      $file=public_path($arrfile['template_modif_mi']);}
-else
-{$file=public_path($arrfile['template_modif']);}
-
-}
-else
-{ $file=public_path($arrfile['template_modif']);}
-
-}
-
-
-}
+                    {$file=public_path($arrfile['template_annulation']);}
+                else {$file=public_path($arrfile['template_remplace']);}
             }
         }
         //return $_POST;
@@ -164,7 +59,6 @@ else
         if (isset($_POST['pre_dateheure']))
         {
             $array += [ '[PRE_DATEHEURE]' => $_POST['pre_dateheure']];
-
         }
         // champ idtag GOP pour PEC
         if (isset($_POST['idtaggop']))
@@ -183,26 +77,13 @@ else
             foreach ($champsArray as $champtemp) {
                 //verifier quil nest pas un champs libre
                 if (stristr($champtemp,'[CL_')=== FALSE && ($champtemp !=='[MONTANT_FRANCHISE]') ) 
-                {
-
-
-
-
- //$array += [ $champtemp => 'ti' ];
+                {   
+                    //$array += [ $champtemp => 'ti' ];
                     $champform = str_replace('[', '', $champtemp);
                     $champform = str_replace(']', '', $champform);
                     $champform = strtolower($champform);
-if( ($_POST[$champform]==="prestselectfaux") )
-{
-
-return 'false';
-
-}
-else
-                    {$valchamp = $_POST[$champform];
-                    
-
-                    $array += [ $champtemp => $valchamp];}
+                    $valchamp = $_POST[$champform];
+                    $array += [ $champtemp => $valchamp];
 
                 }
                     elseif($champtemp ==='[MONTANT_FRANCHISE]')
@@ -237,7 +118,7 @@ else
                 elseif(stristr($champtemp,'[CL_')!== FALSE)
                 {if (stristr($champtemp,'[CL_accidente')== TRUE )
                         {if(isset($_POST['CL_accidente']))
-                            {$valchamp='Accidenté';
+                            {$valchamp='Accidente';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -247,7 +128,7 @@ else
                             }}
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if(isset($_POST['CL_enpanne']))
-                            {$valchamp='En panne';
+                            {$valchamp='Enpanne';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -257,7 +138,7 @@ else
                             }}
                             elseif (stristr($champtemp,'[CL_incendie')== TRUE )
                         {if(isset($_POST['CL_incendie']))
-                            {$valchamp='Incendié';
+                            {$valchamp='Incendie';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -277,7 +158,7 @@ else
                             }}
 elseif (stristr($champtemp,'[CL_attention')== TRUE )
                         {if(isset($_POST['CL_attention']))
-                            {$valchamp="Attention : Cette prise en charge s'entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix";
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -285,63 +166,22 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                             $valchamp='';
                             $array += [ $champtemp => $valchamp];
                             }}
-/*elseif (stristr($champtemp,'[CL_rapport')== TRUE )
-                        {if(isset($_POST['CL_rapport']))
-                            {
-$strv = $_POST['CL_rapport'];
-if(strlen($strv)>2600){
-$strv=substr_replace($strv,"\par \page ",strpos($strv," ",2600),0);
-}
-$x=7600;
-while(strlen($strv)>$x){
-$strv=substr_replace($strv,"\par \page ",strpos($strv," ",$x),0);
-$x=$x+5000;
-}
-
-$valchamp = $strv;
-                             $array += [ $champtemp => $valchamp];
-                        }
-                        else
-                            {
-                            $valchamp='';
-                            $array += [ $champtemp => $valchamp];
-                            }}*/
                     else
                     //champ libre
-                  {  
-                      if(empty($champtemp))
-                    {$array += [ $champtemp => '         ']; }  
-                    $champdb = str_replace('[CL_', '', $champtemp);
+                  {  $champdb = str_replace('[CL_', '', $champtemp);
                     $champdb = str_replace(']', '', $champdb);
                     $champdb = strtolower($champdb);
 
                     $valchamp=$_POST['CL_'.$champdb];
-if(stristr($champtemp,'[CL_passport') == TRUE || stristr($champtemp,'[CL_passeport') == TRUE)
-{if(empty($valchamp))
-$valchamp = '...........................';
-
-
-}
-if(stristr($champtemp,'[CL_rapport') == TRUE || stristr($champtemp,'[CL_prest') == TRUE || stristr($champtemp,'[CL_prest1') == TRUE || stristr($champtemp,'[CL_prest2') == TRUE || stristr($champtemp,'[CL_prest3') == TRUE || stristr($champtemp,'[CL_prest4') == TRUE )
-{
-$valchamp = nl2br($valchamp);
-
-}
                     $array += [ $champtemp => $valchamp];
-
                     }
-  }
+
+                }
 
                 
                     //remplissage de la colonne de base - valeur des champs
                     if ($valchamps!=="")
                     {
-
-
-
-
-$valchamp = str_replace("<br />", "", $valchamp);
-
                         if ($valchamps!=="|") {
                             $valchamps=$valchamps.'|'.$valchamp;
                         }
@@ -366,25 +206,16 @@ $valchamp = str_replace("<br />", "", $valchamp);
                 date_default_timezone_set('Africa/Tunis');
                 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
                 $mc=round(microtime(true) * 1000);
-                $datees = strftime("%d-%m-%Y"."_".$mc); 
-                $datesc = strftime("%d-%m-%Y"); 				
-                
-if (strpos($arrfile['nom'], 'Fax_Ima') !== false) {
-$infodossierfaxima=Dossier::select('reference_medic','reference_customer')->where('id',$dossier)->first();
-$refdossfaxima=$infodossierfaxima['reference_medic'];
-$refclientfaxima=$infodossierfaxima['reference_customer'];
-$name_file = utf8_encode($arrfile['nom'].'_'.$datees.'_'.$refdossfaxima.'_'.$refclientfaxima.'.rtf');
- $titref =utf8_encode($arrfile['nom'].'_'.$datesc.'_'.$refdossfaxima.'_'.$refclientfaxima);
-}
-else
-{
-$name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.rtf');
-$titref =utf8_encode($arrfile['nom'].'_'.$datesc);}
-                
+                $datees = strftime("%d-%B-%Y"."_".$mc); 
+                $datesc = strftime("%d-%B-%Y"); 				
+                $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.doc');
+                $titref =utf8_encode($arrfile['nom'].'_'.$datesc);
            /* }
         else 
             {
                 $name_file = utf8_encode($arrfile['nom'].'_'.$refdoss.'.doc');
+
+
                 $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }*/
 
@@ -411,6 +242,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         /*$miss->update(['date_spec_affect'=>1]); 
                     
                         $miss->update(['date_spec_affect2'=>1]); 
+
                         $miss->update(['h_fin_sejour'=>$datespe]);*/
 
                         //return 'date affectée'; 
@@ -426,17 +258,23 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         {
             if (isset($_POST['CL_date_fin_location']))
             {
+
               $format = "Y-m-d\TH:i";              
               $datespe = \DateTime::createFromFormat($format,$_POST['CL_date_fin_location']);
+
                $miss=Mission::where('id',$_POST['idMissionDoc'])->first();
+
                     if($miss->type_Mission==46)// location voiture
                     {
                      
                        $miss->update(['date_spec_affect'=>1]); 
                     
                         $miss->update(['date_spec_affect2'=>1]);
+
                         $miss->update(['date_spec_affect3'=>1]);  
+
                         $miss->update(['h_fin_location_voit'=>$datespe]);  
+
                         //return 'date affectée'; 
                    
                     }
@@ -466,6 +304,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                      
                                                  
                         /* $miss->update(['date_spec_affect'=>1]); 
+
                           $miss->update(['h_rdv'=>$datespe]);  */
 
                         //return 'date affectée'; 
@@ -483,11 +322,14 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
     // mise a jour montant GOP
     /*if (isset($_POST['CL_montant_numerique']) || isset($_POST['CL_montant_total']) )
     {
+
      if (isset($_POST['CL_montant_numerique']))
      {$montantgp = intval($_POST['CL_montant_numerique']); }
         elseif (isset($_POST['CL_montant_total']))
         {$montantgp = intval($_POST['CL_montant_total']); }
+
        $doss = Dossier::where('id', $dossier)->first();
+
             if($montantgp!==0)
             {
              
@@ -511,29 +353,16 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 {$montantgp = intval($_POST['CL_tarif_convention']); }
 
             // recuperation devise de GOP utilisé
+            $devisegop = Tag::where("id",$_POST['idtaggop'])->first();
+
             $paramdev=Parametre::select('euro_achat','dollar_achat')->first();
 
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
-            $devisegop = Tag::where("id",$_POST['idtaggop'])->first();
-  if ( $devisegop['devise'] === "EUR")
-                    $montantgp = $montantgp / floatval($paramdev['euro_achat']);
-                if ( $devisegop['devise'] === "USD")
-                    $montantgp = $montantgp / floatval($paramdev['dollar_achat']);
-
-}
-else
-{
- $devisegop = Rubrique::where("id",$_POST['idtaggop'])->first();
- if ( $devisegop['devise'] === "EUR")
-                    $montantgp = $montantgp / floatval($paramdev['euro_achat']);
-                if ( $devisegop['devise'] === "USD")
-                    $montantgp = $montantgp / floatval($paramdev['dollar_achat']);
-}
-
-
             // CONVERSION MONTANT GOP
-              
+                if ( $devisegop['devise'] === "EUR")
+                    $montantgp = $montantgp / floatval($paramdev['euro_achat']);
+                if ( $devisegop['devise'] === "USD")
+                    $montantgp = $montantgp / floatval($paramdev['dollar_achat']);
+
             // verifier si le montant est reel
             /*if (is_float($montantgp)) {
                 // rondre 3 num apres virgule
@@ -559,32 +388,17 @@ else
                                     {
                                         // update gop du dossier
                                         $nmntgop =intval($infoparent['montantgop']) - $diffmontant;
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
-                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);}
-else
-{
-DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmntgop,'updated_at'=>NOW()]);
-}
+                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);
                                     }
                                     else
                                     {
                                         // update gop du dossier
                                         $nmntgop =intval($infoparent['montantgop']) + $diffmontant;
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
-                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);}
-else
-{
-DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmntgop,'updated_at'=>NOW()]);
-}
-      
+                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);
                                     }
                                 }
                                 else
                                 {
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
                                     // avec un different taggop
                                     // maj montant ex tag
                                     $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
@@ -599,25 +413,7 @@ if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
                                        // update gop du dossier
                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
                                    
-                                    }}
-else {
- // avec un different taggop
-                                    // maj montant ex tag
-
-                       $tagprecinfo = DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->first();
-                                    $mntgop = intval($tagprecinfo->mrestant) + intval($infoparent['montantgop']);
-                DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $mntgop,'updated_at'=>NOW()]);
-                                    // maj montant nouveau tag
-
-                                    $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->first();
-                                    if($montantgp>0)
-                                    {
-                                     
-                                       $nmontant = intval($tag->mrestant) - $montantgp;
-                                       // update gop du dossier
-                                       $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmontant,'updated_at'=>NOW()]);
-                                   
-                                    }}
+                                    }
 
                                 }
                             }
@@ -632,8 +428,6 @@ else {
                     }
                     else {       
                        //cas premiere generation du document
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
                        $tag = Tag::where('id', $idtaggop)->first();
 
                             if($montantgp!==0)
@@ -643,25 +437,11 @@ if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
                                // update gop du dossier
                                Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
                            
-                            } }
-else{
- $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->first();
-
-                            if($montantgp!==0)
-                            {
-                             
-                               $nmontant = intval($tag->mrestant) - $montantgp;
-                               // update gop du dossier
-                               DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmontant,'updated_at'=>NOW()]);
-                           
                             }
-}
                     }
                 }
             else {       
                //cas premiere generation du document
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
                $tag = Tag::where('id', $idtaggop)->first();
 
                     if($montantgp!==0)
@@ -671,46 +451,22 @@ if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
                        // update gop du dossier
                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
                    
-                    }}
-else
-{
+                    }
 
-               $tag = DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->first();
-
-                    if($montantgp!==0)
-                    {
-                     
-                       $nmontant = intval($tag->mrestant) - $montantgp;
-                       // update gop du dossier
-                       DB::table('rubriques_assure')->where('rubrique', $idtaggop)->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $nmontant,'updated_at'=>NOW()]);
-                   
-                    }}
-
-                //$titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
-		$titref =utf8_decode($arrfile['nom'].'_'.$refdoss);
+                $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }
         }
      
     }
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
-$Arrayn = str_replace("’", "'", $array);
-//$search  = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ');
-	//$replace = array('A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y');
-	//$Arrayd = str_replace($search, $replace, $Arrayn);
-//$Arrayd = array_map("utf8_decode", $Arrayn); 
-//$Arrayd =mb_convert_encoding($Arrayn,'CP850','utf-8');
-$Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
-       $Arrays = str_replace("?,", "", $Arrayd);
-       $Arraym = str_replace("?", "", $Arrays);
-       $Arraysi = str_replace('<br />', "\\", $Arraym);
-
-       WordTemplate::export($file,$Arraysi, '/documents/'.$refdoss.'/'.$name_file);
+            
+       WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
 
 
     // creation du fichier PDF
     $nfsansext = substr($name_file, 0, -3);
-  Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
+    Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
         ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
         ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
         ->setTimeout(100) // libreoffice process timeout
@@ -723,13 +479,11 @@ $Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
         $doc = new Document([
             'dossier' => $dossier,
             'titre' => $titref,
-            'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
-            'name' => $nfsansext.'pdf',
+            'emplacement' => 'documents/'.$refdoss.'/'.$fda.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
             'valchamps' => $valchamps,
-            'comment' => $comment,
             'idtaggop' => $idgop,
             'montantgop' => $montantgp
 
@@ -739,102 +493,24 @@ $Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
             'dossier' => $dossier,
             'titre' => $titref,
             'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
-            'name' => $nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
             'valchamps' => $valchamps,
-            'comment' => $comment,
             'idtaggop' => $idgop
 
         ]);}
         $doc->save();
-//LOG DOC
-if ($doc->save()) {
-
-$par=Auth::id();
-$user = User::find($par);
-$nomuser = $user->name ." ".$user->lastname ;
- if (isset($_POST['parent']) )
-        {
-            if (!empty($_POST['parent']) && $_POST['parent']!== null)
-            {$infoparent = Document::where('id',$parent)->first();
-
-       $docparent=$infoparent['titre'];
-if(isset($_POST['modif']) && $_POST['modif']=='1')
-{
- 
- 			$desc='Modification du document '.$docparent.' dans le dossier: '.$refdoss ;
-
-		 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	$hist->save();
-
-}
-else
-{
- 
- 			$desc='Remplacement du document '.$docparent.' dans le dossier: '.$refdoss ;
-
-		 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	$hist->save();
-		
-}
-if(!empty($_POST['id__prestataire']))
-{
-$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-         if(!empty($prestation))    
- {$prestation  ->update(['oms_docs'=>$titref]);}
-}
-if(!empty($_POST['id__prestataire1']))
-{
-$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire1'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-        if(!empty($prestation))    
- {$prestation  ->update(['oms_docs'=>$titref]);}     
-  
-}
-}
-else 
-{
-  			$desc='Generation du document '.$titref.' dans le dossier: '.$refdoss ;
-
-		 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	$hist->save();
-		
-if(!empty($_POST['id__prestataire']))
-{
-$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-           if(!empty($prestation))    
- {$prestation  ->update(['oms_docs'=>$titref]);}    
-
-}
-if(!empty($_POST['id__prestataire1']))
-{
-$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire1'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              if(!empty($prestation))    
- {$prestation  ->update(['oms_docs'=>$titref]);}
-
-}
-}
-}
-}
-//FIN LOG DOC
         //return $valchamps;
 
         //redirect()->route('docgen');
         //return url('/dossiers/view/'.$dossier) ;
         // enregistrement de lattachement
-        
- $doc = Document::select('id','titre','emplacement','comment','dernier','parent','idtaggop','created_at','dossier','name')->where('id', $doc->id)->first();
-return json_encode($doc);
+        $attachement = new Attachement([
+
+            'type'=>'pdf','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $nfsansext.'pdf','boite'=>2,'dossier'=>$dossier
+        ]);
+        $attachement->save();
     }
 
     public function htmlfilled(Request $request)
@@ -858,19 +534,10 @@ return json_encode($doc);
         //$refdoss = Dossier->RefDossierById($dossier);
         $infodossier=Dossier::select('reference_medic','franchise','montant_franchise','GOP','montant_GOP')->where('id',$dossier)->first();
         $refdoss = trim($infodossier['reference_medic']);
-
-
         $entreesdos=Entree::where("dossier",$refdoss)->get();
         $paramapp=Parametre::select('euro_achat','dollar_achat')->first();
-$dossiertpa=Dossier::where('id',$dossier)->first();
-//dd($dossiertpa['ID_assure']);
-$garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assure'])->get()->toArray();
-//dd($garanties);
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
         
         if ( ! empty($entreesdos)) {
-
         switch ($arrfile['nom']) {
             case "PEC_analyses_medicales":
             case "PEC_frais_medicaux":
@@ -881,35 +548,9 @@ if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
                 $dossgopmed = false;
                 $dossplafond = false;
                 $arr_gopmed = array();
-$coltags=array();
-               foreach ($entreesdos as $entr) {
-
+                foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-
-                   
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
-
-                    $coltags = array_merge($coltagsmails->toArray(), $coltags);
-                    $colattachs = Attachement::where("parent","=",$entr['id'])->get();
-                        if (!empty($colattachs))
-                        {
-                            foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
-                               $coltags = array_merge( $coltagsattach->toArray(),$coltags);
-
-
-
-}}}
- if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
-$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
-}
- $columns = array_column($coltags, 'updated_at');
-array_multisort($columns, SORT_DESC, $coltags);
-  
+                    $coltags = Tag::where("entree","=",$entr['id'])->get();
                     if (!empty($coltags))
                     {
 
@@ -928,11 +569,8 @@ array_multisort($columns, SORT_DESC, $coltags);
                                     if ( $ltag['devise'] === "USD")
                                        { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);}
 
-
                                 $arr_gopmed[]=$ltag['id']."_".$Montanttag."_".$ltag['contenu']."_".$ltag['updated_at'];
-
                              }
-
                              if (strpos( $ltag['abbrev'],"Franchise") !== FALSE)
                              {
                                 /*if ($indossier['franchise'] == 1)
@@ -950,6 +588,7 @@ array_multisort($columns, SORT_DESC, $coltags);
                             }
                         }
                     }
+                }
                 //return $arrtags;
                 if ($dossgopmed === false)
                 {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
@@ -970,32 +609,9 @@ array_multisort($columns, SORT_DESC, $coltags);
                     $dossgopmed = false;
                     $dossplafond = false;
                     $arr_gopmed = array();
-$coltags=array();
-                            foreach ($entreesdos as $entr) {
-
-                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                   
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
-
-                    $coltags = array_merge($coltagsmails->toArray(), $coltags);
-                    $colattachs = Attachement::where("parent","=",$entr['id'])->get();
-                        if (!empty($colattachs))
-                        {
-                            foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
-                               $coltags = array_merge( $coltagsattach->toArray(),$coltags);
-
-
-}}}
- if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->get();
-$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
-}
- $columns = array_column($coltags, 'updated_at');
-array_multisort($columns, SORT_DESC, $coltags);
+                    foreach ($entreesdos as $entr) {
+                        //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                        $coltags = Tag::where("entree","=",$entr['id'])->get();
                         if (!empty($coltags))
                         {
 
@@ -1006,12 +622,14 @@ array_multisort($columns, SORT_DESC, $coltags);
                                  if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
                                  {
                                     // VERIFICATION DEVISE GOP
-                                      if ( $ltag['devise'] === "TND") 
-                                    {$Montanttag = $ltag['mrestant'];}
-                                    if ( $ltag['devise'] === "EUR")
-                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);}
-                                    if ( $ltag['devise'] === "USD")
-                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);}
+                                    switch ($ltag['devise']) {
+                                        case "TND":
+                                            $Montanttag = $ltag['mrestant'];
+                                        case "EUR":
+                                            $Montanttag = intval($ltag['mrestant']) * intval($paramapp['euro_achat']);
+                                        case "USD":
+                                            $Montanttag = intval($ltag['mrestant']) * intval($paramapp['dollar_achat']);
+                                    }
                                     $arr_gopmed[]=$ltag['id']."_".$Montanttag."_".$ltag['contenu']."_".$ltag['updated_at'];
                                     $dossgopmed = true;
                                  }
@@ -1023,7 +641,7 @@ array_multisort($columns, SORT_DESC, $coltags);
                                 }
                             }
                         }
-
+                    }
                     //return $arrtags;
                     if ($dossgopmed === false)
                     {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
@@ -1041,32 +659,9 @@ array_multisort($columns, SORT_DESC, $coltags);
                     $dossgoptn = false;
                     $dossplafondrm = false;
                     $arr_gopmtn = array();
-$coltags=array();
-                        foreach ($entreesdos as $entr) {
-
-                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                   
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
-
-                    $coltags = array_merge($coltagsmails->toArray(), $coltags);
-                    $colattachs = Attachement::where("parent","=",$entr['id'])->get();
-                        if (!empty($colattachs))
-                        {
-                            foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
-                               $coltags = array_merge( $coltagsattach->toArray(),$coltags);
-
-
-}}}
-if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
-$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
-}
- $columns = array_column($coltags, 'updated_at');
-array_multisort($columns, SORT_DESC, $coltags);
+                    foreach ($entreesdos as $entr) {
+                        //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                        $coltags = Tag::where("entree","=",$entr['id'])->get();
                         if (!empty($coltags))
                         {
 
@@ -1095,7 +690,7 @@ array_multisort($columns, SORT_DESC, $coltags);
                                 }
                             }
                         }
-  
+                    }
                     //return $arrtags;
                     if (($dossgoptn === false) || ($dossplafondrm === false))
                     {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (Toutes natures) ou Plafond (Remorquage) Spécifié!";}
@@ -1111,9 +706,9 @@ array_multisort($columns, SORT_DESC, $coltags);
 
 
                 case "PEC_gardiennage":
-                //case "PEC_Hotel":
+                case "PEC_Hotel":
                 case "PEC_location_Najda_a_VAT":
-               // case "Orientation_vehicule_accidente_pr_expertise_Rev":
+                case "Orientation_vehicule_accidente_pr_expertise_Rev":
                 case "Procuration_Najda_pr_prestataire_rapat_veh":
                 case "PEC_Reparation":
                 case "PEC_Pompes_funebres":
@@ -1124,129 +719,28 @@ array_multisort($columns, SORT_DESC, $coltags);
                 case "PEC_Cargo":
                 $dossgoptn = false;
                 $arr_gopmtn = array();
-                $coltags=array();
-                        foreach ($entreesdos as $entr) {
-
+                foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                   
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
-
-                    $coltags = array_merge($coltagsmails->toArray(), $coltags);
-                    $colattachs = Attachement::where("parent","=",$entr['id'])->get();
-                        if (!empty($colattachs))
-                        {
-                            foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
-                               $coltags = array_merge( $coltagsattach->toArray(),$coltags);
-
-
-}}}
-if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
-$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
-}
- $columns = array_column($coltags, 'updated_at');
-array_multisort($columns, SORT_DESC, $coltags);
+                    $coltags = Tag::where("entree","=",$entr['id'])->get();
                     if (!empty($coltags))
                     {
 
                         foreach ($coltags as $ltag) {
                              if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
                              {
-                                if ( $ltag['devise'] === "TND") 
-                                    $Montanttag = $ltag['mrestant'];
-                                    if ( $ltag['devise'] === "EUR")
-                                        $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);
-                                    if ( $ltag['devise'] === "USD")
-                                        $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);
-
-                                $arr_gopmtn[]=$ltag['id']."_".$Montanttag ."_".$ltag['contenu']."_".$ltag['updated_at'];
+                                $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu']."_".$ltag['updated_at'];
                                 $dossgoptn = true;
                              }
                         }
                     }
- 
+                }
+                //return $arrtags;
                 if ($dossgoptn === false)
                 {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (Toutes natures) Spécifié!";}
                 else
                 {
                     $sgoptn =implode(',', $arr_gopmtn);
                     $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
-                }
-                break;
-       case "Document_Generique":
-                $dossfranchise = false;
-                $dossgopmed = false;
-                $dossplafond = false;
-                $arr_gopmed = array();
-$coltags=array();
-               foreach ($entreesdos as $entr) {
-
-                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-
-                   
- $coltagsmails=Tag::where(["entree" => $entr['id'], "dernier" => 1,'type'=>'email'])->where('mrestant', '>=', 1)->orderBy('updated_at', 'desc')->get();
-
-                    $coltags = array_merge($coltagsmails->toArray(), $coltags);
-                    $colattachs = Attachement::where("parent","=",$entr['id'])->get();
-                        if (!empty($colattachs))
-                        {
-                            foreach ($colattachs as $lattach) {
- $coltagsattach=Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('mrestant', '>=', 1);
-                               $coltags = array_merge( $coltagsattach->toArray(),$coltags);
-
-
-
-}}}
- if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent=Tag::where(["id" => $infoparent['idtaggop']])->where('mrestant', '<', 1)->where('mrestant', '>=', 0)->get();
-$coltags = array_merge( $coltagcurrent->toArray(),$coltags);
-}
- $columns = array_column($coltags, 'updated_at');
-array_multisort($columns, SORT_DESC, $coltags);
-  
-                    if (!empty($coltags))
-                    {
-
-                        foreach ($coltags as $ltag) {
-                           
-                             //if ($resp === "notallow") {$resp="allow";}
-                             if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE || strpos( $ltag['abbrev'],"GOPtn") !== FALSE )
-                             {
-                                $dossgopmed = true;
-                                // VERIFICATION DEVISE GOP
-                                    if ( $ltag['devise'] === "TND") 
-                                    {$Montanttag = $ltag['mrestant'];}
-                                    if ( $ltag['devise'] === "EUR")
-                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);}
-                                    if ( $ltag['devise'] === "USD")
-                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);}
-
-
-                                $arr_gopmed[]=$ltag['id']."_".$Montanttag."_".$ltag['contenu']."_".$ltag['updated_at'];
-
-                             }
-
-                             
-                             
-                            
-                        }
-                    }
-                //return $arrtags;
-                if ($dossgopmed === false)
-                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
-                else
-                {
-                    /* PASTGOP $resp = "allow_VERIFmontant(".$montantgop.")_GOPmed";*/
-                    $sgopmed =implode(',', $arr_gopmed);
-                    $resp = "allow_VERIFglist(".$sgopmed.")_GOPmed";
-                   
                 }
                 break;
 
@@ -1258,6 +752,7 @@ array_multisort($columns, SORT_DESC, $coltags);
                     $coltags = Tag::where("entree","=",$entr['id'])->get();
                     if (!empty($coltags))
                     {
+
                         foreach ($coltags as $ltag) {
                              if (strpos( $ltag['abbrev'],"RMtraduit") !== FALSE)
                              {
@@ -1274,6 +769,8 @@ array_multisort($columns, SORT_DESC, $coltags);
                     $resp = "allow_RMtraduit";
                  }
                 break;
+
+
                 case "RM_francais":
                 $dossRM = false;
                 foreach ($entreesdos as $entr) {
@@ -1281,6 +778,7 @@ array_multisort($columns, SORT_DESC, $coltags);
                     $coltags = Tag::where("entree","=",$entr['id'])->get();
                     if (!empty($coltags))
                     {
+
                         foreach ($coltags as $ltag) {
                              if ((strpos( $ltag['abbrev'],"RM") !== FALSE) && (strpos( $ltag['abbrev'],"RMtraduit") === FALSE))
                              {
@@ -1298,178 +796,7 @@ array_multisort($columns, SORT_DESC, $coltags);
                 }
                 break;*/
         }
-        }}
-
-
-else
-{
- 
-switch ($arrfile['nom']) {
-            case "PEC_analyses_medicales":
-            case "PEC_frais_medicaux":
-            case "PEC_opticien":
-            case "PEC_frais_imagerie":
-            case "PEC_consultation":
-            case "PEC_Reeducation":
-            case "PEC_pharmacie":
-            case "PEC_depannage":
-            case "PEC_gardiennage":
-            case "PEC_location_Najda_a_VAT":
-            case "Procuration_Najda_pr_prestataire_rapat_veh":
-            case "PEC_Reparation":
-            case "PEC_Pompes_funebres":
-            case "PEC_expertise":
-            case "PEC_evasan_armee":
-            case "PEC_deplacement":
-            case "PEC_dedouanement_pieces":
-            case "PEC_Cargo":
-$annee=date('Y');
- $rubriques_assure=DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 1)->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
-if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent= DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->where('rubrique', $infoparent['idtaggop'])->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
-$rubriques_assure = array_merge( $coltagcurrent,$rubriques_assure);
-$columns = array_column($rubriques_assure, 'updated_at');
-array_multisort($columns, SORT_DESC, $rubriques_assure);
-
-}
-if(!empty($rubriques_assure))
-{
-$rub=0;
-
-foreach($rubriques_assure as $rubrique)
-{
-
-
-$ltag= Rubrique::where("id",$rubrique->rubrique)->first();
-
-
-$ltaginitial= RubriqueInitial::where("id",$rubrique->rubriqueinitial)->first();
-$template=Template_doc::where("nom",$arrfile['nom'])->first();
-if($ltaginitial->pec!==0 && $ltaginitial->pec==$template->id)
-{
-
-
-if ( $ltag['devise'] === "TND") 
-                                    {$Montanttag = $rubrique->mrestant;}
-                                    if ( $ltag['devise'] === "EUR")
-                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['euro_achat']);}
-                                    if ( $ltag['devise'] === "USD")
-                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['dollar_achat']);
-
-//dd($Montanttag);
-}
-
-$arr_gopmed[]=$rubrique->rubrique."_".$Montanttag."_".$ltaginitial['nom']."_".$rubrique->updated_at;
-
-
-$sgoptn =implode(',', $arr_gopmed);
-                        $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
-
- $rub=$rub+1;
-} 
-
-
-}
-if($rub===0)
-
- {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
-                
-
-
-
-}
-
-
-
-                        
-                    
-            
-
-
-          
- else
-                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
-break;
-  case "Document_Generique":
-$annee=date('Y');
- $rubriques_assure=DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 1)->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
-if ($request->has('parent'))
-            {
-                $infoparent = Document::where('id', $request->get('parent'))->first();
-
-$coltagcurrent= DB::table('rubriques_assure')->orderBy('updated_at', 'desc')->where('mrestant', '>=', 0)->where('mrestant', '<', 1)->where('rubrique', $infoparent['idtaggop'])->where('id_assure',$dossiertpa['ID_assure'])->where('annee',$annee)->get()->toArray();
-$rubriques_assure = array_merge( $coltagcurrent,$rubriques_assure);
-$columns = array_column($rubriques_assure, 'updated_at');
-array_multisort($columns, SORT_DESC, $rubriques_assure);
-
-}
-if(!empty($rubriques_assure))
-{
-$rub=0;
-
-foreach($rubriques_assure as $rubrique)
-{
-
-
-$ltag= Rubrique::where("id",$rubrique->rubrique)->first();
-
-
-$ltaginitial= RubriqueInitial::where("id",$rubrique->rubriqueinitial)->first();
-$template=Template_doc::where("nom",$arrfile['nom'])->first();
-if($ltaginitial->pec==0)
-{
-
-
-if ( $ltag['devise'] === "TND") 
-                                    {$Montanttag = $rubrique->mrestant;}
-                                    if ( $ltag['devise'] === "EUR")
-                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['euro_achat']);}
-                                    if ( $ltag['devise'] === "USD")
-                                       { $Montanttag = intval($rubrique->mrestant) * floatval($paramapp['dollar_achat']);
-
-//dd($Montanttag);
-}
-
-$arr_gopmed[]=$rubrique->rubrique."_".$Montanttag."_".$ltaginitial['nom']."_".$rubrique->updated_at;
-
-
-$sgoptn =implode(',', $arr_gopmed);
-                        $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
-
- $rub=$rub+1;
-} 
-
-
-}
-if($rub===0)
-
- {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
-                
-
-
-
-}
-
-
-
-                        
-                    
-            
-
-
-          
- else
-                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas une Rubrique Spécifié!";}
-
-        break;        }}
-
-
-
-                      
-               
+        }
 
 
             // verifier si la template a un champ date/heure
@@ -1478,47 +805,17 @@ if($rub===0)
                     {
                         date_default_timezone_set('Africa/Tunis');
                         setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-                        if ($arrfile['nom'] == "RM_anglais")
-                        {//en_US.UTF-8
-                            setlocale (LC_TIME, 'en_US.UTF-8', 'eng'); 
-                        }
                         $datees = strftime("%d %B %Y".", "."%H:%M"); 
                     }
                 $champsArray = explode(',', $arrfile['champs']);
                 $array = array();
 
                 $array += [ 'templatehtml' => utf8_encode($arrfile['template_html'])];
-
-
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
-{if($dossiertpa['type_affectation']==="MEDIC")
-{
-         $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
-else
-{    $array += [ 'templatertf' => utf8_encode($arrfile['path'])];}}
-
-
-else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
-{ if($dossiertpa['type_affectation']==="MEDIC")
-{
-      $array += [ 'templatertf' => utf8_encode($arrfile['path_m'])];}
-else if($dossiertpa['type_affectation']==="Medic International")
-{
-      $array += [ 'templatertf' => utf8_encode($arrfile['path_mi'])];}
-else
-{$array += [ 'templatertf' => utf8_encode($arrfile['path'])];}
-
-}
-else
-{    $array += [ 'templatertf' => utf8_encode($arrfile['path'])];}
-
-
-
-             
+                $array += [ 'templatertf' => utf8_encode($arrfile['path'])];
 
 
                 // ajout identification des tags
-                if (isset($resp)) {$array += [ 'lestags' => $resp];}
+                if (isset($resp)) {$array += [ 'lestags' => utf8_encode($resp)];}
                 // ajout montant gop
                 //if (isset($montantgop)) {$array += [ 'montantgop' => utf8_encode($montantgop)];}
 
@@ -1537,7 +834,7 @@ else
                         if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
                         {   
                             /////
-                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]')&&($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]'))
+                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]')&&($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]')&&($champtemp !=='[MONTANT_FRANCHISE]'))
                             {
                                 if (array_key_exists($i,$champsparentArray))
                                 {
@@ -1549,7 +846,7 @@ else
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
                             {
@@ -1574,7 +871,7 @@ else
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[AGENT__NAME]')
                             {
@@ -1601,7 +898,7 @@ else
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[AGENT__SIGNATURE]')
                             {
@@ -1628,7 +925,7 @@ else
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp =>$valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[AGENT__LASTNAME]')
                             {
@@ -1655,24 +952,35 @@ else
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                         }
-                      /*  elseif($champtemp ==='[MONTANT_FRANCHISE]')
+                        elseif($champtemp ==='[MONTANT_FRANCHISE]')
                         {
-                                  
-                            if (array_key_exists($i,$champsparentArray))
-                                {
-                                    $valchamp = $champsparentArray[$i];
+                                                             $iddossier = $infodossier['id'];
+                                if (! empty($iddossier) && $iddossier!==null)
+                                {   
+                                    $infodossier = Dossier::where('id', $iddossier)->first();
+                                    $valchamp = $infodossier['montant_franchise'];
+                                    if (! empty($valchamp) && $valchamp!==null)
+                                    {$champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
+                                    }
+                                    else
+                                   {
+                                       $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                        $valchamp='';
+                                         $array += [ $champtemp => $valchamp];
+                                
+                                   }    
+                                     
                                 }
-                                else
-                                    { $valchamp = "undefined index";}
-                                $champtemp = str_replace('[', '', $champtemp);
-                                $champtemp = str_replace(']', '', $champtemp);
-                                $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];    
                                                     
-                        }*/
+                        }
                         
                         elseif($champtemp ==='[DATE_HEURE]')
                         {
@@ -1680,7 +988,7 @@ else
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ $champtemp => $datees];
+                            $array += [ $champtemp => utf8_encode($datees)];
                             // champ date precedente
                             if (array_key_exists($i,$champsparentArray))
                             {
@@ -1688,7 +996,7 @@ else
                             }
                             else
                                 { $valchamp = "undefined index";}
-                            $array += [ 'pre_dateheure' => $valchamp];
+                            $array += [ 'pre_dateheure' => utf8_encode($valchamp)];
 
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
@@ -1703,7 +1011,7 @@ else
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $valchamp];
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
                         }
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if (array_key_exists($i,$champsparentArray))
@@ -1716,7 +1024,7 @@ else
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $valchamp];
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
                         }
                             elseif (stristr($champtemp,'[CL_incendie')== TRUE )
                         {if (array_key_exists($i,$champsparentArray))
@@ -1729,7 +1037,7 @@ else
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $valchamp];
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
                         }
                             elseif (stristr($champtemp,'[CL_intact')== TRUE )
                         {if (array_key_exists($i,$champsparentArray))
@@ -1742,20 +1050,18 @@ else
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $valchamp];
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
                         }
                 elseif (stristr($champtemp,'[CL_attention')== TRUE )
-                        {if (array_key_exists($i,$champsparentArray))
+                        {if(isset($_POST['CL_attention']))
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
+                             $array += [ $champtemp => $valchamp];
+                        }
+                        else
                             {
-                                $valchamp = $champsparentArray[$i];
-                            }
-                            else
-                                { $valchamp = "undefined index";}
-
-                            $champtemp = str_replace('[CL_', '', $champtemp);
-                            $champtemp = str_replace(']', '', $champtemp);
-                            $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $valchamp];}
+                            $valchamp='';
+                            $array += [ $champtemp => $valchamp];
+                            }}
                     else
                     //champ libre
                   {
@@ -1766,18 +1072,11 @@ else
                             }
                             else
                                 { $valchamp = "undefined index";}
-if(stristr($champtemp,'[CL_rapport') == TRUE || stristr($champtemp,'[CL_prest') == TRUE || stristr($champtemp,'[CL_prest1') == TRUE || stristr($champtemp,'[CL_prest2') == TRUE || stristr($champtemp,'[CL_prest3') == TRUE || stristr($champtemp,'[CL_prest4') == TRUE )
-{
-$valchamp = nl2br($valchamp);
 
-}
-$valchamp = str_replace('<br />', "\\", $valchamp);
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-
-
-                            $array += [ 'CL_'.$champtemp => $valchamp];
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
 
                         }}
 
@@ -1793,30 +1092,20 @@ $valchamp = str_replace('<br />', "\\", $valchamp);
                 //return $infodossier['reference_medic']." | ".$infodossier['subscriber_name']." | ".$infodossier['subscriber_lastname'];
                  
                     foreach ($champsArray as $champtemp) {
-
                         //verifier quil nest pas un champs libre
                         if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
                         {   
-                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]')&& ($champtemp !=='[PREST__HOTEL]') && ($champtemp !=='[PREST__GARAGE]') && ($champtemp !=='[PREST__TRANSIT]') && ($champtemp !=='[PREST__IMAG]') && ($champtemp !=='[PREST__OPTIC]') && ($champtemp !=='[PREST__PHARM]') && ($champtemp !=='[PREST__POMPES]') && ($champtemp !=='[PREST__REEDUC]') && ($champtemp !=='[PREST__LABMED]'))
-                            { 
+                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[PREST__HOTEL]') && ($champtemp !=='[PREST__GARAGE]') && ($champtemp !=='[PREST__TRANSIT]') && ($champtemp !=='[PREST__IMAG]') && ($champtemp !=='[PREST__OPTIC]') && ($champtemp !=='[PREST__PHARM]') && ($champtemp !=='[PREST__POMPES]') && ($champtemp !=='[PREST__REEDUC]') && ($champtemp !=='[PREST__LABMED]')&&($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]')&&($champtemp !=='[MONTANT_FRANCHISE]'))
+                            {
                                 $champdb = str_replace('[', '', $champtemp);
                                 $champdb = str_replace(']', '', $champdb);
-                            
                                 $champdb = strtolower($champdb);
-                 if( empty(($infodossier[$champdb])) || ($infodossier[$champdb]) == null)
+                                $valchamp = $infodossier[$champdb];
 
-                               { $valchamp = '';}
-                             else
-                               { $valchamp = $infodossier[$champdb];}
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-/*if(stristr($champtemp,'ville') == TRUE)
-{
-$valchamp = str_replace('?', '', $valchamp);
-}*/
-                                $array += [ $champtemp =>$valchamp];
-
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
                             {
@@ -1828,7 +1117,7 @@ $valchamp = str_replace('?', '', $valchamp);
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp => $valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
                             elseif($champtemp ==='[AGENT__NAME]')
@@ -1841,7 +1130,7 @@ $valchamp = str_replace('?', '', $valchamp);
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp =>$valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
 
                                 }
                             }
@@ -1855,7 +1144,7 @@ $valchamp = str_replace('?', '', $valchamp);
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp =>$valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
                              elseif($champtemp ==='[AGENT__SIGNATURE]')
@@ -1868,10 +1157,10 @@ $valchamp = str_replace('?', '', $valchamp);
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp =>$valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
-                           /* elseif($champtemp ==='[MONTANT_FRANCHISE]')
+                            elseif($champtemp ==='[MONTANT_FRANCHISE]')
                         {
                                                              $iddossier = $infodossier['id'];
                                 if (! empty($iddossier) && $iddossier!==null)
@@ -1882,7 +1171,7 @@ $valchamp = str_replace('?', '', $valchamp);
                                     {$champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp => $valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                     }
                                     else
                                    {$champtemp = str_replace('[', '', $champtemp);
@@ -1895,9 +1184,9 @@ $valchamp = str_replace('?', '', $valchamp);
                                      
                                 }
                                             
-                        }*/
+                        }
                         
-                          elseif($champtemp ==='[PREST__HOTEL]')
+                            elseif($champtemp ==='[PREST__HOTEL]')
                             {
                                 $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 18])->first();
                                 $idprest = $infoprest['prestataire_id'];
@@ -2040,12 +1329,12 @@ $valchamp = str_replace('?', '', $valchamp);
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ $champtemp =>$datees];
+                            $array += [ $champtemp => utf8_encode($datees)];
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
                         { if (stristr($champtemp,'[CL_accidente')== TRUE )
                         {if(isset($_POST['CL_accidente']))
-                            {$valchamp='Accidenté';
+                            {$valchamp='Accidente';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -2055,7 +1344,7 @@ $valchamp = str_replace('?', '', $valchamp);
                             }}
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if(isset($_POST['CL_enpanne']))
-                            {$valchamp='En panne';
+                            {$valchamp='Enpanne';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -2065,7 +1354,7 @@ $valchamp = str_replace('?', '', $valchamp);
                             }}
                             elseif (stristr($champtemp,'[CL_incendie')== TRUE )
                         {if(isset($_POST['CL_incendie']))
-                            {$valchamp='Incendié';
+                            {$valchamp='Incendie';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -2085,12 +1374,12 @@ $valchamp = str_replace('?', '', $valchamp);
                             }}
 elseif (stristr($champtemp,'[CL_attention')== TRUE )
                         {if(isset($_POST['CL_attention']))
-                            {$valchamp="Attention : Cette prise en charge s'entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix";
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
                             {
-                            $valchamp='           ';
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
                             }}
                     else
@@ -2105,24 +1394,19 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp =>$champdb];
-
+                            $array += [ 'CL_'.$champtemp => utf8_encode($champdb)];
 
                         }}
                     }
-
             }
 
             // envoie ID_DOSSIER au preview
             $array += [ 'ID_DOSSIER' => $dossier];
-           //header("Content-type: application/json; charset=utf-8");
- 
+            
             //header('Content-type: application/json');    
             //return json_encode($array);
-       // return response()->json($array, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
-      // JSON_UNESCAPED_UNICODE); 
-	  return $array;
-       
+            return response() -> json($array, 200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
+        
     }
 
 public function historique(Request $request)
@@ -2130,7 +1414,7 @@ public function historique(Request $request)
         $docparent= $_POST['doc'] ;
         $histodoc = array();
         while ($docparent !== null) {
-            $arrdoc = Document::select('id','titre','emplacement','comment','dernier','parent','idtaggop','created_at')->where('id', $docparent)->first();
+            $arrdoc = Document::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $docparent)->first();
             $histodoc[]=$arrdoc;
             $docparent = $arrdoc['parent'];
         }
@@ -2158,44 +1442,9 @@ public function historique(Request $request)
 
         $arrfile = Template_doc::where('id', $templateid)->first();
         // template annulation
-       
-if(stristr($arrfile['nom'],'PEC_frais_medicaux') == TRUE || stristr($arrfile['nom'],'PEC_pharmacie') == TRUE )
-{if($infodossier['type_affectation']==="MEDIC")
-{
-       $file=public_path($arrfile['template_annulation_m']);}
-else
-{  $file=public_path($arrfile['template_annulation']);}}
-
-else if(stristr($arrfile['nom'],'Document_Generique') == TRUE)
-{ if($infodossier['type_affectation']==="MEDIC")
-{
-     $file=public_path($arrfile['template_annulation_m']);}
-else if($infodossier['type_affectation']==="Medic International")
-{
-      $file=public_path($arrfile['template_annulation_mi']);}
-else
-{$file=public_path($arrfile['template_annulation']);}
-
-}
-else
-{  $file=public_path($arrfile['template_annulation']);}
-        $mc=round(microtime(true) * 1000);
-        $datees = strftime("%d-%m-%Y"."_".$mc); 
-        $datesc = strftime("%d-%m-%Y"); 
-        
-if (strpos($arrfile['nom'], 'Fax_Ima') !== false) {
-$infodossierfaxima=Dossier::select('reference_medic','reference_customer')->where('id',$dossier)->first();
-$refdossfaxima=$infodossierfaxima['reference_medic'];
-$refclientfaxima=$infodossierfaxima['reference_customer'];
-
-$name_file = $arrfile['nom'].'_'.$datees.'_'.$refdossfaxima.'_'.$refclientfaxima.'_annulation.rtf';
-$titref =$arrfile['nom'].'_'.$datesc.'_'.$refdossfaxima.'_'.$refclientfaxima;
- 
-}
-else
-{
-$name_file = $arrfile['nom'].'_'.$datees.'_annulation.rtf';
-        $titref =$arrfile['nom'].'_'.$datesc;}
+        $file=public_path($arrfile['template_annulation']);
+        $name_file = $arrfile['nom'].'_'.$refdoss.'_annulation.doc';
+        $titref =$arrfile['nom'].'_'.$refdoss;
         // verifier si la template a un champ date/heure
         $datees="";
         if(stristr($arrfile['champs'], '[DATE_HEURE]') !== FALSE) 
@@ -2225,49 +1474,6 @@ $name_file = $arrfile['nom'].'_'.$datees.'_annulation.rtf';
                         { $valchamp = "undefined index";}
 
                     $array += [ $champtemp => $valchamp];
-if($champtemp ==='[ID__PRESTATAIRE]')
-{
-if(!empty($valchamp))
-{$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
-     if(!empty($prestation))    
- { $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "document annulé","oms_docs"=>$titref]);        
-
-
-$par=Auth::id();
-$user = User::find($par);
-$nomuser = $user->name ." ".$user->lastname ;
-
- 
- 			$desc='Annulation de prestation pour le dossier: ' .$refdoss ;
-
-		 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	$hist->save();
-		
-	}  }}  
-if($champtemp ==='[ID__PRESTATAIRE1]')
-{
-if(!empty($valchamp))
-{$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
-             if(!empty($prestation))    
- { $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "document annulé","oms_docs"=>$titref]);
-
-$par=Auth::id();
-$user = User::find($par);
-$nomuser = $user->name ." ".$user->lastname ;
-
-   		
-$desc='Annulation de prestation pour le dossier: ' .$refdoss;
-
-		 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	$hist->save();
-		
-	 } }}  
                 }
                 elseif($champtemp ==='[DATE_HEURE]')
                 {
@@ -2280,7 +1486,7 @@ $desc='Annulation de prestation pour le dossier: ' .$refdoss;
                     else
                         { $valchamp = "undefined index";}
                     //champ date/heure
-                    $array += [ $champtemp => $datees];
+                    $array += [ $champtemp => $valchamp];
                     $array += [ '[PRE_DATEHEURE]' => $valchamp];
 
                 }
@@ -2313,14 +1519,7 @@ $desc='Annulation de prestation pour le dossier: ' .$refdoss;
                     }
                     else
                         { $valchamp = "undefined index";}
-if(stristr($champtemp,'[CL_rapport') == TRUE || stristr($champtemp,'[CL_prest') == TRUE || stristr($champtemp,'[CL_prest1') == TRUE || stristr($champtemp,'[CL_prest2') == TRUE || stristr($champtemp,'[CL_prest3') == TRUE || stristr($champtemp,'[CL_prest4') == TRUE )
-{
-$valchamp = nl2br($valchamp);
 
-}
-$valchamp = str_replace('<br />', "\\", $valchamp);
-
-$valchamp = str_replace('<br />', "\n", $valchamp);
                     $array += [ $champtemp => $valchamp];
 
                     // verifier si le champs existe en double
@@ -2337,32 +1536,20 @@ $valchamp = str_replace('<br />', "\n", $valchamp);
         }
 
         // maj montant ex tag
-$dossiertpa=Dossier::where('id',$dossier)->first();
-$garanties=DB::table('garanties_assure')->where('id_assure',$dossiertpa['ID_assure'])->get()->toArray();
-if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
-{
         $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
         $mntgop = intval($tagprecinfo['mrestant']) + intval($infoparent['montantgop']);
-        Tag::where('id', $infoparent['idtaggop'])->update(['mrestant' => $mntgop]);}
-
-   else
-{
-        $tagprecinfo = DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->first();
-        $mntgop = intval($tagprecinfo->mrestant) + intval($infoparent['montantgop']);
-        DB::table('rubriques_assure')->where('rubrique', $infoparent['idtaggop'])->where('id_assure', $dossiertpa['ID_assure'])->update(['mrestant' => $mntgop,'updated_at'=>NOW()]);}                                 
+        Tag::where('id', $infoparent['idtaggop'])->update(['mrestant' => $mntgop]);
+                                    
         //marque le document precedent comme non dernier
          Document::where('id', $parentdoc)->update(['dernier' => 0]);
         
         /*header('Content-type: application/json');    
         return json_encode($array);*/
-
-        $Arrayn = str_replace("’", "'", $array);
-        $Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
-        WordTemplate::export($file, $Arrayd, '/documents/'.$refdoss.'/'.$name_file);
+        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
 
     // creation du fichier PDF
     $nfsansext = substr($name_file, 0, -3);
-  Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
+    Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
         ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
         ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
         ->setTimeout(100) // libreoffice process timeout
@@ -2376,7 +1563,6 @@ if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
             'dossier' => $dossier,
             'titre' => $titref,
             'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
-             'name' => $nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parentdoc,
             'dernier' => 1,
@@ -2384,44 +1570,13 @@ if($dossiertpa['type_affectation']!=="Najda TPA" || empty($garanties))
 
         ]);
         $doc->save();
-//LOG DOC
-if ($doc->save()) {
 
-$par=Auth::id();
-$user = User::find($par);
-$nomuser = $user->name ." ".$user->lastname ;
- 
-
- $docparent=$infoparent['titre'];
-  		
-$desc='Annulation du document '.$docparent.' dans le dossier: '.$refdoss ;
-
-		 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	$hist->save();
-		
-}
-//FIN LOG DOC
         // enregistrement de lattachement
         $attachement = new Attachement([
 
-            'type'=>'pdf','description'=>'Document généré Annulé','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $nfsansext.'pdf','boite'=>2,'dossier'=>$dossier
+            'type'=>'pdf','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $nfsansext.'pdf','boite'=>2,'dossier'=>$dossier
         ]);
         $attachement->save();
         return "document annulé avec succès";
     }
-public function attachdocument(Request $request)
-{
- $dossier= $request->get('dossier') ;
- $emplacement= $request->get('emplacement') ;
-$name= $request->get('name') ;
-$attachement = new Attachement([
-
-            'type'=>'pdf','description'=>'Document généré','path' => '/app/'.$emplacement, 'nom' => $name,'boite'=>2,'dossier'=>$dossier
-        ]);
-        $attachement->save();
-
-}
 }

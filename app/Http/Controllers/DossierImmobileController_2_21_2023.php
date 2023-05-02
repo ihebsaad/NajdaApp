@@ -481,13 +481,12 @@ And the rest of the entity signature*/
     {
         $format = "Y-m-d H:i:s";
         $dernier_date_envoi_mail=Envoye::where('dossier','like','%'.$refdoss.'%')->orderBy('created_at','desc')->first();
-       
-	   if($dernier_date_envoi_mail)
+         if($dernier_date_envoi_mail)
 		 {
 	       $dernier_date_envoi_mail=$dernier_date_envoi_mail->created_at;
 		   $dernier_date_envoi_mail=\DateTime::createFromFormat($format, $dernier_date_envoi_mail);
 		 }
-		// dd( $date); 
+		 
 		 
         $dernier_date_recep_mail=Entree::where('dossier','like','%'.$refdoss.'%')->orderBy('created_at','desc')->first();
        
@@ -498,7 +497,7 @@ And the rest of the entity signature*/
         $dernier_date_recep_mail=\DateTime::createFromFormat($format, $dernier_date_recep_mail);
 		 }
 
-        // dd($dernier_date_recep_mail); 
+        
      //   $dtc = (new \DateTime())->format('Y-m-d H:i:s');
 
 
@@ -509,11 +508,10 @@ And the rest of the entity signature*/
         $dateDoss ='';
 		if($date)
 		{
-        $dateDoss = \DateTime::createFromFormat($format, $date) ;
+        $dateDoss = (\DateTime::createFromFormat($format, $date) );
 	    }
-		//dd('kk');
 		
-		if(! $dernier_date_recep_mail==null && ! $dernier_date_envoi_mail )
+		if(!dernier_date_envoi_mail && !dernier_date_recep_mail)
 		{
 			if($dateDoss)
 			{
@@ -532,10 +530,8 @@ And the rest of the entity signature*/
 				return false;
 			}	
 		}
-		//dd('kkkk');
 		if($dateDoss && $dernier_date_envoi_mail && $dernier_date_recep_mail)
 		{
-			
 
         if($dateDoss <= $dateSys && ($dernier_date_envoi_mail <= $dateSys && $dernier_date_recep_mail <= $dateSys) )
         {
@@ -583,7 +579,7 @@ And the rest of the entity signature*/
         // la mise à jour des liste des dossiers immobile se fait dans la page role.blade à la fin de la page
 
         // lire la liste de dossiers immobiles depuis DossierController
-        $dtc = (new \DateTime())->format('2022-01-01 00:00:00');
+        $dtc = (new \DateTime())->format('2021-01-01 00:00:00');
         $dossiers = Dossier::where('sub_status', 'immobile')
             ->where('current_status','!=','Cloture')
             ->whereNotNull('updatedmiss_at')
@@ -603,25 +599,19 @@ And the rest of the entity signature*/
          //$arrayeml=Adresse::where('parent', 2)->where('nature','email')->pluck('champ')->toArray();
          //dd($arrayeml);
          // fin test 
-		 $nb_doss_imm=0;
     foreach($dossiers as $dossier)
         {
          if( !in_array($dossier->id,$dossierTous))            
             {
                 if($dossier->updatedmiss_at) {
 
-                 if( self::checkImmobile3Daysv2($dossier->updatedmiss_at,$dossier->reference_medic)==true)
+                 if( self::checkImmobile3Days($dossier->updatedmiss_at)==true)
                  {
-					 
-				   if($nb_doss_imm<5)
-					 {
 
-                // dd($dossier->customer_id.' '.$dossier->id.' '.$dossier->reference_medic);
+                 //dd($dossier->customer_id.' '.$dossier->id.' '.$dossier->reference_medic);
                 $cli=Client::where('id', $dossier->customer_id)->first();
              $arrayeml=[];
-			 
-			  $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->pluck('champ')->toArray();
-           /*  kkk if(trim($dossier->type_dossier)=="Medical" || trim($dossier->type_dossier)=="Transport")
+             if(trim($dossier->type_dossier)=="Medical" || trim($dossier->type_dossier)=="Transport")
              {
               $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->where('type','like', '%medical%')->pluck('champ')->toArray();
              }
@@ -642,59 +632,48 @@ And the rest of the entity signature*/
                                $q->where('type','like', '%technique%')->orWhere('type','like', '%medical%');
                                 })->pluck('champ')->toArray();
                }
-             } */
+             }
 			 // get last email
 			 
-			 
-			 
-			  /* kkkkk $dernier_envoi_mail=Envoye::where('dossier','like','%'.$dossier->reference_medic.'%')->orderBy('created_at','desc')->first();
+			  $dernier_envoi_mail=Envoye::where('dossier','like','%'.$dossier->reference_medic.'%')->orderBy('created_at','desc')->first();
               if($dernier_envoi_mail)
 			  {
 				$dernier_envoi_mail=$dernier_envoi_mail->destinataire;
-			  } */
+			  }
 			  
-              $dernier_recep_mail=Entree::where('dossier','like','%'.$dossier->reference_medic.'%')->whereIn('emetteur', $arrayeml)->orderBy('created_at','desc')->first();
+              $dernier_recep_mail=Entree::where('dossier','like','%'.$dossier->reference_medic.'%')->orderBy('created_at','desc')->first();
               if($dernier_recep_mail)
 			  {
 			    $dernier_recep_mail=$dernier_recep_mail->emetteur;
 			  }
 			  
-               /* kkkkkif(! $arrayeml || count($arrayeml)==0 )
+               if(! $arrayeml || count($arrayeml)==0 )
                {
 				   if($dernier_envoi_mail)
 				   {
 					   $arrayeml[]=$dernier_envoi_mail;
 				   }
-			   } */
+			   }
 			   
-			  /* kkkkk  if(! $arrayeml || count($arrayeml)==0 )
+			    if(! $arrayeml || count($arrayeml)==0 )
                {
 				   if($dernier_recep_mail)
 				   {
 					   $arrayeml[]=$dernier_recep_mail;
 				   }
-			   }  */
+			   }
 			  
 
             // dd($arrayeml);
-             /* kkkk for($i=0; $i<count($arrayeml); $i++)
+             for($i=0; $i<count($arrayeml); $i++)
              {
                  if(stripos($arrayeml[$i],'@')==false)
                  {
                     unset($arrayeml[$i]);                    
                  }
 
-             } */
-            //kkk $adresseStock= implode(" ", $arrayeml);
-			$adresseStock='';		
-			
-			
-			if(stripos($dernier_recep_mail,'@'))
-                 {
-                    $adresseStock=$dernier_recep_mail;                 
-                 }
-			
-			
+             }
+             $adresseStock= implode(" ", $arrayeml);
             // dd($adresseStock);
               //dd($arrayeml);
 
@@ -812,7 +791,7 @@ And the rest of the entity signature*/
                      $nom_prenom=$prenom_ass.' '.$nom_ass ; 
                     }
                     // à décommenter
-                    $nouv= new DossierImmobile ([
+                    /*$nouv= new DossierImmobile ([
                       'dossier_id'=>$dossier->id,
                       'reference_doss' =>$dossier->reference_medic,
                       'nom_assure' =>$nom_prenom,
@@ -828,11 +807,7 @@ And the rest of the entity signature*/
 
                     ]);
 
-                    $nouv->save();
-					
-				}// fin nb_doss_imm
-				
-				$nb_doss_imm++;
+                    $nouv->save();*/
 
                  }
 
@@ -968,7 +943,7 @@ And the rest of the entity signature*/
 	    $nbemail=0;
         foreach ($dossim as $dm ) {
         
-        if( self::checkImmobile3Daysv2($dm->updatedmiss_at,$dm->reference_doss)==true )
+        if( self::checkImmobile3Daysv2($dm->updatedmiss_at)==true )
          {
           //dd('verif');
            if($dm->client_adresse !=null )
@@ -1094,7 +1069,7 @@ And the rest of the entity signature*/
 
             $sujet = 'Dossier immobile '.$dm->nom_assure.' - '.$dm->ref_client.' - '.$dm->reference_doss;
             $contenu = "Bonjour de ".$entete.",<br><br>
-                    Nous avons constaté qu’aucune action n’a été entreprise dans ce dossier depuis plus de 3 jours, et aucune action n’y est programmée.<br><br> Merci de nous indiquer s’il y a lieu de le clôturer ou si nous devons le garder ouvert. Et dans ce dernier cas quelles sont vos instructions pour la suite ?<br><br>
+                    Nous avons constaté qu’aucune action n’a été entreprise dans ce dossier depuis 3 jours, et aucune action n’y est programmée.<br><br> Merci de nous indiquer s’il y a lieu de le clôturer ou si nous devons le garder ouvert. Et dans ce dernier cas quelles sont vos instructions pour la suite ?<br><br>
                 (Signé): Ceci est un email généré automatiquement par le système de gestion de Najda Assistance.";
             $contenu=$contenu.'<br><br>Cordialement <br><br>'.$signature.' <br><br><hr style="float:left;"><br><br>';
 
@@ -1109,7 +1084,7 @@ And the rest of the entity signature*/
             $contenu=$contenu.'<br><br>Best regards <br> Najda Assistance <br><br><hr style="float:left;"><br><br>';*/
              $sujet = 'Motionless file '.$dm->nom_assure.' - '.$dm->ref_client.' - '.$dm->reference_doss;
              $contenu = "Hello from ".$entete.",<br><br>
-              We noticed that no action has been taken on this file for more than 3 days, and there is no action scheduled for the upcoming days.<br><br>
+              We noticed that no action has been taken on this file for 3 days, and there is no action scheduled for the upcoming days.<br><br>
               Please let us know whether we should close the file or keep it open. In that case what are your following instructions?<br><br>
             Best regards,
             <br><br>
@@ -1149,7 +1124,7 @@ And the rest of the entity signature*/
                     if($dests[$i])
                     {
                       //$cc=$cc.$dests[$i].',';
-                      //kkkk array_push($cc,$dests[$i]);
+                      array_push($cc,$dests[$i]);
                     }
   
                   }
@@ -1159,36 +1134,24 @@ And the rest of the entity signature*/
                   // array_push($bcc,'24ops@najda-assistance.com');
   
                
-                /* kkk array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                 array_push($bcc,'nejib.karoui@medicmultiservices.com');
                  array_push($bcc,'kbskhaled@gmail.com');
                  array_push($bcc,'24ops@najda-assistance.com');
-                 array_push($bcc,'finances@medicmultiservices.com'); */
-				  // array_push($bcc,'nejib.karoui@gmail.com');
-				   array_push($bcc,'nejib.karoui18@gmail.com');
-				   array_push($bcc,'hassine.lachouek@najda-assistance.com');                 
-				   array_push($bcc,'kbskhaled@gmail.com');
-				   array_push($cc,'24ops1@najda-assistance.com');
+array_push($bcc,'finances@medicmultiservices.com');
              }
              else
              {
                $to=$dm->client_adresse ; // null;
                 // cc nejib karoui; 
-                  //kkk array_push($bcc,'nejib.karoui@medicmultiservices.com');
-                  // array_push($bcc,'nejib.karoui@gmail.com');
-				   array_push($bcc,'nejib.karoui18@gmail.com');
-				   array_push($bcc,'hassine.lachouek@najda-assistance.com');                  
-				   array_push($bcc,'kbskhaled@gmail.com');
-				   array_push($cc,'24ops1@najda-assistance.com');
-                   
-                  //kkk array_push($bcc,'24ops@najda-assistance.com');
-                  //kkk array_push($bcc,'finances@medicmultiservices.com');
-              
-
-			  //$cc=null; 
+                   array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                   array_push($bcc,'kbskhaled@gmail.com');
+                   array_push($bcc,'24ops@najda-assistance.com');
+  array_push($bcc,'finances@medicmultiservices.com');
+               //$cc=null; 
              }
           // dd($bcc);
 		   // à désecommenter
-           $swiftMailer = new Swift_Mailer($swiftTransport);
+         /*  $swiftMailer = new Swift_Mailer($swiftTransport);
                 Mail::setSwiftMailer($swiftMailer);      
                 Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
                $message        
@@ -1207,14 +1170,14 @@ And the rest of the entity signature*/
                 'date_envoi_mail' =>$dateSys ,
                 'reponse_client'  =>null
              
-             ]); 
+             ]); */
 
             $emaiautodestcc = implode(";", $cc);
 
              // sauvgarder dans la table d'envoi mail auto 
 
              // à désecommenter
-                $emaiauto=new EmailAuto ([
+               /* $emaiauto=new EmailAuto ([
                       'dossierid'=>$dm->dossier_id,
                       'dossier' =>$dm->reference_doss,
                       'client' =>$dm->client_name,
@@ -1227,14 +1190,14 @@ And the rest of the entity signature*/
 
                     ]);
 
-              $emaiauto->save();
+              $emaiauto->save();*/
 
 
             }
 			
 			 }//fin if($nbemail <10)
 				 
-			// dd("envoi 10 emails auto dossier immobile");
+			 dd("envoi 10 emails auto dossier immobile");
          
 		  } /// fin  if($dm->mail_auto_envoye !='Oui' )
 
@@ -1243,13 +1206,13 @@ And the rest of the entity signature*/
          {
          // adresse null pas d'envoi 
            // à désecommenter
-      
+         /*
               $dm->update([
                 'mail_auto_envoye'=> 'Non',
                 'date_envoi_mail' =>$dateSys  ,
                 'remarques' => 'dossier immobile plus que 4 jours mais le mail n\'est pas encore envoyé car l\'adresse mail destinataire est inexistante'             
              ]);
-           
+           */
 
          }
 
@@ -1273,7 +1236,7 @@ This file has seen no action or instruction from you for 72 hours. Please let us
 And the rest of the entity signature*/
 
 
-  // dd('fin ft');
+    dd('fin ft');
         
     }// fin fonction
 

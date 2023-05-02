@@ -241,7 +241,9 @@ class EntreesController extends Controller
 
     public function show($id)
     {
-        $dossiers = Dossier::all();
+       ini_set('memory_limit', '16384M');       
+	DB::disableQueryLog();
+ 	$dossiers = DB::table('dossiers')->get();
         $entree = Entree::find($id);
         if ($entree->viewed==0 )
         {
@@ -264,7 +266,10 @@ class EntreesController extends Controller
 
     public function showdisp($id)
     {
-        $dossiers = Dossier::orderBy('created_at', 'desc')->get();
+	ini_set('memory_limit', '16384M');       
+	DB::disableQueryLog();        
+	//$dossiers = Dossier::orderBy('created_at', 'desc')->get();
+	$dossiers = DB::table('dossiers')->orderBy('created_at', 'desc')->get();
         $entree = Entree::find($id);
         if ($entree->viewed==0 )
         {
@@ -515,7 +520,9 @@ else
         }
         $filename=$entree->sujet;
         $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', '', $filename);
-        $name='REC - '.$name;
+        $mc=round(microtime(true) * 1000);
+        $datees = strftime("%d-%m-%Y"."_".$mc); 
+        $name='REC - '.$name.'_'.$datees;
 
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$id.'/'.$name.'.pdf');
@@ -890,6 +897,19 @@ else
         ]);	$hist->save();
 
     }
+public function updating(Request $request)
+    {
+        $id= $request->get('entree');
+        $champ= strval($request->get('champ'));
+        
+            $val= $request->get('val');
+
+       
+        //  $dossier = Dossier::find($id);
+        // $dossier->$champ =   $val;
+        Entree::where('id', $id)->update(array($champ => $val));
+
+    }
 public function detectnom(Request $request)
     {
         if ($request->get('peerdisplayname') != null)
@@ -983,8 +1003,8 @@ $iddossier= $dossierrecu['id'];
     }
 public function numaccept(Request $request)
     {
-
-     return $request->get('peername');
+$peername1=str_replace("+", '', $request->get('peername'));
+     return $peername1;
     }
 
 

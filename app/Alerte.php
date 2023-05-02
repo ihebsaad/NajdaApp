@@ -13,12 +13,5 @@ class Alerte extends Model
  'facture',
  'traite'
   ];
-
-  /*protected $dateFormat = 'Y-m-d H:i:s';
-
-    public function getDateFormat()
-    {
-        return 'Y-m-d H:i:s.u';
-    } */
  
 }

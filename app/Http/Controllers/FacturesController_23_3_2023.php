@@ -234,39 +234,7 @@ class FacturesController extends Controller
 
         return redirect('/factures')->with('success', '  Supprimé ');
     }
-	
-	public function updatingReglefacture (Request $request)
-	 {
-		 
-		$id= $request->get('facture');
-       // $champ= strval($request->get('champ'));
-       $val= $request->get('valReg');
-       // $dossier = Dossier::find($id);
-       // $dossier->$champ =   $val;
-        Facture::where('id', $id)->update(array('regle' => $val));
-		
-		return 'ok';	   
-	   
-		 
-	 }
-	
-	
-	 public function updatingParvenuPrestation (Request $request)
-	 {
-	   $id= $request->get('prestation');
-       // $champ= strval($request->get('champ'));
-       $val= $request->get('val');
-       // $dossier = Dossier::find($id);
-       // $dossier->$champ =   $val;
-        Prestation::where('id', $id)->update(array('parvenu' => $val));
-		
-		return 'ok';		   
-		 
-	 }
-	 
-	 
 
-    
      public static function checkImmobile3Days($date)
     {
 
@@ -290,104 +258,12 @@ class FacturesController extends Controller
 
 
     }
-	
-	 public static function envoi_mail_v2($swiftTransport,$adresse, $sujet, $contenu,$from,$fromname)
-    {
-            
-            $cc=array();
-			$to=$adresse;
-            $bcc=array();
-            $destinataires = null;
-            $dests = null;
-             
-			   
-			       array_push($bcc,'nejib.karoui@medicmultiservices.com');
-                   array_push($bcc,'kbskhaled@gmail.com');
-				   if($to !== 'finances@medicmultiservices.com')
-				   {
-                   array_push($bcc,'finances@medicmultiservices.com');
-				   }
-				   array_push($bcc,'hassine.lachouek@najda-assistance.com');
-
-				   
-                   //array_push($bcc,'24ops@najda-assistance.com');
-
-                $swiftMailer = new Swift_Mailer($swiftTransport);
-                Mail::setSwiftMailer($swiftMailer);      
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
-               $message        
-               ->to($to)
-               //->cc($cc ?: [])
-               ->bcc($bcc ?: [])
-               ->subject($sujet)
-               ->setBody($contenu, 'text/html')
-               ->setFrom([$from => $fromname]);
-               });
-  
-          
-                    
-
-    }
-	
-	 public static function envoi_mail_v2_prest($swiftTransport,$adresse, $cccc,$sujet, $contenu,$from,$fromname)
-    {
-            
-            $cc=array();
-			$to=$adresse;
-            $bcc=array();
-            $destinataires = null;
-            $dests = $cccc;
-			
-			 if(count($dests)>1)
-               {
-                 // $cc='';
-                  for($i=0 ;$i<count($dests) ; $i++)
-                  {
-                    if($dests[$i])
-                    {
-						if($dests[$i] !== $to)
-						{
-                        //$cc=$cc.$dests[$i].',';
-                        array_push($cc,$dests[$i]);
-						}
-                    }
-  
-                  }
-				  
-			   }
-             
-			   
-			       array_push($bcc,'nejib.karoui@medicmultiservices.com');
-                   array_push($bcc,'kbskhaled@gmail.com');
-                   array_push($bcc,'finances@medicmultiservices.com');
-				   array_push($bcc,'hassine.lachouek@najda-assistance.com');
-
-				   
-                   //array_push($bcc,'24ops@najda-assistance.com');
-
-                $swiftMailer = new Swift_Mailer($swiftTransport);
-                Mail::setSwiftMailer($swiftMailer);      
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
-               $message        
-               ->to($to)
-               ->cc($cc ?: [])
-               ->bcc($bcc ?: [])
-               ->subject($sujet)
-               ->setBody($contenu, 'text/html')
-               ->setFrom([$from => $fromname]);
-               });
-  
-          
-                    
-
-    }
 
 
     public static function envoi_mail($swiftTransport,$adresses, $sujet, $contenu,$from,$fromname)
     {
             
             $cc=array();
-			$to='';
             $bcc=array();
             $destinataires = null;
             $dests = null;
@@ -410,21 +286,8 @@ class FacturesController extends Controller
              //dd($dests);
              if(count($dests)>0 && $dests[0])
              {
-				 
-		      $dernier_recep_mail=Entree::whereIn('emetteur', $dests)->orderBy('created_at','desc')->first();
-              if($dernier_recep_mail)
-			  {
-			    $to=$dernier_recep_mail->emetteur;
-			  }
-			  else{
-				  
-				   $to=$dests[0];
-				  
-			  }
-						 
-				 
 
-             
+              $to=$dests[0];
               
                if(count($dests)>1)
                {
@@ -439,20 +302,18 @@ class FacturesController extends Controller
   
                   }
                 //nejib.karoui@gmail.com
-                   array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                   array_push($bcc,'nejib.karoui18@gmail.com');
                    array_push($bcc,'kbskhaled@gmail.com');
-                   array_push($bcc,'finances@medicmultiservices.com');
                    array_push($bcc,'24ops@najda-assistance.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
   
                }
                 else
                {
-               //kkk $to=$dests[0]; // null;
+               $to=$dests[0]; // null;
                 //nejib.karoui@gmail.com
-                array_push($bcc,'nejib.karoui@medicmultiservices.com');
+                array_push($bcc,'nejib.karoui18@gmail.com');
                    array_push($bcc,'kbskhaled@gmail.com');
-                   array_push($bcc,'finances@medicmultiservices.com');
                    array_push($bcc,'24ops@najda-assistance.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
  
@@ -460,15 +321,15 @@ class FacturesController extends Controller
 
                 $swiftMailer = new Swift_Mailer($swiftTransport);
                 Mail::setSwiftMailer($swiftMailer);      
-              /* Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$bcc,$from,$fromname) {
                $message        
                ->to($to)
-               //->cc($cc ?: [])
+               ->cc($cc ?: [])
                ->bcc($bcc ?: [])
                ->subject($sujet)
                ->setBody($contenu, 'text/html')
                ->setFrom([$from => $fromname]);
-               });*/
+               });
   
              }
                     
@@ -1713,7 +1574,7 @@ Many thanks for your collaboration.<br><br>
   
                   }
                  
-                 array_push($cc,'nejib.karoui@medicmultiservices.com');
+                 array_push($cc,'nejib.karoui18@gmail.com');
                 // array_push($cc,'kbskhaled@gmail.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
   
@@ -1722,7 +1583,7 @@ Many thanks for your collaboration.<br><br>
                {
                $to=$dests[0] ; // null;
           
-                array_push($cc,'nejib.karoui@medicmultiservices.com');
+                array_push($cc,'nejib.karoui18@gmail.com');
                 //array_push($cc,'kbskhaled@gmail.com');
                 //array_push($cc,'nbsnajoua@gmail.com');
                }
@@ -1769,7 +1630,7 @@ Many thanks for your collaboration.<br><br>
   
                   }
                   
-                  array_push($cc,'nejib.karoui@medicmultiservices.com');
+                  array_push($cc,'nejib.karoui18@gmail.com');
                  // array_push($cc,'kbskhaled@gmail.com');
                   //array_push($cc,'nbsnajoua@gmail.com');
   
@@ -1778,7 +1639,7 @@ Many thanks for your collaboration.<br><br>
                {
                $to=$dests[0] ; // null;
              
-                 array_push($cc,'nejib.karoui@medicmultiservices.com');
+                 array_push($cc,'nejib.karoui18@gmail.com');
                 // array_push($cc,'kbskhaled@gmail.com');
                  //array_push($cc,'nbsnajoua@gmail.com');
                }
@@ -1798,38 +1659,16 @@ Many thanks for your collaboration.<br><br>
         $email_prestataires=array();
         $email_client=array();
 
-      $dtc = (new \DateTime())->format('2023-04-01 00:00:00');
+      $dtc = (new \DateTime())->format('2021-01-01 00:00:00');
       //$factures=Facture::where('id',22)->orWhere('id',23)->get();
       //$factures=Facture::where('honoraire',1)->whereNotNull('date_email')->whereIn('id',$id_fact_test)->where('created_at','>=', $dtc)->get();
       //dd($factures);
      // $prestations=Prestation::whereNotNull('date_prestation')->where('parvenu','<>',1)->get();
      //$prestations=Prestation::where('parvenu','<>',1)->whereNotNull('date_prestation')->whereNotNull('created_at')->where('created_at','>=', $dtc)->whereIn('prestataire_id',$id_prest_test)->get();
       //dd($prestations);
-      /*date_rapp_15 null ou mail_40_env mail_55_env mail_70_env */
-      /*$factures=Facture::where('honoraire',1)->whereNotNull('date_email')->where(function($q){                             
-                               $q->whereNull('date_rapp_15')
-                               ->orWhere('mail_40_env','=',0)
-                               ->orWhere('mail_55_env','=',0)
-							   ->orWhere('mail_70_env','=',0);
-                                })->where('created_at','>=', $dtc)->get();*/
-								
-		$factures=Facture::where(function($q){                             
-                               $q->whereNotNull('date_email')
-                               ->whereNotNull('date_poste');                               
-                                })->where(function($q){  		                                                
-                                $q->whereNull('date_rapp_15')
-                               ->orWhere('mail_40_env','=',0)
-                               ->orWhere('mail_55_env','=',0)
-							   ->orWhere('mail_70_env','=',0);
-                                })->where('created_at','>=', $dtc)->get();
-	 
-      $prestations=Prestation::where('parvenu','<>',1)->whereNotNull('date_prestation')->where(function($q){                            
-                               $q->whereNull('date_rapp_15')
-                               ->orWhere('mail_30_env','=',0)
-                               ->orWhere('mail_45_env','=',0)
-							   ->orWhere('mail_60_env','=',0);
-                                })->whereNotNull('created_at')->where('created_at','>=', $dtc)->get();
-      /*date_rapp_15 null ou mail_30_env mail_45_env mail_60_env */
+      $factures=Facture::where('honoraire',1)->whereNotNull('date_email')->where('created_at','>=', $dtc)->get();
+      $prestations=Prestation::where('parvenu','<>',1)->whereNotNull('date_prestation')->whereNotNull('created_at')->where('created_at','>=', $dtc)->get();
+      
 
       $format = "Y-m-d H:i:s";
       $dtc30=(new \DateTime())->modify('-30 days')->format($format);
@@ -1958,18 +1797,12 @@ Many thanks for your collaboration.<br><br>
    $fromname='';
    $signature='';
    $entete='';
-   $nb_mail_prest=0;
 
    if($prestations && $prestations->count()>0 )
    {
       
       foreach ($prestations as $p ) {
-		  
-		  
-		  if($nb_mail_prest<=7)
-		  {
-		  
-		  
+
               $dateCreation1=str_replace('/','-',$p->date_prestation);   
               //$dateCreation = \DateTime::createFromFormat($p->date_prestation);
               $dateCreation = new \DateTime($dateCreation1);
@@ -2154,28 +1987,11 @@ Many thanks for your collaboration.<br><br>
                      if($dateSys30>= $dateCreation && $dateSys45 < $dateCreation && $p->mail_30_env==0 )
                             {
                               $email_prestataires[]=$adr[0];
-							  $to='';
-							  $dernier_recep_mail=Entree::whereIn('emetteur', $adr)->orderBy('created_at','desc')->first();
-							  if($dernier_recep_mail)
-							  {
-								$to=$dernier_recep_mail->emetteur;
-							  }
-							  else{
-								  
-								   $to=$adr[0];
-								  
-							  }							  
-							  
-							  
-                              self::envoi_mail_v2_prest($swiftTransport,$to,$adr,$sujet,$contenu,$from, $fromname);
+                              self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                               Prestation::where('id', $p->id)->update(['mail_30_env'=>1]);
-                              /* kkk $ccea=self::return_dest_cc($adr);
-                              $ccea = implode(";", $ccea);*/
-                             /* kkk  $toea=self::return_dest_to($adr);*/
-							  $ccea=array_diff($adr,$to);
-							  $ccea = implode(";", $ccea);
-							  //$ccea ='';
-							  $toea=$to;
+                              $ccea=self::return_dest_cc($adr);
+                              $ccea = implode(";", $ccea);
+                              $toea=self::return_dest_to($adr);
                               $presname='';
                               $prenom='';
                               $presname=Prestataire::where('id',$p->prestataire_id)->first();
@@ -2211,31 +2027,11 @@ Many thanks for your collaboration.<br><br>
                                  if($dateSys45 >= $dateCreation && $p->mail_45_env==0)
                                  {
                                    $email_prestataires[]=$adr[0];
-								   
-								    $to='';
-							  $dernier_recep_mail=Entree::whereIn('emetteur', $adr)->orderBy('created_at','desc')->first();
-							  if($dernier_recep_mail)
-							  {
-								$to=$dernier_recep_mail->emetteur;
-							  }
-							  else{
-								  
-								   $to=$adr[0];
-								  
-							  }							  
-							  
-							  
-                              self::envoi_mail_v2_prest($swiftTransport,$to,$adr,$sujet,$contenu,$from, $fromname);
-								   
-                                //self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                               self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                                 Prestation::where('id', $p->id)->update(['mail_45_env'=>1]);
-                                    /*kkk  $ccea=self::return_dest_cc($adr);
+                                    $ccea=self::return_dest_cc($adr);
                                       $ccea = implode(";", $ccea);
-                                      $toea=self::return_dest_to($adr);*/
-									   $ccea=array_diff($adr,$to);
-							          $ccea = implode(";", $ccea);
-									  // $ccea = '';
-                                       $toea=$to;
+                                      $toea=self::return_dest_to($adr);
                                       $presname='';
                                       if($presname=Prestataire::where('id',$p->prestataire_id)->first())
                                       {
@@ -2408,15 +2204,14 @@ Many thanks for your collaboration.<br><br>
      // $dtc30=(new \DateTime())->modify('-30 days')->format($format);
 
                   $email_prestataires[]=$adr;
-                    self::envoi_mail_v2($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                    self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                     Prestation::where('id', $p->id)->update(['mail_60_env'=>1]);
                     //adresse financier
                     //$adr= fianancier
-                              /* kkk $ccea=self::return_dest_cc($adr);
+                              $ccea=self::return_dest_cc($adr);
                               $ccea = implode(";", $ccea);
-                              $toea=self::return_dest_to($adr);*/
-                             $toea=$adr;
-							 $ccea ='';
+                              $toea=self::return_dest_to($adr);
+                             
 
                               $emaiauto=new EmailAuto ([ 
                              'dossierid'=>$p->dossier_id,
@@ -2427,7 +2222,7 @@ Many thanks for your collaboration.<br><br>
                              'cc'=>$ccea,
                              'sujet'=>$sujet, 
                              'contenutxt' =>$contenu,
-                             'type'=>'Alerte financier facture prestataire'                    
+                             'type'=>'Alerte_financier_facture_prestataire'                    
 
                              ]);
 
@@ -2460,16 +2255,14 @@ Many thanks for your collaboration.<br><br>
                               (Signé): Mail généré automatiquement";
 
                                $email_prestataires[]=$adr;
-                                self::envoi_mail_v2($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                                self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                                  Prestation::where('id', $p->id)->update(['mail_60_env'=>1]);
                                //adresse financier
                               //$adr= fianancier
-                           /*   $ccea=self::return_dest_cc($adr);
+                              $ccea=self::return_dest_cc($adr);
                               $ccea = implode(";", $ccea);
-                              $toea=self::return_dest_to($adr);*/
+                              $toea=self::return_dest_to($adr);
                              
-							  $ccea='';
-							  $toea=$adr;
 
                               $emaiauto=new EmailAuto ([ 
                              'dossierid'=>$p->dossier_id,
@@ -2480,7 +2273,7 @@ Many thanks for your collaboration.<br><br>
                              'cc'=>$ccea,
                              'sujet'=>$sujet, 
                              'contenutxt' =>$contenu,
-                             'type'=>'Alerte financier facture prestataire'                    
+                             'type'=>'Alerte_financier_facture_prestataire'                    
 
                              ]);
 
@@ -2504,10 +2297,6 @@ Many thanks for your collaboration.<br><br>
                 }
 
               }
-			  
-			  $nb_mail_prest++;
-			  
-	         } // fin if ($nb_mail_prest<=10)
 
 //=======================================================================================================
          
@@ -2519,7 +2308,6 @@ Many thanks for your collaboration.<br><br>
     if($factures && $factures->count()>0 )
         {
       //dd($factures);
-	  $nb_mail_client=0;
       foreach ($factures as $f ) 
       {
        
@@ -2528,8 +2316,6 @@ Many thanks for your collaboration.<br><br>
                 
             if($f->regle==0)// facture non réglée
             {
-				if($nb_mail_client<=7)
-				{
                
                 //$format = "Y/m/d"; 
                 if($f->date_email)
@@ -2701,7 +2487,7 @@ if(($dateSys40>= $dateEnvoi ||  $dateSys55>=  $dateEnvoi) &&  $dateSys70<  $date
                             {
                             $sujet = 'Rappel facture client';
                              /*$contenu = "Bonjour ,<br>
-                            Pour le dossier ".$dossier->reference_medic."(dont l'assuré : ".$prenom_ass." ".$nom_ass.", réference ".$f->reference." et la date ".$dateEmail."), votre facture n'est pas encore réglée<br>
+                            Pour le dossier ".$dossier->reference_medic."(dont l'assuré : ".$prenom_ass." ".$nom_ass.", réfernce ".$f->reference." et la date ".$dateEmail."), votre facture n'est pas encore réglée<br>
                              (Signé): Mail généré automatiquement";
                             $contenu=$contenu.'<br><br>Cordialement <br>'.$signatureFinances.'<br><br><hr style="float:left;"><br><br>';*/
 
@@ -2714,8 +2500,7 @@ Avec nos remerciements pour votre collaboration.<br><br>
                             $contenu=$contenu.'<br><br>Cordialement <br>'.$signature.'<br><br><hr style="float:left;"><br><br>';
 
                             $email_client[]=$adr[0];
-                           //self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-						   self::envoi_mail_v2($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                           self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                             Facture::where('id', $f->id)->update(['mail_40_env'=>1]);
                             //dd('ok envoi au gestionnaire client');
                             }
@@ -2728,7 +2513,7 @@ Avec nos remerciements pour votre collaboration.<br><br>
                                $contenu=$contenu.'<br><br>cordially <br>'.$signatureFinances.'<br><br><hr style="float:left;"><br><br>';*/
 
                             $contenu = "Hello from the accountability department of ".$entete.",<br><br>
-We sent you on the date of ". $dateEmail."  as part of the file under your reference ".$doss_ref_cus." (Our ref:".$doss_ref." - insured: ". $prenom_ass." ".$nom_ass.") our invoice number ".$f->reference." with the amount of ".$f->montant." ".$f->devise."<br><br>.
+We sent you on the date of". $dateEmail."  as part of the file under your reference ".$doss_ref_cus." (Our ref:".$doss_ref." - insured: ". $prenom_ass." ".$nom_ass.") our invoice number ".$f->reference." with the amount of ".$f->montant." ".$f->devise."<br><br>.
 However, until today, we did not receive any payment for this invoice that was sent forty days ago. If u did not proceed for the payment yet, we would be grateful if you could do it as soon as possible and let us know. In case that you have already done the payment in the meantime and we did not receive it yet, please send us the details and do not take note of this email.<br><br>
 Many thanks for your collaboration<br><br>
                               (Signed): This is an automatically generated email by the management system of Najda Assistance. ";
@@ -2741,11 +2526,9 @@ Many thanks for your collaboration<br><br>
             
                                 }
 
-                                  /* kkk    $ccea=self::return_dest_cc($adr);
+                                      $ccea=self::return_dest_cc($adr);
                                       $ccea = implode(";", $ccea);
-                                      $toea=self::return_dest_to($adr);*/
-									  $toea=$adr;
-									  $ccea = '';
+                                      $toea=self::return_dest_to($adr);
                                    
                                       $emaiauto=new EmailAuto ([ 
                                      'dossierid'=>$dossier->id,
@@ -2767,21 +2550,7 @@ Many thanks for your collaboration<br><br>
                        {
 
                         $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->pluck('champ')->toArray();
-                              
-                              $to='';
-							  $dernier_recep_mail=Entree::whereIn('emetteur', $arrayeml)->orderBy('created_at','desc')->first();
-							  if($dernier_recep_mail)
-							  {
-								$to=$dernier_recep_mail->emetteur;
-							  }
-							  else{
-								  
-								   $to=$arrayeml[0];
-								  
-							  }				
-
-
-							 /* kkk $arrayemails=array();
+                                 $arrayemails=array();
                                 $arraykbs=array();
                                 if(count($arrayeml)>0)
                                 {
@@ -2793,11 +2562,11 @@ Many thanks for your collaboration<br><br>
                                   }
                                     
                                 }
-                              
+                                  //$adr=$arraykbs->latest()->first();
                                 usort($arraykbs, function($a, $b) {
                                   return $a['id'] <=> $b['id'];
                                  });
-                          
+                               //dd($arraykbs);
                                 $adresseStock='';
                                 if($arraykbs && count($arraykbs)>0)
                                 {
@@ -2806,10 +2575,7 @@ Many thanks for your collaboration<br><br>
                                $destinataires = str_replace(array( '(', ')' ), '', $destinataires);
                                $destinataires = str_replace(' ', '', $destinataires);
                                $dests = explode(";", $destinataires); 
-                               $adr=$dests;*/
-							   
-                           if($to && stripos($to, '@') !== FALSE)
-                             {
+                               $adr=$dests;
 
                                if($clilang=="Fr")
                             {
@@ -2828,8 +2594,7 @@ Avec nos remerciements pour votre collaboration.<br><br>
                             $contenu=$contenu.'<br><br>Cordialement <br>'.$signature.'<br><br><hr style="float:left;"><br><br>';
 
                             $email_client[]=$adr[0];
-                          // self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-						    self::envoi_mail_v2($swiftTransport,$to,$sujet,$contenu,$from, $fromname);
+                           self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                             Facture::where('id', $f->id)->update(['mail_40_env'=>1]);
                             //dd('ok envoi au gestionnaire client');
                             }
@@ -2842,7 +2607,7 @@ Avec nos remerciements pour votre collaboration.<br><br>
                                $contenu=$contenu.'<br><br>cordially <br>'.$signatureFinances.'<br><br><hr style="float:left;"><br><br>';*/
 
                             $contenu = "Hello from the accountability department of ".$entete.",<br><br>
-We sent you on the date of ". $dateEmail."  as part of the file under your reference ".$doss_ref_cus." (Our ref:".$doss_ref." - insured: ". $prenom_ass." ".$nom_ass.") our invoice number ".$f->reference." with the amount of ".$f->montant." ".$f->devise."<br><br>.
+We sent you on the date of". $dateEmail."  as part of the file under your reference ".$doss_ref_cus." (Our ref:".$doss_ref." - insured: ". $prenom_ass." ".$nom_ass.") our invoice number ".$f->reference." with the amount of ".$f->montant." ".$f->devise."<br><br>.
 However, until today, we did not receive any payment for this invoice that was sent forty days ago. If u did not proceed for the payment yet, we would be grateful if you could do it as soon as possible and let us know. In case that you have already done the payment in the meantime and we did not receive it yet, please send us the details and do not take note of this email.<br><br>
 Many thanks for your collaboration<br><br>
                               (Signed): This is an automatically generated email by the management system of Najda Assistance. ";
@@ -2850,17 +2615,14 @@ Many thanks for your collaboration<br><br>
 
 
                                  $email_client[]=$adr[0];
-                                // self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-								self::envoi_mail_v2($swiftTransport,$to,$sujet,$contenu,$from, $fromname);
+                                 self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                                   Facture::where('id', $f->id)->update(['mail_40_env'=>1]);
             
                                 }
 
-                                     /* kkk $ccea=self::return_dest_cc($adr);
+                                      $ccea=self::return_dest_cc($adr);
                                       $ccea = implode(";", $ccea);
-                                      $toea=self::return_dest_to($adr);*/
-									  $ccea ='';
-									  $toea=$to;
+                                      $toea=self::return_dest_to($adr);
                                    
                                       $emaiauto=new EmailAuto ([ 
                                      'dossierid'=>$dossier->id,
@@ -2891,10 +2653,8 @@ Many thanks for your collaboration<br><br>
                       if($f->mail_55_env==0 && $dateSys55 >=  $dateEnvoi)
                         {
                          // dd("55");
-                            if($adr && count($adr)>0)
+                           if($adr && count($adr)>0)
                              {
-						 
-						 
                                 if($clilang=="Fr")
                                   {
 
@@ -2912,8 +2672,7 @@ Avec nos remerciements pour votre collaboration.<br><br> (Signé): Ceci est un e
 
                                   $contenu=$contenu.'<br><br>Cordialement <br>'.$signature.'<br><br><hr style="float:left;"><br><br>';
                                   $email_client[]=$adr[0];
-                                 //self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-								  self::envoi_mail_v2($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                                 self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                                   Facture::where('id', $f->id)->update(['mail_55_env'=>1]);
                                   //dd('ok envoi au gestionnaire client');
                                   }
@@ -2933,18 +2692,14 @@ Many thanks for your collaboration.<br><br>
  ";
                                      $contenu=$contenu.'<br><br>cordially <br>'.$signature.'<br><br><hr style="float:left;"><br><br>';
                                        $email_client[]=$adr[0];
-                                    //   self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-									 self::envoi_mail_v2($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                                       self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                                         Facture::where('id', $f->id)->update(['mail_55_env'=>1]);
                   
                                       }
 
-                                           /* $ccea=self::return_dest_cc($adr);
+                                            $ccea=self::return_dest_cc($adr);
                                             $ccea = implode(";", $ccea);
-                                            $toea=self::return_dest_to($adr);*/
-											
-											 $ccea ='';
-											 $toea=$adr;
+                                            $toea=self::return_dest_to($adr);
                                          
                                             $emaiauto=new EmailAuto ([ 
                                            'dossierid'=>$dossier->id,
@@ -2964,30 +2719,10 @@ Many thanks for your collaboration.<br><br>
                              }
                              else // sinon si mail gestion n'existe pas denière adresse envoyé
                              {
-								 
-								 
 
 
                                $arrayeml=Adresse::where('parent', $dossier->customer_id)->where('nature','email')->pluck('champ')->toArray();
-                                
-                               
-                                $to='';
-							  $dernier_recep_mail=Entree::whereIn('emetteur', $arrayeml)->orderBy('created_at','desc')->first();
-							  if($dernier_recep_mail)
-							  {
-								$to=$dernier_recep_mail->emetteur;
-							  }
-							  else{
-								  
-								   $to=$arrayeml[0];
-								  
-							  }		
-
-
-
-
-
-								/*$arrayemails=array();
+                                 $arrayemails=array();
                                 $arraykbs=array();
                                 if(count($arrayeml)>0)
                                 {
@@ -2999,11 +2734,11 @@ Many thanks for your collaboration.<br><br>
                                   }
                                     
                                 }
-                               
+                                  //$adr=$arraykbs->latest()->first();
                                 usort($arraykbs, function($a, $b) {
                                   return $a['id'] <=> $b['id'];
                                  });
-                        
+                               //dd($arraykbs);
                                 $adresseStock='';
                                 if($arraykbs && count($arraykbs)>0)
                                 {
@@ -3012,10 +2747,7 @@ Many thanks for your collaboration.<br><br>
                                $destinataires = str_replace(array( '(', ')' ), '', $destinataires);
                                $destinataires = str_replace(' ', '', $destinataires);
                                $dests = explode(";", $destinataires); 
-                               $adr=$dests;*/
-							   
-							  if($to && stripos($to, '@') !== FALSE)
-                             {
+                               $adr=$dests;
 
                                if($clilang=="Fr")
                             {
@@ -3034,8 +2766,7 @@ Avec nos remerciements pour votre collaboration.<br><br>
                             $contenu=$contenu.'<br><br>Cordialement <br>'.$signature.'<br><br><hr style="float:left;"><br><br>';
 
                             $email_client[]=$adr[0];
-                            //self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-							self::envoi_mail_v2($swiftTransport,$to,$sujet,$contenu,$from, $fromname);
+                           self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                             Facture::where('id', $f->id)->update(['mail_40_env'=>1]);
                             //dd('ok envoi au gestionnaire client');
                             }
@@ -3056,18 +2787,14 @@ Many thanks for your collaboration<br><br>
 
 
                                  $email_client[]=$adr[0];
-                                // self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-								self::envoi_mail_v2($swiftTransport,$to,$sujet,$contenu,$from, $fromname);
+                                 self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                                   Facture::where('id', $f->id)->update(['mail_40_env'=>1]);
             
                                 }
 
-                                    /*kkk   $ccea=self::return_dest_cc($adr);
+                                      $ccea=self::return_dest_cc($adr);
                                       $ccea = implode(";", $ccea);
-                                      $toea=self::return_dest_to($adr);*/
-									  
-									  $ccea = '';
-                                      $toea=$to;
+                                      $toea=self::return_dest_to($adr);
                                    
                                       $emaiauto=new EmailAuto ([ 
                                      'dossierid'=>$dossier->id,
@@ -3131,16 +2858,12 @@ Many thanks for your collaboration<br><br>
                      //$date_rapp2= \DateTime::createFromFormat($format, $date_rapp);
                 // $dtc30=(new \DateTime())->modify('-30 days')->format($format);
                        $email_client[]=$adr;
-                      //  self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-					    self::envoi_mail_v2($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                        self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                          Facture::where('id', $f->id)->update(['mail_70_env'=>1]);
 
-                       /* kkk  $ccea=self::return_dest_cc($adr);
+                         $ccea=self::return_dest_cc($adr);
                               $ccea = implode(";", $ccea);
-                              $toea=self::return_dest_to($adr);  */
-							  
-							  $ccea = '';
-                              $toea=$adr;
+                              $toea=self::return_dest_to($adr);
                              
 
                               $emaiauto=new EmailAuto ([ 
@@ -3152,7 +2875,7 @@ Many thanks for your collaboration<br><br>
                              'cc'=>$ccea,
                              'sujet'=>$sujet, 
                              'contenutxt' =>$contenu,
-                             'type'=>'Alerte financier facture client'                    
+                             'type'=>'Alerte_financier_facture_client'                    
 
                              ]);
 
@@ -3187,17 +2910,12 @@ Many thanks for your collaboration<br><br>
 
 
                                $email_client[]=$adr;
-                        /* self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);*/						
-						 self::envoi_mail_v2($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
-						 
+                        self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
                          Facture::where('id', $f->id)->update(['mail_70_env'=>1]);
 
-                         /* kkk $ccea=self::return_dest_cc($adr);
+                         $ccea=self::return_dest_cc($adr);
                               $ccea = implode(";", $ccea);
-                              $toea=self::return_dest_to($adr); */
-							  
-							  $ccea ='';
-                              $toea=$adr;
+                              $toea=self::return_dest_to($adr);
                              
 
                               $emaiauto=new EmailAuto ([ 
@@ -3209,7 +2927,7 @@ Many thanks for your collaboration<br><br>
                              'cc'=>$ccea,
                              'sujet'=>$sujet, 
                              'contenutxt' =>$contenu,
-                             'type'=>'Alerte financier facture client'                    
+                             'type'=>'Alerte_financier_facture_client'                    
 
                              ]);
 
@@ -3237,9 +2955,7 @@ Many thanks for your collaboration<br><br>
 
               }                 
 
-               $nb_mail_client++;
-			   
-			}
+              
 
 ///////------------------------------------------------------------------------------------------------
             
@@ -3252,8 +2968,9 @@ Many thanks for your collaboration<br><br>
 
    } // fin if  $factures
       
-     // dd('fin facture 3');
+
     }//fin fonction
 
 
 } // fin controlleur
+

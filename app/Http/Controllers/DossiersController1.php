@@ -35,16 +35,13 @@ use App\OMAmbulance;
 use App\OMRemorquage;
 use App\OMMedicInternational;
 use App\Attachement;
-use App\Tag;
-use App\Appel;
 
 use WordTemplate;
 use Mail;
 use App\Notification;
 use App\Notif ;
-use App\Historique ;
+
 use Swift_Mailer;
-use App\DossierImmobile;
 
 ini_set('memory_limit','1024M');
 ini_set('upload_max_filesize','50M');
@@ -155,9 +152,7 @@ class DossiersController extends Controller
                  $attachement->save();                                     
 
 
-                return  'ok';  
-
- 			
+                return  'ok';         
     
     }
 
@@ -216,12 +211,7 @@ class DossiersController extends Controller
     public function create($identree)
     {
         $entree  = Entree::find($identree);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
+
 
       //  $cldocs = DB::table('clients_docs')->select('client', 'doc')->get();
 
@@ -256,7 +246,7 @@ $villes= DB::table('prestataires')
 
                 ->get();
 
-        return view('dossiers.create',['identree'=>$identree,'entree'=>$entree ,'clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages, 'villes'=>$villes] );
+        return view('dossiers.create',['identree'=>$identree,'entree'=>$entree ,'clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
 
 
@@ -267,12 +257,6 @@ $villes= DB::table('prestataires')
 
             $clients =  DB::table('clients')
             ->get();
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
 
         $hopitaux =  DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',8 )
@@ -292,7 +276,7 @@ $villes= DB::table('prestataires')
 
             ->get();
 
-        return view('dossiers.add',['clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages, 'villes'=>$villes] );
+        return view('dossiers.add',['clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
 
 
@@ -805,161 +789,11 @@ $villes= DB::table('prestataires')
 
         if ($dossier->save()) {
             $iddoss = $dossier->id;
-if($request->get('idpresthos')!==null)
-{ 
-$prestataire=$request->get('idpresthos');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestmed')!==null )
-{ 
-$prestataire=$request->get('idprestmed');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestemp')!==null )
-{ 
-$prestataire=$request->get('idprestemp');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestemp2')!==null )
-{ 
-$prestataire=$request->get('idprestemp2');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestemp3')!==null )
-{ 
-$prestataire=$request->get('idprestemp3');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idpresthotel')!==null )
-{ 
-$prestataire=$request->get('idpresthotel');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
 
 
             $nomuser = $user->name . ' ' . $user->lastname;
- 		
-$desc='Ajout de dossier: ' . $reference_medic;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-$hist->save();
+            Log::info('[Agent: ' . $nomuser . '] Ajout de dossier: ' . $reference_medic);
+
             // dispatch Email au dossier
            $entreeid= $request->get('entree');
            if($entreeid >0)
@@ -1096,7 +930,8 @@ $hist->save();
         { $iddoss=$dossier->id;
 
             $nomuser=$user->name.' '.$user->lastname;
- 
+            Log::info('[Agent: '.$nomuser.'] Ajout de dossier: '.$reference_medic);
+
             $identree = $request->get('entree');
         //    if($identree!=''){
           //  $entree  = Entree::find($identree);
@@ -1172,8 +1007,8 @@ $hist->save();
 
         $cci=array();
        // array_push($cci,'medic.multiservices@topnet.tn' );///
-       // array_push($cci,'medic.multiservices@topnet.tn' );///
-array_push($cci,'nejib.karoui18@gmail.com' );
+        array_push($cci,'medic.multiservices@topnet.tn' );///
+
         $parametres =  DB::table('parametres')
             ->where('id','=', 1 )->first();
 
@@ -1244,7 +1079,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('assistance@medicmultiservices.com');
             $swiftTransport->setPassword($pass_MEDIC);
-            $fromname="Medic' Multiservices";
+            $fromname="Medic International";
             $signatureentite= $parametres->signature3 ;
 
         }
@@ -1255,7 +1090,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
             $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
             $swiftTransport->setPassword($pass_TM);
-            $fromname="Transport Medic";
+            $fromname="Transport MEDIC";
             $signatureentite= $parametres->signature4 ;
 
         }
@@ -1275,7 +1110,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('operations@medicinternational.tn');
             $swiftTransport->setPassword($pass_MI);
-            $fromname="Medic International";
+            $fromname="Medic' Multiservices";
             $signatureentite= $parametres->signature6 ;
 
         }
@@ -1364,14 +1199,8 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $files=null;$attachs=null;
             app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu,$files,$attachs) ;
 
-			$desc='Envoi Accusé N Aff , Dossier: ' . $refdossier;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-		$hist->save();
- 
+            Log::info('Envoi Accusé N Aff par : ' . $nomuser . ' Dossier: ' . $refdossier);
+
         } catch (Exception $ex) {
             // Debug via $ex->getMessage();
             //      echo '<script>alert("Erreur !") </script>' ;
@@ -1521,7 +1350,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             'util_affecteur'=>$iduser,
             'util_affecte'=>$agent,
             'statut'=>"nouveau",
-            'manuelauto'=>5,
+
             'id_dossier'=>$id,
             'date_affectation'=>$dtc,
         ]);
@@ -1535,15 +1364,8 @@ array_push($cci,'nejib.karoui18@gmail.com' );
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
-       
-	   $desc='Affectation de dossier :'.$ref.' à: '.$nomagent ;
-	   	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-$hist->save();
-          return back();
+        Log::info('[Agent: '.$nomuser.'] - Affectation de dossier :'.$ref.' à: '.$nomagent);
+         return back();
 
     }
 
@@ -1575,7 +1397,7 @@ $hist->save();
                     'util_affecteur'=>$iduser,
                     'util_affecte'=>$agent,
                     'statut'=>"nouveau",
-                     'manuelauto'=>5,
+
                     'id_dossier'=>$doss,
                     'date_affectation'=>$dtc,
                 ]);
@@ -1585,15 +1407,7 @@ $hist->save();
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
                 $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
-               
- 			   
-			   $desc='Affectation de dossier :'.$ref.' à: '.$nomagent;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-		$hist->save();	   
+                Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
             }   //foreach
         }
         return 'true';
@@ -1650,12 +1464,6 @@ $hist->save();
             $prestataires= DB::table('prestataires')
                 ->orderBy('name', 'asc')
                 ->get();
- $villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
       //  });
 
         $gouvernorats = DB::table('cities')
@@ -1663,14 +1471,7 @@ $hist->save();
 
             ->get();
 
- $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
         $dossier = Dossier::find($id);
 
         $cl=$this->ChampById('customer_id',$id);
@@ -1706,18 +1507,18 @@ $hist->save();
 
         $entrees1 =   Entree::where('dossier', $ref)
             ->where('destinataire','<>','finances@najda-assistance.com')
-            ->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
+            ->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
         $envoyes1 =   Envoye::where('dossier', $ref)
             ->where('emetteur','<>','finances@najda-assistance.com')
-            ->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
+            ->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
         ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
-          
+            ->where('parenttype','dossier')
             ->get();
 
         $phonesCl =   Adresse::where('nature', 'tel')
@@ -1773,14 +1574,13 @@ $hist->save();
             ->where('boite','<>',10)  //boite n'est pas finances
             ->whereIn('entree_id',$identr )
             ->orWhereIn('envoye_id',$idenv )
-            ->orWhere('dossier','=',$id )->where('envoye_id',"=",null)->where('entree_id',"=",null)
+            ->orWhere('dossier','=',$id )
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
-       $documents = Document::where(['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
-     
+        $documents = Document::where(['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
+$ommi = OMMedicInternational::where(['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
 
-   $ommi= OMMedicInternational::where (['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
         $dossiers = $this->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
@@ -1799,13 +1599,13 @@ $hist->save();
             ->whereIn('id', $specialitesIds)
             ->get();
 */
-         $tagdossier = $this->DossierTags($id,$ref);
          $specialites =DB::table('specialites')
              ->orderBy('nom', 'asc')
+
              ->get();
 
 
-        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'villes'=>$villes,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents ,'ommi'=>$ommi,'ftags'=>$tagdossier,'prestataires1'=>$prestataires1,], compact('dossier'));
+        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents,  'ommi'=>$ommi], compact('dossier'));
 
 
 
@@ -1831,12 +1631,7 @@ $hist->save();
     {
 
         $this->update_missions($id);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
+
 
         $relations1 = DB::table('dossiers_docs')->select('dossier', 'doc')
             ->where('dossier',$id)
@@ -1984,15 +1779,8 @@ $villes= DB::table('prestataires')
 
         $relations2 = DB::table('clients_docs')->select('client', 'doc')
             ->where('client',$id)->get();
- $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
-        return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'villes'=>$villes,'Missions'=>$Missions,'prestataires1'=>$prestataires1], compact('dossier'));
+        return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'Missions'=>$Missions], compact('dossier'));
 
 
     }
@@ -2009,12 +1797,7 @@ $villes= DB::table('prestataires')
 
         $typesMissions =  DB::table('type_mission')
             ->get();
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
+
         $Missions=Dossier::find($id)->activeMissions;
 
         $dossier = Dossier::find($id);
@@ -2147,16 +1930,8 @@ $villes= DB::table('prestataires')
        //     ->where('client',$id)->get();
         $entree=null;
         if($dossier->entree >0 ) {$entree  = Entree::find($dossier->entree);}
-$prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
-
-        return view('dossiers.update',['entree'=> $entree,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'villes'=>$villes,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'prestataires1'=>$prestataires1], compact('dossier'));
+        return view('dossiers.update',['entree'=> $entree,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
 
     }
@@ -2404,9 +2179,8 @@ $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id')
         $type = $request->get('type');
         $spec = $request->get('specialite');
         $ville = trim($request->get('ville'));
-//dd($ville);
-        //$postal = $request->get('postal');
-       if (($ville !='toutes') && ($ville !='' ) ){
+        $postal = $request->get('postal');
+        if (intval($postal) >1 || ($ville!='')){
             $liste =Evaluation::where('gouv',$gouv )
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
@@ -2464,23 +2238,16 @@ $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id')
                             </div>
                             <div class="row">
                                 <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> ' . $observ . '</div>
-
-								</div>
+                                <div class="col-md-8"><span style="color:grey" class="fas  fa fa-star"></span>Évaluation : ' . $eval . '</div>
+                            </div>
                         </div>                       
                         <table style="padding-left:5px">';
 
 
           foreach ($tels as $tel) {
-$nom= $tel->nom.' '.$tel->prenom.' ( '.$tel->remarque .' ) ';
-$nom1="'".$nom."'";
-$num=$tel->champ;
               $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $nom. '</td>'; 
-$output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer"  ><i class="fas fa-phone"></i> Appeler </a></td>';
-?>
-
-
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>'; ?>
               <?php if ($tel->typetel == 'Mobile') {
                   $output .= '<td><a onclick="setTel(this);" class="' . $tel->champ . '" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
               } else {
@@ -2517,13 +2284,12 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
         $type = $request->get('type');
         $spec = $request->get('specialite');
         $ville = $request->get('ville');
-       // $postal = $request->get('postal');
-   if (($ville !='toutes') && ($ville !='' ) && ($ville !='Select' ) ){
+        $postal = $request->get('postal');
+        if (intval($postal) >1 || ($ville!='')){
             $liste =Evaluation::where('gouv',$gouv )
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
                 ->where('ville',$ville )
-                ->where('actif','<>',0 )				
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2533,7 +2299,6 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
                 ->where('postal',1 )
-                ->where('actif','<>',0 )				
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2556,10 +2321,9 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
           $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
 
 
-           $tels = Adresse::where('nature', 'telinterv')
-              ->where('parent', $prestataire)
+          $tels =   Adresse::where('nature', 'tel')
+              ->where('parent',$prestataire)
               ->get();
-
 
           $output .= '  <div id="item'.$c . '-m" style="display:none;;padding: 20px 20px 20px 20px; border:3px dotted #4fc1e9">
                                                                                    
@@ -2578,19 +2342,11 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
 
 
           foreach ($tels as $tel) {
-
-$nom= $tel->nom.' '.$tel->prenom.' ( '.$tel->remarque .' ) ';
-$nom1="'".$nom."'";
-$num=$tel->champ;
               $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';
-
-$output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer"  ><i class="fas fa-phone"></i> Appeler </a></td>';
-?>
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';?>
 <?php if($tel->typetel=='Mobile') {
                   $output .= '<td><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
-
                     } else
                       { $output .= '<td></td>';}
 
@@ -2618,14 +2374,7 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
 
     public function searchprest(Request $request)
     {
-$prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $request->get('dossier'))->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
         $datasearch =null;
 
         if($request->get('dossier'))
@@ -2642,22 +2391,22 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
         if($request->get('typeprest'))
         { $typeprest=$request->get('typeprest'); }
         else{ $typeprest='';}
-//dd($request->get('villepr2'));
-        if($request->get('villepr2'))
-        { $ville=$request->get('villepr2'); }
+
+        if($request->get('ville'))
+        { $ville=$request->get('ville'); }
         else{ $ville='';}
 
-        /*if($request->get('postal'))
+        if($request->get('postal'))
         { $postal=$request->get('postal'); }
-        else{ $postal=0;}*/
+        else{ $postal=0;}
 
 
-        //if (intval($postal) >1 || $ville !=''  ){
-	if (($ville !='toutes') && ($ville !='' ) && ($ville !=null) ){
+        if (intval($postal) >1 || $ville !=''  ){
             $datasearch =Evaluation::where('gouv',$gouvernorat )
                 ->where('type_prest',$typeprest )
                 ->where('specialite',$specialite )
                 ->where('ville',$ville )
+                ->where('effectue',1 )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2673,7 +2422,7 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
                 ->get();
         }
 
-//dd($datasearch);
+
         $specialites =DB::table('specialites')
             ->orderBy('nom', 'asc')
             ->get();
@@ -2718,17 +2467,17 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
-        $entrees1 =   Entree::where('dossier', $ref)->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
-        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
         ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
+            ->where('parenttype','dossier')
             ->get();
-
 
         $phonesCl =   Adresse::where('nature', 'tel')
             ->where('parent',$cl)
@@ -2774,10 +2523,9 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
         }
 
         $attachements= DB::table('attachements')
-            ->where('boite','<>',10)  //boite n'est pas finances
             ->whereIn('entree_id',$identr )
             ->orWhereIn('envoye_id',$idenv )
-            ->orWhere('dossier','=',$id )->where('envoye_id',"=",null)->where('entree_id',"=",null)
+            ->orWhere('dossier','=',$id )
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
@@ -2788,16 +2536,11 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
         $dossiers = $this->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
-        $tagdossier = $this->DossierTags($id,$ref);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
-return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'prestataires1'=>$prestataires1,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,
+
+return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,
 'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,
-'attachements'=>$attachements,'villes'=>$villes,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents,'ommi'=>$ommi,'ftags'=>$tagdossier], compact('dossier'));
+'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents,  
+'ommi'=>$ommi], compact('dossier'));
 
 
     }
@@ -2822,12 +2565,9 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             if ($adresse->save())
             {
 
-             if($request->get('update')==='1')
-{
-                return url('/dossiers/update/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
-else
-{
-                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
+                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
             }
 
             else {
@@ -2858,12 +2598,8 @@ else
 
             if ($adresse->save())
             {
-if($request->get('update')==='1')
-{
-                return url('/dossiers/update/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
-else
-{
-                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
+
+                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
                 // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
                 //  return  $iddoss;
             }
@@ -3289,125 +3025,6 @@ else
 
     }
 
-
-
-
-    function RendreEtatDossiersActifsSeance1($deb_seance_11,$fin_seance_11)
-    {
-
-
-        /* rendre les anciens dosiiers actifs inactif*/
-
-          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
-
-          $dossiersactifsparmissions=$this->DossiersActifsSeance1($deb_seance_11,$fin_seance_11);
-          $dossiersactifs =array_unique($dossiersactifsparmissions);
-          //dd($dossiersactifs);
-          foreach ($dossiersdb as $value) {
-
-            if(in_array($value->id, $dossiersactifs))
-            {
-                //echo "je_suis_actif   ";
-
-                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
-
-
-            }
-            else
-            {
-                if($value->current_status=='actif' || $value->current_status=='En cours' )
-                {
-                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
-                   // echo "maj_inactif   ";
-                }
-                else
-                {
-                    //echo $value->current_status.' ';
-                }
-            }
-          }
-
-/* rendre les anciens dosiiers actifs inactif*/
-
-
-    }
-     function RendreEtatDossiersActifsSeance2($deb_seance_22,$fin_seance_22)
-    {
-
-
-        /* rendre les anciens dosiiers actifs inactif*/
-
-          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
-
-          $dossiersactifsparmissions=$this->DossiersActifsSeance2($deb_seance_22,$fin_seance_22);
-          $dossiersactifs =array_unique($dossiersactifsparmissions);
-          //dd($dossiersactifs);
-          foreach ($dossiersdb as $value) {
-
-            if(in_array($value->id, $dossiersactifs))
-            {
-                //echo "je_suis_actif   ";
-
-                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
-
-
-            }
-            else
-            {
-                if($value->current_status=='actif' || $value->current_status=='En cours' )
-                {
-                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
-                   // echo "maj_inactif   ";
-                }
-                else
-                {
-                    //echo $value->current_status.' ';
-                }
-            }
-          }
-
-/* rendre les anciens dosiiers actifs inactif*/
-
-
-    }
-     function RendreEtatDossiersActifsSeance3($deb_seance_33,$fin_seance_33)
-    {
-
-
-        /* rendre les anciens dosiiers actifs inactif*/
-
-          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
-
-          $dossiersactifsparmissions=$this->DossiersActifsSeance3($deb_seance_33,$fin_seance_33);
-          $dossiersactifs =array_unique($dossiersactifsparmissions);
-          //dd($dossiersactifs);
-          foreach ($dossiersdb as $value) {
-
-            if(in_array($value->id, $dossiersactifs))
-            {
-                //echo "je_suis_actif   ";
-
-                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
-
-
-            }
-            else
-            {
-                if($value->current_status=='actif' || $value->current_status=='En cours' )
-                {
-                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
-                   // echo "maj_inactif   ";
-                }
-                else
-                {
-                    //echo $value->current_status.' ';
-                }
-            }
-          }
-
-/* rendre les anciens dosiiers actifs inactif*/
-}
-
     function RendreEtatDossiersImmobiles()
     {
 
@@ -3482,31 +3099,6 @@ else
     {
 
         $this->RendreEtatDossiersActifs();
-        $this->RendreEtatDossiersDormants();
-        $this->RendreEtatDossiersImmobiles();
-
-    }
-
-    function Gerer_etat_dossiersSeance1 ($deb_seance_11,$fin_seance_11)
-    {
-
-        $this->RendreEtatDossiersActifsSeance1($deb_seance_11,$fin_seance_11);
-        $this->RendreEtatDossiersDormants();
-        $this->RendreEtatDossiersImmobiles();
-
-    }
-     function Gerer_etat_dossiersSeance2 ($deb_seance_22,$fin_seance_22)
-    {
-
-        $this->RendreEtatDossiersActifsSeance2($deb_seance_22,$fin_seance_22);
-        $this->RendreEtatDossiersDormants();
-        $this->RendreEtatDossiersImmobiles();
-
-    }
-     function Gerer_etat_dossiersSeance3($deb_seance_33,$fin_seance_33)
-    {
-
-        $this->RendreEtatDossiersActifsSeance3($deb_seance_33,$fin_seance_33);
         $this->RendreEtatDossiersDormants();
         $this->RendreEtatDossiersImmobiles();
 
@@ -3669,17 +3261,9 @@ else
                 ]); 
                 $affechis->save();
 
-                $desc=' Clôture de dossier: ' . $refd .' '.$etat;       
-                $hist = new Historique([
-                      'description' => $desc,
-                    'user' => $nomuser,
-                    'user_id'=>auth::user()->id,
-                ]); 
-                $hist->save();
-
                 // supprimer le id dossier de table dossiers immmobiles
 
-                $dm = DossierImmobile::where('dossier_id',$iddossier)->first();  
+                $dm = App\DossierImmobile::where('dossier_id',$iddossier)->first();  
                 if($dm)
                 {
                     if (! empty($dm)) {
@@ -3687,7 +3271,9 @@ else
                     }
                 }
 
-     
+                Log::info('[Agent: ' . $nomuser . '] Clôture de dossier: ' . $refd .' '.$etat);
+
+
                 }
             }else{
               Dossier::where('id',$iddossier)->update(array('current_status'=>'inactif','affecte'=>0 , 'sub_status'=>'immobile'));
@@ -3713,14 +3299,9 @@ else
 
                 $alerte->save();
 
- 
-    $desc='Re-Ouverture de dossier: ' . $refd;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-$hist->save();
+                Log::info('[Agent: ' . $nomuser . '] Re-Ouverture de dossier: ' . $refd);
+
+
             }
     }
 
@@ -3766,8 +3347,7 @@ $hist->save();
    public function historiqueAffectation ($id)
    {
 
-         $hisaffec=AffectDoss::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
-// $hisaffec1=AffectDoss::where('id_dossier',$id)->where()->orderBy('date_affectation','DESC')->get();
+         $hisaffec=AffectDossHis::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
          //dd($hisaffec);
 
       $output='';
@@ -3849,7 +3429,7 @@ $hist->save();
                          if($user_em && $user_re && $user_re!=$user_em && !stripos($ha->statut,"Cloture") && !stripos($ha->statut,"Ouverture") )
                          {
 
-                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Affectation '. $ha->manuelauto.'du dossier à '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Affectation du dossier à '.$user_re->name.' '.$user_re->lastname.'</span></td>';
                              $operation=false;
 
                          }
@@ -3857,7 +3437,7 @@ $hist->save();
                          if($user_em && $user_re && $user_re==$user_em && !stripos($ha->statut,"Cloture") && !stripos($ha->statut,"Ouverture") )
                          {
 
-                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"> affectation '. $ha->manuelauto.' à l\'utilisateur lui meme  '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Creation et affectation du nouveau dossier à l\'utilisateur lui meme  '.$user_re->name.' '.$user_re->lastname.'</span></td>';
                         $operation=false;
 
 
@@ -3918,1970 +3498,163 @@ $hist->save();
 
    }
 
-      public static function DossierTags($id,$ref)
-    {
-        if (($id != null) || ($ref != null))
-        {       
-                if (($id != null) && ($ref != null))
-                $entreesdossier = Entree::where(["dossier" => $ref, "dossierid" => $id])->get();
-                if ($id == null)
-                $entreesdossier = Entree::where("dossier",$ref)->get();
-                if ($ref == null)
-                $entreesdossier = Entree::where("dossierid",$id)->get();
-
-            $listetags = array();
-
-            foreach ($entreesdossier as $entr) {
-                //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                $coltags = Tag::orderBy('created_at', 'DESC')->get()->where('entree', '=', $entr['id'] )->where('type', '=', 'email')->where('dernier', '=', 1);
-
-                if (!empty($coltags))
-                {
-
-                    foreach ($coltags as $ltag) {
-                        array_push($listetags, $ltag);
-                    }
-                }
-
-              // recuperation liste des attachements de l'entree
-                $colattachs = Attachement::where("parent","=",$entr['id'])->get();
-                if (!empty($colattachs))
-                {
-                    foreach ($colattachs as $lattach) {
-                        $coltagsattach = Tag::orderBy('created_at', 'DESC')->get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('dernier', '=', 1);
-
-                        if (!empty($coltagsattach))
-                        {
-
-                            foreach ($coltagsattach as $ltagatt) {
-                                array_push($listetags, $ltagatt);
-                            }
-                        }
-
-                    }
-                }
-            }
-                
-        }
-
- $columns = array_column($listetags, 'created_at');
-array_multisort($columns, SORT_DESC, $listetags);
-        return $listetags;
-    }
-
- public static function DossiersActifsSeance1($deb_seance_11,$fin_seance_11 )
-    {
-
-        $deb_seance_1=(new \DateTime())->format('Y-m-d '.$deb_seance_11.':00');
-        $fin_seance_1=(new \DateTime())->format('Y-m-d '.$fin_seance_11.':00');
-           // dd('DossiersActifsSeance1') ;
-      
-        $format = "Y-m-d H:i:s";
-        $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
-        $fin_seance_1 = \DateTime::createFromFormat($format, $fin_seance_1);
-        
-       
-        //dd( $fin_seance_3);
-        //dd($deb_seance_1);
-
-        $format = "Y-m-d H:i:s";
-        $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-        $dateSys = \DateTime::createFromFormat($format, $dtc);
-          /*  $datespe = \DateTime::createFromFormat($format,$request->dateSpec);*/
-
-
-         $missions=Mission::get();
-
-      //  $missions= DB::table('missions')
-        //    ->where('statut_courant','active')->get();
-
-        $dossiersactifs=array();
-        $dossiersactifsparmissions=array();
-
-       foreach($missions as $Miss)
-        {
-           // dd($Miss->ActionEC_report_rappel);
-            $ActionEC_report_rappel=$Miss->ActionEC_report_rappel;
-           // dd($ActionEC_report_rappel);
-            if($ActionEC_report_rappel)
-            {
-                foreach($ActionEC_report_rappel as $actrr)
-                {
-
-                    //dd($actrr->statut);
-                    if($actrr->statut=="rappelee")
-                    {
-
-                        $daterappel = \DateTime::createFromFormat($format,$actrr->date_rappel);
-
-                        if($dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $daterappel >= $deb_seance_1 && $daterappel <= $fin_seance_1 )
-                        {
-
-                            $dossiersactifsparmissions[]=$Miss->dossier_id;
-                          // remplir tableau info activation dossier
-
-                        }
-
-                    }
-                    else
-                    {
-
-                         if($actrr->statut=="reportee")                    
-                        {
-                            $datereport = \DateTime::createFromFormat($format,$actrr->date_report);
-
-                             if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $datereport >= $deb_seance_1 && $datereport <= $fin_seance_1 )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-                        }
-                   }
-
-
-                } // fin if parcours des actions d'une seule miss
-            } // fin  if($ActionEC_report_rappel)
-
-            // parcours les dates spécifiques d'activation des actions pour une mission
-           if($Miss->date_spec_affect==1 || $Miss->date_spec_affect2==1 || $Miss->date_spec_affect3==1 )
-           {
-            if($Miss->h_rdv )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_rdv);
-
-               if($dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-
-
-            if($Miss->h_dep_pour_miss)
-            {
-
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_pour_miss);
-              // dd($deb_seance_3);
-             if($dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-
-            if($Miss->h_dep_charge_dest )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_charge_dest);
-
-               if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-            if($Miss->h_arr_prev_dest )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_prev_dest);
-
-             if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-              if($Miss->h_decoll_ou_dep_bat)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_decoll_ou_dep_bat);
-
-                if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-            if($Miss->h_arr_av_ou_bat)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_av_ou_bat);
-
-              if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-              if($Miss->h_retour_base)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_retour_base);
-
-               if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-             if($Miss->h_deb_sejour)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_sejour);
-
-               if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-            if($Miss->h_fin_sejour)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_sejour);
-
-               if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-             if($Miss->h_deb_location_voit)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_location_voit);
-
-                if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-            if($Miss->h_fin_location_voit)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_location_voit);
-
-               if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-      
-            // si la mission est reportée
-           
-           }
-           if($Miss->statut_courant=="reportee")
-           {
-           // dd('mission reportee');
-
-             $date_spe = \DateTime::createFromFormat($format,$Miss->date_deb);
-              if( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 )
-                            {
-
-                              $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-           }
-
-           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee" || $Miss->statut_courant=="delendormie")
-           {
-             $dossiersactifsparmissions[]=$Miss->dossier_id;
-
-           }
-
-
-            
-        }
-
-        $dossiersactifs =array_unique($dossiersactifsparmissions);
-
-        return($dossiersactifs);
-
-  
-
-
-    }
-
-
-     public static function DossiersActifsSeance2($deb_seance_22,$fin_seance_22 )
-    {
-
-      
-        $deb_seance_2=(new \DateTime())->format('Y-m-d '.$deb_seance_22.':00');
-        $fin_seance_2=(new \DateTime())->format('Y-m-d '.$fin_seance_22.':00');
-
-        $format = "Y-m-d H:i:s";
-               
-        $deb_seance_2 = \DateTime::createFromFormat($format,  $deb_seance_2);
-        $fin_seance_2 = \DateTime::createFromFormat($format, $fin_seance_2);
 
    
-
-
-        //dd( $fin_seance_3);
-        //dd($deb_seance_1);
-
-        $format = "Y-m-d H:i:s";
-        $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-        $dateSys = \DateTime::createFromFormat($format, $dtc);
-          /*  $datespe = \DateTime::createFromFormat($format,$request->dateSpec);*/
-
-
-         $missions=Mission::get();
-
-      //  $missions= DB::table('missions')
-        //    ->where('statut_courant','active')->get();
-
-        $dossiersactifs=array();
-        $dossiersactifsparmissions=array();
-
-       foreach($missions as $Miss)
-        {
-           // dd($Miss->ActionEC_report_rappel);
-            $ActionEC_report_rappel=$Miss->ActionEC_report_rappel;
-           // dd($ActionEC_report_rappel);
-            if($ActionEC_report_rappel)
-            {
-                foreach($ActionEC_report_rappel as $actrr)
-                {
-
-                    //dd($actrr->statut);
-                    if($actrr->statut=="rappelee")
-                    {
-
-                        $daterappel = \DateTime::createFromFormat($format,$actrr->date_rappel);
-
-                        if( ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $daterappel >= $deb_seance_2 && $daterappel <= $fin_seance_2 )  )
-                        {
-
-                            $dossiersactifsparmissions[]=$Miss->dossier_id;
-                          // remplir tableau info activation dossier
-
-                        }
-
-                    }
-                    else
-                    {
-
-                         if($actrr->statut=="reportee")                    
-                        {
-                            $datereport = \DateTime::createFromFormat($format,$actrr->date_report);
-
-                             if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $datereport >= $deb_seance_2 && $datereport <= $fin_seance_2 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-                        }
-                   }
-
-
-                } // fin if parcours des actions d'une seule miss
-            } // fin  if($ActionEC_report_rappel)
-
-            // parcours les dates spécifiques d'activation des actions pour une mission
-           if($Miss->date_spec_affect==1 || $Miss->date_spec_affect2==1 || $Miss->date_spec_affect3==1 )
-           {
-            if($Miss->h_rdv )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_rdv);
-
-                if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-
-
-            if($Miss->h_dep_pour_miss)
-            {
-
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_pour_miss);
-              // dd($deb_seance_3);
-                 if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-
-            if($Miss->h_dep_charge_dest )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_charge_dest);
-
-                 if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-            if($Miss->h_arr_prev_dest )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_prev_dest);
-
-                 if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-              if($Miss->h_decoll_ou_dep_bat)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_decoll_ou_dep_bat);
-
-                if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-            if($Miss->h_arr_av_ou_bat)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_av_ou_bat);
-
-                 if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-              if($Miss->h_retour_base)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_retour_base);
-
-                 if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-             if($Miss->h_deb_sejour)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_sejour);
-
-                if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-            if($Miss->h_fin_sejour)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_sejour);
-
-               if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-             if($Miss->h_deb_location_voit)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_location_voit);
-
-               if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-            if($Miss->h_fin_location_voit)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_location_voit);
-
-             if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-      
-            // si la mission est reportée
-           
-           }
-           if($Miss->statut_courant=="reportee")
-           {
-           // dd('mission reportee');
-
-             $date_spe = \DateTime::createFromFormat($format,$Miss->date_deb);
-              if(( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) )
-                            {
-
-                              $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-           }
-
-           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee" || $Miss->statut_courant=="delendormie")
-           {
-             $dossiersactifsparmissions[]=$Miss->dossier_id;
-
-           }
-
-            
-        }
-
-        $dossiersactifs =array_unique($dossiersactifsparmissions);
-
-        return($dossiersactifs);
-  
-
-    }
-
-     public static function DossiersActifsSeance3($deb_seance_33,$fin_seance_33 )
-    {
-
-
-        $deb_seance_3=(new \DateTime())->format('Y-m-d '.$deb_seance_33.':00');
-        $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d '.$fin_seance_33.':00');
-      //dd($deb_seance_3);
-       
-      
-        $format = "Y-m-d H:i:s";
-      
-        $deb_seance_3 = \DateTime::createFromFormat($format, $deb_seance_3);
-        $fin_seance_3 = \DateTime::createFromFormat($format, $fin_seance_3);
-
-
-        //dd( $fin_seance_3);
-        //dd($deb_seance_1);
-
-        $format = "Y-m-d H:i:s";
-        $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-        $dateSys = \DateTime::createFromFormat($format, $dtc);
-          /*  $datespe = \DateTime::createFromFormat($format,$request->dateSpec);*/
-
-
-         $missions=Mission::get();
-
-      //  $missions= DB::table('missions')
-        //    ->where('statut_courant','active')->get();
-
-        $dossiersactifs=array();
-        $dossiersactifsparmissions=array();
-
-       foreach($missions as $Miss)
-        {
-           // dd($Miss->ActionEC_report_rappel);
-            $ActionEC_report_rappel=$Miss->ActionEC_report_rappel;
-           // dd($ActionEC_report_rappel);
-            if($ActionEC_report_rappel)
-            {
-                foreach($ActionEC_report_rappel as $actrr)
-                {
-
-                    //dd($actrr->statut);
-                    if($actrr->statut=="rappelee")
-                    {
-
-                        $daterappel = \DateTime::createFromFormat($format,$actrr->date_rappel);
-
-                        if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $daterappel >= $deb_seance_3 && $daterappel <= $fin_seance_3 ) )
-                        {
-
-                            $dossiersactifsparmissions[]=$Miss->dossier_id;
-                          // remplir tableau info activation dossier
-
-                        }
-
-                    }
-                    else
-                    {
-
-                         if($actrr->statut=="reportee")                    
-                        {
-                            $datereport = \DateTime::createFromFormat($format,$actrr->date_report);
-
-                             if(( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $datereport >= $deb_seance_3 && $datereport <= $fin_seance_3 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-                        }
-                   }
-
-
-                } // fin if parcours des actions d'une seule miss
-            } // fin  if($ActionEC_report_rappel)
-
-            // parcours les dates spécifiques d'activation des actions pour une mission
-           if($Miss->date_spec_affect==1 || $Miss->date_spec_affect2==1 || $Miss->date_spec_affect3==1 )
-           {
-            if($Miss->h_rdv )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_rdv);
-
-                if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-
-
-            if($Miss->h_dep_pour_miss)
-            {
-
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_pour_miss);
-              // dd($deb_seance_3);
-                if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-
-            if($Miss->h_dep_charge_dest )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_charge_dest);
-
-               if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-
-                            }
-
-
-            }
-            if($Miss->h_arr_prev_dest )
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_prev_dest);
-
-               if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-              if($Miss->h_decoll_ou_dep_bat)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_decoll_ou_dep_bat);
-
-                if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-            if($Miss->h_arr_av_ou_bat)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_av_ou_bat);
-
-            if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-              if($Miss->h_retour_base)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_retour_base);
-
-              if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-             if($Miss->h_deb_sejour)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_sejour);
-
-               if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-            if($Miss->h_fin_sejour)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_sejour);
-
-              if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-             if($Miss->h_deb_location_voit)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_location_voit);
-
-              if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-            if($Miss->h_fin_location_voit)
-            {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_location_voit);
-
-               if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-            }
-
-      
-            // si la mission est reportée
-           
-           }
-           if($Miss->statut_courant=="reportee")
-           {
-           // dd('mission reportee');
-
-             $date_spe = \DateTime::createFromFormat($format,$Miss->date_deb);
-            if( ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
-                            {
-
-                              $dossiersactifsparmissions[]=$Miss->dossier_id;
-                              // remplir tableau info activation dossier
-                            }
-
-           }
-
-           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee" || $Miss->statut_courant=="delendormie")
-           {
-             $dossiersactifsparmissions[]=$Miss->dossier_id;
-
-           }
-
-
-            
-        }
-
-        $dossiersactifs =array_unique($dossiersactifsparmissions);
-
-        return($dossiersactifs);
-
-  
-
-
-    }
-
-    public static function set_calcul_doss_seance1($val)
-    {
-        Parametre::where('id',1)->update(array('calcul_doss_sea1' => $val));
-    }
    
-    public static function set_calcul_doss_seance2($val)
-    {
-        Parametre::where('id',1)->update(array('calcul_doss_sea2' => $val));
-    }
    
-     public static function set_calcul_doss_seance3($val)
-    {
-        Parametre::where('id',1)->update(array('calcul_doss_sea3' => $val));
-    }
-     public static function set_date_seance1($val)
-    {
-        Parametre::where('id',1)->update(array('date_seance1' => $val));
-    }
-     public static function set_date_seance2($val)
-    {
-        Parametre::where('id',1)->update(array('date_seance2' => $val));
-    }
-     public static function set_date_seance3($val)
-    {
-        Parametre::where('id',1)->update(array('date_seance3' => $val));
-    }
-
-     public static function get_calcul_doss_seance1()
-    {
-       // Parametre::where('id',1)->update(array('calcul_doss_sea1' => $val));
-        return Parametre::first()->calcul_doss_sea1;
-    }
    
-    public static function get_calcul_doss_seance2()
-    {
-        //Parametre::where('id',1)->update(array('calcul_doss_sea2' => $val));
-        return Parametre::first()->calcul_doss_sea2;
-    }
-   
-     public static function get_calcul_doss_seance3()
-    {
-        //Parametre::where('id',1)->update(array('calcul_doss_sea3' => $val));
-        return Parametre::first()->calcul_doss_sea3;
-    }
-     public static function get_date_seance1()
-    {
-       // Parametre::where('id',1)->update(array('date_seances' => $val));
-        return Parametre::first()->date_seance1;
-    }
-     public static function get_date_seance2()
-    {
-       // Parametre::where('id',1)->update(array('date_seances' => $val));
-        return Parametre::first()->date_seance2;
-    }
-     public static function get_date_seance3()
-    {
-       // Parametre::where('id',1)->update(array('date_seances' => $val));
-        return Parametre::first()->date_seance3;
-    }
-	
-	
-	
-	     public  function fermeture ($id)
+   public  function details ($id)
    {
-       
-     return view('dossiers.fermeture', ['id' => $id]);
-
-   } 
-
-   
-        public  function details2(Request $request)
-    {
-		 $id = $request->get('id');
-		 $debut = $request->get('debut');
-		 $hdebut = $request->get('hdebut');
-		 $fin = $request->get('fin');
-		 $hfin = $request->get('hfin');
-
-       
-     return view('dossiers.details2', ['id' => $id,'debut'=>$debut,'fin'=>$fin,'hdebut'=>$hdebut,'hfin'=>$hfin]);
-
-   } 
-   
-           public  function details ($id)
-   {
-       
-     return view('dossiers.details', ['id' => $id]);
+	   
+	 return view('dossiers.details', ['id' => $id]);
 
    }
    
-      public static function users_work_on_folder( $iddoss)
+     public  function fermeture ($id)
    {
-    $usersFolder = array();
-    
-    $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->where('util_affecte','!=',0)->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-    $usersFolders=\App\AffectDoss::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->where('util_affecte','!=',0)->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-         //dd($hisaffec);
-    //$countU=count($usersFolder);
-      $usersFolder = array_merge($usersFolderh,$usersFolders);
+	   
+	 return view('dossiers.fermeture', ['id' => $id]);
 
-            
+   } 
+    
+   // Liste des utilisateurs qui ont travaillé sur un dossier
+   
+   public static function users_work_on_folder( $iddoss)
+   {
+	$usersFolder = array();
+	
+    $usersFolder=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+         //dd($hisaffec);
+	//$countU=count($usersFolder);
      $usersFolder=array_unique($usersFolder);
      $usersFolder=array_values($usersFolder);
  
-    return $usersFolder ;
+	return $usersFolder ;
    }
 
-      // nombre de factures
+   
+   
+   
+   // nombre de factures
       public  static function countFactures ($id)
-      {
-         $count= \App\Facture::where('iddossier',$id)->count();
-          return $count;
-      }
+	  {
+		 $count= \App\Facture::where('iddossier',$id)->count();
+		  return $count;
+	  }
 
    // nombre de prestations
        public  static function countPrestations ($id)
-      {
-         $count= \App\Prestation::where('dossier_id',$id)->count();
-          return $count;
-      }
+	  {
+		 $count= \App\Prestation::where('dossier_id',$id)->count();
+		  return $count;
+	  }
    // nombre des emails recus
         public  static function countEmailsDoss ($id)
-      {
-         $count= \App\Entree::where('dossierid',$id)->where('type','email')->count();
-          return $count;
-      }
+	  {
+		 $count= \App\Entree::where('dossierid',$id)->where('type','email')->count();
+		  return $count;
+	  }
    
    // nombre de Fax reçus
            public  static function countFaxs ($id)
-      {
-         $count= \App\Entree::where('dossierid',$id)->where('type','fax')->count();
-          return $count;
-      }
+	  {
+		 $count= \App\Entree::where('dossierid',$id)->where('type','fax')->count();
+		  return $count;
+	  }
    // nombre des sms reçus
            public  static function countSms ($id)
-      {
-         $count= \App\Entree::where('dossierid',$id)->where('type','sms')->count();
-          return $count;
-      }
+	  {
+		 $count= \App\Entree::where('dossierid',$id)->where('type','sms')->count();
+		  return $count;
+	  }
    // nombre des emails envoyés
            public  static function countEmailsSent ($id)
-      {
-         $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
-         $count= \App\Envoye::where('dossier',$ref)->where('type','email')->count();
-          return $count;
-      }
+	  {
+		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','email')->count();
+		  return $count;
+	  }
    // nombre des emails envoyés par un agent
        public  static function countEmailsSentUser ($id,$user)
-      { 
-               $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
-         $count= \App\Envoye::where('dossier',$ref)->where('type','email')->where('par',$user)->count();
-          return $count;
-      }
+	  { 
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','email')->where('par',$user)->count();
+		  return $count;
+	  }
    // nombre des fax envoyés
           public  static function countFaxsSent ($id)
-      {
-               $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
-         $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->count();
-          return $count;
-      }
+	  {
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->count();
+		  return $count;
+	  }
    // nombre des fax envoyés par un agent
       public  static function countFaxsSentUser ($id,$user)
-      {
-               $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
-         $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->where('par',$user)->count();
-          return $count;
-      }
+	  {
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->where('par',$user)->count();
+		  return $count;
+	  }
    // nombre des sms envoyés
          public  static function countSmsSent ($id)
-      {
-               $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;      
-         $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->count();
-          return $count;
-      }
+	  {
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;	  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->count();
+		  return $count;
+	  }
    // nombre des sms envoyés par un agent
       public static  function countSmsSentUser ($id,$user)
-      {
-            $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
-         $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->where('par',$user)->count();
-          return $count;
-      }
+	  {
+	  	  $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->where('par',$user)->count();
+		  return $count;
+	  }
    
         // nombre des  comptes rendus
       public static  function countRendus  ($id)
-      {
-          $count= \App\Entree::where('dossierid',$id)->where('type','tel')->count();
-          return $count;
-      } 
-      
+	  {
+ 		 $count= \App\Entree::where('dossierid',$id)->where('type','tel')->count();
+		  return $count;
+	  } 
+	  
      // nombre des compte rendu   par un agent
       public static  function countRendusUser ($id,$user)
-      {
-          $count= \App\Entree::where('dossierid',$id)->where('type','tel')->where('par',$user)->count();
-          return $count;
-      } 
+	  {
+ 		 $count= \App\Entree::where('dossierid',$id)->where('type','tel')->where('par',$user)->count();
+		  return $count;
+	  } 
    
         // nombre des missions en cours
       public static  function countMissions  ($id)
-      {
-          $count= \App\Mission::where('dossier_id',$id)->count();
-          return $count;
-      } 
-      
-      // nombre des missions
+	  {
+ 		 $count= \App\Mission::where('dossier_id',$id)->count();
+		  return $count;
+	  } 
+	  
+	  // nombre des missions
       public static  function countMissionsT  ($id)
-      {
-          $count= \App\MissionHis::where('dossier_id',$id)->count();
-          return $count;
-      } 
-      
+	  {
+ 		 $count= \App\MissionHis::where('dossier_id',$id)->count();
+		  return $count;
+	  } 
+	  
    
         // nombre des missions  encours  par un agent
       public static  function countMissionsUser ($id,$user)
-      {
-          $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->count();
-          return $count;
-      } 
+	  {
+ 		 $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->count();
+		  return $count;
+	  } 
    
    
            // nombre des missions  terminées  par un agent
       public static  function countMissionsUserT ($id,$user)
-      {
-          $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
-          return $count;
-      } 
-
-
-      public static function countMissionsUsCreees($id,$user)
-      {
-         $count1= \App\MissionHis::where('dossier_id',$id)->where('origin_id',$user)->count();
-         $count2= \App\Mission::where('dossier_id',$id)->where('origin_id',$user)->count();
-         $count=$count1+$count2;
-         return $count;
-
-      }
-
-       public static function countMissionsUsTerminees($id,$user)
-      {
-         $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
-         return $count;
-      }
-
-     public static function countMissionsUsCourAff($id,$user)
-      {
-         $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->count();
-        
-         return $count;
-
-      }
-
-       public static function countMissionsUsPart($id,$user)
-      {
-         $count1=0;
-         $count2=0;
-         $mish= \App\MissionHis::where('dossier_id',$id)->get(['id_origin_miss','dossier_id']);
-         foreach ($mish as $mh) {
-            
-            $res=\App\Action::where('mission_id',$mh->id_origin_miss)->where('user_id',$user)->where(function($q){                             
-                               $q->where('statut',"faite")
-                               ->orWhere('statut',"repotee")
-                               ->orWhere('statut',"rappelee") 
-                               ->orWhere('statut',"rfaite") 
-                               ->orWhere('statut',"ignoree");                            
-                                })->first();
-            if($res)
-            {
-              $count1++;  
-            }
-         }
-
-         $miss= \App\Mission::where('dossier_id',$id)->get(['id','dossier_id']);
-         foreach ($miss as $ms) {
-            
-            $res=\App\ActionEC::where('mission_id',$ms->id)->where('user_id',$user)->where(function($q){                             
-                               $q->where('statut',"faite")
-                               ->orWhere('statut',"repotee")
-                               ->orWhere('statut',"rappelee") 
-                               ->orWhere('statut',"rfaite") 
-                               ->orWhere('statut',"ignoree");                            
-                                })->first();
-            if($res)
-            {
-              $count2++;  
-            }
-         }
-         $count=$count1+$count2;
-         return $count;
-
-      }
-	  
-	  
-	  
-	  
-/**************  Stats par date **********************/
-
- 
-
-      public static function users_work_on_folderDate( $iddoss ,$debut,$fin ,$hdebut,$hfin)
-   {
-	    if($hdebut=="" || $hfin=="" ){ 
-		$debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	$usersFolder = array();
-    
-    $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)
-			   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-	->whereNotNull('util_affecte')->where('util_affecte','!=',0)
-			   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-	->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-    $usersFolders=\App\AffectDoss::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->where('util_affecte','!=',0)->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-         //dd($hisaffec);
-    //$countU=count($usersFolder);
-      $usersFolder = array_merge($usersFolderh,$usersFolders);
-
-            
-     $usersFolder=array_unique($usersFolder);
-     $usersFolder=array_values($usersFolder);
- 
-    return $usersFolder ;
-   }
-
-      // nombre de factures
-      public  static function countFacturesDate ($id,$debut,$fin ,$hdebut,$hfin)
-      {
-	    if($hdebut=="" || $hfin=="" ){ 
-		$debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-         $count= \App\Facture::where('iddossier',$id)
-		  ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->count();
-          return $count;
-      }
-
-   // nombre de prestations
-       public  static function countPrestationsDate ($id,$debut,$fin ,$hdebut,$hfin)
-      {
-	    if($hdebut=="" || $hfin=="" ){ 
-		$debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-         $count= \App\Prestation::where('dossier_id',$id)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->count();
-          return $count;
-      }
-   // nombre des emails recus
-        public  static function countEmailsDossDate ($id,$debut,$fin,$hdebut,$hfin)
-      {   
-	    if($hdebut=="" || $hfin=="" ){ 
-		$debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-         $count= \App\Entree::where('dossierid',$id)
-		  ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','email')->count();
-          return $count;
-      }
-   
-   // nombre de Fax reçus
-           public  static function countFaxsDate ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	    if($hdebut=="" || $hfin=="" ){ 
-		$debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-         $count= \App\Entree::where('dossierid',$id)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','fax')->count();
-          return $count;
-      }
-	  
-   // nombre des sms reçus
-           public  static function countSmsDate ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	    if($hdebut=="" || $hfin=="" ){ 
-		$debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-         $count= \App\Entree::where('dossierid',$id)
-		 	  ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','sms')->count();
-          return $count;
-      }
-   // nombre des emails envoyés
-           public  static function countEmailsSentDate ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	    if($hdebut=="" || $hfin=="" ){ 
-		$debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
- 
-         $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
-         $count= \App\Envoye::where('dossier',$ref)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','email')->count();
-          return $count;
-      }
-   // nombre des emails envoyés par un agent
-       public  static function countEmailsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
-      { 
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-         $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
-         $count= \App\Envoye::where('dossier',$ref)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','email')->where('par',$user)->count();
-          return $count;
-      }
-   // nombre des fax envoyés
-          public  static function countFaxsSentDate ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-         $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
-         $count= \App\Envoye::where('dossier',$ref)
-		 	  ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','fax')->count();
-          return $count;
-      }
-   // nombre des fax envoyés par un agent
-      public  static function countFaxsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
-      {	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-      $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-           $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
-         $count= \App\Envoye::where('dossier',$ref)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','fax')->where('par',$user)->count();
-          return $count;
-      }
-   // nombre des sms envoyés
-         public  static function countSmsSentDate ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  
-		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;      
-         $count= \App\Envoye::where('dossier',$ref)
-		 	  ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','sms')->count();
-          return $count;
-      }
-   // nombre des sms envoyés par un agent
-      public static  function countSmsSentUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	  $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
-         $count= \App\Envoye::where('dossier',$ref)
-		  ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','sms')->where('par',$user)->count();
-          return $count;
-      }
-   
-        // nombre des  comptes rendus
-      public static  function countRendusDate  ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\Entree::where('dossierid',$id)
-		   ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		->where('type','tel')->count();
-          return $count;
-      } 
-      
-     // nombre des compte rendu   par un agent
-      public static  function countRendusUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\Entree::where('dossierid',$id)
-		 ->where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		->where('type','tel')->where('par',$user)->count();
-          return $count;
-      } 
-   
-        // nombre des missions en cours
-      public static  function countMissionsDate  ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\Mission::where('dossier_id',$id)
-		   ->where('date_deb', '>=', $debut)
-		   ->where('date_fin', '<=', $fin)
-		->count();
-          return $count;
-      } 
-      
-      // nombre des missions
-      public static  function countMissionsTDate  ($id,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\MissionHis::where('dossier_id',$id)
-		   ->where('date_deb', '>=', $debut)
-		   ->where('date_fin', '<=', $fin)
-		->count();
-          return $count;
-      } 
-      
-   
-        // nombre des missions  encours  par un agent
-      public static  function countMissionsUserDate ($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\Mission::where('dossier_id',$id)
-		   ->where('date_deb', '>=', $debut)
-		   ->where('date_fin', '<=', $fin)		
-		->where('user_id',$user)->count();
-          return $count;
-      } 
+	  {
+ 		 $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
+		  return $count;
+	  } 
    
    
-           // nombre des missions  terminées  par un agent
-      public static  function countMissionsUserTDate ($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-		  
-      	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\MissionHis::where('dossier_id',$id)
-		   ->where('date_deb', '>=', $debut)
-		   ->where('date_fin', '<=', $fin)
-		   ->where('user_id',$user)->count();
-          return $count;
-      } 
-
-       public static function countMissionsUsCreeesDate($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-        if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-       $debut = ($debut )->format('Y-m-d\TH:i');
-       $fin = ($fin )->format('Y-m-d\TH:i');
-         $count1= \App\MissionHis::where('dossier_id',$id)->where('origin_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
-         $count2= \App\Mission::where('dossier_id',$id)->where('origin_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
-         $count=$count1+$count2;
-         return $count;
-
-      }
-
-       public static function countMissionsUsTermineesDate($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-        if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-         $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_fin','<=', $fin)->count();
-         return $count;
-      }
-
-     public static function countMissionsUsCourAffDate($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-        if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut.' 00:00:00');
-           $fin= new \DateTime($fin.' 23:59:59');
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-          if($fin){
-
-            $count=0;
-            $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-            $format = "Y-m-d H:i:s";
-            $dateSys = \DateTime::createFromFormat($format, $dtc);
-            $datefin  = \DateTime::createFromFormat($format, $fin->format('Y-m-d H:i:s'));
-            if($dateSys<=$datefin)
-            {
-
-            $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_deb', '<=', $fin)->count(); 
-            }
-
-          }
-          else
-          {
-            $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->where('date_deb', '>=', $debut)->count(); 
-          }
-        
-        
-         return $count;
-
-      }
-
-       public static function countMissionsUsPartDate($id,$user,$debut,$fin,$hdebut,$hfin)
-      {
-          if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-         $count1=0;
-         $count2=0;
-         $mish= \App\MissionHis::where('dossier_id',$id)->get(['id_origin_miss','dossier_id']);
-         foreach ($mish as $mh) {
-            
-            $res=\App\Action::where('mission_id',$mh->id_origin_miss)->where('user_id',$user)->where(function($q){                             
-                               $q->where('statut',"faite")
-                               ->orWhere('statut',"repotee")
-                               ->orWhere('statut',"rappelee") 
-                               ->orWhere('statut',"rfaite") 
-                               ->orWhere('statut',"ignoree");                            
-                                })->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->first();
-            if($res)
-            {
-              $count1++;  
-            }
-         }
-
-         $miss= \App\Mission::where('dossier_id',$id)->get(['id','dossier_id']);
-         foreach ($miss as $ms) {
-            
-            $res=\App\ActionEC::where('mission_id',$ms->id)->where('user_id',$user)->where(function($q){                             
-                               $q->where('statut',"faite")
-                               ->orWhere('statut',"repotee")
-                               ->orWhere('statut',"rappelee") 
-                               ->orWhere('statut',"rfaite") 
-                               ->orWhere('statut',"ignoree");                            
-                                })->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->first();
-            if($res)
-            {
-              $count2++;  
-            }
-         }
-         $count=$count1+$count2;
-         return $count;
-
-      }
-      
-
-
-/************/
-
-
-
-
-
-
-
-
-
-
-
-
-	  
-/**************  Stats par date Agents sans dossiers **********************/
-
- 
-   
-   
-    
-   // nombre des emails envoyés par un agent
-       public  static function countEmailsSentUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      { 
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-		}
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-          $count= \App\Envoye::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','email')->where('par',$user)->count();
-          return $count;
-      }
-   // nombre des fax envoyés
-      
-   // nombre des fax envoyés par un agent
-      public  static function countFaxsSentUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-      $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-
-	   $count= \App\Envoye::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','fax')->where('par',$user)->count();
-          return $count;
-      }
- 
-   // nombre des sms envoyés par un agent
-      public static  function countSmsSentUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-          $count= \App\Envoye::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','sms')->where('par',$user)->count();
-          return $count;
-      }
- public static  function countpausesUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-          $count= \App\Historique::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('description','Retour de pause')->where('user_id',$user)->count();
-          return $count;
-      }
-    public static  function countAppelsSentUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-          $count= \App\Envoye::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','tel')->where('par',$user)->count();
-          return $count;
-      }
-public static function convert($seconds) {
-  $t = round($seconds);
-  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
-}
- public static  function countcommunictationsSentUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-    if($hdebut=="" || $hfin=="" ){ 
-     
-     $debut= new \DateTime($debut);
-     $fin= new \DateTime($fin);
-     }else{
-      $debut= new \DateTime($debut.' '.$hdebut);
-     $fin= new \DateTime($fin.' '.$hfin);
-   }
-     $debut = ($debut )->format('Y-m-d\TH:i');
-     $fin = ($fin )->format('Y-m-d\TH:i');
-          $appels= \App\Envoye::where('created_at', '>=', $debut)
-       ->where('created_at', '<=', $fin)
-     ->where('type','tel')->where('par',$user)->pluck('duration');
-$dur=0;
-        foreach ($appels as $appel) {
-
-  $dur=$dur+$appel;
-}
-$count=$dur;
- return $count;
-      }
-
-        
-      
-     // nombre des compte rendu   par un agent
-      public static  function countRendusUserDate2 ($user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\Entree::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		->where('type','tel')->where('par',$user)->count();
-          return $count;
-      } 
-   
-     
-   
-        // nombre des missions  encours  par un agent
-      public static  function countMissionsUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\Mission::where('date_deb', '>=', $debut)
-		   ->where('date_fin', '<=', $fin)		
-		->where('user_id',$user)->count();
-          return $count;
-      } 
-   
-   
-           // nombre des missions  terminées  par un agent
-      public static  function countMissionsUserTDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-		  
-      	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-	    $count= \App\MissionHis::where('date_deb', '>=', $debut)
-		   ->where('date_fin', '<=', $fin)
-		   ->where('user_id',$user)->count();
-          return $count;
-      } 
-
-     // missions terminées par un agent
-
-       public static function countMissionsUsTermineesDate2($user,$debut,$fin,$hdebut,$hfin)
-      {
-        if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-         $count= \App\MissionHis::where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_fin','<=', $fin)->count();
-         return $count;
-      }
-// par agent
-     public static function countMissionsUsCourAffDate2($user,$debut,$fin,$hdebut,$hfin)
-      {
-        if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-         $count= \App\Mission::where('user_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
-        
-         return $count;
-
-      }
-	  
-	         public static function countMissionsUsCreeesDate2($user,$debut,$fin,$hdebut,$hfin)
-      {
-        if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-       $debut = ($debut )->format('Y-m-d\TH:i');
-       $fin = ($fin )->format('Y-m-d\TH:i');
-         $count1= \App\MissionHis::where('origin_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
-         $count2= \App\Mission::where('origin_id',$user)->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->count();
-         $count=$count1+$count2;
-         return $count;
-
-      }
-	  
-
-	  // par agent
-       public static function countMissionsUsPartDate2($user,$debut,$fin,$hdebut,$hfin)
-      {
-          if($hdebut=="" || $hfin=="" ){
-       
-           $debut= new \DateTime($debut);
-           $fin= new \DateTime($fin);
-           }else{
-            $debut= new \DateTime($debut.' '.$hdebut);
-           $fin= new \DateTime($fin.' '.$hfin);
-          }
-         $count1=0;
-         $count2=0;
-         $mish= \App\MissionHis::get(['id_origin_miss','dossier_id']);
-         foreach ($mish as $mh) {
-            
-            $res=\App\Action::where('mission_id',$mh->id_origin_miss)->where('user_id',$user)->where(function($q){                             
-                               $q->where('statut',"faite")
-                               ->orWhere('statut',"repotee")
-                               ->orWhere('statut',"rappelee") 
-                               ->orWhere('statut',"rfaite") 
-                               ->orWhere('statut',"ignoree");                            
-                                })->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->first();
-            if($res)
-            {
-              $count1++;  
-            }
-         }
-
-         $miss= \App\Mission::get(['id','dossier_id']);
-         foreach ($miss as $ms) {
-            
-            $res=\App\ActionEC::where('mission_id',$ms->id)->where('user_id',$user)->where(function($q){                             
-                               $q->where('statut',"faite")
-                               ->orWhere('statut',"repotee")
-                               ->orWhere('statut',"rappelee") 
-                               ->orWhere('statut',"rfaite") 
-                               ->orWhere('statut',"ignoree");                            
-                                })->where('date_deb', '>=', $debut)->where('date_fin', '<=', $fin)->first();
-            if($res)
-            {
-              $count2++;  
-            }
-         }
-         $count=$count1+$count2;
-         return $count;
-
-      }
-      
-
-
-/************/
-
-
-
-
-
-
-    function addappel(Request $request)
-    {
-
-         $dossier = $request->get('dossier');
-         $numero =  $request->get("numero");
-		 $date=date('Y-m-d H:i:s');
-		 $heure=date('H:i:s');
-		 
-	/*	   $appel = new Appel([
-            'dossier' => $dossier,
-            'numero' => $numero,
-            'date' => $date,
-            'heure' => $heure
-      
-        ]);
-		*/
-		    DB::table('appels')->insert(
-            ['dossier' => $dossier,
-                'numero' => $numero,
-                'date' => $date,
-                'heure' => $heure,
-		 
-				]
-        );
-
-    /*  if ($appel->save()){
-		  return $appel->id;
-	  }  else{
-		  return 0;
-	  }
-			*/
-	}
-	 public  function numints(Request $request)
-    {
-        $val =  trim($request->get('value'));
-        $adresses =  Adresse::where('nature', 'telinterv')
-            ->where('parent', $val)
-            ->get();
-
-         return $adresses;
-    }
-	
 
 }
-
 

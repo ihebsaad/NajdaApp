@@ -124,7 +124,12 @@ class RechercheController extends Controller
                  $etat=$row->current_status;
               }
              // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' '.$row->subscriber_name.' '.$row->subscriber_lastname.'( Réf. Médicale) ('. $etat.')'. $affecOuNon.'</a></li>';
+             if($row->type_dossier==='Medical')
+{
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' '.$row->subscriber_name.' '.$row->subscriber_lastname.'( Réf. Médicale) ('. $etat.')'. $affecOuNon.'</a></li>';  }
+else
+{
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' '.$row->subscriber_name.' '.$row->subscriber_lastname.'('. $etat.')'. $affecOuNon.'</a></li>';  }
           }
 
           $output.='<li class="divider"></li>';
@@ -304,13 +309,8 @@ class RechercheController extends Controller
     {
 
           $prests=Prestataire::get(['id','name','civilite','prenom','ville','ville_id','annule']);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
-           return view('prestataires.index', compact('prests'),['villes'=>$villes]); 
+
+           return view('prestataires.index', compact('prests')); 
 
     }
 
@@ -458,11 +458,11 @@ $villes= DB::table('prestataires')
   "ville_id_search" => null
   "spec_id_search" => null
 ]*/
-     //dd($request->all());
- 
-     if($request->get('pres_id_search_hidden')!='undefined' && $request->get('pres_id_search_hidden')!=null)
+     // dd($request->all());
+     // dd($request->get('pres_id_search').' / hidden : '.$request->get('pres_id_search_hidden'));
+     if($request->get('pres_id_search_hidden'))
        {
- 
+
           if(is_numeric($request->get('pres_id_search_hidden')))
           {
            $prests=Prestataire::where('id',$request->get('pres_id_search_hidden'))->get();
@@ -478,7 +478,6 @@ $villes= DB::table('prestataires')
        }
        else
        {
-    //dd($request->get('pres_id_search').' / hidden : '.$request->get('pres_id_search_hidden'));
         if($request->get('pres_id_search') && $request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')== null && $request->get('spec_id_search')==null)
         {
            $prests=Prestataire::where('name','like', '%'.$request->get('pres_id_search').'%')
@@ -945,13 +944,8 @@ $villes= DB::table('prestataires')
        $prests = $prests->sortBy(function($prests) {
        return sprintf('%-12s%s', $prests->name,  $prests->prenom);
        });
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
-      return view('prestataires.index', compact('prests'),['villes'=>$villes]);  
+
+      return view('prestataires.index', compact('prests'));  
 
    }
 
@@ -987,9 +981,7 @@ public function pageRechercheAvancee(Request $request )
   {
 
 
-      //  $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
-
-     $datasearch=Dossier::where('reference_medic','like','%'.$request->get('reference_medic1').'%')->get();
+                    $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
 
 
 

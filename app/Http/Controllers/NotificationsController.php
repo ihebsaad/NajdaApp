@@ -37,7 +37,7 @@ class NotificationsController extends Controller
     public static function checkNewNotifs()
     {
         $user = auth()->user();
-        $iduser=$user->id;
+        $iduser=Auth::id();
        // $notif = Notification::where('read_at',null)->where('notifiable_id',$iduser)->where('affiche',null)->first();
         $notif = Notif::where('read_at',null)->where('user',$iduser)->where('affiche',-1)->first();
 

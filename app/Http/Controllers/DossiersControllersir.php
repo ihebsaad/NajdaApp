@@ -42,9 +42,8 @@ use WordTemplate;
 use Mail;
 use App\Notification;
 use App\Notif ;
-use App\Historique ;
+
 use Swift_Mailer;
-use App\DossierImmobile;
 
 ini_set('memory_limit','1024M');
 ini_set('upload_max_filesize','50M');
@@ -155,9 +154,7 @@ class DossiersController extends Controller
                  $attachement->save();                                     
 
 
-                return  'ok';  
-
- 			
+                return  'ok';         
     
     }
 
@@ -216,12 +213,7 @@ class DossiersController extends Controller
     public function create($identree)
     {
         $entree  = Entree::find($identree);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
+
 
       //  $cldocs = DB::table('clients_docs')->select('client', 'doc')->get();
 
@@ -256,7 +248,7 @@ $villes= DB::table('prestataires')
 
                 ->get();
 
-        return view('dossiers.create',['identree'=>$identree,'entree'=>$entree ,'clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages, 'villes'=>$villes] );
+        return view('dossiers.create',['identree'=>$identree,'entree'=>$entree ,'clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
 
 
@@ -267,12 +259,6 @@ $villes= DB::table('prestataires')
 
             $clients =  DB::table('clients')
             ->get();
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
 
         $hopitaux =  DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',8 )
@@ -292,7 +278,7 @@ $villes= DB::table('prestataires')
 
             ->get();
 
-        return view('dossiers.add',['clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages, 'villes'=>$villes] );
+        return view('dossiers.add',['clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
 
 
@@ -805,161 +791,11 @@ $villes= DB::table('prestataires')
 
         if ($dossier->save()) {
             $iddoss = $dossier->id;
-if($request->get('idpresthos')!==null)
-{ 
-$prestataire=$request->get('idpresthos');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestmed')!==null )
-{ 
-$prestataire=$request->get('idprestmed');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestemp')!==null )
-{ 
-$prestataire=$request->get('idprestemp');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestemp2')!==null )
-{ 
-$prestataire=$request->get('idprestemp2');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idprestemp3')!==null )
-{ 
-$prestataire=$request->get('idprestemp3');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
-if($request->get('idpresthotel')!==null )
-{ 
-$prestataire=$request->get('idpresthotel');
-$nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
-
-        // vérifier prestataire n existe pas
-        $count = app('App\Http\Controllers\IntervenantsController')->countIntervByDossier($prestataire, $iddoss);
-        if ($count == 0)
-        {
-            $intervenant = new Intervenant([
-                'prestataire_id' => $prestataire,
-                'dossier' => $iddoss,
-                'nom' => $nom,
-                'prenom' => $prenom,
-
-            ]);
-        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
-
-      $intervenant->save();
-
-           
-    }
-}
 
 
             $nomuser = $user->name . ' ' . $user->lastname;
- 		
-$desc='Ajout de dossier: ' . $reference_medic;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-$hist->save();
+            Log::info('[Agent: ' . $nomuser . '] Ajout de dossier: ' . $reference_medic);
+
             // dispatch Email au dossier
            $entreeid= $request->get('entree');
            if($entreeid >0)
@@ -1096,7 +932,8 @@ $hist->save();
         { $iddoss=$dossier->id;
 
             $nomuser=$user->name.' '.$user->lastname;
- 
+            Log::info('[Agent: '.$nomuser.'] Ajout de dossier: '.$reference_medic);
+
             $identree = $request->get('entree');
         //    if($identree!=''){
           //  $entree  = Entree::find($identree);
@@ -1172,8 +1009,8 @@ $hist->save();
 
         $cci=array();
        // array_push($cci,'medic.multiservices@topnet.tn' );///
-       // array_push($cci,'medic.multiservices@topnet.tn' );///
-array_push($cci,'nejib.karoui18@gmail.com' );
+        array_push($cci,'medic.multiservices@topnet.tn' );///
+
         $parametres =  DB::table('parametres')
             ->where('id','=', 1 )->first();
 
@@ -1244,7 +1081,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('assistance@medicmultiservices.com');
             $swiftTransport->setPassword($pass_MEDIC);
-            $fromname="Medic' Multiservices";
+            $fromname="Medic International";
             $signatureentite= $parametres->signature3 ;
 
         }
@@ -1255,7 +1092,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
             $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
             $swiftTransport->setPassword($pass_TM);
-            $fromname="Transport Medic";
+            $fromname="Transport MEDIC";
             $signatureentite= $parametres->signature4 ;
 
         }
@@ -1275,7 +1112,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('operations@medicinternational.tn');
             $swiftTransport->setPassword($pass_MI);
-            $fromname="Medic International";
+            $fromname="Medic' Multiservices";
             $signatureentite= $parametres->signature6 ;
 
         }
@@ -1364,14 +1201,8 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             $files=null;$attachs=null;
             app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu,$files,$attachs) ;
 
-			$desc='Envoi Accusé N Aff , Dossier: ' . $refdossier;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-		$hist->save();
- 
+            Log::info('Envoi Accusé N Aff par : ' . $nomuser . ' Dossier: ' . $refdossier);
+
         } catch (Exception $ex) {
             // Debug via $ex->getMessage();
             //      echo '<script>alert("Erreur !") </script>' ;
@@ -1521,7 +1352,7 @@ array_push($cci,'nejib.karoui18@gmail.com' );
             'util_affecteur'=>$iduser,
             'util_affecte'=>$agent,
             'statut'=>"nouveau",
-            'manuelauto'=>5,
+
             'id_dossier'=>$id,
             'date_affectation'=>$dtc,
         ]);
@@ -1535,15 +1366,8 @@ array_push($cci,'nejib.karoui18@gmail.com' );
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
-       
-	   $desc='Affectation de dossier :'.$ref.' à: '.$nomagent ;
-	   	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-$hist->save();
-          return back();
+        Log::info('[Agent: '.$nomuser.'] - Affectation de dossier :'.$ref.' à: '.$nomagent);
+         return back();
 
     }
 
@@ -1575,7 +1399,7 @@ $hist->save();
                     'util_affecteur'=>$iduser,
                     'util_affecte'=>$agent,
                     'statut'=>"nouveau",
-                     'manuelauto'=>5,
+
                     'id_dossier'=>$doss,
                     'date_affectation'=>$dtc,
                 ]);
@@ -1585,15 +1409,7 @@ $hist->save();
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
                 $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
-               
- 			   
-			   $desc='Affectation de dossier :'.$ref.' à: '.$nomagent;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-		$hist->save();	   
+                Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
             }   //foreach
         }
         return 'true';
@@ -1650,12 +1466,6 @@ $hist->save();
             $prestataires= DB::table('prestataires')
                 ->orderBy('name', 'asc')
                 ->get();
- $villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
       //  });
 
         $gouvernorats = DB::table('cities')
@@ -1663,14 +1473,7 @@ $hist->save();
 
             ->get();
 
- $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
         $dossier = Dossier::find($id);
 
         $cl=$this->ChampById('customer_id',$id);
@@ -1706,18 +1509,18 @@ $hist->save();
 
         $entrees1 =   Entree::where('dossier', $ref)
             ->where('destinataire','<>','finances@najda-assistance.com')
-            ->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
+            ->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
         $envoyes1 =   Envoye::where('dossier', $ref)
             ->where('emetteur','<>','finances@najda-assistance.com')
-            ->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
+            ->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
         ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
-          
+            ->where('parenttype','dossier')
             ->get();
 
         $phonesCl =   Adresse::where('nature', 'tel')
@@ -1773,7 +1576,7 @@ $hist->save();
             ->where('boite','<>',10)  //boite n'est pas finances
             ->whereIn('entree_id',$identr )
             ->orWhereIn('envoye_id',$idenv )
-            ->orWhere('dossier','=',$id )->where('envoye_id',"=",null)->where('entree_id',"=",null)
+            ->orWhere('dossier','=',$id )
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
@@ -1805,7 +1608,7 @@ $hist->save();
              ->get();
 
 
-        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'villes'=>$villes,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents ,'ommi'=>$ommi,'ftags'=>$tagdossier,'prestataires1'=>$prestataires1,], compact('dossier'));
+        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents ,'ommi'=>$ommi,'ftags'=>$tagdossier], compact('dossier'));
 
 
 
@@ -1831,12 +1634,7 @@ $hist->save();
     {
 
         $this->update_missions($id);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
+
 
         $relations1 = DB::table('dossiers_docs')->select('dossier', 'doc')
             ->where('dossier',$id)
@@ -1984,15 +1782,8 @@ $villes= DB::table('prestataires')
 
         $relations2 = DB::table('clients_docs')->select('client', 'doc')
             ->where('client',$id)->get();
- $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
-        return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'villes'=>$villes,'Missions'=>$Missions,'prestataires1'=>$prestataires1], compact('dossier'));
+        return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'Missions'=>$Missions], compact('dossier'));
 
 
     }
@@ -2009,12 +1800,7 @@ $villes= DB::table('prestataires')
 
         $typesMissions =  DB::table('type_mission')
             ->get();
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
+
         $Missions=Dossier::find($id)->activeMissions;
 
         $dossier = Dossier::find($id);
@@ -2147,16 +1933,8 @@ $villes= DB::table('prestataires')
        //     ->where('client',$id)->get();
         $entree=null;
         if($dossier->entree >0 ) {$entree  = Entree::find($dossier->entree);}
-$prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
-
-        return view('dossiers.update',['entree'=> $entree,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'villes'=>$villes,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'prestataires1'=>$prestataires1], compact('dossier'));
+        return view('dossiers.update',['entree'=> $entree,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
 
     }
@@ -2404,9 +2182,8 @@ $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id')
         $type = $request->get('type');
         $spec = $request->get('specialite');
         $ville = trim($request->get('ville'));
-//dd($ville);
-        //$postal = $request->get('postal');
-       if (($ville !='toutes') && ($ville !='' ) ){
+        $postal = $request->get('postal');
+        if (intval($postal) >1 || ($ville!='')){
             $liste =Evaluation::where('gouv',$gouv )
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
@@ -2471,16 +2248,9 @@ $prestataires1 =   Prestation::where('dossier_id', $id)->pluck('prestataire_id')
 
 
           foreach ($tels as $tel) {
-$nom= $tel->nom.' '.$tel->prenom.' ( '.$tel->remarque .' ) ';
-$nom1="'".$nom."'";
-$num=$tel->champ;
               $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $nom. '</td>'; 
-$output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer"  ><i class="fas fa-phone"></i> Appeler </a></td>';
-?>
-
-
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>'; ?>
               <?php if ($tel->typetel == 'Mobile') {
                   $output .= '<td><a onclick="setTel(this);" class="' . $tel->champ . '" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
               } else {
@@ -2517,8 +2287,8 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
         $type = $request->get('type');
         $spec = $request->get('specialite');
         $ville = $request->get('ville');
-       // $postal = $request->get('postal');
-   if (($ville !='toutes') && ($ville !='' ) && ($ville !='Select' ) ){
+        $postal = $request->get('postal');
+        if (intval($postal) >1 || ($ville!='')){
             $liste =Evaluation::where('gouv',$gouv )
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
@@ -2556,10 +2326,9 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
           $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
 
 
-           $tels = Adresse::where('nature', 'telinterv')
-              ->where('parent', $prestataire)
+          $tels =   Adresse::where('nature', 'tel')
+              ->where('parent',$prestataire)
               ->get();
-
 
           $output .= '  <div id="item'.$c . '-m" style="display:none;;padding: 20px 20px 20px 20px; border:3px dotted #4fc1e9">
                                                                                    
@@ -2578,19 +2347,11 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
 
 
           foreach ($tels as $tel) {
-
-$nom= $tel->nom.' '.$tel->prenom.' ( '.$tel->remarque .' ) ';
-$nom1="'".$nom."'";
-$num=$tel->champ;
               $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';
-
-$output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer"  ><i class="fas fa-phone"></i> Appeler </a></td>';
-?>
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';?>
 <?php if($tel->typetel=='Mobile') {
                   $output .= '<td><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
-
                     } else
                       { $output .= '<td></td>';}
 
@@ -2618,14 +2379,7 @@ $output .= '<td><a onclick="ButtonOnclick3('.$num.','.$nom1.');" class="'. $tel-
 
     public function searchprest(Request $request)
     {
-$prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pluck('prestataire_id');
-            $prestataires1 = $prestataires1->unique();
 
-            $intervenants1 =   Intervenant::where('dossier', $request->get('dossier'))->pluck('prestataire_id');
-
-            // merger prestataire + intervenants
-            $prestataires1=$prestataires1->merge($intervenants1);
-            $prestataires1=$prestataires1->unique();
         $datasearch =null;
 
         if($request->get('dossier'))
@@ -2642,18 +2396,17 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
         if($request->get('typeprest'))
         { $typeprest=$request->get('typeprest'); }
         else{ $typeprest='';}
-//dd($request->get('villepr2'));
-        if($request->get('villepr2'))
-        { $ville=$request->get('villepr2'); }
+
+        if($request->get('ville'))
+        { $ville=$request->get('ville'); }
         else{ $ville='';}
 
-        /*if($request->get('postal'))
+        if($request->get('postal'))
         { $postal=$request->get('postal'); }
-        else{ $postal=0;}*/
+        else{ $postal=0;}
 
 
-        //if (intval($postal) >1 || $ville !=''  ){
-	if (($ville !='toutes') && ($ville !='' ) && ($ville !=null) ){
+        if (intval($postal) >1 || $ville !=''  ){
             $datasearch =Evaluation::where('gouv',$gouvernorat )
                 ->where('type_prest',$typeprest )
                 ->where('specialite',$specialite )
@@ -2673,7 +2426,7 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
                 ->get();
         }
 
-//dd($datasearch);
+
         $specialites =DB::table('specialites')
             ->orderBy('nom', 'asc')
             ->get();
@@ -2718,17 +2471,17 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
-        $entrees1 =   Entree::where('dossier', $ref)->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
-        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','par','path','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
         ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
+            ->where('parenttype','dossier')
             ->get();
-
 
         $phonesCl =   Adresse::where('nature', 'tel')
             ->where('parent',$cl)
@@ -2774,10 +2527,9 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
         }
 
         $attachements= DB::table('attachements')
-            ->where('boite','<>',10)  //boite n'est pas finances
             ->whereIn('entree_id',$identr )
             ->orWhereIn('envoye_id',$idenv )
-            ->orWhere('dossier','=',$id )->where('envoye_id',"=",null)->where('entree_id',"=",null)
+            ->orWhere('dossier','=',$id )
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
@@ -2789,15 +2541,10 @@ $prestataires1 =   Prestation::where('dossier_id', $request->get('dossier'))->pl
 
         $evaluations=DB::table('evaluations')->get();
         $tagdossier = $this->DossierTags($id,$ref);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
-return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'prestataires1'=>$prestataires1,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,
+
+return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,
 'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,
-'attachements'=>$attachements,'villes'=>$villes,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents,'ommi'=>$ommi,'ftags'=>$tagdossier], compact('dossier'));
+'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents,'ommi'=>$ommi,'ftags'=>$tagdossier], compact('dossier'));
 
 
     }
@@ -2822,12 +2569,9 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             if ($adresse->save())
             {
 
-             if($request->get('update')==='1')
-{
-                return url('/dossiers/update/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
-else
-{
-                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
+                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
             }
 
             else {
@@ -2858,12 +2602,8 @@ else
 
             if ($adresse->save())
             {
-if($request->get('update')==='1')
-{
-                return url('/dossiers/update/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
-else
-{
-                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;}
+
+                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
                 // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
                 //  return  $iddoss;
             }
@@ -3669,17 +3409,9 @@ else
                 ]); 
                 $affechis->save();
 
-                $desc=' Clôture de dossier: ' . $refd .' '.$etat;       
-                $hist = new Historique([
-                      'description' => $desc,
-                    'user' => $nomuser,
-                    'user_id'=>auth::user()->id,
-                ]); 
-                $hist->save();
-
                 // supprimer le id dossier de table dossiers immmobiles
 
-                $dm = DossierImmobile::where('dossier_id',$iddossier)->first();  
+                $dm = App\DossierImmobile::where('dossier_id',$iddossier)->first();  
                 if($dm)
                 {
                     if (! empty($dm)) {
@@ -3687,7 +3419,9 @@ else
                     }
                 }
 
-     
+                Log::info('[Agent: ' . $nomuser . '] Clôture de dossier: ' . $refd .' '.$etat);
+
+
                 }
             }else{
               Dossier::where('id',$iddossier)->update(array('current_status'=>'inactif','affecte'=>0 , 'sub_status'=>'immobile'));
@@ -3713,14 +3447,9 @@ else
 
                 $alerte->save();
 
- 
-    $desc='Re-Ouverture de dossier: ' . $refd;		
-	 $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-            'user_id'=>$user->id,
-        ]);	
-$hist->save();
+                Log::info('[Agent: ' . $nomuser . '] Re-Ouverture de dossier: ' . $refd);
+
+
             }
     }
 
@@ -3766,8 +3495,7 @@ $hist->save();
    public function historiqueAffectation ($id)
    {
 
-         $hisaffec=AffectDoss::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
-// $hisaffec1=AffectDoss::where('id_dossier',$id)->where()->orderBy('date_affectation','DESC')->get();
+         $hisaffec=AffectDossHis::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
          //dd($hisaffec);
 
       $output='';
@@ -3849,7 +3577,7 @@ $hist->save();
                          if($user_em && $user_re && $user_re!=$user_em && !stripos($ha->statut,"Cloture") && !stripos($ha->statut,"Ouverture") )
                          {
 
-                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Affectation '. $ha->manuelauto.'du dossier à '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Affectation du dossier à '.$user_re->name.' '.$user_re->lastname.'</span></td>';
                              $operation=false;
 
                          }
@@ -3857,7 +3585,7 @@ $hist->save();
                          if($user_em && $user_re && $user_re==$user_em && !stripos($ha->statut,"Cloture") && !stripos($ha->statut,"Ouverture") )
                          {
 
-                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"> affectation '. $ha->manuelauto.' à l\'utilisateur lui meme  '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Creation et affectation du nouveau dossier à l\'utilisateur lui meme  '.$user_re->name.' '.$user_re->lastname.'</span></td>';
                         $operation=false;
 
 
@@ -5604,68 +5332,7 @@ array_multisort($columns, SORT_DESC, $listetags);
 		 ->where('type','sms')->where('par',$user)->count();
           return $count;
       }
- public static  function countpausesUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-          $count= \App\Historique::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('description','Retour de pause')->where('user_id',$user)->count();
-          return $count;
-      }
-    public static  function countAppelsSentUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-	  if($hdebut=="" || $hfin=="" ){ 
-	   
-	   $debut= new \DateTime($debut);
-	   $fin= new \DateTime($fin);
-	   }else{
-	    $debut= new \DateTime($debut.' '.$hdebut);
-	   $fin= new \DateTime($fin.' '.$hfin);
-   }
-	   $debut = ($debut )->format('Y-m-d\TH:i');
-	   $fin = ($fin )->format('Y-m-d\TH:i');
-          $count= \App\Envoye::where('created_at', '>=', $debut)
-		   ->where('created_at', '<=', $fin)
-		 ->where('type','tel')->where('par',$user)->count();
-          return $count;
-      }
-public static function convert($seconds) {
-  $t = round($seconds);
-  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
-}
- public static  function countcommunictationsSentUserDate2 ( $user,$debut,$fin,$hdebut,$hfin)
-      {
-    if($hdebut=="" || $hfin=="" ){ 
-     
-     $debut= new \DateTime($debut);
-     $fin= new \DateTime($fin);
-     }else{
-      $debut= new \DateTime($debut.' '.$hdebut);
-     $fin= new \DateTime($fin.' '.$hfin);
-   }
-     $debut = ($debut )->format('Y-m-d\TH:i');
-     $fin = ($fin )->format('Y-m-d\TH:i');
-          $appels= \App\Envoye::where('created_at', '>=', $debut)
-       ->where('created_at', '<=', $fin)
-     ->where('type','tel')->where('par',$user)->pluck('duration');
-$dur=0;
-        foreach ($appels as $appel) {
-
-  $dur=$dur+$appel;
-}
-$count=$dur;
- return $count;
-      }
-
+   
         
       
      // nombre des compte rendu   par un agent
@@ -5871,17 +5538,8 @@ $count=$dur;
 	  }
 			*/
 	}
-	 public  function numints(Request $request)
-    {
-        $val =  trim($request->get('value'));
-        $adresses =  Adresse::where('nature', 'telinterv')
-            ->where('parent', $val)
-            ->get();
-
-         return $adresses;
-    }
+	
 	
 
 }
-
 

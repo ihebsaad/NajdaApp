@@ -17,7 +17,7 @@ use App\Seance ;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Session;
-
+use App\Historique;
 class UsersController extends Controller
 {
 

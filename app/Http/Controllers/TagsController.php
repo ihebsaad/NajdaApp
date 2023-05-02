@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User ;
 use App\Entree ;
 use App\Tag ;
+use App\Document ;
 use App\Dossier ;
 use App\Attachement ;
 use App\Parametre;
@@ -20,6 +21,7 @@ class TagsController extends Controller
     {
 
         // verification si plafond dépassé
+	//dd( $request );
         if ($request->has('dossier'))
         {
             if (! empty($request->get('dossier'))) {
@@ -59,7 +61,16 @@ class TagsController extends Controller
                     $smtag = $mgoptnd;
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                        $coltags = Tag::get()->where('entree', '=', $entr['id'] )->where('type', '=', 'email');
+if($request->get('parent')!=null)
+{
+                        $coltags = Tag::get()->where('entree', '=', $entr['id'] )
+->where('id','<>',$request->get('parent'))->where('type', '=', 'email')->where('dernier',1);}
+else
+{
+    $coltags = Tag::get()->where('entree', '=', $entr['id'] )->where('type', '=', 'email')->where('dernier',1);}
+
+
+
 
                         if (!empty($coltags))
                         {
@@ -90,6 +101,12 @@ class TagsController extends Controller
                         {
                             foreach ($colattachs as $lattach) {
                                 $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+if($request->get('parent')!=null)
+{
+                         $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('id','<>',$request->get('parent'))->where('dernier',1);}
+else
+{
+     $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe')->where('dernier',1);}
 
                                 if (!empty($coltagsattach))
                                 {
@@ -305,6 +322,7 @@ class TagsController extends Controller
                 ]);
                 if ($tag->save())
                 { 
+Document::where('idtaggop', $request->get('parent'))->update(['idtaggop' => $tag->id]);
 $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;

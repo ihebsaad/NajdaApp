@@ -4197,7 +4197,7 @@ public function getAjaxDeleguerMission($idmiss)
     { $minutes2=600;
         $typeMissions = Cache::remember('type_mission',$minutes2,  function () {
 
-            return DB::table('type_mission')->orderBy('nom_type_Mission', 'asc')->select('id','nom_type_Mission')->get();
+            return DB::table('type_mission')->select('id','nom_type_Mission')->orderBy('nom_type_Mission')->get();
         });
       //  $typeMissions=TypeMission::all();
         return $typeMissions;

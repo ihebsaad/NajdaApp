@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Adresse;
-use App\Rating;
 use App\Email;
 use App\Evaluation;
 use App\Intervenant;
@@ -15,14 +14,12 @@ use App\Entree ;
 use App\Dossier ;
 use App\Prestataire ;
 use App\Prestation ;
-use App\Facture ;
 use App\Ville ;
 use App\Citie ;
 use DB;
 use Illuminate\Support\Facades\Cache;
 use Swift_Mailer;
 use Illuminate\Support\Facades\Mail;
-use App\Historique;
 
 
 
@@ -44,14 +41,9 @@ class PrestatairesController extends Controller
     {
 
         $prestataires = Prestataire::orderBy('name', 'asc')->get();
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
 
-        return view('prestataires.index', compact('prestataires'),['villes'=>$villes]);
+
+        return view('prestataires.index', compact('prestataires'));
 
 
     }
@@ -73,37 +65,21 @@ $villes= DB::table('prestataires')
      */
     public function create($id)
     {
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
-        return view('prestataires.create',['folder'=>$id,'villes'=>$villes]);
+
+        return view('prestataires.create',['folder'=>$id]);
     }
 
 
 
     public function addeval(Request $request)
     {
-
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
-     $prest  =  $request->get('prestataire');
-
-    if($request->get('ville')==null && ($ville =='' ) && ($ville =='toutes')){
+      $prest  =  $request->get('prestataire');
+    if($request->get('ville')==''){
     $ville='toutes';$postal=1;}
     else{$ville=$request->get('ville'); $postal=$request->get('postal');}
-//dd($ville);
 
         $sp=$request->get('specialite');
     if($sp==''){$sp=0;}
-
-$priorite=Evaluation::where('prestataire',$prest)->where('gouv', $request->get('gouvernorat'))->where('type_prest', $request->get('type_prest'))->where('specialite',$sp)->where('ville',$ville)->first();
- if($priorite!='')
-{
-dd($priorite);}
         $eval = new Evaluation([
             'prestataire' => $prest,
             'gouv' => $request->get('gouvernorat'),
@@ -114,7 +90,6 @@ dd($priorite);}
             'postal' => $postal,
 
         ]);
-
 
        if ($eval->save()){
 
@@ -127,79 +102,19 @@ dd($priorite);}
            $swiftTransport->setPassword($parametres->pass_N);
            $fromname="Najda Assistance";
            $from='24ops@najda-assistance.com';
-$ccimails=array('nejib.karoui18@gmail.com');
-//$ccimails=array('hammalisirine120@gmail.com');
+
            $swiftMailer = new Swift_Mailer($swiftTransport);
 
            Mail::setSwiftMailer($swiftMailer);
-   $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
-$user = auth()->user();
-        $nomuser = $user->name . ' ' . $user->lastname;
-  $gouvernorat=    PrestatairesController::GouvByid($request->get('gouvernorat'));
-        $Specialite=   PrestatairesController::SpecialiteByid( $sp);
-        $TypePrest=  PrestatairesController::TypeprestationByid($request->get('type_prest'));
-$to=array( 'nejib.karoui18@gmail.com');
-       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
-        $sujet= 'Ajout d\'une priorité d\'un prestataire';
-        $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a ajouté une  priorité au prestataire '.$nomprest.'<br>
-        Priorité : '.$request->get('priorite').' - Type de prestation : '.$TypePrest. ' - Spécialité :  '. $Specialite.' -  Gouvernorat : '. $gouvernorat. ' - Ville: '.$ville.'  
-            ';
 
-
-        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname,$ccimails) {
-            $message
-                //->to($to ?: [])
-                ->to($to)
-
-             //   ->cc($cc ?: [])
-                ->bcc($ccimails ?: [])
-                ->subject($sujet)
-                ->setBody($contenu, 'text/html')
-                ->setFrom([$from => $fromname]);
-
-
-            /* foreach ($to as $t) {
-                 $message->to($t);
-             }
-*/
-        });
 
 
            //  return url('/prestataires/view/'.$prest.'#tab03') ;
         return url('/prestataires/view/'.$prest ) ;
-       } }
+       }
     }
 
-public function addrating(Request $request)
-    {
-	   $prestataire  =  $request->get('prestataire');
-	   $prestation  =  $request->get('prestation');
-	   $ponctualite  =  $request->get('ponctualite');
-	   $raison  =  $request->get('raison');
-	   $disponibilite  =  $request->get('disponibilite');
-	   $reactivite  =  $request->get('reactivite');
-	   $retour  =  $request->get('retour');
-   
-        $rating = new Rating([
-            'prestataire' => $prestataire,
-            'prestation' =>$prestation ,
-            'ponctualite' => $ponctualite,
-            'raison' => $raison,
-            'disponibilite' => $disponibilite,
-            'reactivite' => $reactivite,
-            'retour' => $retour,
-          
 
-        ]);
-       if ($rating->save()){
-		$id=$rating->id;
-	 return url('/ratings/view/'.$id ) ;
-	   }
-	   else{
-		   return url('/prestations/view/'.$prestation );
-	   }
-	}
-	
     /**
      * Store a newly created resource in storage.
      *
@@ -222,18 +137,13 @@ public function addrating(Request $request)
 
     public function saving(Request $request)
     {
-    
-		$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
-
-	// **** prestataires dossiers dans table intervenant
+            // **** prestataires dossiers dans table intervenant
         if ($request->get('name') !==null ) {$nom=$request->get('name');}else{$nom='nom';}
          $prenom= $request->get('prenom');
         $dossier= $request->get('dossier');
 
        // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
-         $to=array( 'nejib.karoui18@gmail.com');
+         $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
 
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
@@ -274,8 +184,6 @@ public function addrating(Request $request)
                     $sujet="Création d'un nouvel intervenant";
                     $contenu='Création d\'un nouvel intervenant par '.$nomuser.'<br>
                    Nom : '.$nomprest.' <br>date : '.$date;
-$ccimails=array('nejib.karoui18@gmail.com');
-//$ccimails=array('hammalisirine120@gmail.com');
 
                     Mail::send([], [], function ($message) use ($to, $sujet, $contenu,$from,$fromname) {
                         $message
@@ -283,19 +191,23 @@ $ccimails=array('nejib.karoui18@gmail.com');
                             ->to($to)
 
                             //   ->cc($cc ?: [])
-                            ->bcc($ccimails ?: [])
+                            //  ->bcc($ccimails ?: [])
                             ->subject($sujet)
                             ->setBody($contenu, 'text/html')
                             ->setFrom([$from => $fromname]);
 
 
-       
+                        /* foreach ($to as $t) {
+                             $message->to($t);
+                         }
+     */
                     });
 
 
 
                     $id = $prestataire->id;
- 
+                    Log::info('03');
+
                     $prestataire->update($request->all());
 
                     $interv = new Intervenant([
@@ -318,7 +230,8 @@ $ccimails=array('nejib.karoui18@gmail.com');
         }else{
         // hors dossier
 
- 
+            Log::info('06');
+
             $prestataire = new Prestataire([
                 'name' => $nom,
                 'prenom' => $prenom,
@@ -350,15 +263,14 @@ $ccimails=array('nejib.karoui18@gmail.com');
                 $sujet='Création d\un nouvel intervenant';
                 $contenu='Création d\'un nouvel intervenant par '.$nomuser.'<br>
                    Nom : '.$nomprest.' date : '.$date;
-$ccimails=array('nejib.karoui18@gmail.com');
-//$ccimails=array('hammalisirine120@gmail.com');
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu,$from,$fromname,$ccimails) {
+
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu,$from,$fromname) {
                     $message
                         //->to($to ?: [])
                         ->to($to)
 
                      //   ->cc($cc ?: [])
-                       ->bcc($ccimails ?: [])
+                        //  ->bcc($ccimails ?: [])
                         ->subject($sujet)
                         ->setBody($contenu, 'text/html')
                         ->setFrom([$from => $fromname]);
@@ -386,25 +298,14 @@ $ccimails=array('nejib.karoui18@gmail.com');
 
         }
 
- 		 
-	 $desc=' Ajout Intervenant: ' . $nom.' '.$prenom ;
- $hist = new Historique([
-              'description' => $desc,
-            'user' => $nomuser,
-             'user_id'=>auth::user()->id,
-        ]);	 $hist->save();
-		
+         Log::info('[Agent: ' . $nomuser . '] Ajout Intervenant: ' . $nom.' '.$prenom);
 
- } // if superviseur
+
     }
 
     public function saving2(Request $request)
     {
-    		$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){  
-
-	  if( ($request->get('nom'))!=null) {
+        if( ($request->get('nom'))!=null) {
 
             $prestataire = new Prestataire([
                 'nom' => $request->get('nom'),
@@ -424,112 +325,23 @@ $ccimails=array('nejib.karoui18@gmail.com');
 
         }
 
-		
- }	
-		
-		
     }
     public function show()
-    {
-		
-	}
+    {}
 
     public function updating(Request $request)
     {
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
+
         $id= $request->get('prestataire');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
         Prestataire::where('id', $id)->update(array($champ => $val));
- }
-else
-{
-return ('modification interdite');
-}
 
       //  $dossier->save();
 
      ///   return redirect('/dossiers')->with('success', 'Entry has been added');
-
-    }
-
-   public function updaterating(Request $request)
-    {
-		 $id= $request->get('rating');
-        $champ= strval($request->get('champ'));
-       $val= $request->get('val');
-         Rating::where('id', $id)->update(array($champ => $val));
-	}
-	
-	
-    public function activer(Request $request)
-    {
-
-        $id= $request->get('prestataire');
-        $valeur= $request->get('valeur');
-		
-		$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
-		
-		
-         Evaluation::where('prestataire', $id)->update(array('actif' => $valeur));
-        if($valeur==1)
-        {$statut='Actif';}
-        else{$statut='Inactif';}
-
-        // Email Modification Priorié
-        $parametres =  DB::table('parametres')
-            ->where('id','=', 1 )->first();
-
-        $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
-        $swiftTransport->setUsername('24ops@najda-assistance.com');
-        $swiftTransport->setPassword($parametres->pass_N);
-        $fromname="Najda Assistance";
-        $from='24ops@najda-assistance.com';
-
-        $swiftMailer = new Swift_Mailer($swiftTransport);
-
-        Mail::setSwiftMailer($swiftMailer);
-
-        $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $id) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $id) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $id);
-        $user = auth()->user();
-        $nomuser = $user->name . ' ' . $user->lastname;
-
-        $to=array( 'nejib.karoui18@gmail.com');
-         // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
-        $sujet= 'Modification du statut d\'un prestataire';
-        $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a changé le statut du prestataire <b>'.$nomprest.'</b> en <b>'.$statut.'</b>
-             ';
-$ccimails=array('nejib.karoui18@gmail.com');
-//$ccimails=array('hammalisirine120@gmail.com');
-
-        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname) {
-            $message
-                //->to($to ?: [])
-                ->to($to)
-
-                //   ->cc($cc ?: [])
-                ->bcc($ccimails ?: [])
-                ->subject($sujet)
-                ->setBody($contenu, 'text/html')
-                ->setFrom([$from => $fromname]);
-
-
-            /* foreach ($to as $t) {
-                 $message->to($t);
-             }
-*/
-        });
-
-
- }
-
-
 
     }
 
@@ -557,13 +369,7 @@ $ccimails=array('nejib.karoui18@gmail.com');
 
 
        // $villes = DB::table('cities')->select('id', 'name')->get();
-        //$villes = Ville::all();
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
+        $villes = Ville::all();
 
        // $gouvernorats = DB::table('cities')->get();
       ////  $emails =   Email::where('parent', $id)->get();
@@ -581,7 +387,7 @@ $villes= DB::table('prestataires')
             ->pluck('type_prestation_id');
 
         $prestataire = Prestataire::find($id);
-        $prestations =   Prestation::where('prestataire_id', $id)->orderBy('id','desc')->get();
+        $prestations =   Prestation::where('prestataire_id', $id)->get();
 
         $evaluations =   Evaluation::where('prestataire', $id)->orderBy('priorite','asc')->get();
 
@@ -612,7 +418,7 @@ $villes= DB::table('prestataires')
             ->get();
         $specialites2=$specialites2->unique();
 
-        $dossiers = Dossier::where('current_status','<>','Cloture')->orderby('id','desc')
+        $dossiers = Dossier::where('current_status','<>','Cloture')
              ->get();
 
         return view('prestataires.view',['specialites2'=>$specialites2, 'dossiers'=>$dossiers,'specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
@@ -620,17 +426,11 @@ $villes= DB::table('prestataires')
     }
 
 
-  public function view_rating($id)
-    {
-		$rating=Rating::where('id', $id)->first();
-		 return view('ratings.view',['rating'=>$rating]);
-	}
+
+
 
     public function addressadd(Request $request)
     {
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
         if( ($request->get('champ'))!=null) {
 
             $parent=$request->get('parent');
@@ -656,7 +456,7 @@ $user = auth()->user();
             else {
                 return url('/prestataires');
             }
-        } }
+        }
 
         // return redirect('/clients')->with('success', 'ajouté avec succès');
 
@@ -705,33 +505,10 @@ $user = auth()->user();
      */
     public function destroy($id)
     {
-    		$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
-	 $prestataire = Prestataire::find($id);
+        $prestataire = Prestataire::find($id);
         $prestataire->delete();
-DB::table('adresses')
-            ->where([
-                ['parent', '=',$id],
-                ['nature', '=', 'telinterv'],
-            ])->delete();
-DB::table('adresses')
-            ->where([
-                ['parent', '=',$id],
-                ['nature', '=', 'emailinterv'],
-            ])->delete();
-DB::table('adresses')
-            ->where([
-                ['parent', '=',$id],
-                ['nature', '=', 'faxinterv'],
-            ])->delete();
 
-        Evaluation::where('prestataire',$id)->delete();
-        Facture::where('prestataire',$id)->update(array('prestataire' => null));
-        Prestation::where('prestataire_id',$id)->update(array('prestataire_id' => 0));
-
-        return redirect()->back()->with('success', '  Supprimé ');
- }
+        return redirect('/prestataires')->with('success', '  Supprimé ');
     }
 
     public static function VilleById($id)
@@ -800,9 +577,6 @@ DB::table('adresses')
 
     public  function removespec(Request $request)
     {
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $specialite= $request->get('specialite');
 
@@ -814,14 +588,11 @@ $user = auth()->user();
             ])->delete();
 
 
-}
+
     }
 
     public  function createspec(Request $request)
     {
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $specialite= $request->get('specialite');
 
@@ -832,16 +603,13 @@ $user = auth()->user();
         );
 
 
-  }
+
     }
 
 
 
     public  function removetypeprest(Request $request)
     {
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= trim($request->get('prestataire'));
         $typeprest= trim($request->get('typeprest'));
 
@@ -853,14 +621,11 @@ $user = auth()->user();
             ])->delete();
 
 
- }
+
     }
 
     public  function createtypeprest(Request $request)
     {
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $typeprest= $request->get('typeprest');
 
@@ -875,7 +640,7 @@ $user = auth()->user();
             );
             return 1;
         } else{ return 0;}
-}
+
 
 
     }
@@ -883,9 +648,6 @@ $user = auth()->user();
 
     public  function removecitieprest(Request $request)
     {
-$user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $citie= $request->get('citie');
 
@@ -897,14 +659,11 @@ $user = auth()->user();
             ])->delete();
 
 
- }
+
     }
 
     public  function createcitieprest(Request $request)
     {
- $user = auth()->user();
- $user_type=$user->user_type;
- if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $prestataire= $request->get('prestataire');
         $citie= $request->get('citie');
 
@@ -915,7 +674,7 @@ $user = auth()->user();
         );
 
 
- }
+
     }
 
 
@@ -1060,9 +819,8 @@ $user = auth()->user();
         $val =  trim($request->get('val'));
          $count =  Prestataire::where('name', $val)
               ->count();
-$rech=   Prestataire::where('name', $val)->first();
-     return json_encode($rech) ;
-      
+
+        return $count;
 
     }
 

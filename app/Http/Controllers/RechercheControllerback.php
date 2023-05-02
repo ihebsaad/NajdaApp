@@ -85,7 +85,7 @@ class RechercheController extends Controller
        $affecOuNon='';
        $etat='';
        $burl = URL::to("/");
-       $dtc = (new \DateTime())->format('2018-12-31 00:00:00');
+
         if($request->get('qy'))
         {
           $qery=$request->get('qy');
@@ -96,7 +96,7 @@ class RechercheController extends Controller
 
     //--recherhe  des dossiers selon la reférence médic (référence selon la société) --
 
-           $data=DB::Table('dossiers')->where('reference_medic','like','%'.$qery.'%')->whereNotNull('created_at')->where('created_at','>=', $dtc)->limit(10)->orderBy('id','desc')->get();
+           $data=DB::Table('dossiers')->where('reference_medic','like','%'.$qery.'%')->limit(10)->orderBy('id','desc')->get();
 
          
           if(count($data)!=0)
@@ -132,7 +132,7 @@ class RechercheController extends Controller
 
     // recherche  des dossiers selon la reférence client (référence selon la société) --
  
-         $data=DB::Table('dossiers')->where('reference_customer','like','%'.$qery.'%')->whereNotNull('created_at')->where('created_at','>=', $dtc)->limit(10)->orderBy('id','desc')->get();
+         $data=DB::Table('dossiers')->where('reference_customer','like','%'.$qery.'%')->limit(10)->orderBy('id','desc')->get();
 
          
           if(count($data)!=0)
@@ -169,10 +169,7 @@ class RechercheController extends Controller
 
     //-recherhe sur le nom et le prénom de l'abonnée 
 
-           $data=DB::Table('dossiers')->whereNotNull('created_at')->where('created_at','>=', $dtc)
-                ->where(function($q) use($qery) {                             
-                               $q->where('subscriber_name','like','%'.$qery.'%')->orWhere('subscriber_lastname','like','%'.$qery.'%');
-                                })->limit(10)->orderBy('id','desc')->get();
+           $data=DB::Table('dossiers')->where('subscriber_name','like','%'.$qery.'%')->orWhere('subscriber_lastname','like','%'.$qery.'%')->limit(10)->orderBy('id','desc')->get();
 
         //  $output='<div><ul class="dropdown-menu " style="display:block ; position:relative ; top:-65px; ">';
           if(count($data)!=0)
@@ -210,7 +207,7 @@ class RechercheController extends Controller
 
          //-recherhe sur l'immatriculation sans caractères spéciaux - _ ( )
 
-           $dossiertechs=DB::Table('dossiers')->whereNotNull('vehicule_immatriculation')->whereNotNull('created_at')->where('created_at','>=', $dtc)->orderBy('id','desc')->get();
+           $dossiertechs=DB::Table('dossiers')->whereNotNull('vehicule_immatriculation')->orderBy('id','desc')->get();
           // dd($dossiertechs);
            $collectDossierTech = collect();
            //$c->add(new Post);
@@ -303,14 +300,9 @@ class RechercheController extends Controller
     public function touslesprestataires(Request $request)
     {
 
-          $prests=Prestataire::get(['id','name','civilite','prenom','ville','ville_id','annule']);
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
-           return view('prestataires.index', compact('prests'),['villes'=>$villes]); 
+          $prests=Prestataire::get(['id','name','civilite','prenom','ville','ville_id']);
+
+           return view('prestataires.index', compact('prests')); 
 
     }
 
@@ -454,15 +446,15 @@ $villes= DB::table('prestataires')
       /* array:5 [▼
   "pres_id_search" => null
   "typepres_id_search" => null
-  "gouv_id_search" => null 
+  "gouv_id_search" => null
   "ville_id_search" => null
   "spec_id_search" => null
 ]*/
-     //dd($request->all());
- 
-     if($request->get('pres_id_search_hidden')!='undefined' && $request->get('pres_id_search_hidden')!=null)
+     // dd($request->all());
+     // dd($request->get('pres_id_search').' / hidden : '.$request->get('pres_id_search_hidden'));
+     if($request->get('pres_id_search_hidden'))
        {
- 
+
           if(is_numeric($request->get('pres_id_search_hidden')))
           {
            $prests=Prestataire::where('id',$request->get('pres_id_search_hidden'))->get();
@@ -478,7 +470,6 @@ $villes= DB::table('prestataires')
        }
        else
        {
-    //dd($request->get('pres_id_search').' / hidden : '.$request->get('pres_id_search_hidden'));
         if($request->get('pres_id_search') && $request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')== null && $request->get('spec_id_search')==null)
         {
            $prests=Prestataire::where('name','like', '%'.$request->get('pres_id_search').'%')
@@ -504,11 +495,11 @@ $villes= DB::table('prestataires')
           $prests=Prestataire::whereIn('id',array_values($idprestataire))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
               }
               else
               {
-                $prests=Prestataire::whereIn('id',array_values($idprestataire))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                $prests=Prestataire::whereIn('id',array_values($idprestataire))->get(['id','name','civilite','prenom','ville','ville_id']);
               }
 
             }
@@ -534,11 +525,11 @@ $villes= DB::table('prestataires')
            $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
               else
               {
-               $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+               $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
               }
 
 
@@ -549,9 +540,9 @@ $villes= DB::table('prestataires')
             if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
             {
               $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
-              $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();
 
-                
+                 $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
 
                  $result=array_intersect($idprestatairetype, $prestatairesville);
     
@@ -564,11 +555,11 @@ $villes= DB::table('prestataires')
                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                }
 
             }
@@ -592,11 +583,11 @@ $villes= DB::table('prestataires')
            $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
 
                 }
 
@@ -625,12 +616,12 @@ $villes= DB::table('prestataires')
            $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
 
-                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                }
 
             }
@@ -641,7 +632,8 @@ $villes= DB::table('prestataires')
             {
               $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
 
-                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
 
@@ -658,11 +650,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -675,7 +667,8 @@ $villes= DB::table('prestataires')
 
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
 
                
                  $result1=array_intersect($idprestatairetype, $idprestatairegouv);
@@ -691,11 +684,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -707,7 +700,8 @@ $villes= DB::table('prestataires')
 
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
 
@@ -725,11 +719,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -754,11 +748,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -772,7 +766,8 @@ $villes= DB::table('prestataires')
              
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
 
                  $result=array_intersect($idprestatairegouv,$prestatairesville);
     
@@ -784,11 +779,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -816,11 +811,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -832,7 +827,8 @@ $villes= DB::table('prestataires')
            
                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
 
-                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
                 
@@ -849,11 +845,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -867,7 +863,8 @@ $villes= DB::table('prestataires')
              if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
             {
              
-                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();       
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();        
     
            $result=array_unique($prestatairesville);
           // $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
@@ -877,11 +874,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -891,7 +888,8 @@ $villes= DB::table('prestataires')
            if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')!=null )
             {
                           
-                $prestatairesville = DB::table('prestataires')->where('ville','=',$request->get('ville_id_search'))->pluck('id')->toArray();
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
 
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
                 
@@ -904,11 +902,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -929,11 +927,11 @@ $villes= DB::table('prestataires')
                 $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
                                $q->where('name','like', '%'.$request->get('pres_id_search').'%')
                               ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
-                                })->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
                }
                else
                {
-                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id','annule']);
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
                 }
 
             }
@@ -941,17 +939,9 @@ $villes= DB::table('prestataires')
 
         }// fin else 2
        }// fin else 1
-       // $prests=$prests->sortBy('name');
-       $prests = $prests->sortBy(function($prests) {
-       return sprintf('%-12s%s', $prests->name,  $prests->prenom);
-       });
-$villes= DB::table('prestataires')
-->whereNotNull('ville')
-->select('ville')
-->distinct()
-                ->orderBy('name', 'asc')
-                ->get();
-      return view('prestataires.index', compact('prests'),['villes'=>$villes]);  
+
+
+      return view('prestataires.index', compact('prests'));  
 
    }
 
@@ -987,9 +977,7 @@ public function pageRechercheAvancee(Request $request )
   {
 
 
-      //  $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
-
-     $datasearch=Dossier::where('reference_medic','like','%'.$request->get('reference_medic1').'%')->get();
+                    $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
 
 
 
@@ -2073,7 +2061,6 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
@@ -2140,9 +2127,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
-
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2176,9 +2161,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
-
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2255,9 +2238,7 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
-
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2412,7 +2393,6 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2492,7 +2472,6 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2535,7 +2514,6 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -2602,7 +2580,6 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-->orderBy('dossiers.id','DESC')
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 

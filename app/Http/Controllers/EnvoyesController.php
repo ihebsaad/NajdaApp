@@ -183,7 +183,7 @@ else
 
         $envoye->update(array(
             'emetteur' => '24ops1@najda-assistance.com', //env('emailenvoi')
-            'destinataire' =>  trim (implode($destinataire)),
+            'destinataire' =>  '',
             'contenu'=> trim ($request->get('contenu')),
             'cc'=> trim (implode($cc)),
           'cci'=> trim (implode($cci)),
@@ -604,7 +604,18 @@ array_multisort($columns, SORT_DESC, $enregs);
         $envoye->dossier=$dossier;
         $envoye->save();
     }
+ public function finances()
+    {
+        $user = auth()->user();
+        $iduser=$user->id;
+        $user_type=$user->user_type;
 
+      
+        $envoyes = Envoye::where('emetteur',  'finances@najda-assistance.com')->paginate(500);
+        
+        return view('envoyes.index', compact('envoyes'));
+
+    }
 
 }
 
