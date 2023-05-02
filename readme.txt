@@ -10,6 +10,15 @@ copier la fonction index en fonction errors
 
 # Providers / AuthServiceProvider = definitions des roles (gates)
 
+Numero Tel Iheb:(USA) / Reception
++13342316588
+
+Numero Tel Khaled:(USA) / Envoi
++14804473614
+
+Numero Tel Haythem:(USA) / Envoi
++18479062370
+
 // Captcha
 https://github.com/anhskohbo/no-captcha
 // il faut créer des nouveau clés pour le nom de domaine du client
@@ -28,12 +37,4 @@ sudo chmod -R 755 ./vendor
 //create 'fonts' folder under 'storage' and make sure your server can access this folder.
   `chmod mode 777 fonts`
 
-
-  // change Cloturee to Cloture on emailsControllers
-
-  // Dossiers ajoutés jusqu'a  id= 4081 / 19N02249     ( 3358 dossiers)
- // prestataires  2110
-
-// prestationsController  =>saving => changer destinataire et liste cc
-
-// emails personnels procedure
+// Verify Https Middelware
